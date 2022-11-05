@@ -1,8 +1,13 @@
 import { NextPage } from 'next';
+import { useState } from 'react';
 import Header from '@/components/layouts/Header';
 import CourseCardList from '@/features/course/CourseCardList';
+import { Loading } from '@/components/utils/Loading';
+import { useFetchCourses } from '@/hooks/useFetchCourses';
 
 const Courses: NextPage = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [courses] = useFetchCourses(setIsLoading);
   return (
     <>
       <Header />
@@ -12,7 +17,7 @@ const Courses: NextPage = () => {
         </div>
       </div>
       <div className="container mx-auto">
-        <CourseCardList />
+        {isLoading ? <Loading /> : <CourseCardList courses={courses} setIsLoading={setIsLoading} />}
       </div>
     </>
   );
