@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { FC } from 'react';
 import { Course } from '@/types/Course';
 
@@ -9,7 +10,9 @@ const CourseCard: FC<Props> = (props) => {
   return (
     <a href="#">
       <div className="mx-[10px] lg:mx-[0px] lg:w-[300px] xl:w-[370px] h-auto border-[#100D59] border-solid border-2 rounded-[10px] overflow-hidden">
-        <div className="bg-purple-500 h-[210px]">{/* <img src="" alt="" /> */}</div>
+        <div className="h-auto">
+          <Image src={'http://laravel_app:80/storage' + course.image} alt="course" height={360} width={640} />
+        </div>
         <div className="h-auto  ml-[13px] mt-[16px]">
           <p className="font-semibold text-[16px] mb-[16px]">{course.title}</p>
           <p className="font-semibold text-[16px] mb-[16px]">
