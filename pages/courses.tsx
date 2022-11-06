@@ -18,7 +18,7 @@ const Courses: NextPage = () => {
           <h2 className="font-semibold text-[36px]">講座一覧</h2>
         </div>
       </div>
-      <div className="container mx-auto">
+      <div className="container mx-auto mb-10">
         {isLoading ? <Loading /> : <CourseCardList courses={courses} />}
         {isError && <Error />}
       </div>
