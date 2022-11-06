@@ -9,7 +9,7 @@ import { Error } from '@/components/utils/Error';
 const Courses: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
-  const [courses] = useFetchCourses(setIsLoading, setIsError);
+  const [courses] = useFetchCourses({ setIsLoading, setIsError });
   return (
     <>
       <Header />
