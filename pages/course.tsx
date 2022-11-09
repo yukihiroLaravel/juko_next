@@ -21,6 +21,9 @@ const Courses: NextPage = () => {
               <li>
                 <div className="bg-[#FFCDCD] w-full text-center">
                   <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">講座名</p>
+                  <div className="w-4/5 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mx-auto">
+                    <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '45%' }}></div>
+                  </div>
                   <p className="font-semibold text-[26px] pt-[20px] pb-[30px]">
                     100% <span className="font-semibold text-[14px]">完了</span>
                   </p>
