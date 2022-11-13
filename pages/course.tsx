@@ -7,7 +7,7 @@ const Courses: NextPage = () => {
     <>
       <Header />
       <div className="flex">
-        <aside className="shrink-0 w-1/5 h-auto bg-[#F5F5F5]" aria-label="Sidebar">
+        <aside className="shrink-0 w-1/5 relative border-[#000000] border-r-[1px]" aria-label="Sidebar">
           <div className="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
             <ul className="mt-[30px]">
               <li className="mb-[20px]">
@@ -31,8 +31,18 @@ const Courses: NextPage = () => {
               </li>
             </ul>
           </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="bg-[#AAAAAA] w-6 h-10 absolute right-[-24px] top-1/2 stroke-[#D9D9D9] fill-[#D9D9D9]"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
         </aside>
-        <div className="w-3/4 mx-auto">
+        <div className="w-3/4 mx-auto min-h-[100vh]">
           <div className="mt-[72px]">
             <h2 className="font-semibold text-[36px]">コースカリキュラム</h2>
           </div>
