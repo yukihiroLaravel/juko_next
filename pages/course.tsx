@@ -1,84 +1,50 @@
 import Header from '@/components/layouts/Header';
+import { ClosedToggleButton } from '@/components/utils/ClosedToggleButton';
+import { ProgressBar } from '@/components/utils/ProgressBar';
+import { SideBar } from '@/components/utils/SideBar';
+import { Thumbnail } from '@/components/utils/Thumbnail';
+import { TitleCard as ChapterTitleCard } from '@/features/chapter/components/TitleCard';
+import { TitleCard as LessonTitleCard } from '@/features/lesson/components/TitleCard';
+import { StatusIcon } from '@/features/lesson/components/StatusIcon';
+import { TitleStatusCard } from '@/features/lesson/components/TitleStatusCard';
 import { NextPage } from 'next';
-import Image from 'next/image';
 
 const Courses: NextPage = () => {
   return (
     <>
       <Header />
       <div className="flex">
-        <aside className="shrink-0 w-1/5 relative border-[#000000] border-r-[1px]" aria-label="Sidebar">
-          <div className="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
-            <ul className="mt-[30px]">
-              <li className="mb-[20px]">
-                <Image
-                  src={process.env.NEXT_PUBLIC_IMAGE_URL + 'course/1/thumbnail.png'}
-                  alt="course"
-                  height={360}
-                  width={640}
-                />
-              </li>
-              <li>
-                <div className="bg-[#FFCDCD] w-full text-center">
-                  <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">講座名</p>
-                  <div className="w-4/5 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mx-auto">
-                    <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '45%' }}></div>
-                  </div>
-                  <p className="font-semibold text-[26px] pt-[20px] pb-[30px]">
-                    100% <span className="font-semibold text-[14px]">完了</span>
-                  </p>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="bg-[#AAAAAA] w-6 h-10 absolute right-[-24px] top-1/2 stroke-[#D9D9D9] fill-[#D9D9D9]"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-          </svg>
-        </aside>
+        <SideBar>
+          <ul className="mt-[30px]">
+            <li className="mb-[20px]">
+              <Thumbnail
+                src={process.env.NEXT_PUBLIC_IMAGE_URL + 'course/1/thumbnail.png'}
+                alt="course"
+                height={360}
+                width={640}
+              />
+            </li>
+            <li>
+              <div className="bg-[#FFCDCD] w-full text-center">
+                <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">講座名</p>
+                <ProgressBar progress={100} />
+                <p className="font-semibold text-[26px] pt-[20px] pb-[30px]">
+                  100% <span className="font-semibold text-[14px]">完了</span>
+                </p>
+              </div>
+            </li>
+          </ul>
+          <ClosedToggleButton />
+        </SideBar>
         <div className="w-3/4 mx-auto min-h-[100vh]">
           <div className="mt-[72px]">
             <h2 className="font-semibold text-[36px]">コースカリキュラム</h2>
           </div>
-          <div className="mt-[10px] h-[120px] bg-[#C1E5FF] text-center">
-            <h3 className="font-semibold text-[36px] leading-[120px]">チャプター</h3>
-          </div>
+          <ChapterTitleCard title={'チャプタータイトル'} />
           <div className="mt-[50px] mx-auto w-11/12 text-center">
-            <div className="flex flex-start mb-[10px]">
-              <div className="w-[30px] h-[30px] rounded-full bg-[#6D8DFF] mt-[10px]"></div>
-              <div className="bg-[#D9D9D9] w-11/12 ml-5 h-[50px]">
-                <p className="leading-[50px] font-semibold text-[32px]">Lesson1</p>
-              </div>
-            </div>
-            <div className="flex flex-start mb-[10px]">
-              <div className="w-[30px] h-[30px] rounded-full bg-[#D9D9D9] mt-[10px]"></div>
-              <div className="bg-[#D9D9D9] w-11/12 ml-5 h-[50px]">
-                <p className="leading-[50px] font-semibold text-[32px]">Lesson2</p>
-              </div>
-            </div>
-            <div className="flex flex-start mb-[10px]">
-              <div className="w-[30px] h-[30px] rounded-full bg-[#F58909] mt-[10px] text-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                  stroke="currentColor"
-                  className="w-5 h-5 mx-auto my-1 text-white"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                </svg>
-              </div>
-              <div className="bg-[#D9D9D9] w-11/12 ml-5 h-[50px]">
-                <p className="leading-[50px] font-semibold text-[32px]">Lesson3</p>
-              </div>
-            </div>
+            <TitleStatusCard status="in_progress" title="Lesson1" />
+            <TitleStatusCard status="not_started" title="Lesson2" />
+            <TitleStatusCard status="completed" title="Lesson3" />
           </div>
         </div>
       </div>
