@@ -1,6 +1,5 @@
 import Header from '@/components/layouts/Header';
-import { ClosedToggleButton } from '@/components/elements/ClosedToggleButton';
-import { OpenedToggleButton } from '@/components/elements/OpenedToggleButton';
+import { ToggleButton } from '@/components/elements/ToggleButton';
 import { ProgressBar } from '@/components/elements/ProgressBar';
 import { SideBar } from '@/components/elements/SideBar';
 import { Thumbnail } from '@/components/elements/Thumbnail';
@@ -36,10 +35,10 @@ const Courses: NextPage = () => {
                 </div>
               </li>
             </ul>
-            <ClosedToggleButton setIsShowedSideBar={setIsShowedSideBar} />
+            <ToggleButton isShowedSideBar={isShowedSideBar} setIsShowedSideBar={setIsShowedSideBar} />
           </SideBar>
         ) : (
-          <OpenedToggleButton setIsShowedSideBar={setIsShowedSideBar} />
+          <ToggleButton isShowedSideBar={isShowedSideBar} setIsShowedSideBar={setIsShowedSideBar} />
         )}
 
         <div className="w-3/4 mx-auto min-h-[100vh]">
