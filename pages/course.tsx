@@ -1,9 +1,9 @@
 import Header from '@/components/layouts/Header';
-import { ClosedToggleButton } from '@/components/utils/ClosedToggleButton';
-import { OpenedToggleButton } from '@/components/utils/OpenedToggleButton';
-import { ProgressBar } from '@/components/utils/ProgressBar';
-import { SideBar } from '@/components/utils/SideBar';
-import { Thumbnail } from '@/components/utils/Thumbnail';
+import { ClosedToggleButton } from '@/components/elements/ClosedToggleButton';
+import { OpenedToggleButton } from '@/components/elements/OpenedToggleButton';
+import { ProgressBar } from '@/components/elements/ProgressBar';
+import { SideBar } from '@/components/elements/SideBar';
+import { Thumbnail } from '@/components/elements/Thumbnail';
 import { TitleCard as ChapterTitleCard } from '@/features/chapter/components/TitleCard';
 import { TitleStatusCard } from '@/features/lesson/components/TitleStatusCard';
 import { NextPage } from 'next';
