@@ -13,7 +13,7 @@ const Courses: NextPage = () => {
   return (
     <>
       <Header />
-      <div className="flex">
+      <div className="md:flex">
         {isShowedSideBar ? (
           <SideBar>
             <ul className="mt-[30px]">
