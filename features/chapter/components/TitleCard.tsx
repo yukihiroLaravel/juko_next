@@ -5,8 +5,8 @@ type Props = {
 };
 export const TitleCard: FC<Props> = ({ title }) => {
   return (
-    <div className="mt-[10px] h-[120px] bg-[#C1E5FF] text-center">
-      <h3 className="font-semibold text-[36px] leading-[120px]">{title}</h3>
+    <div className="mt-[10px] min-h-[120px] h-auto bg-[#C1E5FF] flex justify-center items-center">
+      <h3 className="font-semibold text-[26px] md:text-[36px]">{title}</h3>
     </div>
   );
 };

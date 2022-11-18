@@ -20,7 +20,7 @@ export const ToggleButton: FC<Props> = ({ isShowedSideBar, setIsShowedSideBar })
       </svg>
     </button>
   ) : (
-    <button onClick={() => setIsShowedSideBar(true)}>
+    <button className="hidden md:block" onClick={() => setIsShowedSideBar(true)}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
