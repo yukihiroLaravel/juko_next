@@ -7,9 +7,23 @@ import { TitleCard as ChapterTitleCard } from '@/features/chapter/components/Tit
 import { TitleStatusCard } from '@/features/lesson/components/TitleStatusCard';
 import { NextPage } from 'next';
 import { useState } from 'react';
+import { Breadcrumb } from '@/components/elements/Breadcrumb';
 
 const Courses: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
+
+  // パン屑のリンクリスト
+  const links = [
+    {
+      title: '講座一覧',
+      href: '/courses',
+    },
+    {
+      title: '講座名',
+      href: '#',
+    },
+  ];
+
   return (
     <>
       <Header />
@@ -42,7 +56,8 @@ const Courses: NextPage = () => {
         )}
 
         <div className="w-3/4 mx-auto min-h-[100vh]">
-          <div className="mt-[72px]">
+          <Breadcrumb links={links} />
+          <div className="mt-[30px]">
             <h2 className="font-semibold text-[36px]">コースカリキュラム</h2>
           </div>
           <ChapterTitleCard title={'チャプタータイトル'} />
