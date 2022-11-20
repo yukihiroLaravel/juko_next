@@ -57,7 +57,7 @@ const Courses: NextPage = () => {
 
         <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
           <Breadcrumb links={links} />
-          <div className="mt-[30px] md:hidden">
+          <div className="pb-10 border-black border-b mt-[30px] md:hidden">
             <Thumbnail
               src={process.env.NEXT_PUBLIC_IMAGE_URL + 'course/1/thumbnail.png'}
               alt="course"
