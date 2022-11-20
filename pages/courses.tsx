@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { useState } from 'react';
 import Header from '@/components/layouts/Header';
-import CourseCardList from '@/features/course/CourseCardList';
+import CourseCardList from '@/features/course/components/CourseCardList';
 import { Loading } from '@/components/utils/Loading';
 import { useFetchCourses } from '@/hooks/useFetchCourses';
 import { Error } from '@/components/utils/Error';
