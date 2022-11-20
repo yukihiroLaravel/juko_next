@@ -6,12 +6,12 @@ type Props = {
 export const StatusIcon: FC<Props> = ({ status }) => {
   switch (status) {
     case 'not_started':
-      return <div className="w-[30px] h-[30px] rounded-full bg-[#D9D9D9] mt-[10px]" />;
+      return <div className="min-w-[30px] min-h-[30px] w-[30px] h-[30px] rounded-full bg-[#D9D9D9] mt-[10px]" />;
     case 'in_progress':
-      return <div className="w-[30px] h-[30px] rounded-full bg-[#6D8DFF] mt-[10px]" />;
+      return <div className="min-w-[30px] min-h-[30px] w-[30px] h-[30px] rounded-full bg-[#6D8DFF] mt-[10px]" />;
     case 'completed':
       return (
-        <div className="w-[30px] h-[30px] rounded-full bg-[#F58909] mt-[10px] text-center">
+        <div className="min-w-[30px] min-h-[30px] w-[30px] h-[30px] rounded-full bg-[#F58909] mt-[10px] text-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
