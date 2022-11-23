@@ -3,17 +3,17 @@ import styled from 'styled-components';
 
 type Props = {
   status: 'not_started' | 'in_progress' | 'completed';
-  size: string;
+  size?: string;
 };
 export const StatusIcon: FC<Props> = ({ status, size = '30px' }) => {
   switch (status) {
     case 'not_started':
-      return <Icon background={'#D9D9D9'} size={size} />;
+      return <Icon background="#D9D9D9" size={size} />;
     case 'in_progress':
-      return <Icon background={'#6D8DFF'} size={size} />;
+      return <Icon background="#6D8DFF" size={size} />;
     case 'completed':
       return (
-        <Icon background={'#F58909'} size={size}>
+        <Icon background="#F58909" size={size}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -36,5 +36,4 @@ const Icon = styled.div`
   height: ${(props) => props.size};
   border-radius: 100%;
   background: ${(props) => props.background};
-  margin-top: 10px;
 `;

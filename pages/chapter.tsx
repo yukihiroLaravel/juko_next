@@ -41,7 +41,7 @@ const Chapter: NextPage = () => {
               <li>
                 <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
                   <p className="text-[18px] text-[#6D8DFF] font-semibold">Lesson 1</p>
-                  <StatusIcon status="in_progress" />
+                  <StatusIcon status="in_progress" size="20px" />
                 </div>
               </li>
             </ul>
