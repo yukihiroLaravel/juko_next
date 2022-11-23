@@ -89,13 +89,11 @@ const Chapter: NextPage = () => {
               </p>
             </div>
           </div>
-          <div className="mt-[20px]">
+          <div className="mt-[20px] border-black border-b pb-5">
             <h2 className="font-semibold text-[30px] md:text-[36px]">チャプタータイトル</h2>
           </div>
-          <div className="mt-[50px] mx-auto w-11/12 text-center">
-            <TitleStatusCard status="in_progress" title="Lesson1" />
-            <TitleStatusCard status="not_started" title="Lesson2" />
-            <TitleStatusCard status="completed" title="Lesson3" />
+          <div className="mt-5 mx-auto">
+            <h2 className="font-semibold text-[25px] md:text-[30px]">レッスンタイトル</h2>
           </div>
         </div>
       </div>
