@@ -2,12 +2,11 @@ import Header from '@/components/layouts/Header';
 import { ToggleButton } from '@/components/elements/ToggleButton';
 import { ProgressBar } from '@/components/elements/ProgressBar';
 import { SideBar } from '@/components/elements/SideBar';
-import { Thumbnail } from '@/components/elements/Thumbnail';
-import { TitleStatusCard } from '@/features/lesson/components/TitleStatusCard';
 import { NextPage } from 'next';
 import { useState } from 'react';
 import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { StatusIcon } from '@/features/lesson/components/StatusIcon';
+import { StatusButton } from '@/features/lesson/components/StatusButton';
 
 const Chapter: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
@@ -74,26 +73,18 @@ const Chapter: NextPage = () => {
 
         <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
           <Breadcrumb links={links} />
-          <div className="pb-10 border-black border-b mt-[30px] md:hidden">
-            <Thumbnail
-              src={process.env.NEXT_PUBLIC_IMAGE_URL + 'course/1/thumbnail.png'}
-              alt="course"
-              height={360}
-              width={640}
-            />
-            <div className="bg-[#FFCDCD] w-full text-center">
-              <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">講座名</p>
-              <ProgressBar progress={100} />
-              <p className="font-semibold text-[26px] pt-[20px] pb-[30px]">
-                100% <span className="font-semibold text-[14px]">完了</span>
-              </p>
-            </div>
-          </div>
           <div className="mt-[20px] border-black border-b pb-5">
             <h2 className="font-semibold text-[30px] md:text-[36px]">チャプタータイトル</h2>
           </div>
           <div className="mt-5 mx-auto">
             <h2 className="font-semibold text-[25px] md:text-[30px]">レッスンタイトル</h2>
+          </div>
+          <div className="flex justify-start">
+            <StatusButton selected={true}>Lesson未実施</StatusButton>
+            <span className="ml-10" />
+            <StatusButton selected={false}>Lesson開始</StatusButton>
+            <span className="ml-10" />
+            <StatusButton selected={false}>Lesson完了</StatusButton>
           </div>
         </div>
       </div>
