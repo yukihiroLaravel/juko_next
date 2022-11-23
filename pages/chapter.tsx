@@ -86,6 +86,17 @@ const Chapter: NextPage = () => {
             <span className="ml-10" />
             <StatusButton selected={false}>Lesson完了</StatusButton>
           </div>
+          <div className="mt-5">
+            <p>Index</p>
+            <p>
+              ・本レッスンの概要 0:30~ <br />
+              ・プログラミングとは 1:00~
+              <br />
+              ・PHPとはどんな言語 4:00~ <br />
+              ・PHPで計算してみよう 7:00~ <br />
+              ・まとめ 9:00~
+            </p>
+          </div>
         </div>
       </div>
     </>
