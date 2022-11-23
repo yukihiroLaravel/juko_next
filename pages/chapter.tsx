@@ -3,7 +3,6 @@ import { ToggleButton } from '@/components/elements/ToggleButton';
 import { ProgressBar } from '@/components/elements/ProgressBar';
 import { SideBar } from '@/components/elements/SideBar';
 import { Thumbnail } from '@/components/elements/Thumbnail';
-import { TitleCard as ChapterTitleCard } from '@/features/chapter/components/TitleCard';
 import { TitleStatusCard } from '@/features/lesson/components/TitleStatusCard';
 import { NextPage } from 'next';
 import { useState } from 'react';
@@ -21,6 +20,10 @@ const Chapter: NextPage = () => {
     },
     {
       title: '講座名',
+      href: '/course',
+    },
+    {
+      title: 'レッスン名',
       href: '#',
     },
   ];
@@ -41,7 +44,25 @@ const Chapter: NextPage = () => {
               <li>
                 <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
                   <p className="text-[18px] text-[#6D8DFF] font-semibold">Lesson 1</p>
-                  <StatusIcon status="in_progress" size="20px" />
+                  <StatusIcon status="in_progress" size="s" />
+                </div>
+              </li>
+              <li>
+                <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
+                  <p className="text-[18px] text-[#B5B5B5] font-semibold">Lesson 2</p>
+                  <StatusIcon status="not_started" size="s" />
+                </div>
+              </li>
+              <li>
+                <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
+                  <p className="text-[18px] text-[#B5B5B5] font-semibold">Lesson 3</p>
+                  <StatusIcon status="not_started" size="s" />
+                </div>
+              </li>
+              <li>
+                <div className="border-[#F58909] border-t-2 min-h-[65px] flex items-center justify-between">
+                  <p className="text-[18px] text-[#F58909] font-semibold">Lesson 4</p>
+                  <StatusIcon status="completed" size="s" />
                 </div>
               </li>
             </ul>
@@ -68,10 +89,9 @@ const Chapter: NextPage = () => {
               </p>
             </div>
           </div>
-          <div className="mt-[30px]">
-            <h2 className="font-semibold text-[30px] md:text-[36px]">コースカリキュラム</h2>
+          <div className="mt-[20px]">
+            <h2 className="font-semibold text-[30px] md:text-[36px]">チャプタータイトル</h2>
           </div>
-          <ChapterTitleCard title={'チャプタータイトル'} />
           <div className="mt-[50px] mx-auto w-11/12 text-center">
             <TitleStatusCard status="in_progress" title="Lesson1" />
             <TitleStatusCard status="not_started" title="Lesson2" />
