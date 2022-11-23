@@ -8,8 +8,9 @@ import { TitleStatusCard } from '@/features/lesson/components/TitleStatusCard';
 import { NextPage } from 'next';
 import { useState } from 'react';
 import { Breadcrumb } from '@/components/elements/Breadcrumb';
+import { StatusIcon } from '@/features/lesson/components/StatusIcon';
 
-const Course: NextPage = () => {
+const Chapter: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
 
   // パン屑のリンクリスト
@@ -32,20 +33,15 @@ const Course: NextPage = () => {
           <SideBar>
             <ul className="mt-[30px]">
               <li className="mb-[20px]">
-                <Thumbnail
-                  src={process.env.NEXT_PUBLIC_IMAGE_URL + 'course/1/thumbnail.png'}
-                  alt="course"
-                  height={360}
-                  width={640}
-                />
+                <div className="">
+                  <p className="text-[18px] font-semibold mb-3">チャプター進捗 33%</p>
+                  <ProgressBar progress={33} />
+                </div>
               </li>
               <li>
-                <div className="bg-[#FFCDCD] w-full text-center">
-                  <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">講座名</p>
-                  <ProgressBar progress={100} />
-                  <p className="font-semibold text-[26px] pt-[20px] pb-[30px]">
-                    100% <span className="font-semibold text-[14px]">完了</span>
-                  </p>
+                <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
+                  <p className="text-[18px] text-[#6D8DFF] font-semibold">Lesson 1</p>
+                  <StatusIcon status="in_progress" />
                 </div>
               </li>
             </ul>
@@ -87,4 +83,4 @@ const Course: NextPage = () => {
   );
 };
 
-export default Course;
+export default Chapter;
