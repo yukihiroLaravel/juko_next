@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { StatusIcon } from '@/features/lesson/components/StatusIcon';
 import { StatusButton } from '@/features/lesson/components/StatusButton';
+import { Movie } from '@/components/elements/Movie';
 
 const Chapter: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
@@ -78,6 +79,9 @@ const Chapter: NextPage = () => {
           </div>
           <div className="mt-5 mx-auto">
             <h2 className="font-semibold text-[25px] md:text-[30px]">レッスンタイトル</h2>
+          </div>
+          <div className="my-5">
+            <Movie videoId={'rneIc3LX1vs'} height={720} width={1280} />
           </div>
           <div className="flex justify-start">
             <StatusButton selected={true}>Lesson未実施</StatusButton>
