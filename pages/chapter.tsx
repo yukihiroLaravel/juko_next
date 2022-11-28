@@ -132,11 +132,13 @@ const Chapter: NextPage = () => {
             <h2 className="font-semibold text-[25px] md:text-[30px]">レッスンタイトル</h2>
           </div>
           <div className="my-5 overflow-auto">
-            <Movie
-              videoId={'rneIc3LX1vs'}
-              height={(width as number) > 640 ? 720 : 180}
-              width={(width as number) > 640 ? 1280 : 320}
-            />
+            {(width as number) > 0 && (
+              <Movie
+                videoId={'rneIc3LX1vs'}
+                height={(width as number) > 640 ? 720 : 180}
+                width={(width as number) > 640 ? 1280 : 320}
+              />
+            )}
           </div>
           <div className="flex justify-start">
             <StatusButton selected={true}>Lesson未実施</StatusButton>
