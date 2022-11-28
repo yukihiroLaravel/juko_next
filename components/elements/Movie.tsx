@@ -1,6 +1,11 @@
+import { FC } from 'react';
 import YouTube from 'react-youtube';
-
-export const Movie = ({ videoId, height, width }) => {
+type Props = {
+  videoId: string;
+  height: number;
+  width: number;
+};
+export const Movie: FC<Props> = ({ videoId, height, width }) => {
   const option = {
     height,
     width,
