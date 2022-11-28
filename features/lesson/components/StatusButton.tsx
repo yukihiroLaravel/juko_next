@@ -1,6 +1,12 @@
+import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 
-export const StatusButton = ({ children, selected = false }) => {
+type Props = {
+  children: ReactNode;
+  selected: boolean;
+};
+
+export const StatusButton: FC<Props> = ({ children, selected = false }) => {
   const background = selected ? '#D9D9D9' : '#00A5D4';
   return <Button background={background}>{children}</Button>;
 };
@@ -13,4 +19,7 @@ const Button = styled.button`
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   background: ${(props) => props.background};
+  @media (max-width: 640px) {
+    font-size: 13px;
+  }
 `;
