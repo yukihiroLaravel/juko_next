@@ -8,7 +8,7 @@ type Props = {
 
 export const StatusButton: FC<Props> = ({ children, selected = false }) => {
   const background = selected ? '#D9D9D9' : '#00A5D4';
-  return <Button background={background}>{children}</Button>;
+  return <Button color={background}>{children}</Button>;
 };
 
 const Button = styled.button`
@@ -18,7 +18,7 @@ const Button = styled.button`
   text-align: center;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
-  background: ${(props) => props.background};
+  background: ${(props) => props.color};
   @media (max-width: 640px) {
     font-size: 13px;
   }
