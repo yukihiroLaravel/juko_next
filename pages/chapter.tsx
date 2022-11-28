@@ -88,6 +88,46 @@ const Chapter: NextPage = () => {
           <div className="mt-[20px] border-black border-b pb-5">
             <h2 className="font-semibold text-[30px] md:text-[36px]">チャプタータイトル</h2>
           </div>
+          <ul className="md:hidden mt-[30px] border-black border-b">
+            <li className="mb-[20px]">
+              <div className="">
+                <p className="text-[18px] font-semibold mb-3">チャプター進捗 33%</p>
+                <ProgressBar progress={33} />
+              </div>
+            </li>
+            <li>
+              <a href="#">
+                <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
+                  <p className="text-[18px] text-[#6D8DFF] font-semibold">Lesson 1</p>
+                  <StatusIcon status="in_progress" size="s" />
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
+                  <p className="text-[18px] text-[#B5B5B5] font-semibold">Lesson 2</p>
+                  <StatusIcon status="not_started" size="s" />
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
+                  <p className="text-[18px] text-[#B5B5B5] font-semibold">Lesson 3</p>
+                  <StatusIcon status="not_started" size="s" />
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <div className="border-[#F58909] border-t-2 min-h-[65px] flex items-center justify-between">
+                  <p className="text-[18px] text-[#F58909] font-semibold">Lesson 4</p>
+                  <StatusIcon status="completed" size="s" />
+                </div>
+              </a>
+            </li>
+          </ul>
           <div className="mt-5 mx-auto">
             <h2 className="font-semibold text-[25px] md:text-[30px]">レッスンタイトル</h2>
           </div>
