@@ -3,17 +3,17 @@ import styled from 'styled-components';
 
 type Props = {
   status: 'not_started' | 'in_progress' | 'completed';
-  size?: 's' | 'm';
+  size?: 'small' | 'medium';
 };
-export const StatusIcon: FC<Props> = ({ status, size = 'm' }) => {
-  const getIconSize = (size: 's' | 'm') => {
+export const StatusIcon: FC<Props> = ({ status, size = 'medium' }) => {
+  const getIconSize = (size: 'small' | 'medium') => {
     switch (size) {
-      case 's':
+      case 'small':
         return {
           circleSize: '20px',
           checkIconSize: '1rem',
         };
-      case 'm':
+      case 'medium':
         return {
           circleSize: '30px',
           checkIconSize: '1.25rem',
