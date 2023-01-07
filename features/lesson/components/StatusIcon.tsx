@@ -1,6 +1,26 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
+const Icon = styled.div`
+  min-width: ${(props) => props.size};
+  min-height: ${(props) => props.size};
+  width: ${(props) => props.size};
+  height: ${(props) => props.size};
+  border-radius: 100%;
+  background: ${(props) => props.background};
+  display: flex;
+  align-items: center;
+`;
+
+const IconSvg = styled.svg`
+  width: 0.75rem;
+  height: 0.75rem;
+  margin: 0 auto;
+  color: white;
+  width: ${(props) => props.checkIconSize};
+  height: ${(props) => props.checkIconSize};
+`;
+
 type Props = {
   status: 'not_started' | 'in_progress' | 'completed';
   size?: 'small' | 'medium';
@@ -48,23 +68,3 @@ export const StatusIcon: FC<Props> = ({ status, size = 'medium' }) => {
       );
   }
 };
-
-const Icon = styled.div`
-  min-width: ${(props) => props.size};
-  min-height: ${(props) => props.size};
-  width: ${(props) => props.size};
-  height: ${(props) => props.size};
-  border-radius: 100%;
-  background: ${(props) => props.background};
-  display: flex;
-  align-items: center;
-`;
-
-const IconSvg = styled.svg`
-  width: 0.75rem;
-  height: 0.75rem;
-  margin: 0 auto;
-  color: white;
-  width: ${(props) => props.checkIconSize};
-  height: ${(props) => props.checkIconSize};
-`;
