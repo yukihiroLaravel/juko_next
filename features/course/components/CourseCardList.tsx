@@ -15,7 +15,7 @@ const CourseCardList: FC<Props> = (props) => {
         return (
           <Link key={course.course_id} href="/course">
             <a>
-              <CourseCard course={course} />;
+              <CourseCard course={course} />
             </a>
           </Link>
         );
