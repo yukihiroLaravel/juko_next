@@ -135,8 +135,8 @@ const Chapter: NextPage = () => {
             {(width as number) > 0 && (
               <Movie
                 videoId={'rneIc3LX1vs'}
-                height={(width as number) > 640 ? 576 : 180}
-                width={(width as number) > 640 ? 1024 : 320}
+                height={(width as number) > 640 ? 405 : 180}
+                width={(width as number) > 640 ? 720 : 320}
               />
             )}
           </div>
