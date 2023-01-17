@@ -6,10 +6,11 @@ import { Thumbnail } from '@/components/elements/Thumbnail';
 import { TitleCard as ChapterTitleCard } from '@/features/chapter/components/TitleCard';
 import { TitleStatusCard } from '@/features/lesson/components/TitleStatusCard';
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
 import { Breadcrumb } from '@/components/elements/Breadcrumb';
 
-const Courses: NextPage = () => {
+const Course: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
 
   // パン屑のリンクリスト
@@ -77,9 +78,21 @@ const Courses: NextPage = () => {
           </div>
           <ChapterTitleCard title={'チャプタータイトル'} />
           <div className="mt-[50px] mx-auto w-11/12 text-center">
-            <TitleStatusCard status="in_progress" title="Lesson1" />
-            <TitleStatusCard status="not_started" title="Lesson2" />
-            <TitleStatusCard status="completed" title="Lesson3" />
+            <Link href="/chapter">
+              <a>
+                <TitleStatusCard status="in_progress" title="Lesson1" />
+              </a>
+            </Link>
+            <Link href="/chapter">
+              <a>
+                <TitleStatusCard status="not_started" title="Lesson2" />
+              </a>
+            </Link>
+            <Link href="/chapter">
+              <a>
+                <TitleStatusCard status="completed" title="Lesson3" />
+              </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -87,4 +100,4 @@ const Courses: NextPage = () => {
   );
 };
 
-export default Courses;
+export default Course;

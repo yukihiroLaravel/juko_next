@@ -8,7 +8,7 @@ type Props = {
 };
 export const TitleStatusCard: FC<Props> = ({ title, status }) => {
   return (
-    <div className="flex flex-start mb-[10px]">
+    <div className="flex items-center flex-start mb-[10px]">
       <StatusIcon status={status} />
       <TitleCard title={title} />
     </div>
