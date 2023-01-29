@@ -38,6 +38,20 @@ const Course: NextPage = () => {
     },
   ];
 
+  // TODO 後ほど文字列に変更される
+  const statusString = (status: number) => {
+    switch (status) {
+      case 1:
+        return 'not_started';
+      case 2:
+        return 'in_progress';
+      case 3:
+        return 'completed';
+      default:
+        return 'not_started';
+    }
+  };
+
   return (
     <>
       <Header />
@@ -94,29 +108,27 @@ const Course: NextPage = () => {
               <div className="mt-[30px]">
                 <h2 className="font-semibold text-[30px] md:text-[36px]">コースカリキュラム</h2>
               </div>
-              {/* {チャプターは複数存在する。} */}
               {course.chapters.map((chapter) => {
                 return (
-                  <>
+                  <div key={chapter.chapter_id}>
                     <ChapterTitleCard title={chapter.title} />
-                    <div className="mt-[50px] mx-auto w-11/12 text-center">
-                      <Link href="/chapter">
-                        <a>
-                          <TitleStatusCard status="in_progress" title="Lesson1" />
-                        </a>
-                      </Link>
-                      <Link href="/chapter">
-                        <a>
-                          <TitleStatusCard status="not_started" title="Lesson2" />
-                        </a>
-                      </Link>
-                      <Link href="/chapter">
-                        <a>
-                          <TitleStatusCard status="completed" title="Lesson3" />
-                        </a>
-                      </Link>
+                    <div className="my-[50px] mx-auto w-11/12 text-center">
+                      {chapter.lessons.map((lesson) => {
+                        return (
+                          <div className="my-5" key={lesson.lesson_id}>
+                            <Link href="/chapter">
+                              <a>
+                                <TitleStatusCard
+                                  status={statusString(lesson.lesson_attendance.status)}
+                                  title={lesson.title}
+                                />
+                              </a>
+                            </Link>
+                          </div>
+                        );
+                      })}
                     </div>
-                  </>
+                  </div>
                 );
               })}
             </div>
