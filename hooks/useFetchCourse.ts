@@ -26,5 +26,5 @@ export const useFetchCourse = ({ attendanceId }: Args) => {
     });
   }, [attendanceId]);
 
-  return [course] as const;
+  return [course as Data] as const;
 };

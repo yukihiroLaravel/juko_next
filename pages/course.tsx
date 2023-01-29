@@ -53,7 +53,7 @@ const Course: NextPage = () => {
                 <ul className="mt-[30px]">
                   <li className="mb-[20px]">
                     <Thumbnail
-                      src={process.env.NEXT_PUBLIC_IMAGE_URL + 'course/1/thumbnail.png'}
+                      src={process.env.NEXT_PUBLIC_IMAGE_URL + course.image}
                       alt="course"
                       height={360}
                       width={640}
@@ -61,10 +61,10 @@ const Course: NextPage = () => {
                   </li>
                   <li>
                     <div className="bg-[#FFCDCD] w-full text-center">
-                      <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">講座名</p>
+                      <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">{course.title}</p>
                       <ProgressBar progress={100} />
                       <p className="font-semibold text-[26px] pt-[20px] pb-[30px]">
-                        100% <span className="font-semibold text-[14px]">完了</span>
+                        {course.attendance.progress}% <span className="font-semibold text-[14px]">完了</span>
                       </p>
                     </div>
                   </li>
@@ -78,40 +78,47 @@ const Course: NextPage = () => {
               <Breadcrumb links={links} />
               <div className="pb-10 border-black border-b mt-[30px] md:hidden">
                 <Thumbnail
-                  src={process.env.NEXT_PUBLIC_IMAGE_URL + 'course/1/thumbnail.png'}
+                  src={process.env.NEXT_PUBLIC_IMAGE_URL + course.image}
                   alt="course"
                   height={360}
                   width={640}
                 />
                 <div className="bg-[#FFCDCD] w-full text-center">
-                  <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">講座名</p>
+                  <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">{course.title}</p>
                   <ProgressBar progress={100} />
                   <p className="font-semibold text-[26px] pt-[20px] pb-[30px]">
-                    100% <span className="font-semibold text-[14px]">完了</span>
+                    {course.attendance.progress}% <span className="font-semibold text-[14px]">完了</span>
                   </p>
                 </div>
               </div>
               <div className="mt-[30px]">
                 <h2 className="font-semibold text-[30px] md:text-[36px]">コースカリキュラム</h2>
               </div>
-              <ChapterTitleCard title={'チャプタータイトル'} />
-              <div className="mt-[50px] mx-auto w-11/12 text-center">
-                <Link href="/chapter">
-                  <a>
-                    <TitleStatusCard status="in_progress" title="Lesson1" />
-                  </a>
-                </Link>
-                <Link href="/chapter">
-                  <a>
-                    <TitleStatusCard status="not_started" title="Lesson2" />
-                  </a>
-                </Link>
-                <Link href="/chapter">
-                  <a>
-                    <TitleStatusCard status="completed" title="Lesson3" />
-                  </a>
-                </Link>
-              </div>
+              {/* {チャプターは複数存在する。} */}
+              {course.chapters.map((chapter) => {
+                return (
+                  <>
+                    <ChapterTitleCard title={chapter.title} />
+                    <div className="mt-[50px] mx-auto w-11/12 text-center">
+                      <Link href="/chapter">
+                        <a>
+                          <TitleStatusCard status="in_progress" title="Lesson1" />
+                        </a>
+                      </Link>
+                      <Link href="/chapter">
+                        <a>
+                          <TitleStatusCard status="not_started" title="Lesson2" />
+                        </a>
+                      </Link>
+                      <Link href="/chapter">
+                        <a>
+                          <TitleStatusCard status="completed" title="Lesson3" />
+                        </a>
+                      </Link>
+                    </div>
+                  </>
+                );
+              })}
             </div>
           </>
         )}
