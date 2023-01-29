@@ -33,7 +33,7 @@ const Course: NextPage = () => {
       href: '/courses',
     },
     {
-      title: '講座名',
+      title: course.title,
       href: '#',
     },
   ];
