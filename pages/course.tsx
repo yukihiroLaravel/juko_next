@@ -27,16 +27,19 @@ const Course: NextPage = () => {
   }, [course]);
 
   // パン屑のリンクリスト
-  const links = [
-    {
-      title: '講座一覧',
-      href: '/courses',
-    },
-    {
-      title: course.title,
-      href: '#',
-    },
-  ];
+  const links =
+    course !== null
+      ? [
+          {
+            title: '講座一覧',
+            href: '/courses',
+          },
+          {
+            title: course.title,
+            href: '#',
+          },
+        ]
+      : [];
 
   // TODO 後ほど文字列に変更される
   const statusString = (status: number) => {
