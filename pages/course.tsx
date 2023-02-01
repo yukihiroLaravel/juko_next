@@ -119,7 +119,9 @@ const Course: NextPage = () => {
                       {chapter.lessons.map((lesson) => {
                         return (
                           <div className="my-5" key={lesson.lesson_id}>
-                            <Link href="/chapter">
+                            <Link
+                              href={{ pathname: '/chapter', query: { attendanceId, chapterId: chapter.chapter_id } }}
+                            >
                               <a>
                                 <TitleStatusCard
                                   status={statusString(lesson.lesson_attendance.status)}

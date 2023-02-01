@@ -9,11 +9,24 @@ import { StatusIcon } from '@/features/lesson/components/StatusIcon';
 import { StatusButton } from '@/features/lesson/components/StatusButton';
 import { Movie } from '@/components/elements/Movie';
 import { useWindowSize } from '@/hooks/useWindowSize';
+import { useFetchChapter } from '@/hooks/useFetchChapter';
+import { useRouter } from 'next/router';
+
+type Query = {
+  attendanceId?: string;
+  chapterId?: string;
+};
 
 const Chapter: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
 
   const [width] = useWindowSize();
+  const router = useRouter();
+  const query: Query = router.query;
+  const [chapter] = useFetchChapter({
+    attendanceId: query.attendanceId,
+    chapterId: query.chapterId,
+  });
 
   // パン屑のリンクリスト
   const links = [
