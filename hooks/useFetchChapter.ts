@@ -20,7 +20,6 @@ export const useFetchChapter = ({ attendanceId, chapterId }: Args) => {
 
   useEffect(() => {
     if (attendanceId === undefined || chapterId === undefined) return;
-    console.log(attendanceId, chapterId);
     Axios.get('api/proxy/api/v1/course/chapter/?attendance_id=' + attendanceId + '&chapter_id=' + chapterId).then(
       (res) => {
         setChapter(res.data.data);
