@@ -139,7 +139,6 @@ const Course: NextPage = () => {
             </div>
           </>
         )}
-        ;
       </div>
     </>
   );
