@@ -22,7 +22,7 @@ const IconSvg = styled.svg`
 `;
 
 type Props = {
-  status: 'not_started' | 'in_progress' | 'completed';
+  status: 'before_attendance' | 'in_attendance' | 'completed_attendance';
   size?: 'small' | 'medium';
 };
 export const StatusIcon: FC<Props> = ({ status, size = 'medium' }) => {
@@ -47,11 +47,11 @@ export const StatusIcon: FC<Props> = ({ status, size = 'medium' }) => {
   };
   const iconSize = getIconSize(size);
   switch (status) {
-    case 'not_started':
+    case 'before_attendance':
       return <Icon background="#D9D9D9" size={iconSize.circleSize} />;
-    case 'in_progress':
+    case 'in_attendance':
       return <Icon background="#6D8DFF" size={iconSize.circleSize} />;
-    case 'completed':
+    case 'completed_attendance':
       return (
         <Icon background="#F58909" size={iconSize.circleSize}>
           <IconSvg

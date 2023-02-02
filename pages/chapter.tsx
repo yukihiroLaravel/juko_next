@@ -12,11 +12,17 @@ import { useWindowSize } from '@/hooks/useWindowSize';
 import { useFetchChapter } from '@/hooks/useFetchChapter';
 import { useRouter } from 'next/router';
 import { Loading } from '@/components/utils/Loading';
+import { Lesson } from '@/types/Lesson';
+import { LessonAttendance } from '@/types/LessonAttendance';
 
 type Query = {
   attendanceId?: string;
   chapterId?: string;
 };
+
+const STATUS_BEFORE_ATTENDANCE = 'before_attendance';
+const STATUS_IN_ATTENDANCE = 'in_attendance';
+const STATUS_COMPLETED_ATTENDANCE = 'completed_attendance';
 
 const Chapter: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
@@ -31,9 +37,40 @@ const Chapter: NextPage = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const [currentLesson, setCurrentLesson] = useState<
+    | (Lesson & {
+        lessonAttendance: LessonAttendance;
+      })
+    | null
+  >(null);
+
+  const calculateChapterProgeress = (): number => {
+    // チャプター取得前は0を返す
+    if (chapter === null) return 0;
+
+    // 合計レッスン数
+    const lessonTotalCount = chapter.lessons.length;
+
+    // 合計レッスン数が0の場合は、0を返す
+    if (lessonTotalCount === 0) return 0;
+
+    // 進捗完了レッスン数
+    const completedLessonTotalCount = chapter.lessons.filter((lesson) => {
+      console.log(lesson);
+      return lesson.lessonAttendance?.status === STATUS_COMPLETED_ATTENDANCE;
+    }).length;
+
+    return Math.floor((completedLessonTotalCount / lessonTotalCount) * 100);
+  };
+
   useEffect(() => {
     if (chapter !== null) {
       setIsLoading(false);
+      setCurrentLesson(
+        chapter.lessons[0] as Lesson & {
+          lessonAttendance: LessonAttendance;
+        }
+      );
       return;
     }
   }, [chapter]);
@@ -49,10 +86,17 @@ const Chapter: NextPage = () => {
       href: '/course',
     },
     {
-      title: 'レッスン名',
+      title: currentLesson?.title as string,
       href: '#',
     },
   ];
+
+  const clickHandler = (lessonId: number) => {
+    const newLesson = chapter.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
+      lessonAttendance: LessonAttendance;
+    };
+    setCurrentLesson(newLesson);
+  };
 
   return (
     <>
@@ -69,42 +113,23 @@ const Chapter: NextPage = () => {
                 <ul className="mt-[30px]">
                   <li className="mb-[20px]">
                     <div className="">
-                      <p className="text-[18px] font-semibold mb-3">チャプター進捗 33%</p>
-                      <ProgressBar progress={33} />
+                      <p className="text-[18px] font-semibold mb-3">チャプター進捗 {calculateChapterProgeress()}%</p>
+                      <ProgressBar progress={calculateChapterProgeress()} />
                     </div>
                   </li>
-                  <li>
-                    <a href="#">
-                      <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
-                        <p className="text-[18px] text-[#6D8DFF] font-semibold">Lesson 1</p>
-                        <StatusIcon status="in_progress" size="small" />
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
-                        <p className="text-[18px] text-[#B5B5B5] font-semibold">Lesson 2</p>
-                        <StatusIcon status="not_started" size="small" />
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
-                        <p className="text-[18px] text-[#B5B5B5] font-semibold">Lesson 3</p>
-                        <StatusIcon status="not_started" size="small" />
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div className="border-[#F58909] border-t-2 min-h-[65px] flex items-center justify-between">
-                        <p className="text-[18px] text-[#F58909] font-semibold">Lesson 4</p>
-                        <StatusIcon status="completed" size="small" />
-                      </div>
-                    </a>
-                  </li>
+                  {chapter.lessons.map((lesson) => {
+                    return (
+                      <li key={lesson.lesson_id}>
+                        <div
+                          className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between cursor-pointer"
+                          onClick={() => clickHandler(lesson.lesson_id)}
+                        >
+                          <p className="text-[18px] text-[#6D8DFF] font-semibold">{lesson.title}</p>
+                          <StatusIcon status={lesson.lessonAttendance.status} size="small" />
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
                 <ToggleButton isShowedSideBar={isShowedSideBar} setIsShowedSideBar={setIsShowedSideBar} />
               </SideBar>
@@ -115,50 +140,28 @@ const Chapter: NextPage = () => {
             <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
               <Breadcrumb links={links} />
               <div className="mt-[20px] border-black border-b pb-5">
-                <h2 className="font-semibold text-[30px] md:text-[36px]">チャプタータイトル</h2>
+                <h2 className="font-semibold text-[30px] md:text-[36px]">{chapter.title}</h2>
               </div>
               <ul className="md:hidden mt-[30px] border-black border-b">
                 <li className="mb-[20px]">
                   <div className="">
-                    <p className="text-[18px] font-semibold mb-3">チャプター進捗 33%</p>
-                    <ProgressBar progress={33} />
+                    <p className="text-[18px] font-semibold mb-3">チャプター進捗 {calculateChapterProgeress()}%</p>
+                    <ProgressBar progress={calculateChapterProgeress()} />
                   </div>
                 </li>
-                <li>
-                  <a href="#">
-                    <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
-                      <p className="text-[18px] text-[#6D8DFF] font-semibold">Lesson 1</p>
-                      <StatusIcon status="in_progress" size="small" />
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
-                      <p className="text-[18px] text-[#B5B5B5] font-semibold">Lesson 2</p>
-                      <StatusIcon status="not_started" size="small" />
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
-                      <p className="text-[18px] text-[#B5B5B5] font-semibold">Lesson 3</p>
-                      <StatusIcon status="not_started" size="small" />
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <div className="border-[#F58909] border-t-2 min-h-[65px] flex items-center justify-between">
-                      <p className="text-[18px] text-[#F58909] font-semibold">Lesson 4</p>
-                      <StatusIcon status="completed" size="small" />
-                    </div>
-                  </a>
-                </li>
+                {chapter.lessons.map((lesson) => {
+                  return (
+                    <li key={lesson.lesson_id}>
+                      <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
+                        <p className="text-[18px] text-[#6D8DFF] font-semibold">{lesson.title}</p>
+                        <StatusIcon status={lesson.lessonAttendance.status} size="small" />
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
               <div className="mt-5 mx-auto">
-                <h2 className="font-semibold text-[25px] md:text-[30px]">レッスンタイトル</h2>
+                <h2 className="font-semibold text-[25px] md:text-[30px]">{currentLesson?.title}</h2>
               </div>
               <div className="my-5 overflow-auto">
                 {(width as number) > 0 && (
@@ -170,22 +173,21 @@ const Chapter: NextPage = () => {
                 )}
               </div>
               <div className="flex justify-start">
-                <StatusButton selected={true}>Lesson未実施</StatusButton>
+                <StatusButton selected={currentLesson?.lessonAttendance.status === STATUS_BEFORE_ATTENDANCE}>
+                  Lesson未実施
+                </StatusButton>
                 <span className="ml-10" />
-                <StatusButton selected={false}>Lesson開始</StatusButton>
+                <StatusButton selected={currentLesson?.lessonAttendance.status === STATUS_IN_ATTENDANCE}>
+                  Lesson開始
+                </StatusButton>
                 <span className="ml-10" />
-                <StatusButton selected={false}>Lesson完了</StatusButton>
+                <StatusButton selected={currentLesson?.lessonAttendance.status === STATUS_COMPLETED_ATTENDANCE}>
+                  Lesson完了
+                </StatusButton>
               </div>
               <div className="mt-5">
                 <p>Index</p>
-                <p>
-                  ・本レッスンの概要 0:30~ <br />
-                  ・プログラミングとは 1:00~
-                  <br />
-                  ・PHPとはどんな言語 4:00~ <br />
-                  ・PHPで計算してみよう 7:00~ <br />
-                  ・まとめ 9:00~
-                </p>
+                <p>{currentLesson?.remarks}</p>
               </div>
             </div>
           </>

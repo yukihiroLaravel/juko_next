@@ -8,7 +8,11 @@ type Props = {
 
 export const StatusButton: FC<Props> = ({ children, selected = false }) => {
   const background = selected ? '#D9D9D9' : '#00A5D4';
-  return <Button color={background}>{children}</Button>;
+  return (
+    <Button color={background} disabled={selected}>
+      {children}
+    </Button>
+  );
 };
 
 const Button = styled.button`

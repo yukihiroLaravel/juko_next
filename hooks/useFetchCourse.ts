@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 type Data = Course & {
   chapters: (Chapter & {
     lessons: (Lesson & {
-      lesson_attendance: LessonAttendance;
+      lessonAttendance: LessonAttendance;
     })[];
   })[];
 };
