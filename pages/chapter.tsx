@@ -164,9 +164,9 @@ const Chapter: NextPage = () => {
                 <h2 className="font-semibold text-[25px] md:text-[30px]">{currentLesson?.title}</h2>
               </div>
               <div className="my-5 overflow-auto">
-                {(width as number) > 0 && (
+                {(width as number) > 0 && currentLesson && (
                   <Movie
-                    videoId={'rneIc3LX1vs'}
+                    videoId={currentLesson.url}
                     height={(width as number) > 640 ? 405 : 180}
                     width={(width as number) > 640 ? 720 : 320}
                   />
@@ -186,8 +186,7 @@ const Chapter: NextPage = () => {
                 </StatusButton>
               </div>
               <div className="mt-5">
-                <p>Index</p>
-                <p>{currentLesson?.remarks}</p>
+                <p className="whitespace-pre-wrap">{currentLesson?.remarks}</p>
               </div>
             </div>
           </>
