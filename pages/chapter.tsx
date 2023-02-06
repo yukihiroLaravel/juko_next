@@ -111,7 +111,7 @@ const Chapter: NextPage = () => {
               <SideBar>
                 <ul className="mt-[30px]">
                   <li className="mb-[20px]">
-                    <div className="">
+                    <div>
                       <p className="text-[18px] font-semibold mb-3">チャプター進捗 {calculateChapterProgeress()}%</p>
                       <ProgressBar progress={calculateChapterProgeress()} />
                     </div>
@@ -143,7 +143,7 @@ const Chapter: NextPage = () => {
               </div>
               <ul className="md:hidden mt-[30px] border-black border-b">
                 <li className="mb-[20px]">
-                  <div className="">
+                  <div>
                     <p className="text-[18px] font-semibold mb-3">チャプター進捗 {calculateChapterProgeress()}%</p>
                     <ProgressBar progress={calculateChapterProgeress()} />
                   </div>
@@ -151,7 +151,10 @@ const Chapter: NextPage = () => {
                 {chapter.lessons.map((lesson) => {
                   return (
                     <li key={lesson.lesson_id}>
-                      <div className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between">
+                      <div
+                        className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between"
+                        onClick={() => clickHandler(lesson.lesson_id)}
+                      >
                         <p className="text-[18px] text-[#6D8DFF] font-semibold">{lesson.title}</p>
                         <StatusIcon status={lesson.lessonAttendance.status} size="small" />
                       </div>
