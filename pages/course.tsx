@@ -41,20 +41,6 @@ const Course: NextPage = () => {
         ]
       : [];
 
-  // TODO 後ほど文字列に変更される
-  const statusString = (status: number) => {
-    switch (status) {
-      case 1:
-        return 'not_started';
-      case 2:
-        return 'in_progress';
-      case 3:
-        return 'completed';
-      default:
-        return 'not_started';
-    }
-  };
-
   return (
     <>
       <Header />
@@ -119,12 +105,11 @@ const Course: NextPage = () => {
                       {chapter.lessons.map((lesson) => {
                         return (
                           <div className="my-5" key={lesson.lesson_id}>
-                            <Link href="/chapter">
+                            <Link
+                              href={{ pathname: '/chapter', query: { attendanceId, chapterId: chapter.chapter_id } }}
+                            >
                               <a>
-                                <TitleStatusCard
-                                  status={statusString(lesson.lesson_attendance.status)}
-                                  title={lesson.title}
-                                />
+                                <TitleStatusCard status={lesson.lessonAttendance.status} title={lesson.title} />
                               </a>
                             </Link>
                           </div>
@@ -137,7 +122,6 @@ const Course: NextPage = () => {
             </div>
           </>
         )}
-        ;
       </div>
     </>
   );

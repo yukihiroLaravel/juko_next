@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { StatusIcon } from './StatusIcon';
 
 type Props = {
-  status: 'not_started' | 'in_progress' | 'completed';
+  status: 'before_attendance' | 'in_attendance' | 'completed_attendance';
   title: string;
 };
 export const TitleStatusCard: FC<Props> = ({ title, status }) => {

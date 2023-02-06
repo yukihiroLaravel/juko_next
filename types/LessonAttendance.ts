@@ -1,4 +1,4 @@
 export type LessonAttendance = {
   lesson_attendance_id: number;
-  status: number;
+  status: 'before_attendance' | 'in_attendance' | 'completed_attendance';
 };
