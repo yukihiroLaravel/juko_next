@@ -56,7 +56,6 @@ const Chapter: NextPage = () => {
 
     // 進捗完了レッスン数
     const completedLessonTotalCount = chapter.lessons.filter((lesson) => {
-      console.log(lesson);
       return lesson.lessonAttendance?.status === STATUS_COMPLETED_ATTENDANCE;
     }).length;
 
