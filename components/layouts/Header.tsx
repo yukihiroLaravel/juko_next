@@ -1,13 +1,18 @@
-const Header = () => {
+import { FC } from 'react';
+
+type Props = {
+  isLogin?: boolean;
+};
+const Header: FC<Props> = ({ isLogin = true }) => {
   return (
-    <>
-      <nav className="w-full bg-main-blue h-[100px] sticky top-0 z-50">
-        <div className="flex h-[100px] justify-between">
-          <div className="flex items-center">
-            <a href="#" className="w-[252px] ml-[30px]">
-              <h1 className="font-semibold text-[36px] text-[#FBF459]">受講管理アプリ</h1>
-            </a>
-          </div>
+    <nav className="w-full bg-main-blue h-[100px] sticky top-0 z-50">
+      <div className="flex h-[100px] justify-between">
+        <div className="flex items-center">
+          <a href="#" className="w-[252px] ml-[30px]">
+            <h1 className="font-semibold text-[36px] text-[#FBF459]">受講管理アプリ</h1>
+          </a>
+        </div>
+        {isLogin && (
           <div className="flex items-center mr-[50px]">
             <a href="#">
               <svg
@@ -26,9 +31,9 @@ const Header = () => {
               </svg>
             </a>
           </div>
-        </div>
-      </nav>
-    </>
+        )}
+      </div>
+    </nav>
   );
 };
 
