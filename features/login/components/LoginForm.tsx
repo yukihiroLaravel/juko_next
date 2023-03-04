@@ -11,7 +11,7 @@ export const LoginForm: FC = () => {
     password: '',
   };
 
-  const [unauthorizedMessage, setUnauthorizedMessage] = useState<string>();
+  const [isUnauthorized, setisUnauthorized] = useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +40,7 @@ export const LoginForm: FC = () => {
         .catch((error) => {
           setIsLoading(false);
           if (error.response.status === 401) {
-            setUnauthorizedMessage('認証情報が正しくありません。もう一度、お試しください。');
+            setisUnauthorized(true);
           }
         });
     });
@@ -54,7 +54,12 @@ export const LoginForm: FC = () => {
       <h2 className="text-center mt-[50px] text-[40px]">ログイン画面</h2>
 
       <div className="w-4/5 mx-auto">
-        {unauthorizedMessage && <span className="text-red-600">{unauthorizedMessage}</span>}
+        {isUnauthorized && (
+          <>
+            <p className="text-red-600">認証情報が正しくありません。</p>
+            <p className="text-red-600">もう一度、お試しください。</p>
+          </>
+        )}
         <div className="mt-[40px]">
           <label htmlFor="email">
             <p>メールアドレス</p>
