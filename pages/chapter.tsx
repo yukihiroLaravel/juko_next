@@ -15,6 +15,7 @@ import { Loading } from '@/components/utils/Loading';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import styled from 'styled-components';
+import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 
 type Query = {
   attendanceId?: string;
@@ -113,7 +114,7 @@ const Chapter: NextPage = () => {
   };
 
   return (
-    <>
+    <AuthWrapper>
       <Header />
       <div className="flex">
         {isLoading ? (
@@ -229,7 +230,7 @@ const Chapter: NextPage = () => {
           </>
         )}
       </div>
-    </>
+    </AuthWrapper>
   );
 };
 

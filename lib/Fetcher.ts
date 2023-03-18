@@ -1,7 +1,12 @@
-export const fetcher = (url: string) =>
-  fetch(url).then((res) => {
-    if (res.ok == false) {
-      throw res.status;
-    }
-    return res.json();
-  });
+import { Axios } from './api';
+
+export const fetcher = (url: string) => {
+  return Axios.get(url)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error(error);
+      throw error;
+    });
+};

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Axios } from '@/lib/api';
 import { useRouter } from 'next/router';
+import { useSWRConfig } from 'swr';
 
 export const LoginForm: FC = () => {
   const defaultValues = {
@@ -11,7 +12,9 @@ export const LoginForm: FC = () => {
     password: '',
   };
 
-  const [isUnauthorized, setisUnauthorized] = useState<boolean>(false);
+  const { cache } = useSWRConfig();
+
+  const [isUnauthorized, setIsUnauthorized] = useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,18 +32,19 @@ export const LoginForm: FC = () => {
 
   const submitHandler = (data: typeof defaultValues) => {
     setIsLoading(true);
-    Axios.get('api/proxy/sanctum/csrf-cookie').then(() => {
-      Axios.post('api/proxy/login', data)
+    Axios.get('/api/proxy/sanctum/csrf-cookie').then(() => {
+      Axios.post('/api/proxy/login', data)
         .then((res) => {
           setIsLoading(false);
           if (res.data.result === true) {
+            cache.delete('/api/proxy/api/user');
             router.push('/courses');
           }
         })
         .catch((error) => {
           setIsLoading(false);
           if (error.response.status === 401) {
-            setisUnauthorized(true);
+            setIsUnauthorized(true);
           }
         });
     });
@@ -64,6 +68,7 @@ export const LoginForm: FC = () => {
           <label htmlFor="email">
             <p>メールアドレス</p>
             <input
+              id="email"
               className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
               {...register('email')}
             />
@@ -74,6 +79,7 @@ export const LoginForm: FC = () => {
           <label htmlFor="password">
             <p>パスワード</p>
             <input
+              id="password"
               className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
               type="password"
               {...register('password')}
