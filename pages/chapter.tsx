@@ -118,7 +118,10 @@ const Chapter: NextPage = () => {
                   </li>
                   {chapter.lessons.map((lesson) => {
                     return (
-                      <li key={lesson.lesson_id}>
+                      <li
+                        key={lesson.lesson_id}
+                        className={lesson.lesson_id === currentLesson?.lesson_id ? `bg-gray-200` : ''}
+                      >
                         <div
                           className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between cursor-pointer"
                           onClick={() => clickHandler(lesson.lesson_id)}
@@ -150,7 +153,10 @@ const Chapter: NextPage = () => {
                 </li>
                 {chapter.lessons.map((lesson) => {
                   return (
-                    <li key={lesson.lesson_id}>
+                    <li
+                      key={lesson.lesson_id}
+                      className={lesson.lesson_id === currentLesson?.lesson_id ? `bg-gray-200` : ''}
+                    >
                       <div
                         className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between"
                         onClick={() => clickHandler(lesson.lesson_id)}
