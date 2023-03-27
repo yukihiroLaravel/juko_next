@@ -25,6 +25,20 @@ const STATUS_BEFORE_ATTENDANCE = 'before_attendance';
 const STATUS_IN_ATTENDANCE = 'in_attendance';
 const STATUS_COMPLETED_ATTENDANCE = 'completed_attendance';
 
+const StyleSideBarList = styled.li<{ isSelected: boolean }>`
+  border-top: 1px solid #b5b5b5;
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${({ isSelected }) => isSelected && '#ddd'};
+  cursor: pointer;
+  padding: 0.5rem;
+  :hover {
+    opacity: 0.8;
+  }
+`;
+
 const Chapter: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
 
@@ -196,16 +210,5 @@ const Chapter: NextPage = () => {
     </>
   );
 };
-
-const StyleSideBarList = styled.li<{ isSelected: boolean }>`
-  border-top: 1px solid #b5b5b5;
-  min-height: 4rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: ${({ isSelected }) => isSelected && '#ddd'};
-  cursor: pointer;
-  padding: 0.5rem;
-`;
 
 export default Chapter;
