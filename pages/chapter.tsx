@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import { Loading } from '@/components/utils/Loading';
 import { Lesson } from '@/types/Lesson';
 import { LessonAttendance } from '@/types/LessonAttendance';
+import styled from 'styled-components';
 
 type Query = {
   attendanceId?: string;
@@ -23,6 +24,20 @@ type Query = {
 const STATUS_BEFORE_ATTENDANCE = 'before_attendance';
 const STATUS_IN_ATTENDANCE = 'in_attendance';
 const STATUS_COMPLETED_ATTENDANCE = 'completed_attendance';
+
+const StyleSideBarList = styled.li<{ isSelected: boolean }>`
+  border-top: 1px solid #b5b5b5;
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${({ isSelected }) => isSelected && '#ddd'};
+  cursor: pointer;
+  padding: 0.5rem;
+  :hover {
+    opacity: 0.8;
+  }
+`;
 
 const Chapter: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
@@ -90,7 +105,7 @@ const Chapter: NextPage = () => {
     },
   ];
 
-  const clickHandler = (lessonId: number) => {
+  const clickHandler = (lessonId: number) => () => {
     const newLesson = chapter.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
       lessonAttendance: LessonAttendance;
     };
@@ -109,24 +124,23 @@ const Chapter: NextPage = () => {
           <>
             {isShowedSideBar ? (
               <SideBar>
-                <ul className="mt-[30px]">
-                  <li className="mb-[20px]">
-                    <div>
-                      <p className="text-[18px] font-semibold mb-3">チャプター進捗 {calculateChapterProgeress()}%</p>
+                <ul className="mt-2">
+                  <li className="mb-10">
+                    <div className="text-center">
+                      <p className="font-semibold mb-3">チャプター進捗 {calculateChapterProgeress()}%</p>
                       <ProgressBar progress={calculateChapterProgeress()} />
                     </div>
                   </li>
                   {chapter.lessons.map((lesson) => {
                     return (
-                      <li key={lesson.lesson_id}>
-                        <div
-                          className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between cursor-pointer"
-                          onClick={() => clickHandler(lesson.lesson_id)}
-                        >
-                          <p className="text-[18px] text-[#6D8DFF] font-semibold">{lesson.title}</p>
-                          <StatusIcon status={lesson.lessonAttendance.status} size="small" />
-                        </div>
-                      </li>
+                      <StyleSideBarList
+                        key={lesson.lesson_id}
+                        onClick={clickHandler(lesson.lesson_id)}
+                        isSelected={lesson.lesson_id === currentLesson?.lesson_id}
+                      >
+                        <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
+                        <StatusIcon status={lesson.lessonAttendance.status} size="small" />
+                      </StyleSideBarList>
                     );
                   })}
                 </ul>
@@ -138,27 +152,26 @@ const Chapter: NextPage = () => {
 
             <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
               <Breadcrumb links={links} />
-              <div className="mt-[20px] border-black border-b pb-5">
-                <h2 className="font-semibold text-[30px] md:text-[36px]">{chapter.title}</h2>
+              <div className="mt-10 border-black border-b pb-5">
+                <h2 className="font-semibold text-3xl md:text-4xl">{chapter.title}</h2>
               </div>
-              <ul className="md:hidden mt-[30px] border-black border-b">
-                <li className="mb-[20px]">
-                  <div>
-                    <p className="text-[18px] font-semibold mb-3">チャプター進捗 {calculateChapterProgeress()}%</p>
+              <ul className="md:hidden my-5 border-black border-b">
+                <li className="mb-10">
+                  <div className="text-center">
+                    <p className="font-semibold mb-3">チャプター進捗 {calculateChapterProgeress()}%</p>
                     <ProgressBar progress={calculateChapterProgeress()} />
                   </div>
                 </li>
                 {chapter.lessons.map((lesson) => {
                   return (
-                    <li key={lesson.lesson_id}>
-                      <div
-                        className="border-[#B5B5B5] border-t-2 min-h-[65px] flex items-center justify-between"
-                        onClick={() => clickHandler(lesson.lesson_id)}
-                      >
-                        <p className="text-[18px] text-[#6D8DFF] font-semibold">{lesson.title}</p>
-                        <StatusIcon status={lesson.lessonAttendance.status} size="small" />
-                      </div>
-                    </li>
+                    <StyleSideBarList
+                      key={lesson.lesson_id}
+                      onClick={clickHandler(lesson.lesson_id)}
+                      isSelected={lesson.lesson_id === currentLesson?.lesson_id}
+                    >
+                      <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
+                      <StatusIcon status={lesson.lessonAttendance.status} size="small" />
+                    </StyleSideBarList>
                   );
                 })}
               </ul>
