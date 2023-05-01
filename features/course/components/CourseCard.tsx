@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { FC } from 'react';
-import { Course } from '@/types/Course';
+import { Course } from '@/features/course/types/Course';
 
 type Props = {
   course: Course;

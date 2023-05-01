@@ -1,6 +1,6 @@
 import { Axios } from '@/lib/api';
 import { Chapter } from '@/types/Chapter';
-import { Course } from '@/types/Course';
+import { Course } from '@/features/course/types/Course';
 import { Lesson } from '@/types/Lesson';
 import { LessonAttendance } from '@/types/LessonAttendance';
 import { useEffect, useState } from 'react';
