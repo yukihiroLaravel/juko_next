@@ -1,24 +1,53 @@
 import Header from '@/components/layouts/Header';
 import { NextPage } from 'next';
 import { useDropzone } from 'react-dropzone';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { StoreSchema } from '@/features/course/schemas/StoreSchema';
+import { StoreCourse } from '@/features/course/types/StoreCourse';
 
 const Register: NextPage = () => {
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop: (acceptedFiles) => {
-      console.log(acceptedFiles);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<StoreCourse>({
+    mode: 'onSubmit',
+    resolver: yupResolver(StoreSchema),
+    defaultValues: {
+      title: '',
     },
   });
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (acceptedFiles: File[]) => {
+      if (acceptedFiles[0] instanceof File) {
+        setValue('image', acceptedFiles[0]);
+      }
+    },
+  });
+
+  const submitHandler = (data: StoreCourse) => {
+    console.log(data);
+  };
+
   return (
     <>
       <Header />
       <div className="md:border md:w-3/6 min-h-[80vh] mt-10 mb-10 bg-white mx-auto">
-        <form>
+        <form onSubmit={handleSubmit(submitHandler)}>
           <h2 className="text-center my-10 text-3xl">講座登録</h2>
           <div className="w-4/5 mx-auto">
             <div className="my-5">
               <label htmlFor="title">
                 <p>講座名</p>
-                <input className="rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]" name="title" />
+                <input
+                  id="title"
+                  className="rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+                  {...register('title')}
+                />
+                {errors.title && <p className="text-red-500">{errors.title.message}</p>}
               </label>
             </div>
             <div className="my-5">
@@ -29,7 +58,7 @@ const Register: NextPage = () => {
                     className: 'border-2 border-dotted h-80 flex justify-center items-center',
                   })}
                 >
-                  <input {...getInputProps()} />
+                  <input {...getInputProps()} {...register('image')} />
                   <div className="flex flex-col justify-center items-center ">
                     <svg
                       aria-hidden="true"
@@ -49,10 +78,14 @@ const Register: NextPage = () => {
                     <p>画像アップロード</p>
                   </div>
                 </div>
+                {errors.image && <p className="text-red-500">{errors.image.message}</p>}
               </label>
             </div>
-            <div className="my-5">
-              <button className="block rounded bg-[#00A5D4] w-4/5 mx-auto text-center text-white font-semibold text-2xl py-2 hover:opacity-75">
+            <div className="my-5 text-center">
+              <button
+                type="submit"
+                className="rounded bg-[#00A5D4] w-4/5 text-white font-semibold text-2xl py-2 hover:opacity-75"
+              >
                 登録
               </button>
             </div>
