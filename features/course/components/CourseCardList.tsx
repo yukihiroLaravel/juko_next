@@ -1,4 +1,4 @@
-import { Course } from '@/types/Course';
+import { Course } from '@/features/course/types/Course';
 import React, { FC } from 'react';
 import CourseCard from './CourseCard';
 import Link from 'next/link';

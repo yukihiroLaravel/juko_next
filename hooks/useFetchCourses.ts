@@ -1,6 +1,6 @@
 import { Axios } from '@/lib/api';
 import { useEffect, useState } from 'react';
-import { Course } from '@/types/Course';
+import { Course } from '@/features/course/types/Course';
 
 export const useFetchCourses = (args: {
   setIsLoading: (value: React.SetStateAction<boolean>) => void;
