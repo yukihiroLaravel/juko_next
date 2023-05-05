@@ -7,6 +7,7 @@ import { StoreSchema } from '@/features/course/schemas/StoreSchema';
 import { StoreCourse } from '@/features/course/types/StoreCourse';
 import { Button } from '@/components/elements/Button';
 import { useState } from 'react';
+import { Axios } from '@/lib/api';
 
 const Register: NextPage = () => {
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
@@ -35,7 +36,22 @@ const Register: NextPage = () => {
   });
 
   const submitHandler = (data: StoreCourse) => {
-    console.log(data);
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('image', data.image as File);
+
+    Axios.post('api/v1/course', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then((res) => {
+        alert('講座を登録しました');
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('講座の登録に失敗しました');
+      });
   };
 
   return (
