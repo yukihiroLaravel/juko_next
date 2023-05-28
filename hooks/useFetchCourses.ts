@@ -9,7 +9,7 @@ export const useFetchCourses = (args: {
   const { setIsLoading, setIsError } = args;
   const [courses, setCourses] = useState<Course[]>([]);
   useEffect(() => {
-    Axios.get('api/proxy/api/v1/courses?student_id=1')
+    Axios.get('api/proxy/api/v1/course/index?student_id=1')
       .then((res) => {
         setCourses(res.data.data);
         setIsLoading(false);
