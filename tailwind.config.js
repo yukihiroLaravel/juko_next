@@ -3,8 +3,11 @@ module.exports = {
   content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './features/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
-      colors: {
-        'main-blue': '#00A5D4',
+      backgroundColor: {
+        primary: '#00A5D4',
+      },
+      borderColor: {
+        primary: '#00A5D4',
       },
     },
   },
