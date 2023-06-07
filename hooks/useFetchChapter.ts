@@ -20,11 +20,9 @@ export const useFetchChapter = ({ attendanceId, chapterId }: Args) => {
 
   useEffect(() => {
     if (attendanceId === undefined || chapterId === undefined) return;
-    Axios.get('api/proxy/api/v1/course/chapter/?attendance_id=' + attendanceId + '&chapter_id=' + chapterId).then(
-      (res) => {
-        setChapter(res.data.data);
-      }
-    );
+    Axios.get('/api/v1/course/chapter?attendance_id=' + attendanceId + '&chapter_id=' + chapterId).then((res) => {
+      setChapter(res.data.data);
+    });
   }, [attendanceId, chapterId]);
 
   return [chapter as Data] as const;
