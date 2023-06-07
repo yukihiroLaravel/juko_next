@@ -40,7 +40,7 @@ const Register: NextPage = () => {
     formData.append('title', data.title);
     formData.append('image', data.image as File);
 
-    Axios.post('api/v1/course', formData, {
+    Axios.post('api/v1/instructor/course', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
