@@ -4,12 +4,20 @@ import styled from 'styled-components';
 type Props = {
   children: ReactNode;
   selected: boolean;
+  attendId: number | undefined;
+  status: string | undefined;
+  clickChangeLessonAttendance: Function;
 };
 
-export const StatusButton: FC<Props> = ({ children, selected = false }) => {
+export const StatusButton: FC<Props> = ({ children, selected = false, clickChangeLessonAttendance, attendId, status }) => {
   const background = selected ? '#D9D9D9' : '#00A5D4';
+  console.log(status);
   return (
-    <Button color={background} disabled={selected}>
+    <Button
+      color={background}
+      disabled={selected}
+      onClick={() => clickChangeLessonAttendance(attendId, status)}
+    >
       {children}
     </Button>
   );

@@ -10,6 +10,7 @@ import { StatusButton } from '@/features/lesson/components/StatusButton';
 import { Movie } from '@/components/elements/Movie';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useFetchChapter } from '@/hooks/useFetchChapter';
+import { useUpdateLessonAttendance } from '@/features/lesson/hooks/useUpdateLessonAttendance';
 import { useRouter } from 'next/router';
 import { Loading } from '@/components/utils/Loading';
 import { Lesson } from '@/types/Lesson';
@@ -75,6 +76,7 @@ const Chapter: NextPage = () => {
     }).length;
 
     return Math.floor((completedLessonTotalCount / lessonTotalCount) * 100);
+
   };
 
   useEffect(() => {
@@ -111,6 +113,15 @@ const Chapter: NextPage = () => {
     };
     setCurrentLesson(newLesson);
   };
+
+  const clickChangeLessonAttendance = (attendId: number, status: string) => {
+    useUpdateLessonAttendance({
+      lesson_attendance_id: attendId, 
+      status: status
+    });
+
+    // useUpdateLessonAttendance
+  }
 
   return (
     <>
@@ -188,15 +199,30 @@ const Chapter: NextPage = () => {
                 )}
               </div>
               <div className="flex justify-start">
-                <StatusButton selected={currentLesson?.lessonAttendance.status === STATUS_BEFORE_ATTENDANCE}>
+                <StatusButton
+                  selected={currentLesson?.lessonAttendance.status === STATUS_BEFORE_ATTENDANCE}
+                  attendId={currentLesson?.lessonAttendance.lesson_attendance_id}
+                  status={STATUS_BEFORE_ATTENDANCE}
+                  clickChangeLessonAttendance={clickChangeLessonAttendance}
+                >
                   Lesson未実施
                 </StatusButton>
                 <span className="ml-10" />
-                <StatusButton selected={currentLesson?.lessonAttendance.status === STATUS_IN_ATTENDANCE}>
+                <StatusButton
+                  selected={currentLesson?.lessonAttendance.status === STATUS_IN_ATTENDANCE}
+                  attendId={currentLesson?.lessonAttendance.lesson_attendance_id}
+                  status={STATUS_IN_ATTENDANCE}
+                  clickChangeLessonAttendance={clickChangeLessonAttendance}
+                  >
                   Lesson開始
                 </StatusButton>
                 <span className="ml-10" />
-                <StatusButton selected={currentLesson?.lessonAttendance.status === STATUS_COMPLETED_ATTENDANCE}>
+                <StatusButton 
+                  selected={currentLesson?.lessonAttendance.status === STATUS_COMPLETED_ATTENDANCE}
+                  attendId={currentLesson?.lessonAttendance.lesson_attendance_id}
+                  status={STATUS_COMPLETED_ATTENDANCE}
+                  clickChangeLessonAttendance={clickChangeLessonAttendance}
+                >
                   Lesson完了
                 </StatusButton>
               </div>
