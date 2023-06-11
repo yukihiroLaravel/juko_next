@@ -6,15 +6,14 @@ import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { StatusIcon } from '@/features/lesson/components/StatusIcon';
-import { StatusButton } from '@/features/lesson/components/StatusButton';
+import { StatusButton } from '@/features/lessonAttendance/components/StatusButton';
 import { Movie } from '@/components/elements/Movie';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useFetchChapter } from '@/hooks/useFetchChapter';
-import { useUpdateLessonAttendance } from '@/features/lesson/hooks/useUpdateLessonAttendance';
 import { useRouter } from 'next/router';
 import { Loading } from '@/components/utils/Loading';
-import { Lesson } from '@/types/Lesson';
-import { LessonAttendance } from '@/types/LessonAttendance';
+import { Lesson } from '@/features/lesson/types/Lesson';
+import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import styled from 'styled-components';
 
 type Query = {
@@ -55,8 +54,8 @@ const Chapter: NextPage = () => {
 
   const [currentLesson, setCurrentLesson] = useState<
     | (Lesson & {
-        lessonAttendance: LessonAttendance;
-      })
+      lessonAttendance: LessonAttendance;
+    })
     | null
   >(null);
 
@@ -113,15 +112,6 @@ const Chapter: NextPage = () => {
     };
     setCurrentLesson(newLesson);
   };
-
-  const clickChangeLessonAttendance = (attendId: number, status: string) => {
-    useUpdateLessonAttendance({
-      lesson_attendance_id: attendId, 
-      status: status
-    });
-
-    // useUpdateLessonAttendance
-  }
 
   return (
     <>
@@ -203,7 +193,7 @@ const Chapter: NextPage = () => {
                   selected={currentLesson?.lessonAttendance.status === STATUS_BEFORE_ATTENDANCE}
                   attendId={currentLesson?.lessonAttendance.lesson_attendance_id}
                   status={STATUS_BEFORE_ATTENDANCE}
-                  clickChangeLessonAttendance={clickChangeLessonAttendance}
+                  lesson_id={currentLesson?.lesson_id}
                 >
                   Lesson未実施
                 </StatusButton>
@@ -212,16 +202,16 @@ const Chapter: NextPage = () => {
                   selected={currentLesson?.lessonAttendance.status === STATUS_IN_ATTENDANCE}
                   attendId={currentLesson?.lessonAttendance.lesson_attendance_id}
                   status={STATUS_IN_ATTENDANCE}
-                  clickChangeLessonAttendance={clickChangeLessonAttendance}
-                  >
+                  lesson_id={currentLesson?.lesson_id}
+                >
                   Lesson開始
                 </StatusButton>
                 <span className="ml-10" />
-                <StatusButton 
+                <StatusButton
                   selected={currentLesson?.lessonAttendance.status === STATUS_COMPLETED_ATTENDANCE}
                   attendId={currentLesson?.lessonAttendance.lesson_attendance_id}
                   status={STATUS_COMPLETED_ATTENDANCE}
-                  clickChangeLessonAttendance={clickChangeLessonAttendance}
+                  lesson_id={currentLesson?.lesson_id}
                 >
                   Lesson完了
                 </StatusButton>
