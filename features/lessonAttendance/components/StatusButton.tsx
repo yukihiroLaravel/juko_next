@@ -1,13 +1,26 @@
 import { Axios } from '@/lib/api';
 import { FC, ReactNode, useState } from 'react';
 import styled from 'styled-components';
-import { LessonAttendance } from '@/features/lesson/types/LessonAttendance';
+import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 
 type Props = {
   children: ReactNode;
   selected: boolean;
   lessonAttendance: LessonAttendance;
 };
+
+const Button = styled.button`
+  border: 1px solid black;
+  font-weight: 600;
+  font-size: 20px;
+  text-align: center;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  background: ${(props) => props.color};
+  @media (max-width: 640px) {
+    font-size: 13px;
+  }
+`;
 
 export const StatusButton: FC<Props> = ({ children, selected = false, lessonAttendance }) => {
   const background = selected ? '#D9D9D9' : '#00A5D4';
@@ -27,16 +40,3 @@ export const StatusButton: FC<Props> = ({ children, selected = false, lessonAtte
     </Button>
   );
 };
-
-const Button = styled.button`
-  border: 1px solid black;
-  font-weight: 600;
-  font-size: 20px;
-  text-align: center;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  background: ${(props) => props.color};
-  @media (max-width: 640px) {
-    font-size: 13px;
-  }
-`;
