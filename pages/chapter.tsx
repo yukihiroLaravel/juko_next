@@ -54,8 +54,8 @@ const Chapter: NextPage = () => {
 
   const [currentLesson, setCurrentLesson] = useState<
     | (Lesson & {
-      lessonAttendance: LessonAttendance;
-    })
+        lessonAttendance: LessonAttendance;
+      })
     | null
   >(null);
 
@@ -75,7 +75,6 @@ const Chapter: NextPage = () => {
     }).length;
 
     return Math.floor((completedLessonTotalCount / lessonTotalCount) * 100);
-
   };
 
   useEffect(() => {
@@ -191,27 +190,30 @@ const Chapter: NextPage = () => {
               <div className="flex justify-start">
                 <StatusButton
                   selected={currentLesson?.lessonAttendance.status === STATUS_BEFORE_ATTENDANCE}
-                  attendId={currentLesson?.lessonAttendance.lesson_attendance_id}
-                  status={STATUS_BEFORE_ATTENDANCE}
-                  lesson_id={currentLesson?.lesson_id}
+                  lessonAttendance={{
+                    lesson_attendance_id: currentLesson?.lessonAttendance.lesson_attendance_id,
+                    status: STATUS_BEFORE_ATTENDANCE,
+                  }}
                 >
                   Lesson未実施
                 </StatusButton>
                 <span className="ml-10" />
                 <StatusButton
                   selected={currentLesson?.lessonAttendance.status === STATUS_IN_ATTENDANCE}
-                  attendId={currentLesson?.lessonAttendance.lesson_attendance_id}
-                  status={STATUS_IN_ATTENDANCE}
-                  lesson_id={currentLesson?.lesson_id}
+                  lessonAttendance={{
+                    lesson_attendance_id: currentLesson?.lessonAttendance.lesson_attendance_id,
+                    status: STATUS_IN_ATTENDANCE,
+                  }}
                 >
                   Lesson開始
                 </StatusButton>
                 <span className="ml-10" />
                 <StatusButton
                   selected={currentLesson?.lessonAttendance.status === STATUS_COMPLETED_ATTENDANCE}
-                  attendId={currentLesson?.lessonAttendance.lesson_attendance_id}
-                  status={STATUS_COMPLETED_ATTENDANCE}
-                  lesson_id={currentLesson?.lesson_id}
+                  lessonAttendance={{
+                    lesson_attendance_id: currentLesson?.lessonAttendance.lesson_attendance_id,
+                    status: STATUS_COMPLETED_ATTENDANCE,
+                  }}
                 >
                   Lesson完了
                 </StatusButton>

@@ -1,34 +1,30 @@
+import { Axios } from '@/lib/api';
 import { FC, ReactNode, useState } from 'react';
 import styled from 'styled-components';
-import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
-import { useUpdateLessonAttendance } from '@/features/lessonAttendance/hooks/useUpdateLessonAttendance';
-import { number } from 'yup';
+import { LessonAttendance } from '@/features/lesson/types/LessonAttendance';
 
 type Props = {
   children: ReactNode;
   selected: boolean;
-  attendId: number | undefined;
-  status: string;
-  lesson_id: number | undefined;
+  lessonAttendance:
+    | LessonAttendance
+    | { lesson_attendance_id: undefined; status: 'before_attendance' | 'in_attendance' | 'completed_attendance' };
 };
 
-export const StatusButton: FC<Props> = ({ children, selected = false, attendId, status }) => {
+export const StatusButton: FC<Props> = ({ children, selected = false, lessonAttendance }) => {
   const background = selected ? '#D9D9D9' : '#00A5D4';
 
   const clickHandler = () => {
-    useUpdateLessonAttendance({
-          lesson_attendance_id: attendId,
-          status: status
+    Axios.patch('api/proxy/api/v1/lesson_attendance', {
+      lesson_attendance_id: lessonAttendance.lesson_attendance_id,
+      status: lessonAttendance.status,
     });
+
     window.location.reload();
-  }
+  };
 
   return (
-    <Button
-      color={background}
-      disabled={selected}
-      onClick={clickHandler}
-    >
+    <Button color={background} disabled={selected} onClick={clickHandler}>
       {children}
     </Button>
   );
