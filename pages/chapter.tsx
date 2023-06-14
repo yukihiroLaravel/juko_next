@@ -187,37 +187,41 @@ const Chapter: NextPage = () => {
                   />
                 )}
               </div>
-              <div className="flex justify-start">
-                <StatusButton
-                  selected={currentLesson?.lessonAttendance.status === STATUS_BEFORE_ATTENDANCE}
-                  lessonAttendance={{
-                    lesson_attendance_id: currentLesson?.lessonAttendance.lesson_attendance_id,
-                    status: STATUS_BEFORE_ATTENDANCE,
-                  }}
-                >
-                  Lesson未実施
-                </StatusButton>
-                <span className="ml-10" />
-                <StatusButton
-                  selected={currentLesson?.lessonAttendance.status === STATUS_IN_ATTENDANCE}
-                  lessonAttendance={{
-                    lesson_attendance_id: currentLesson?.lessonAttendance.lesson_attendance_id,
-                    status: STATUS_IN_ATTENDANCE,
-                  }}
-                >
-                  Lesson開始
-                </StatusButton>
-                <span className="ml-10" />
-                <StatusButton
-                  selected={currentLesson?.lessonAttendance.status === STATUS_COMPLETED_ATTENDANCE}
-                  lessonAttendance={{
-                    lesson_attendance_id: currentLesson?.lessonAttendance.lesson_attendance_id,
-                    status: STATUS_COMPLETED_ATTENDANCE,
-                  }}
-                >
-                  Lesson完了
-                </StatusButton>
-              </div>
+              {currentLesson && (
+                <>
+                  <div className="flex justify-start">
+                    <StatusButton
+                      selected={currentLesson?.lessonAttendance.status === STATUS_BEFORE_ATTENDANCE}
+                      lessonAttendance={{
+                        lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
+                        status: STATUS_BEFORE_ATTENDANCE,
+                      }}
+                    >
+                      Lesson未実施
+                    </StatusButton>
+                    <span className="ml-10" />
+                    <StatusButton
+                      selected={currentLesson?.lessonAttendance.status === STATUS_IN_ATTENDANCE}
+                      lessonAttendance={{
+                        lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
+                        status: STATUS_IN_ATTENDANCE,
+                      }}
+                    >
+                      Lesson開始
+                    </StatusButton>
+                    <span className="ml-10" />
+                    <StatusButton
+                      selected={currentLesson?.lessonAttendance.status === STATUS_COMPLETED_ATTENDANCE}
+                      lessonAttendance={{
+                        lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
+                        status: STATUS_COMPLETED_ATTENDANCE,
+                      }}
+                    >
+                      Lesson完了
+                    </StatusButton>
+                  </div>
+                </>
+              )}
               <div className="mt-5">
                 <p className="whitespace-pre-wrap">{currentLesson?.remarks}</p>
               </div>

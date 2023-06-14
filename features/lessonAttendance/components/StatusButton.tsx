@@ -6,9 +6,7 @@ import { LessonAttendance } from '@/features/lesson/types/LessonAttendance';
 type Props = {
   children: ReactNode;
   selected: boolean;
-  lessonAttendance:
-    | LessonAttendance
-    | { lesson_attendance_id: undefined; status: 'before_attendance' | 'in_attendance' | 'completed_attendance' };
+  lessonAttendance: LessonAttendance;
 };
 
 export const StatusButton: FC<Props> = ({ children, selected = false, lessonAttendance }) => {
