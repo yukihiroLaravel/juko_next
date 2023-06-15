@@ -6,14 +6,14 @@ import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { StatusIcon } from '@/features/lesson/components/StatusIcon';
-import { StatusButton } from '@/features/lesson/components/StatusButton';
+import { StatusButton } from '@/features/lessonAttendance/components/StatusButton';
 import { Movie } from '@/components/elements/Movie';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useFetchChapter } from '@/hooks/useFetchChapter';
 import { useRouter } from 'next/router';
 import { Loading } from '@/components/utils/Loading';
-import { Lesson } from '@/types/Lesson';
-import { LessonAttendance } from '@/types/LessonAttendance';
+import { Lesson } from '@/features/lesson/types/Lesson';
+import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import styled from 'styled-components';
 
 type Query = {
@@ -187,19 +187,41 @@ const Chapter: NextPage = () => {
                   />
                 )}
               </div>
-              <div className="flex justify-start">
-                <StatusButton selected={currentLesson?.lessonAttendance.status === STATUS_BEFORE_ATTENDANCE}>
-                  Lesson未実施
-                </StatusButton>
-                <span className="ml-10" />
-                <StatusButton selected={currentLesson?.lessonAttendance.status === STATUS_IN_ATTENDANCE}>
-                  Lesson開始
-                </StatusButton>
-                <span className="ml-10" />
-                <StatusButton selected={currentLesson?.lessonAttendance.status === STATUS_COMPLETED_ATTENDANCE}>
-                  Lesson完了
-                </StatusButton>
-              </div>
+              {currentLesson && (
+                <>
+                  <div className="flex justify-start">
+                    <StatusButton
+                      selected={currentLesson?.lessonAttendance.status === STATUS_BEFORE_ATTENDANCE}
+                      lessonAttendance={{
+                        lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
+                        status: STATUS_BEFORE_ATTENDANCE,
+                      }}
+                    >
+                      Lesson未実施
+                    </StatusButton>
+                    <span className="ml-10" />
+                    <StatusButton
+                      selected={currentLesson?.lessonAttendance.status === STATUS_IN_ATTENDANCE}
+                      lessonAttendance={{
+                        lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
+                        status: STATUS_IN_ATTENDANCE,
+                      }}
+                    >
+                      Lesson開始
+                    </StatusButton>
+                    <span className="ml-10" />
+                    <StatusButton
+                      selected={currentLesson?.lessonAttendance.status === STATUS_COMPLETED_ATTENDANCE}
+                      lessonAttendance={{
+                        lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
+                        status: STATUS_COMPLETED_ATTENDANCE,
+                      }}
+                    >
+                      Lesson完了
+                    </StatusButton>
+                  </div>
+                </>
+              )}
               <div className="mt-5">
                 <p className="whitespace-pre-wrap">{currentLesson?.remarks}</p>
               </div>

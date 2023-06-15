@@ -1,7 +1,7 @@
 import { Axios } from '@/lib/api';
 import { Chapter } from '@/types/Chapter';
-import { Lesson } from '@/types/Lesson';
-import { LessonAttendance } from '@/types/LessonAttendance';
+import { Lesson } from '@/features/lesson/types/Lesson';
+import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import { useEffect, useState } from 'react';
 
 type Data = Chapter & {
