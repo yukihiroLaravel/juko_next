@@ -15,6 +15,7 @@ import { Loading } from '@/components/utils/Loading';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import styled from 'styled-components';
+import { Button } from '@/components/elements/Button';
 
 type Query = {
   attendanceId?: string;
@@ -222,6 +223,7 @@ const Chapter: NextPage = () => {
                   </div>
                 </>
               )}
+              <Button>Lesson未実施</Button>
               <div className="mt-5">
                 <p className="whitespace-pre-wrap">{currentLesson?.remarks}</p>
               </div>
