@@ -25,13 +25,11 @@ const Button = styled.button`
 export const StatusButton: FC<Props> = ({ children, selected = false, lessonAttendance }) => {
   const background = selected ? '#D9D9D9' : '#00A5D4';
 
-  const clickHandler = () => {
-    Axios.patch('api/proxy/api/v1/lesson_attendance', {
+  const clickHandler = async () => {
+    await Axios.patch('api/v1/lesson_attendance', {
       lesson_attendance_id: lessonAttendance.lesson_attendance_id,
       status: lessonAttendance.status,
-    });
-
-    window.location.reload();
+    }).then(() => window.location.reload());
   };
 
   return (
