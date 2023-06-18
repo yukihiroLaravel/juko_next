@@ -1,20 +1,29 @@
-import styled from 'styled-components';
 import { FC } from 'react';
+import clsx from 'clsx';
 
 type Props = {
-  children: string;
+  children: React.ReactNode;
+  type: 'button' | 'submit';
+  color?: 'primary' | 'danger' | 'secondary';
+  className?: string;
+  clickHandler?: () => void;
 };
 
-export const SButton = styled.button`
-  border: none;
-  border-radius: 6px;
-  outline: none;
-  &:hover {
-    cursor: pointer;
-    opacity: 0.8;
-  }
-`;
-
-export const Button: FC<Props> = ({ children }) => {
-  return <SButton>{children}</SButton>;
+export const Button: FC<Props> = ({ children, type, color = 'primary', className, clickHandler }) => {
+  return (
+    <button
+      type={type}
+      className={clsx(
+        'rounded',
+        color === 'primary' && 'bg-primary',
+        color === 'danger' && 'bg-danger',
+        color === 'secondary' && 'bg-slate-300',
+        'text-white',
+        className
+      )}
+      onClick={clickHandler}
+    >
+      {children}
+    </button>
+  );
 };

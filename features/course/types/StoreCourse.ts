@@ -1,5 +1,5 @@
 import { Course } from './Course';
 
 export type StoreCourse = Pick<Course, 'title'> & {
-  image: File;
+  image: File | undefined;
 };

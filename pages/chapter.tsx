@@ -223,7 +223,6 @@ const Chapter: NextPage = () => {
                   </div>
                 </>
               )}
-              <Button>Lesson未実施</Button>
               <div className="mt-5">
                 <p className="whitespace-pre-wrap">{currentLesson?.remarks}</p>
               </div>

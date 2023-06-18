@@ -21,7 +21,7 @@ export const useFetchCourse = ({ attendanceId }: Args) => {
   const [course, setCourse] = useState<Data | null>(null);
 
   useEffect(() => {
-    Axios.get('api/proxy/api/v1/course?attendance_id=' + attendanceId).then((res) => {
+    Axios.get('/api/v1/course?attendance_id=' + attendanceId).then((res) => {
       setCourse(res.data.data);
     });
   }, [attendanceId]);
