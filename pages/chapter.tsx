@@ -15,7 +15,6 @@ import { Loading } from '@/components/utils/Loading';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import styled from 'styled-components';
-import { Button } from '@/components/elements/Button';
 
 type Query = {
   attendanceId?: string;
