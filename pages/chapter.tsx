@@ -61,9 +61,10 @@ const Chapter: NextPage = () => {
 
   const calculateChapterProgeress = (): number => {
     // チャプター取得前は0を返す
-    if (chapter === null) return 0;
+    if (chapter === undefined) return 0;
 
     // 合計レッスン数
+    console.log(chapter);
     const lessonTotalCount = chapter.lessons.length;
 
     // 合計レッスン数が0の場合は、0を返す
@@ -78,7 +79,7 @@ const Chapter: NextPage = () => {
   };
 
   useEffect(() => {
-    if (chapter !== null) {
+    if (chapter !== undefined) {
       setIsLoading(false);
       setCurrentLesson(
         chapter.lessons[0] as Lesson & {

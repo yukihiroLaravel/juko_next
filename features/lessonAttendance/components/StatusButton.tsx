@@ -3,6 +3,7 @@ import { FC, ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import { Button } from '@/components/elements/Button';
+import useSWRMutation from 'swr/mutation';
 
 type Props = {
   children: ReactNode;
@@ -21,15 +22,15 @@ const SButton = styled(Button)`
 export const StatusButton: FC<Props> = ({ children, selected = false, lessonAttendance }) => {
   const color = selected ? 'secondary' : 'primary';
 
-  const clickHandler = async () => {
-    await Axios.patch('api/v1/lesson_attendance', {
+  const res = async (url: string) =>
+    await Axios.patch(url, {
       lesson_attendance_id: lessonAttendance.lesson_attendance_id,
       status: lessonAttendance.status,
-    }).then(() => window.location.reload());
-  };
+    }).then((res) => res.data);
+  const { trigger } = useSWRMutation('api/v1/lesson_attendance', res);
 
   return (
-    <SButton type="button" color={color} clickHandler={clickHandler}>
+    <SButton type="button" color={color} clickHandler={() => trigger()}>
       {children}
     </SButton>
   );

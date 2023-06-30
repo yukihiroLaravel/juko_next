@@ -2,7 +2,7 @@ import { Axios } from '@/lib/api';
 import { Chapter } from '@/types/Chapter';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
-import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 
 type Data = Chapter & {
   lessons: (Lesson & {
@@ -16,14 +16,11 @@ type Args = {
 };
 
 export const useFetchChapter = ({ attendanceId, chapterId }: Args) => {
-  const [chapter, setChapter] = useState<Data | null>(null);
+  const fetcher = (url: string) => Axios.get(url).then((res) => res.data);
+  const { data: chapter } = useSWR(
+    '/api/v1/course/chapter?attendance_id=' + attendanceId + '&chapter_id=' + chapterId,
+    fetcher
+  );
 
-  useEffect(() => {
-    if (attendanceId === undefined || chapterId === undefined) return;
-    Axios.get('/api/v1/course/chapter?attendance_id=' + attendanceId + '&chapter_id=' + chapterId).then((res) => {
-      setChapter(res.data.data);
-    });
-  }, [attendanceId, chapterId]);
-
-  return [chapter as Data] as const;
+  return [chapter?.data] as const;
 };
