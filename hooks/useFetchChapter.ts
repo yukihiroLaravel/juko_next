@@ -17,10 +17,10 @@ type Args = {
 
 export const useFetchChapter = ({ attendanceId, chapterId }: Args) => {
   const fetcher = (url: string) => Axios.get(url).then((res) => res.data);
-  const { data: chapter } = useSWR(
+  const { data: chapter, mutate } = useSWR(
     '/api/v1/course/chapter?attendance_id=' + attendanceId + '&chapter_id=' + chapterId,
     fetcher
   );
 
-  return [chapter?.data] as const;
+  return [chapter?.data, mutate] as const;
 };

@@ -45,7 +45,7 @@ const Chapter: NextPage = () => {
   const [width] = useWindowSize();
   const router = useRouter();
   const query: Query = router.query;
-  const [chapter] = useFetchChapter({
+  const [chapter, mutate] = useFetchChapter({
     attendanceId: query.attendanceId,
     chapterId: query.chapterId,
   });
@@ -106,7 +106,7 @@ const Chapter: NextPage = () => {
     },
   ];
 
-  const clickHandler = (lessonId: number) => () => {
+  const clickHandler = (lessonId: number) => {
     const newLesson = chapter.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
       lessonAttendance: LessonAttendance;
     };
@@ -136,7 +136,7 @@ const Chapter: NextPage = () => {
                     return (
                       <StyleSideBarList
                         key={lesson.lesson_id}
-                        onClick={clickHandler(lesson.lesson_id)}
+                        onClick={() => clickHandler(lesson.lesson_id)}
                         isSelected={lesson.lesson_id === currentLesson?.lesson_id}
                       >
                         <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
@@ -167,7 +167,7 @@ const Chapter: NextPage = () => {
                   return (
                     <StyleSideBarList
                       key={lesson.lesson_id}
-                      onClick={clickHandler(lesson.lesson_id)}
+                      onClick={() => clickHandler(lesson.lesson_id)}
                       isSelected={lesson.lesson_id === currentLesson?.lesson_id}
                     >
                       <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
@@ -197,6 +197,7 @@ const Chapter: NextPage = () => {
                         lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
                         status: STATUS_BEFORE_ATTENDANCE,
                       }}
+                      mutate={() => mutate()}
                     >
                       Lesson未実施
                     </StatusButton>
@@ -207,6 +208,7 @@ const Chapter: NextPage = () => {
                         lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
                         status: STATUS_IN_ATTENDANCE,
                       }}
+                      mutate={() => mutate()}
                     >
                       Lesson開始
                     </StatusButton>
@@ -217,6 +219,7 @@ const Chapter: NextPage = () => {
                         lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
                         status: STATUS_COMPLETED_ATTENDANCE,
                       }}
+                      mutate={() => mutate()}
                     >
                       Lesson完了
                     </StatusButton>

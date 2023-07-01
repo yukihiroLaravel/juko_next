@@ -9,6 +9,7 @@ type Props = {
   children: ReactNode;
   selected: boolean;
   lessonAttendance: LessonAttendance;
+  mutate: () => Promise<Response | undefined>;
 };
 
 const SButton = styled(Button)`
@@ -19,18 +20,19 @@ const SButton = styled(Button)`
   }
 `;
 
-export const StatusButton: FC<Props> = ({ children, selected = false, lessonAttendance }) => {
+export const StatusButton: FC<Props> = ({ children, selected = false, lessonAttendance, mutate }) => {
   const color = selected ? 'secondary' : 'primary';
 
-  const res = async (url: string) =>
-    await Axios.patch(url, {
+  const clickHandler = async () => {
+    await Axios.patch('api/v1/lesson_attendance', {
       lesson_attendance_id: lessonAttendance.lesson_attendance_id,
       status: lessonAttendance.status,
-    }).then((res) => res.data);
-  const { trigger } = useSWRMutation('api/v1/lesson_attendance', res);
+    });
+    mutate();
+  };
 
   return (
-    <SButton type="button" color={color} clickHandler={() => trigger()}>
+    <SButton type="button" color={color} clickHandler={clickHandler}>
       {children}
     </SButton>
   );
