@@ -3,7 +3,6 @@ import { FC, ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import { Button } from '@/components/elements/Button';
-import useSWRMutation from 'swr/mutation';
 
 type Props = {
   children: ReactNode;
