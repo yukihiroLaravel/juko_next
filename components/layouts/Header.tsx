@@ -2,6 +2,7 @@ import { Axios } from '@/lib/api';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { mutate } from 'swr';
+import { Button } from '../elements/Button';
 
 type Props = {
   isLogin?: boolean;
@@ -22,18 +23,18 @@ const Header: FC<Props> = ({ isLogin = true }) => {
   };
 
   return (
-    <nav className="w-full bg-primary h-[100px] sticky top-0 z-50">
-      <div className="flex h-[100px] justify-between">
+    <nav className="w-full bg-primary h-24 sticky top-0 z-50">
+      <div className="flex min-h-full justify-between">
         <div className="flex items-center">
-          <a href="#" className="w-[252px] ml-[30px]">
-            <h1 className="font-semibold text-[36px] text-[#FBF459]">受講管理アプリ</h1>
+          <a href="#" className="ml-5">
+            <h1 className="font-bold text-3xl text-[#FBF459]">受講管理アプリ</h1>
           </a>
         </div>
         {isLogin && (
-          <div className="flex items-center mr-[50px]">
-            <button className="bg-gray-600 hover:bg-gray-500 text-white rounded px-4 py-2" onClick={clickHandler}>
+          <div className="flex items-center mr-5">
+            <Button className="bg-gray-600 hover:bg-gray-500 rounded px-2 py-2" clickHandler={clickHandler}>
               ログアウト
-            </button>
+            </Button>
             <a href="#">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
