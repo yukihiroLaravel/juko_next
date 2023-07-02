@@ -4,15 +4,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Axios } from '@/lib/api';
 import { useRouter } from 'next/router';
-import { useSWRConfig } from 'swr';
 
 export const LoginForm: FC = () => {
   const defaultValues = {
     email: '',
     password: '',
   };
-
-  const { cache } = useSWRConfig();
 
   const [isUnauthorized, setIsUnauthorized] = useState<boolean>(false);
 
@@ -23,6 +20,7 @@ export const LoginForm: FC = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: 'onSubmit',
@@ -37,12 +35,13 @@ export const LoginForm: FC = () => {
         .then((res) => {
           setIsLoading(false);
           if (res.data.result === true) {
-            cache.delete('/api/user');
             router.push('/courses');
           }
+          setValue('password', '');
         })
         .catch((error) => {
           setIsLoading(false);
+          setValue('password', '');
           if (error.response.status === 401) {
             setIsUnauthorized(true);
           }
