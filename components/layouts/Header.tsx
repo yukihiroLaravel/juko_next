@@ -11,11 +11,13 @@ const Header: FC<Props> = ({ isLogin = true }) => {
   const { cache } = useSWRConfig();
   const clickHandler = () => {
     if (router.isReady) {
-      Axios.post('api/proxy/logout').then((res) => {
-        if (res.status === 200) {
-          cache.delete('/api/proxy/api/user');
-          router.push('/login');
-        }
+      Axios.get('/sanctum/csrf-cookie').then(() => {
+        Axios.post('/logout').then((res) => {
+          if (res.status === 200) {
+            cache.delete('/api/user');
+            router.push('/login');
+          }
+        });
       });
     }
   };

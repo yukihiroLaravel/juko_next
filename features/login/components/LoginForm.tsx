@@ -32,12 +32,12 @@ export const LoginForm: FC = () => {
 
   const submitHandler = (data: typeof defaultValues) => {
     setIsLoading(true);
-    Axios.get('/api/proxy/sanctum/csrf-cookie').then(() => {
-      Axios.post('/api/proxy/login', data)
+    Axios.get('/sanctum/csrf-cookie').then(() => {
+      Axios.post('/login', data)
         .then((res) => {
           setIsLoading(false);
           if (res.data.result === true) {
-            cache.delete('/api/proxy/api/user');
+            cache.delete('/api/user');
             router.push('/courses');
           }
         })
