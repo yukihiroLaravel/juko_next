@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Axios } from '@/lib/api';
 import { useRouter } from 'next/router';
+import { Button } from '@/components/elements/Button';
 
 export const LoginForm: FC = () => {
   const defaultValues = {
@@ -50,12 +51,8 @@ export const LoginForm: FC = () => {
   };
 
   return (
-    <form
-      className="md:w-1/3 md:border mx-auto min-h-[80vh] mt-10 mb-10 bg-white"
-      onSubmit={handleSubmit(submitHandler)}
-    >
-      <h2 className="text-center mt-[50px] text-[40px]">ログイン画面</h2>
-
+    <form className="md:w-1/3 md:border mx-auto min-h-full my-10 bg-white" onSubmit={handleSubmit(submitHandler)}>
+      <h2 className="text-center mt-10 text-2xl">ログイン画面</h2>
       <div className="w-4/5 mx-auto">
         {isUnauthorized && (
           <>
@@ -63,7 +60,7 @@ export const LoginForm: FC = () => {
             <p className="text-red-600">もう一度、お試しください。</p>
           </>
         )}
-        <div className="mt-[40px]">
+        <div className="mt-10">
           <label htmlFor="email">
             <p>メールアドレス</p>
             <input
@@ -74,7 +71,7 @@ export const LoginForm: FC = () => {
             <span className="text-red-600">{errors?.email?.message}</span>
           </label>
         </div>
-        <div className="mt-[50px]">
+        <div className="mt-10">
           <label htmlFor="password">
             <p>パスワード</p>
             <input
@@ -87,18 +84,17 @@ export const LoginForm: FC = () => {
           </label>
         </div>
       </div>
-      {isLoading ? (
-        <button
-          className="block rounded mt-[50px] bg-[#00A5D4] w-4/5 mx-auto text-center text-white font-semibold text-[25px] py-2 opacity-75"
-          disabled
-        >
-          ログイン中...
-        </button>
-      ) : (
-        <button className="block rounded mt-[50px] bg-[#00A5D4] w-4/5 mx-auto text-center text-white font-semibold text-[25px] py-2 hover:opacity-75">
-          ログイン
-        </button>
-      )}
+      <div className="text-center my-10">
+        {isLoading ? (
+          <Button type="button" className="w-4/5 py-2 text-lg" isDisabled={true}>
+            ログイン中...
+          </Button>
+        ) : (
+          <Button type="submit" className="w-4/5 py-2 hover:opacity-75 text-lg">
+            ログイン
+          </Button>
+        )}
+      </div>
     </form>
   );
 };
