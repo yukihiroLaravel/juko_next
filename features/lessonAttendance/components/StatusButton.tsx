@@ -8,7 +8,7 @@ type Props = {
   children: ReactNode;
   selected: boolean;
   lessonAttendance: LessonAttendance;
-  mutate: () => Promise<Response | undefined>;
+  mutate: () => {};
 };
 
 const SButton = styled(Button)`
@@ -26,8 +26,7 @@ export const StatusButton: FC<Props> = ({ children, selected = false, lessonAtte
     await Axios.patch('api/v1/lesson_attendance', {
       lesson_attendance_id: lessonAttendance.lesson_attendance_id,
       status: lessonAttendance.status,
-    });
-    mutate();
+    }).then(() => mutate());
   };
 
   return (

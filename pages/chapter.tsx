@@ -64,7 +64,6 @@ const Chapter: NextPage = () => {
     if (chapter === undefined) return 0;
 
     // 合計レッスン数
-    console.log(chapter);
     const lessonTotalCount = chapter.lessons.length;
 
     // 合計レッスン数が0の場合は、0を返す
@@ -197,7 +196,7 @@ const Chapter: NextPage = () => {
                         lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
                         status: STATUS_BEFORE_ATTENDANCE,
                       }}
-                      mutate={() => mutate()}
+                      mutate={mutate}
                     >
                       Lesson未実施
                     </StatusButton>
@@ -208,7 +207,7 @@ const Chapter: NextPage = () => {
                         lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
                         status: STATUS_IN_ATTENDANCE,
                       }}
-                      mutate={() => mutate()}
+                      mutate={mutate}
                     >
                       Lesson開始
                     </StatusButton>
@@ -219,7 +218,7 @@ const Chapter: NextPage = () => {
                         lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
                         status: STATUS_COMPLETED_ATTENDANCE,
                       }}
-                      mutate={() => mutate()}
+                      mutate={mutate}
                     >
                       Lesson完了
                     </StatusButton>

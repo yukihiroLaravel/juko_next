@@ -8,6 +8,7 @@ type Data = Chapter & {
   lessons: (Lesson & {
     lessonAttendance: LessonAttendance;
   })[];
+  data: Data;
 };
 
 type Args = {
@@ -17,7 +18,7 @@ type Args = {
 
 export const useFetchChapter = ({ attendanceId, chapterId }: Args) => {
   const fetcher = (url: string) => Axios.get(url).then((res) => res.data);
-  const { data: chapter, mutate } = useSWR(
+  const { data: chapter, mutate } = useSWR<Data | null>(
     '/api/v1/course/chapter?attendance_id=' + attendanceId + '&chapter_id=' + chapterId,
     fetcher
   );
