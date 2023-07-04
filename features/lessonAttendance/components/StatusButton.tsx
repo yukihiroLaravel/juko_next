@@ -8,7 +8,7 @@ type Props = {
   children: ReactNode;
   selected: boolean;
   lessonAttendance: LessonAttendance;
-  mutate: () => {};
+  mutate: () => void;
 };
 
 const SButton = styled(Button)`

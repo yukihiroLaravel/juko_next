@@ -105,8 +105,8 @@ const Chapter: NextPage = () => {
     },
   ];
 
-  const clickHandler = (lessonId: number) => {
-    const newLesson = chapter.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
+  const clickHandler = (lessonId: number) => () => {
+    const newLesson = chapter?.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
       lessonAttendance: LessonAttendance;
     };
     setCurrentLesson(newLesson);
@@ -131,11 +131,11 @@ const Chapter: NextPage = () => {
                       <ProgressBar progress={calculateChapterProgeress()} />
                     </div>
                   </li>
-                  {chapter.lessons.map((lesson) => {
+                  {chapter?.lessons.map((lesson) => {
                     return (
                       <StyleSideBarList
                         key={lesson.lesson_id}
-                        onClick={() => clickHandler(lesson.lesson_id)}
+                        onClick={clickHandler(lesson.lesson_id)}
                         isSelected={lesson.lesson_id === currentLesson?.lesson_id}
                       >
                         <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
@@ -153,7 +153,7 @@ const Chapter: NextPage = () => {
             <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
               <Breadcrumb links={links} />
               <div className="mt-10 border-black border-b pb-5">
-                <h2 className="font-semibold text-3xl md:text-4xl">{chapter.title}</h2>
+                <h2 className="font-semibold text-3xl md:text-4xl">{chapter?.title}</h2>
               </div>
               <ul className="md:hidden my-5 border-black border-b">
                 <li className="mb-10">
@@ -162,11 +162,11 @@ const Chapter: NextPage = () => {
                     <ProgressBar progress={calculateChapterProgeress()} />
                   </div>
                 </li>
-                {chapter.lessons.map((lesson) => {
+                {chapter?.lessons.map((lesson) => {
                   return (
                     <StyleSideBarList
                       key={lesson.lesson_id}
-                      onClick={() => clickHandler(lesson.lesson_id)}
+                      onClick={clickHandler(lesson.lesson_id)}
                       isSelected={lesson.lesson_id === currentLesson?.lesson_id}
                     >
                       <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
