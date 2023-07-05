@@ -45,7 +45,7 @@ const Chapter: NextPage = () => {
   const [width] = useWindowSize();
   const router = useRouter();
   const query: Query = router.query;
-  const [chapter] = useFetchChapter({
+  const [chapter, mutate] = useFetchChapter({
     attendanceId: query.attendanceId,
     chapterId: query.chapterId,
   });
@@ -61,7 +61,7 @@ const Chapter: NextPage = () => {
 
   const calculateChapterProgeress = (): number => {
     // チャプター取得前は0を返す
-    if (chapter === null) return 0;
+    if (chapter === undefined) return 0;
 
     // 合計レッスン数
     const lessonTotalCount = chapter.lessons.length;
@@ -78,7 +78,7 @@ const Chapter: NextPage = () => {
   };
 
   useEffect(() => {
-    if (chapter !== null) {
+    if (chapter !== undefined) {
       setIsLoading(false);
       setCurrentLesson(
         chapter.lessons[0] as Lesson & {
@@ -106,7 +106,7 @@ const Chapter: NextPage = () => {
   ];
 
   const clickHandler = (lessonId: number) => () => {
-    const newLesson = chapter.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
+    const newLesson = chapter?.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
       lessonAttendance: LessonAttendance;
     };
     setCurrentLesson(newLesson);
@@ -131,7 +131,7 @@ const Chapter: NextPage = () => {
                       <ProgressBar progress={calculateChapterProgeress()} />
                     </div>
                   </li>
-                  {chapter.lessons.map((lesson) => {
+                  {chapter?.lessons.map((lesson) => {
                     return (
                       <StyleSideBarList
                         key={lesson.lesson_id}
@@ -153,7 +153,7 @@ const Chapter: NextPage = () => {
             <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
               <Breadcrumb links={links} />
               <div className="mt-10 border-black border-b pb-5">
-                <h2 className="font-semibold text-3xl md:text-4xl">{chapter.title}</h2>
+                <h2 className="font-semibold text-3xl md:text-4xl">{chapter?.title}</h2>
               </div>
               <ul className="md:hidden my-5 border-black border-b">
                 <li className="mb-10">
@@ -162,7 +162,7 @@ const Chapter: NextPage = () => {
                     <ProgressBar progress={calculateChapterProgeress()} />
                   </div>
                 </li>
-                {chapter.lessons.map((lesson) => {
+                {chapter?.lessons.map((lesson) => {
                   return (
                     <StyleSideBarList
                       key={lesson.lesson_id}
@@ -196,6 +196,7 @@ const Chapter: NextPage = () => {
                         lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
                         status: STATUS_BEFORE_ATTENDANCE,
                       }}
+                      mutate={mutate}
                     >
                       Lesson未実施
                     </StatusButton>
@@ -206,6 +207,7 @@ const Chapter: NextPage = () => {
                         lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
                         status: STATUS_IN_ATTENDANCE,
                       }}
+                      mutate={mutate}
                     >
                       Lesson開始
                     </StatusButton>
@@ -216,6 +218,7 @@ const Chapter: NextPage = () => {
                         lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
                         status: STATUS_COMPLETED_ATTENDANCE,
                       }}
+                      mutate={mutate}
                     >
                       Lesson完了
                     </StatusButton>

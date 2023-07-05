@@ -8,6 +8,7 @@ type Props = {
   children: ReactNode;
   selected: boolean;
   lessonAttendance: LessonAttendance;
+  mutate: () => void;
 };
 
 const SButton = styled(Button)`
@@ -18,14 +19,14 @@ const SButton = styled(Button)`
   }
 `;
 
-export const StatusButton: FC<Props> = ({ children, selected = false, lessonAttendance }) => {
+export const StatusButton: FC<Props> = ({ children, selected = false, lessonAttendance, mutate }) => {
   const color = selected ? 'secondary' : 'primary';
 
   const clickHandler = async () => {
     await Axios.patch('api/v1/lesson_attendance', {
       lesson_attendance_id: lessonAttendance.lesson_attendance_id,
       status: lessonAttendance.status,
-    }).then(() => window.location.reload());
+    }).then(() => mutate());
   };
 
   return (
