@@ -81,20 +81,19 @@ const Chapter: NextPage = () => {
     if (chapter !== undefined) {
       setIsLoading(false);
       if (currentLesson !== null) {
-        const newLesson = chapter.lessons.find((lesson) => lesson.lesson_id === currentLesson.lesson_id) as Lesson & {
-          lessonAttendance: LessonAttendance;
-        };
-        setCurrentLesson(newLesson);
+        const newLesson = chapter.lessons.find((lesson) => lesson.lesson_id === currentLesson.lesson_id);
+        if (newLesson) {
+          setCurrentLesson(newLesson);
+        }
       } else {
-        setCurrentLesson(
-          chapter.lessons[0] as Lesson & {
-            lessonAttendance: LessonAttendance;
-          }
-        );
+        const initialLesson = chapter.lessons[0];
+        if (initialLesson) {
+          setCurrentLesson(initialLesson);
+        }
       }
       return;
     }
-  }, [chapter]);
+  }, [chapter, currentLesson]);
 
   // パン屑のリンクリスト
   const links = [
