@@ -59,8 +59,6 @@ const Chapter: NextPage = () => {
     | null
   >(null);
 
-  const [selectingLesson, setSelectingLesson] = useState(0);
-
   const calculateChapterProgeress = (): number => {
     // チャプター取得前は0を返す
     if (chapter === undefined) return 0;
@@ -80,13 +78,20 @@ const Chapter: NextPage = () => {
   };
 
   useEffect(() => {
-    if (chapter !== undefined && selectingLesson !== undefined) {
+    if (chapter !== undefined) {
       setIsLoading(false);
-      setCurrentLesson(
-        chapter.lessons[selectingLesson] as Lesson & {
+      if (currentLesson !== null) {
+        const newLesson = chapter.lessons.find((lesson) => lesson.lesson_id === currentLesson.lesson_id) as Lesson & {
           lessonAttendance: LessonAttendance;
-        }
-      );
+        };
+        setCurrentLesson(newLesson);
+      } else {
+        setCurrentLesson(
+          chapter.lessons[0] as Lesson & {
+            lessonAttendance: LessonAttendance;
+          }
+        );
+      }
       return;
     }
   }, [chapter]);
@@ -107,11 +112,10 @@ const Chapter: NextPage = () => {
     },
   ];
 
-  const clickHandler = (lessonId: number, index: number) => () => {
+  const clickHandler = (lessonId: number) => () => {
     const newLesson = chapter?.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
       lessonAttendance: LessonAttendance;
     };
-    setSelectingLesson(index);
     setCurrentLesson(newLesson);
   };
 
@@ -134,11 +138,11 @@ const Chapter: NextPage = () => {
                       <ProgressBar progress={calculateChapterProgeress()} />
                     </div>
                   </li>
-                  {chapter?.lessons.map((lesson, index) => {
+                  {chapter?.lessons.map((lesson) => {
                     return (
                       <StyleSideBarList
                         key={lesson.lesson_id}
-                        onClick={clickHandler(lesson.lesson_id, index)}
+                        onClick={clickHandler(lesson.lesson_id)}
                         isSelected={lesson.lesson_id === currentLesson?.lesson_id}
                       >
                         <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
@@ -165,11 +169,11 @@ const Chapter: NextPage = () => {
                     <ProgressBar progress={calculateChapterProgeress()} />
                   </div>
                 </li>
-                {chapter?.lessons.map((lesson, index) => {
+                {chapter?.lessons.map((lesson) => {
                   return (
                     <StyleSideBarList
                       key={lesson.lesson_id}
-                      onClick={clickHandler(lesson.lesson_id, index)}
+                      onClick={clickHandler(lesson.lesson_id)}
                       isSelected={lesson.lesson_id === currentLesson?.lesson_id}
                     >
                       <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
