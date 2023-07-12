@@ -91,7 +91,6 @@ const Chapter: NextPage = () => {
           setCurrentLesson(initialLesson);
         }
       }
-      return;
     }
   }, [chapter, currentLesson]);
 
