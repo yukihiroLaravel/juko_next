@@ -19,6 +19,7 @@ import styled from 'styled-components';
 type Query = {
   attendanceId?: string;
   chapterId?: string;
+  selectId?: number;
 };
 
 const STATUS_BEFORE_ATTENDANCE = 'before_attendance';
@@ -86,7 +87,7 @@ const Chapter: NextPage = () => {
           setCurrentLesson(newLesson);
         }
       } else {
-        const initialLesson = chapter.lessons[0];
+        const initialLesson = chapter.lessons[query.selectId ? query.selectId : 0];
         if (initialLesson) {
           setCurrentLesson(initialLesson);
         }
