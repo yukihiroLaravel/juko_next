@@ -80,14 +80,19 @@ const Chapter: NextPage = () => {
   useEffect(() => {
     if (chapter !== undefined) {
       setIsLoading(false);
-      setCurrentLesson(
-        chapter.lessons[0] as Lesson & {
-          lessonAttendance: LessonAttendance;
+      if (currentLesson !== null) {
+        const newLesson = chapter.lessons.find((lesson) => lesson.lesson_id === currentLesson.lesson_id);
+        if (newLesson) {
+          setCurrentLesson(newLesson);
         }
-      );
-      return;
+      } else {
+        const initialLesson = chapter.lessons[0];
+        if (initialLesson) {
+          setCurrentLesson(initialLesson);
+        }
+      }
     }
-  }, [chapter]);
+  }, [chapter, currentLesson]);
 
   // パン屑のリンクリスト
   const links = [
