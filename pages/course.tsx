@@ -108,7 +108,7 @@ const Course: NextPage = () => {
                             <Link
                               href={{
                                 pathname: '/chapter',
-                                query: { attendanceId, chapterId: chapter.chapter_id, selectId: index },
+                                query: { attendanceId, chapterId: chapter.chapter_id, lessonIndex: index },
                               }}
                               as={`/chapter?attendanceId=${attendanceId}&chapterId=${chapter.chapter_id}`}
                             >
