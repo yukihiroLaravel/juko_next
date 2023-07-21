@@ -19,6 +19,7 @@ import styled from 'styled-components';
 type Query = {
   attendanceId?: string;
   chapterId?: string;
+  lessonIndex?: number;
 };
 
 const STATUS_BEFORE_ATTENDANCE = 'before_attendance';
@@ -59,6 +60,8 @@ const Chapter: NextPage = () => {
     | null
   >(null);
 
+  const lessonIndex = query.lessonIndex ? query.lessonIndex : 0;
+
   const calculateChapterProgeress = (): number => {
     // チャプター取得前は0を返す
     if (chapter === undefined) return 0;
@@ -86,13 +89,13 @@ const Chapter: NextPage = () => {
           setCurrentLesson(newLesson);
         }
       } else {
-        const initialLesson = chapter.lessons[0];
+        const initialLesson = chapter.lessons[lessonIndex];
         if (initialLesson) {
           setCurrentLesson(initialLesson);
         }
       }
     }
-  }, [chapter, currentLesson]);
+  }, [chapter, currentLesson, lessonIndex]);
 
   // パン屑のリンクリスト
   const links = [

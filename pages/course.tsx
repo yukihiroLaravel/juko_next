@@ -102,11 +102,15 @@ const Course: NextPage = () => {
                   <div key={chapter.chapter_id}>
                     <ChapterTitleCard title={chapter.title} />
                     <div className="my-[50px] mx-auto w-11/12 text-center">
-                      {chapter.lessons.map((lesson) => {
+                      {chapter.lessons.map((lesson, index) => {
                         return (
                           <div className="my-5" key={lesson.lesson_id}>
                             <Link
-                              href={{ pathname: '/chapter', query: { attendanceId, chapterId: chapter.chapter_id } }}
+                              href={{
+                                pathname: '/chapter',
+                                query: { attendanceId, chapterId: chapter.chapter_id, lessonIndex: index },
+                              }}
+                              as={`/chapter?attendanceId=${attendanceId}&chapterId=${chapter.chapter_id}`}
                             >
                               <a>
                                 <TitleStatusCard status={lesson.lessonAttendance.status} title={lesson.title} />
