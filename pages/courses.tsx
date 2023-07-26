@@ -5,13 +5,14 @@ import CourseCardList from '@/features/course/components/CourseCardList';
 import { Loading } from '@/components/utils/Loading';
 import { useFetchCourses } from '@/hooks/useFetchCourses';
 import { Error } from '@/components/utils/Error';
+import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 
 const Courses: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
   const [courses] = useFetchCourses({ setIsLoading, setIsError });
   return (
-    <>
+    <AuthWrapper>
       <Header />
       <div className="w-full border-[#100D59] border-b-2 mb-[56px]">
         <div className="mt-[72px] ml-[56px]">
@@ -22,7 +23,7 @@ const Courses: NextPage = () => {
         {isLoading ? <Loading /> : <CourseCardList courses={courses} />}
         {isError && <Error />}
       </div>
-    </>
+    </AuthWrapper>
   );
 };
 

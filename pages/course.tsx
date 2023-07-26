@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { useFetchCourse } from '@/hooks/useFetchCourse';
 import { Loading } from '@/components/utils/Loading';
+import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 
 const Course: NextPage = () => {
   const attendanceId = 1;
@@ -42,7 +43,7 @@ const Course: NextPage = () => {
       : [];
 
   return (
-    <>
+    <AuthWrapper>
       <Header />
       <div className="flex">
         {isLoading ? (
@@ -127,7 +128,7 @@ const Course: NextPage = () => {
           </>
         )}
       </div>
-    </>
+    </AuthWrapper>
   );
 };
 
