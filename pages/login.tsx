@@ -3,6 +3,7 @@ import { LoginFormSchema } from '@/features/login/schema/LoginFormSchema';
 import { NextPage } from 'next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Axios } from '@/lib/api';
 
 const Login: NextPage = () => {
   const defaultValues = {
@@ -20,7 +21,11 @@ const Login: NextPage = () => {
   });
 
   const submitHandler = (data: typeof defaultValues) => {
-    console.log(data);
+    Axios.get('api/proxy/sanctum/csrf-cookie').then(() => {
+      Axios.post('api/proxy/login', data)
+        .then((res) => console.log(res))
+        .catch((error) => {});
+    });
   };
 
   return (
