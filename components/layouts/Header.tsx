@@ -1,20 +1,19 @@
 import { Axios } from '@/lib/api';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 
 type Props = {
   isLogin?: boolean;
 };
 const Header: FC<Props> = ({ isLogin = true }) => {
   const router = useRouter();
-  const { cache } = useSWRConfig();
   const clickHandler = () => {
     if (router.isReady) {
       Axios.get('/sanctum/csrf-cookie').then(() => {
         Axios.post('/logout').then((res) => {
           if (res.status === 200) {
-            cache.delete('/api/user');
+            mutate('/api/user', null);
             router.push('/login');
           }
         });

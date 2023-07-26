@@ -11,10 +11,9 @@ type Props = {
 export const AuthWrapper: FC<Props> = ({ children }) => {
   const router = useRouter();
 
-  const { isValidating, error } = useSWR('/api/proxy/api/user', fetcher);
+  const { isValidating, error } = useSWR('/api/user', fetcher);
 
   useEffect(() => {
-    // ログイン画面ではなく、失敗ステータスの場合はログイン画面へリダイレクト
     if (!isValidating && router.isReady && error?.response?.status === 401) {
       router.push('/login');
     }
