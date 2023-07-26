@@ -1,16 +1,19 @@
 import { Axios } from '@/lib/api';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
+import { useSWRConfig } from 'swr';
 
 type Props = {
   isLogin?: boolean;
 };
 const Header: FC<Props> = ({ isLogin = true }) => {
   const router = useRouter();
+  const { cache } = useSWRConfig();
   const clickHandler = () => {
     if (router.isReady) {
       Axios.post('api/proxy/logout').then((res) => {
         if (res.status === 200) {
+          cache.delete('/api/proxy/api/user');
           router.push('/login');
         }
       });
