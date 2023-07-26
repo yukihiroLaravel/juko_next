@@ -1,9 +1,22 @@
+import { Axios } from '@/lib/api';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 type Props = {
   isLogin?: boolean;
 };
 const Header: FC<Props> = ({ isLogin = true }) => {
+  const router = useRouter();
+  const clickHandler = () => {
+    if (router.isReady) {
+      Axios.post('api/proxy/logout').then((res) => {
+        if (res.status === 200) {
+          router.push('/login');
+        }
+      });
+    }
+  };
+
   return (
     <nav className="w-full bg-primary h-[100px] sticky top-0 z-50">
       <div className="flex h-[100px] justify-between">
@@ -14,6 +27,9 @@ const Header: FC<Props> = ({ isLogin = true }) => {
         </div>
         {isLogin && (
           <div className="flex items-center mr-[50px]">
+            <button className="bg-gray-600 hover:bg-gray-500 text-white rounded px-4 py-2" onClick={clickHandler}>
+              ログアウト
+            </button>
             <a href="#">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

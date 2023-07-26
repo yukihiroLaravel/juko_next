@@ -13,6 +13,8 @@ export const LoginForm: FC = () => {
 
   const [unauthorizedMessage, setUnauthorizedMessage] = useState<string>();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
 
   const {
@@ -26,14 +28,17 @@ export const LoginForm: FC = () => {
   });
 
   const submitHandler = (data: typeof defaultValues) => {
+    setIsLoading(true);
     Axios.get('api/proxy/sanctum/csrf-cookie').then(() => {
       Axios.post('api/proxy/login', data)
         .then((res) => {
+          setIsLoading(false);
           if (res.data.result === true) {
             router.push('/courses');
           }
         })
         .catch((error) => {
+          setIsLoading(false);
           if (error.response.status === 401) {
             setUnauthorizedMessage('認証情報が正しくありません。もう一度、お試しください。');
           }
@@ -72,9 +77,18 @@ export const LoginForm: FC = () => {
           </label>
         </div>
       </div>
-      <button className="block rounded mt-[50px] bg-[#00A5D4] w-4/5 mx-auto text-center text-white font-semibold text-[25px] py-2 hover:opacity-75">
-        ログイン
-      </button>
+      {isLoading ? (
+        <button
+          className="block rounded mt-[50px] bg-[#00A5D4] w-4/5 mx-auto text-center text-white font-semibold text-[25px] py-2 opacity-75"
+          disabled
+        >
+          ログイン中...
+        </button>
+      ) : (
+        <button className="block rounded mt-[50px] bg-[#00A5D4] w-4/5 mx-auto text-center text-white font-semibold text-[25px] py-2 hover:opacity-75">
+          ログイン
+        </button>
+      )}
     </form>
   );
 };
