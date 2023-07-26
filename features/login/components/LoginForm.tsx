@@ -3,13 +3,12 @@ import { LoginFormSchema } from '@/features/login/schema/LoginFormSchema';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Axios } from '@/lib/api';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 import { Button } from '@/components/elements/Button';
 
 export const LoginForm: FC = () => {
   const [isUnauthorized, setIsUnauthorized] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const defaultValues = {
     email: '',
@@ -32,10 +31,10 @@ export const LoginForm: FC = () => {
       Axios.post('/login', data)
         .then((res) => {
           setIsLoading(false);
-          if (res.data.result === true) {
-            router.push('/courses');
-          }
           setValue('password', '');
+          if (res.data.result === true) {
+            Router.push('/courses');
+          }
         })
         .catch((error) => {
           setIsLoading(false);
