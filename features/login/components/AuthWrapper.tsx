@@ -12,7 +12,7 @@ export const AuthWrapper: FC<Props> = ({ children }) => {
   const { isValidating, error } = useSWR('/api/user', fetcher);
 
   useEffect(() => {
-    if (!isValidating && error?.response?.status === 401) {
+    if (!isValidating && error) {
       Router.push('/login');
     }
   }, [isValidating, error]);
