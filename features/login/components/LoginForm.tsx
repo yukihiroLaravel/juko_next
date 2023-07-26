@@ -50,7 +50,7 @@ export const LoginForm: FC = () => {
     <form className="md:w-1/3 md:border mx-auto min-h-full my-10 bg-white" onSubmit={handleSubmit(submitHandler)}>
       <h2 className="text-center mt-10 text-2xl">ログイン画面</h2>
       <div className="w-4/5 mx-auto">
-        {isUnauthorized && <div className="text-red-600 mt-2">ログインに失敗しました</div>}
+        {isUnauthorized && <div className="text-red-600 mt-2 text-center">ログインに失敗しました</div>}
         <div className="mt-10">
           <label htmlFor="email">
             <p>メールアドレス</p>
