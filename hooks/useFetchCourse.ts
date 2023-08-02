@@ -4,8 +4,12 @@ import { Course } from '@/features/course/types/Course';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import { useEffect, useState } from 'react';
+import { Instructor } from '@/types/Instructor';
+import { Attendance } from '@/types/Attendance';
 
 type Data = Course & {
+  instructor: Instructor;
+  attendance: Attendance;
   chapters: (Chapter & {
     lessons: (Lesson & {
       lessonAttendance: LessonAttendance;

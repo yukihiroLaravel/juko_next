@@ -3,7 +3,7 @@ import { FC } from 'react';
 type Props = {
   isLogin?: boolean;
 };
-const Header: FC<Props> = ({ isLogin = true }) => {
+export const Header: FC<Props> = ({ isLogin = true }) => {
   return (
     <nav className="w-full bg-primary h-[100px] sticky top-0 z-50">
       <div className="flex h-[100px] justify-between">
