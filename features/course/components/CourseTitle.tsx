@@ -16,16 +16,6 @@ export const CourseTitle: FC<Props> = ({ course }) => {
   return (
     <>
       <p className="font-semibold text-[16px] mb-[16px]">{course.title}</p>
-      {'instructor' in course ? (
-        <>
-          <p className="font-semibold text-[16px] mb-[16px]">
-            講師 : {course.instructor.last_name} {course.instructor.first_name}
-          </p>
-          <p className="font-semibold text-[16px] mb-[16px]">進捗 {course.attendance.progress}%</p>
-        </>
-      ) : (
-        ''
-      )}
     </>
   );
 };
