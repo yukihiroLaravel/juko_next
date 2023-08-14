@@ -9,6 +9,7 @@ import { CourseCard } from '@/features/course/components/CourseCard';
 import { CourseHeader } from '@/features/course/components/CourseHeader';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { CourseTitle } from '@/features/course/components/CourseTitle';
+import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 
 const Courses: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -16,7 +17,7 @@ const Courses: NextPage = () => {
   const [courses] = useFetchCourses({ setIsLoading, setIsError });
 
   return (
-    <>
+    <AuthWrapper>
       <Header />
       <CourseHeader />
       <div className="container mx-auto mb-10">
@@ -53,7 +54,7 @@ const Courses: NextPage = () => {
         )}
         {isError && <Error />}
       </div>
-    </>
+    </AuthWrapper>
   );
 };
 
