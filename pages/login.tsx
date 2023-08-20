@@ -1,4 +1,4 @@
-import Header from '@/components/layouts/Header';
+import { Header } from '@/components/layouts/Header';
 import { LoginForm } from '@/features/login/components/LoginForm';
 import { NextPage } from 'next';
 

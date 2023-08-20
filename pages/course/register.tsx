@@ -1,4 +1,4 @@
-import Header from '@/components/layouts/Header';
+import { Header } from '@/components/layouts/Header';
 import { NextPage } from 'next';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';

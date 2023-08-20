@@ -1,4 +1,4 @@
-import Header from '@/components/layouts/Header';
+import { Header } from '@/components/layouts/Header';
 import { ToggleButton } from '@/components/elements/ToggleButton';
 import { ProgressBar } from '@/components/elements/ProgressBar';
 import { SideBar } from '@/components/elements/SideBar';

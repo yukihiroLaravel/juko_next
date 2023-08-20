@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { NextPage } from 'next';
 import { useState } from 'react';
 import { Header } from '@/components/layouts/Header';
@@ -26,23 +25,19 @@ const InstructorCourses: NextPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-[30px]">
             {courses.map((course) => {
               return (
-                <Link key={course.course_id} href="/course">
-                  <a>
-                    <CourseCard>
-                      <div className="h-auto">
-                        <Thumbnail
-                          src={process.env.NEXT_PUBLIC_IMAGE_URL + course.image}
-                          alt="children"
-                          height={360}
-                          width={640}
-                        />
-                      </div>
-                      <div className="h-auto  ml-[13px] mt-[16px]">
-                        <CourseTitle course={course} />
-                      </div>
-                    </CourseCard>
-                  </a>
-                </Link>
+                <CourseCard key={course.course_id}>
+                  <div className="h-auto">
+                    <Thumbnail
+                      src={process.env.NEXT_PUBLIC_IMAGE_URL + course.image}
+                      alt="children"
+                      height={360}
+                      width={640}
+                    />
+                  </div>
+                  <div className="h-auto  ml-[13px] mt-[16px]">
+                    <CourseTitle course={course} />
+                  </div>
+                </CourseCard>
               );
             })}
           </div>
