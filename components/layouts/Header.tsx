@@ -6,7 +6,8 @@ import Router from 'next/router';
 type Props = {
   isLogin?: boolean;
 };
-const Header: FC<Props> = ({ isLogin = true }) => {
+
+export const Header: FC<Props> = ({ isLogin = true }) => {
   const clickHandler = () => {
     Axios.post('/logout').then((res) => {
       if (res.status === 200) {
@@ -50,5 +51,3 @@ const Header: FC<Props> = ({ isLogin = true }) => {
     </nav>
   );
 };
-
-export default Header;

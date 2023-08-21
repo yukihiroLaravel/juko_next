@@ -1,24 +1,18 @@
 import { Axios } from '@/lib/api';
-import { useEffect, useState } from 'react';
 import { Course } from '@/features/course/types/Course';
-import { Instructor } from '@/types/Instructor';
-import { Attendance } from '@/types/Attendance';
+import { useEffect, useState } from 'react';
 
-type Data = Course & {
-  instructor: Instructor;
-  attendance: Attendance;
-};
-
-export const useFetchCourses = (args: {
+export const useFetchInstructorCourses = (args: {
   setIsLoading: (value: React.SetStateAction<boolean>) => void;
   setIsError: (value: React.SetStateAction<boolean>) => void;
 }) => {
   const { setIsLoading, setIsError } = args;
-  const [courses, setCourses] = useState<Data[]>([]);
+  const [instructorCourses, setInstructorCourses] = useState<Course[]>([]);
+
   useEffect(() => {
-    Axios.get('/api/v1/course/index?student_id=1')
+    Axios.get('/api/v1/instructor/course/index')
       .then((res) => {
-        setCourses(res.data.data);
+        setInstructorCourses(res.data.data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -27,5 +21,5 @@ export const useFetchCourses = (args: {
         setIsError(true);
       });
   }, [setIsLoading, setIsError]);
-  return [courses] as const;
+  return [instructorCourses] as const;
 };
