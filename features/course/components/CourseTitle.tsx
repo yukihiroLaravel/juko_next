@@ -1,5 +1,5 @@
 import { Attendance } from '@/features/attendance/types/Attendance';
-import { Instructor } from '@/types/Instructor';
+import { Instructor } from '@/features/instructor/types/Instructor';
 import { FC } from 'react';
 import { Course } from '../types/Course';
 
