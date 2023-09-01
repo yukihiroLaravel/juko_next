@@ -1,13 +1,12 @@
 import { Header } from '@/components/layouts/Header';
 import { ToggleButton } from '@/components/elements/ToggleButton';
-import { ProgressBar } from '@/components/elements/ProgressBar';
 import { SideBar } from '@/components/elements/SideBar';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { TitleCard as ChapterTitleCard } from '@/features/chapter/components/TitleCard';
 import { TitleStatusCard } from '@/features/lesson/components/TitleStatusCard';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { useFetchCourse } from '@/hooks/useFetchCourse';
 import { Loading } from '@/components/utils/Loading';
