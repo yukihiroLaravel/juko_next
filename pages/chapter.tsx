@@ -106,7 +106,7 @@ const Chapter: NextPage = () => {
     },
     {
       title: '講座名',
-      href: '/course',
+      href: `/course?attendance_id=${query.attendanceId}`,
     },
     {
       title: currentLesson?.title as string,
