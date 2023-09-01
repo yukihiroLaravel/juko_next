@@ -1,6 +1,6 @@
 import { ProgressBar } from '@/components/elements/ProgressBar';
 import { Course } from '../types/Course';
-import { Attendance } from '@/types/Attendance';
+import { Attendance } from '@/features/attendance/types/Attendance';
 
 type Props = {
   course: Course & {

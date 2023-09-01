@@ -1,4 +1,4 @@
-import { Attendance } from '@/types/Attendance';
+import { Attendance } from '@/features/attendance/types/Attendance';
 import { Instructor } from '@/types/Instructor';
 import { FC } from 'react';
 import { Course } from '../types/Course';

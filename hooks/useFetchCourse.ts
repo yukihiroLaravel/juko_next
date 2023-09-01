@@ -4,7 +4,7 @@ import { Course } from '@/features/course/types/Course';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import { Instructor } from '@/types/Instructor';
-import { Attendance } from '@/types/Attendance';
+import { Attendance } from '@/features/attendance/types/Attendance';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/Fetcher';
 

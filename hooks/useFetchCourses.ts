@@ -1,6 +1,6 @@
 import { Course } from '@/features/course/types/Course';
 import { Instructor } from '@/types/Instructor';
-import { Attendance } from '@/types/Attendance';
+import { Attendance } from '@/features/attendance/types/Attendance';
 import { fetcher } from '@/lib/Fetcher';
 import useSWR from 'swr';
 
