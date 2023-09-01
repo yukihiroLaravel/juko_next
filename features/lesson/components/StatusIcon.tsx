@@ -1,7 +1,10 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-const Icon = styled.div`
+const Icon = styled.div<{
+  background: string;
+  size: string;
+}>`
   min-width: ${(props) => props.size};
   min-height: ${(props) => props.size};
   width: ${(props) => props.size};
@@ -12,7 +15,9 @@ const Icon = styled.div`
   align-items: center;
 `;
 
-const IconSvg = styled.svg`
+const IconSvg = styled.svg<{
+  checkIconSize: string;
+}>`
   width: 0.75rem;
   height: 0.75rem;
   margin: 0 auto;

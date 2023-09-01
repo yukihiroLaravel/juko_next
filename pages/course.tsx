@@ -12,20 +12,15 @@ import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { useFetchCourse } from '@/hooks/useFetchCourse';
 import { Loading } from '@/components/utils/Loading';
 import { AuthWrapper } from '@/features/login/components/AuthWrapper';
+import { useRouter } from 'next/router';
+import { ProgressCard } from '@/features/course/components/ProgressCard';
 
 const Course: NextPage = () => {
-  const attendanceId = 1;
-  const [isShowedSideBar, setIsShowedSideBar] = useState(true);
+  const router = useRouter();
+  const { attendance_id: attendanceId } = router.query;
+  const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [course] = useFetchCourse({ attendanceId });
-
-  useEffect(() => {
-    if (course !== null) {
-      setIsLoading(false);
-      return;
-    }
-  }, [course]);
+  const { course, isLoading, error } = useFetchCourse({ attendanceId });
 
   // パン屑のリンクリスト
   const links =
@@ -36,7 +31,7 @@ const Course: NextPage = () => {
             href: '/courses',
           },
           {
-            title: course.title,
+            title: course?.title ?? '',
             href: '#',
           },
         ]
@@ -46,11 +41,12 @@ const Course: NextPage = () => {
     <AuthWrapper>
       <Header />
       <div className="flex">
-        {isLoading ? (
-          <div className="w-3/4 mx-auto min-h-[100vh] mt-10 mb-10">
+        {isLoading && (
+          <div className="w-3/4 mx-auto min-h-[100vh] my-10">
             <Loading />
           </div>
-        ) : (
+        )}
+        {course && (
           <>
             {isShowedSideBar ? (
               <SideBar>
@@ -64,13 +60,7 @@ const Course: NextPage = () => {
                     />
                   </li>
                   <li>
-                    <div className="bg-[#FFCDCD] w-full text-center">
-                      <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">{course.title}</p>
-                      <ProgressBar progress={100} />
-                      <p className="font-semibold text-[26px] pt-[20px] pb-[30px]">
-                        {course.attendance.progress}% <span className="font-semibold text-[14px]">完了</span>
-                      </p>
-                    </div>
+                    <ProgressCard course={course} />
                   </li>
                 </ul>
                 <ToggleButton isShowedSideBar={isShowedSideBar} setIsShowedSideBar={setIsShowedSideBar} />
@@ -80,29 +70,25 @@ const Course: NextPage = () => {
             )}
             <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
               <Breadcrumb links={links} />
-              <div className="pb-10 border-black border-b mt-[30px] md:hidden">
+              <div className="pb-10 border-black border-b my-5 md:hidden">
                 <Thumbnail
                   src={process.env.NEXT_PUBLIC_IMAGE_URL + course.image}
                   alt="course"
                   height={360}
                   width={640}
                 />
-                <div className="bg-[#FFCDCD] w-full text-center">
-                  <p className="font-semibold text-[36px] pt-[30px] pb-[20px]">{course.title}</p>
-                  <ProgressBar progress={100} />
-                  <p className="font-semibold text-[26px] pt-[20px] pb-[30px]">
-                    {course.attendance.progress}% <span className="font-semibold text-[14px]">完了</span>
-                  </p>
-                </div>
+                <ProgressCard course={course} />
               </div>
-              <div className="mt-[30px]">
-                <h2 className="font-semibold text-[30px] md:text-[36px]">コースカリキュラム</h2>
+              <div className="mt-5">
+                <h2 className="font-semibold text-xl md:text-2xl">コースカリキュラム</h2>
               </div>
               {course.chapters.map((chapter) => {
                 return (
                   <div key={chapter.chapter_id}>
-                    <ChapterTitleCard title={chapter.title} />
-                    <div className="my-[50px] mx-auto w-11/12 text-center">
+                    <div className="my-3">
+                      <ChapterTitleCard title={chapter.title} />
+                    </div>
+                    <div className="my-5 mx-auto w-11/12 text-center">
                       {chapter.lessons.map((lesson, index) => {
                         return (
                           <div className="my-5" key={lesson.lesson_id}>
