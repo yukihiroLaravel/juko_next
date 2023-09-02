@@ -1,5 +1,5 @@
 import { Axios } from '@/lib/api';
-import { Chapter } from '@/types/Chapter';
+import { Chapter } from '@/features/chapter/types/Chapter';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import useSWR from 'swr';

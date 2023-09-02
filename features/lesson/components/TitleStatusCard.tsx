@@ -8,8 +8,9 @@ type Props = {
 };
 export const TitleStatusCard: FC<Props> = ({ title, status }) => {
   return (
-    <div className="flex items-center flex-start mb-[10px]">
+    <div className="flex items-center flex-start text-gray-700">
       <StatusIcon status={status} />
+      <span className="ml-3" />
       <TitleCard title={title} />
     </div>
   );
