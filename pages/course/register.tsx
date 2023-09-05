@@ -8,6 +8,7 @@ import { StoreCourse } from '@/features/course/types/StoreCourse';
 import { Button } from '@/components/elements/Button';
 import { useState } from 'react';
 import { Axios } from '@/lib/api';
+import { FormLayout } from '@/features/course/components/FormLayout';
 
 const Register: NextPage = () => {
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
@@ -57,9 +58,9 @@ const Register: NextPage = () => {
   return (
     <>
       <Header />
-      <div className="md:border md:w-3/6 min-h-[80vh] mt-10 mb-10 bg-white mx-auto">
+      <FormLayout>
         <form onSubmit={handleSubmit(submitHandler)}>
-          <h2 className="text-center my-10 text-3xl">講座登録</h2>
+          <h2 className="text-center text-2xl py-8">講座登録</h2>
           <div className="w-4/5 mx-auto">
             <div className="my-10">
               <label htmlFor="title">
@@ -121,13 +122,13 @@ const Register: NextPage = () => {
               </label>
             </div>
             <div className="my-5 text-center">
-              <Button type="submit" className="w-4/5 font-semibold text-2xl py-2 hover:opacity-75">
+              <Button type="submit" className="w-4/5 py-2 hover:opacity-75">
                 登録
               </Button>
             </div>
           </div>
         </form>
-      </div>
+      </FormLayout>
     </>
   );
 };
