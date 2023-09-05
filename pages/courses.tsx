@@ -11,12 +11,12 @@ import { Loading } from '@/components/utils/Loading';
 import { Error } from '@/components/utils/Error';
 
 const Courses: NextPage = () => {
-  const { courses, isLoading, error } = useFetchCourses();
+  const { courses, isLoading, error, updateText } = useFetchCourses();
 
   return (
     <AuthWrapper>
       <Header />
-      <CourseHeader />
+      <CourseHeader updateText={updateText} />
       {isLoading && <Loading />}
       {error && <Error />}
       <div className="container mx-auto mb-10">
