@@ -1,63 +1,29 @@
 import { Button } from '@/components/elements/Button';
+import { SwitchButton } from '@/components/elements/SwitchButton';
+import { Thumbnail } from '@/components/elements/Thumbnail';
 import { Header } from '@/components/layouts/Header';
+import { Loading } from '@/components/utils/Loading';
 import { FormLayout } from '@/features/course/components/FormLayout';
+import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
+import { useUpdateCourse } from '@/features/course/hooks/useUpdateCourse';
+import { COURSE_STATUS } from '@/features/course/types/Course';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import styled from 'styled-components';
-
-const Checkbox = styled.input`
-  height: 0;
-  width: 0;
-  visibility: hidden;
-`;
-
-const Label = styled.label`
-  cursor: pointer;
-  text-indent: -9999px;
-  width: 50px;
-  height: 25px;
-  background: grey;
-  display: block;
-  border-radius: 100px;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 20px;
-    height: 20px;
-    background: white;
-    border-radius: 90px;
-    transition: 0.3s;
-  }
-`;
-
-const StyledSwitch = styled.div`
-  ${Checkbox}:checked + ${Label} {
-    background: #4caf50;
-  }
-
-  ${Checkbox}:checked + ${Label}::after {
-    left: calc(100% - 5px);
-    transform: translateX(-100%);
-  }
-
-  ${Label}:active::after {
-    width: 45px;
-  }
-`;
 
 const Edit: NextPage = () => {
-  const [isChecked, setIsChecked] = useState(false);
-  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+  const { course_id } = useRouter().query;
 
-  const handleToggle = () => {
-    const newChecked = !isChecked;
-    setIsChecked(newChecked);
-  };
+  const { course, isLoading } = useFetchInstructorCourse({
+    courseId: course_id,
+  });
+
+  const { register, setValue, errors, handleSubmit } = useUpdateCourse({
+    course: course,
+  });
+
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[]) => {
@@ -68,95 +34,115 @@ const Edit: NextPage = () => {
     },
   });
 
+  const submitHandler = handleSubmit(async (data) => {
+    console.log(data);
+  });
+
   return (
     <>
-      <Header />
-      <FormLayout>
-        <h2 className="text-center text-2xl py-8">講座編集</h2>
-        <div className="w-4/5 mx-auto">
-          <div className="my-10">
-            <label htmlFor="title">
-              <p className="font-bold">講座名</p>
-              <input
-                id="title"
-                className="rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
-                // {...register('title')}
-              />
-              {/* {errors.title && <p className="text-red-500">{errors.title.message}</p>} */}
-            </label>
-          </div>
-          <div className="my-10">
-            <label htmlFor="title">
-              <p className="font-bold">公開/非公開</p>
-              <div className="relative inline-block w-10 mr-2 align-middle select-none">
-                <StyledSwitch>
-                  <Checkbox id="checkbox" type="checkbox" checked={isChecked} onChange={handleToggle} />
-                  <Label htmlFor="checkbox" />
-                </StyledSwitch>
-              </div>
-            </label>
-          </div>
-          <div className="my-10">
-            <label htmlFor="image">
-              <p className="font-bold">講座画像</p>
-              {uploadedFileName ? (
-                <>
-                  <span className="text-gray-600 mt-2 mr-3">アップロードされたファイル: {uploadedFileName}</span>
-                  <Button
-                    type="button"
-                    className="p-1"
-                    color="danger"
-                    clickHandler={() => {
-                      // setValue('image', undefined);
-                      setUploadedFileName(null);
-                    }}
-                  >
-                    取り消し
-                  </Button>
-                </>
-              ) : (
-                <div
-                  {...getRootProps({
-                    className: 'border-2 border-dotted h-80 flex justify-center items-center',
-                  })}
-                >
-                  <input
-                    {...getInputProps()}
-                    // {...register('image')}
-                  />
-                  <div className="flex flex-col justify-center items-center ">
-                    <svg
-                      aria-hidden="true"
-                      className="block w-8 h-8 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                      />
-                    </svg>
-                    <p>画像アップロード</p>
-                  </div>
-                </div>
-              )}
-              {/* {errors.image && <p className="text-red-500">{errors.image.message}</p>} */}
-            </label>
-          </div>
-          <div className="my-5 text-center flex justify-between">
-            <Button type="submit" color="danger" className="hover:opacity-75 py-2 px-5">
-              削除
-            </Button>
-            <Button type="submit" className="hover:opacity-75 py-2 px-5">
-              更新
-            </Button>
-          </div>
+      {isLoading && (
+        <div className="w-3/4 mx-auto min-h-[100vh] my-10">
+          <Loading />
         </div>
-      </FormLayout>
+      )}
+      {course && (
+        <>
+          <Header />
+          <FormLayout>
+            <form onSubmit={submitHandler}>
+              <h2 className="text-center text-2xl py-8">講座編集</h2>
+              <div className="w-4/5 mx-auto">
+                <div className="mt-10 mb-5">
+                  <label htmlFor="title">
+                    <p className="font-bold">講座名</p>
+                    <input
+                      id="title"
+                      className="p-2 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+                      defaultValue={course.title}
+                      {...register('title')}
+                    />
+                    {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+                  </label>
+                </div>
+                <div className="mb-5">
+                  <p className="font-bold mb-3">非公開/公開</p>
+                  <SwitchButton
+                    checked={course.status === COURSE_STATUS.PUBLIC}
+                    onChange={() => {
+                      setValue(
+                        'status',
+                        course.status === COURSE_STATUS.PUBLIC ? COURSE_STATUS.PRIVATE : COURSE_STATUS.PUBLIC
+                      );
+                    }}
+                  />
+                </div>
+                <div className="mb-5">
+                  <label htmlFor="image">
+                    <p className="font-bold">講座画像</p>
+                    <Thumbnail
+                      src={process.env.NEXT_PUBLIC_IMAGE_URL + course.image}
+                      alt="course image"
+                      height={360}
+                      width={640}
+                    />
+                    {uploadedFileName ? (
+                      <>
+                        <span className="text-gray-600 mt-2 mr-3">アップロードされたファイル: {uploadedFileName}</span>
+                        <Button
+                          type="button"
+                          className="p-1"
+                          color="danger"
+                          clickHandler={() => {
+                            setValue('image', undefined);
+                            setUploadedFileName(null);
+                          }}
+                        >
+                          取り消し
+                        </Button>
+                      </>
+                    ) : (
+                      <div
+                        {...getRootProps({
+                          className: 'border-2 border-dotted h-80 flex justify-center items-center',
+                        })}
+                      >
+                        <input {...getInputProps()} {...register('image')} />
+                        <div className="flex flex-col justify-center items-center ">
+                          <svg
+                            aria-hidden="true"
+                            className="block w-8 h-8 text-gray-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                            />
+                          </svg>
+                          <p>画像アップロード</p>
+                        </div>
+                      </div>
+                    )}
+                    {errors.image && <p className="text-red-500">{errors.image.message}</p>}
+                  </label>
+                </div>
+                <div className="my-5 text-center flex justify-between">
+                  <Button type="button" color="danger" className="hover:opacity-75 py-2 px-5">
+                    削除
+                  </Button>
+                  <Button type="submit" className="hover:opacity-75 py-2 px-5">
+                    更新
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </FormLayout>
+        </>
+      )}
     </>
   );
 };
