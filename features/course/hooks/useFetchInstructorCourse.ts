@@ -24,6 +24,7 @@ export const useFetchInstructorCourse = ({ courseId }: Args) => {
     data: course,
     isLoading,
     error,
+    mutate,
   } = useSWR<{
     data: Data;
   }>(fetchUrl, fetcher);
@@ -32,5 +33,6 @@ export const useFetchInstructorCourse = ({ courseId }: Args) => {
     course: course?.data,
     isLoading,
     error,
+    mutate,
   };
 };

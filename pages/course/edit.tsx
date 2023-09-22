@@ -7,6 +7,7 @@ import { FormLayout } from '@/features/course/components/FormLayout';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { useUpdateCourse } from '@/features/course/hooks/useUpdateCourse';
 import { COURSE_STATUS } from '@/features/course/types/Course';
+import { Axios } from '@/lib/api';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -15,7 +16,7 @@ import { useDropzone } from 'react-dropzone';
 const Edit: NextPage = () => {
   const { course_id } = useRouter().query;
 
-  const { course, isLoading } = useFetchInstructorCourse({
+  const { course, isLoading, mutate } = useFetchInstructorCourse({
     courseId: course_id,
   });
 
@@ -28,15 +29,41 @@ const Edit: NextPage = () => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[]) => {
       if (acceptedFiles[0] instanceof File) {
-        // setValue('image', acceptedFiles[0]);
+        setValue('image', acceptedFiles[0]);
         setUploadedFileName(acceptedFiles[0].name);
       }
     },
   });
 
   const submitHandler = handleSubmit(async (data) => {
-    console.log(data);
+    const formData = new FormData();
+    formData.append('title', data.title);
+    if (data.image instanceof File) {
+      formData.append('image', data.image);
+    }
+    formData.append('status', data.status);
+
+    await Axios.post(`api/v1/instructor/course/${course_id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then((res) => {
+        mutate();
+        setValue('image', undefined);
+        setUploadedFileName(null);
+        alert('講座を更新しました。');
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('講座の更新に失敗しました。');
+      });
   });
+
+  const cancelHandler = () => {
+    setValue('image', undefined);
+    setUploadedFileName(null);
+  };
 
   return (
     <>
@@ -86,20 +113,12 @@ const Edit: NextPage = () => {
                       width={640}
                     />
                     {uploadedFileName ? (
-                      <>
+                      <div>
                         <span className="text-gray-600 mt-2 mr-3">アップロードされたファイル: {uploadedFileName}</span>
-                        <Button
-                          type="button"
-                          className="p-1"
-                          color="danger"
-                          clickHandler={() => {
-                            setValue('image', undefined);
-                            setUploadedFileName(null);
-                          }}
-                        >
+                        <Button type="button" className="p-2" color="danger" clickHandler={cancelHandler}>
                           取り消し
                         </Button>
-                      </>
+                      </div>
                     ) : (
                       <div
                         {...getRootProps({
