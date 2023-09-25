@@ -56,7 +56,7 @@ const Edit: NextPage = () => {
         alert('講座を更新しました。');
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         alert('講座の更新に失敗しました。');
       });
   });
@@ -76,7 +76,10 @@ const Edit: NextPage = () => {
           router.push('/instructor/courses');
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.data.message === 'This course has already been taken by students.') {
+            alert('この講座はすでに受講生がいるため、更新できません。');
+            return;
+          }
           alert('講座の削除に失敗しました。');
         });
     }
