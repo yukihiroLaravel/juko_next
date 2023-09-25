@@ -14,7 +14,8 @@ import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 const Edit: NextPage = () => {
-  const { course_id } = useRouter().query;
+  const router = useRouter();
+  const { course_id } = router.query;
 
   const { course, isLoading, mutate } = useFetchInstructorCourse({
     courseId: course_id,
@@ -60,9 +61,25 @@ const Edit: NextPage = () => {
       });
   });
 
+  // 画像アップロードのキャンセル処理
   const cancelHandler = () => {
     setValue('image', undefined);
     setUploadedFileName(null);
+  };
+
+  // 講座削除処理
+  const deleteHandler = () => {
+    if (confirm('講座を削除しますか？')) {
+      Axios.delete(`api/v1/instructor/course/${course_id}`)
+        .then((res) => {
+          alert('講座を削除しました。');
+          router.push('/instructor/courses');
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('講座の削除に失敗しました。');
+        });
+    }
   };
 
   return (
@@ -150,7 +167,12 @@ const Edit: NextPage = () => {
                   </label>
                 </div>
                 <div className="my-5 text-center flex justify-between">
-                  <Button type="button" color="danger" className="hover:opacity-75 py-2 px-5">
+                  <Button
+                    type="button"
+                    color="danger"
+                    className="hover:opacity-75 py-2 px-5"
+                    clickHandler={deleteHandler}
+                  >
                     削除
                   </Button>
                   <Button type="submit" className="hover:opacity-75 py-2 px-5">
