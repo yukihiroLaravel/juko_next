@@ -7,9 +7,9 @@ export const InstructorUserDropDown: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const clickHandler = () => {
-    Axios.post('/logout').then((res) => {
+    Axios.post('/logout/instructor').then((res) => {
       if (res.status === 200) {
-        Router.push('/login');
+        Router.push('/instructor/login');
       }
     });
   };

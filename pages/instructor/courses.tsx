@@ -7,12 +7,13 @@ import { CourseCard } from '@/features/course/components/CourseCard';
 import { CourseHeader } from '@/features/course/components/CourseHeader';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { CourseTitle } from '@/features/course/components/CourseTitle';
+import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
 
 const InstructorCourses: NextPage = () => {
   const { courses, isLoading, error, updateText } = useFetchInstructorCourses();
 
   return (
-    <>
+    <InstructorAuthWrapper>
       <InstructorHeader />
       <CourseHeader updateText={updateText} />
       <div className="container mx-auto mb-10">
@@ -38,7 +39,7 @@ const InstructorCourses: NextPage = () => {
           })}
         </div>
       </div>
-    </>
+    </InstructorAuthWrapper>
   );
 };
 
