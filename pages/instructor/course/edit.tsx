@@ -1,7 +1,7 @@
 import { Button } from '@/components/elements/Button';
 import { SwitchButton } from '@/components/elements/SwitchButton';
 import { Thumbnail } from '@/components/elements/Thumbnail';
-import { Header } from '@/components/layouts/Header';
+import { InstructorHeader } from '@/components/layouts/InstructorHeader';
 import { Loading } from '@/components/utils/Loading';
 import { FormLayout } from '@/features/course/components/FormLayout';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
@@ -94,7 +94,7 @@ const Edit: NextPage = () => {
       )}
       {course && (
         <>
-          <Header />
+          <InstructorHeader />
           <FormLayout>
             <form onSubmit={submitHandler}>
               <h2 className="text-center text-2xl py-8">講座編集</h2>

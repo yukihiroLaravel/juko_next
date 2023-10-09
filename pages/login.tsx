@@ -1,12 +1,12 @@
-import { Header } from '@/components/layouts/Header';
-import { LoginForm } from '@/features/login/components/LoginForm';
+import { StudentHeader } from '@/components/layouts/StudentHeader';
+import { StudentLoginForm } from '@/features/login/components/StudentLoginForm';
 import { NextPage } from 'next';
 
 const Login: NextPage = () => {
   return (
     <>
-      <Header isLogin={false} />
-      <LoginForm />
+      <StudentHeader isLogin={false} />
+      <StudentLoginForm />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { Header } from '@/components/layouts/Header';
+import { StudentHeader } from '@/components/layouts/StudentHeader';
 import { ToggleButton } from '@/components/elements/ToggleButton';
 import { ProgressBar } from '@/components/elements/ProgressBar';
 import { SideBar } from '@/components/elements/SideBar';
@@ -123,7 +123,7 @@ const Chapter: NextPage = () => {
 
   return (
     <AuthWrapper>
-      <Header />
+      <StudentHeader />
       <div className="flex">
         {isLoading ? (
           <div className="w-3/4 mx-auto min-h-[100vh] mt-10 mb-10">

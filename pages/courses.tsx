@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { NextPage } from 'next';
-import { Header } from '@/components/layouts/Header';
+import { StudentHeader } from '@/components/layouts/StudentHeader';
 import { useFetchCourses } from '@/hooks/useFetchCourses';
 import { CourseCard } from '@/features/course/components/CourseCard';
 import { CourseHeader } from '@/features/course/components/CourseHeader';
@@ -15,7 +15,7 @@ const Courses: NextPage = () => {
 
   return (
     <AuthWrapper>
-      <Header />
+      <StudentHeader />
       <CourseHeader updateText={updateText} />
       {isLoading && <Loading />}
       {error && <Error />}
