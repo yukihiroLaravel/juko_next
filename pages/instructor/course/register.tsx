@@ -1,4 +1,4 @@
-import { Header } from '@/components/layouts/Header';
+import { InstructorHeader } from '@/components/layouts/InstructorHeader';
 import { NextPage } from 'next';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
@@ -57,7 +57,7 @@ const Register: NextPage = () => {
 
   return (
     <>
-      <Header />
+      <InstructorHeader />
       <FormLayout>
         <form onSubmit={handleSubmit(submitHandler)}>
           <h2 className="text-center text-2xl py-8">講座登録</h2>

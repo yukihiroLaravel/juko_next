@@ -1,19 +1,13 @@
 import React, { FC, useState } from 'react';
 import clsx from 'clsx';
-import { Axios } from '@/lib/api';
-import Router from 'next/router';
 
-export const UserDropDown: FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+type Props = {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  logoutHandler: () => void;
+};
 
-  const clickHandler = () => {
-    Axios.post('/logout').then((res) => {
-      if (res.status === 200) {
-        Router.push('/login');
-      }
-    });
-  };
-
+export const UserDropDown: FC<Props> = ({ isOpen, setIsOpen, logoutHandler }) => {
   return (
     <div className="mr-5 relative inline-block top-5">
       <button onClick={() => setIsOpen(!isOpen)}>
@@ -32,7 +26,7 @@ export const UserDropDown: FC = () => {
           <a href="#" className="text-gray-700 block px-4 py-2 text-sm">
             ユーザー情報編集
           </a>
-          <button className="text-gray-700 px-4 py-2 text-sm w-full text-start" onClick={clickHandler}>
+          <button className="text-gray-700 px-4 py-2 text-sm w-full text-start" onClick={logoutHandler}>
             ログアウト
           </button>
         </div>

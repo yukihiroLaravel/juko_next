@@ -1,11 +1,11 @@
-import { FC } from 'react';
-import { UserDropDown } from '../elements/UserDropDown';
+import React, { FC, ReactNode } from 'react';
 
 type Props = {
   isLogin?: boolean;
+  renderUserDropDown: () => ReactNode;
 };
 
-export const Header: FC<Props> = ({ isLogin = true }) => {
+export const Header: FC<Props> = ({ isLogin = true, renderUserDropDown }) => {
   return (
     <nav className="w-full bg-primary h-24 sticky top-0 z-50">
       <div className="flex min-h-full justify-between">
@@ -14,7 +14,7 @@ export const Header: FC<Props> = ({ isLogin = true }) => {
             <h1 className="font-bold text-3xl text-[#FBF459]">受講管理アプリ</h1>
           </a>
         </div>
-        {isLogin && <UserDropDown />}
+        {isLogin && renderUserDropDown()}
       </div>
     </nav>
   );
