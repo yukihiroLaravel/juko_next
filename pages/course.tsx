@@ -13,7 +13,6 @@ import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 import { useRouter } from 'next/router';
 import { ProgressCard } from '@/features/course/components/ProgressCard';
 import { StudentLayout } from '@/components/layouts/StudentLayout';
-import { useFetchProgress } from '@/features/course/hooks/useFetchProgress';
 import { CourseProgressCard } from '@/features/course/components/CourseProgressCard';
 
 const Course: NextPage = () => {
