@@ -23,7 +23,10 @@ const Courses: NextPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-[30px]">
             {courses?.map((course) => {
               return (
-                <Link key={course.course_id} href={'/course?attendance_id=' + course.attendance.attendance_id}>
+                <Link
+                  key={course.course_id}
+                  href={`/course?attendance_id=${course.attendance.attendance_id}&course_id=${course.course_id}`}
+                >
                   <a>
                     <CourseCard>
                       <div className="h-auto">

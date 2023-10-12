@@ -13,10 +13,12 @@ import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 import { useRouter } from 'next/router';
 import { ProgressCard } from '@/features/course/components/ProgressCard';
 import { StudentLayout } from '@/components/layouts/StudentLayout';
+import { useFetchProgress } from '@/features/course/hooks/useFetchProgress';
+import { CourseProgressCard } from '@/features/course/components/CourseProgressCard';
 
 const Course: NextPage = () => {
   const router = useRouter();
-  const { attendance_id: attendanceId } = router.query;
+  const { attendance_id: attendanceId, course_id: courseId } = router.query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
 
   const { course, isLoading, error } = useFetchCourse({ attendanceId });
@@ -77,6 +79,9 @@ const Course: NextPage = () => {
                     width={640}
                   />
                   <ProgressCard course={course} />
+                </div>
+                <div className="mt-5">
+                  <CourseProgressCard courseId={courseId} />
                 </div>
                 <div className="mt-5">
                   <h2 className="font-semibold text-xl md:text-2xl">コースカリキュラム</h2>
