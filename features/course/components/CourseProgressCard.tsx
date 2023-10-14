@@ -14,7 +14,8 @@ export const CourseProgressCard: React.FC<Props> = ({ courseId }) => {
   const uncopletedChapters = numberOfTotalChapters - numberOfCompletedChapters;
 
   // 進捗率
-  const chapterProgress = Math.round((numberOfCompletedChapters / numberOfTotalChapters) * 100);
+  const chapterProgress =
+    numberOfCompletedChapters !== 0 ? Math.round((numberOfCompletedChapters / numberOfTotalChapters) * 100) : 0;
 
   const data = [
     {
@@ -29,7 +30,7 @@ export const CourseProgressCard: React.FC<Props> = ({ courseId }) => {
     },
   ];
 
-  const label = ({ name, value, cx, x, y }: { name: string; value: string; cx: number; x: number; y: number }) => {
+  const label = ({ name, value, x, y }: { name: string; value: string; x: number; y: number }) => {
     return (
       <>
         <Text x={x} y={y} fill="#2c2c2c">
