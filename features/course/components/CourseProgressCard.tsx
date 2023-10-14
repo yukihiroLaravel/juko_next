@@ -1,5 +1,6 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Text } from 'recharts';
 import { useFetchProgress } from '../hooks/useFetchProgress';
+import { Button } from '@/components/elements/Button';
 
 type Props = {
   courseId: string | string[] | undefined;
@@ -75,7 +76,7 @@ export const CourseProgressCard: React.FC<Props> = ({ courseId }) => {
             </div>
           </div>
           <div className="p-5">
-            <button className="bg-blue-500 text-white rounded py-1 px-3">続きからはじめる</button>
+            {progress?.continue_lesson_id && <Button className="py-1 px-3">続きからはじめる</Button>}
           </div>
         </div>
       </div>
@@ -109,7 +110,7 @@ export const CourseProgressCard: React.FC<Props> = ({ courseId }) => {
           </div>
         </div>
         <div className="p-5 text-center">
-          <button className="bg-blue-500 text-white rounded py-1 px-3 w-full">続きからはじめる</button>
+          <Button className="py-1 px-3 w-full">続きからはじめる</Button>
         </div>
       </div>
     </>
