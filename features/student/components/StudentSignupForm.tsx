@@ -1,12 +1,14 @@
 import { Button } from '@/components/elements/Button';
 import { Axios } from '@/lib/api';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import { useRef, useState } from 'react';
+import { set, useForm } from 'react-hook-form';
 import { StoreSchema } from '../schemas/StoreSchema';
 
 export const StudentSignupForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
+
+  const [isUniqueEmail, setIsUniqueEmail] = useState<boolean>(false);
 
   const defaultValues = {
     nickName: '',
@@ -23,7 +25,6 @@ export const StudentSignupForm: React.FC = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm({
     mode: 'onSubmit',
@@ -55,7 +56,8 @@ export const StudentSignupForm: React.FC = () => {
         })
         .catch((error) => {
           isSending.current = false;
-          if (error.response.status === 401) {
+          if (error.response.status === 422) {
+            setIsUniqueEmail(true);
           }
         });
     });
@@ -107,6 +109,7 @@ export const StudentSignupForm: React.FC = () => {
               {...register('email')}
             />
             <span className="text-red-600">{errors?.email?.message}</span>
+            {isUniqueEmail && <span className="text-red-600">既に登録されているメールアドレスです</span>}
           </label>
         </div>
         <div className="my-3">
