@@ -1,15 +1,15 @@
 import { Button } from '@/components/elements/Button';
 import { Axios } from '@/lib/api';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Router from 'next/router';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { StoreSchema } from '../schemas/StoreSchema';
 
 export const StudentSignupForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
 
   const defaultValues = {
-    nickname: '',
+    nickName: '',
     lastName: '',
     firstName: '',
     email: '',
@@ -27,28 +27,30 @@ export const StudentSignupForm: React.FC = () => {
     formState: { errors },
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver({
-      nickname: '',
-      lastName: '',
-      firstName: '',
-      email: '',
-      occupation: '',
-      purpose: '',
-      birthDate: '',
-      sex: '',
-      address: '',
-    }),
+    resolver: yupResolver(StoreSchema),
     defaultValues,
   });
 
   const submitHandler = (data: typeof defaultValues) => {
     isSending.current = true;
+
+    const bodyData = {
+      nick_name: data.nickName,
+      last_name: data.lastName,
+      first_name: data.firstName,
+      email: data.email,
+      occupation: data.occupation,
+      purpose: data.purpose,
+      birth_date: data.birthDate,
+      sex: data.sex,
+      address: data.address,
+    };
     Axios.get('/sanctum/csrf-cookie').then(() => {
-      Axios.post('/login', data)
+      Axios.post('/api/v1/student', bodyData)
         .then((res) => {
           isSending.current = false;
           if (res.data.result === true) {
-            Router.push('/courses');
+            console.log(res.data);
           }
         })
         .catch((error) => {
@@ -64,14 +66,14 @@ export const StudentSignupForm: React.FC = () => {
       <h2 className="text-center mt-10 text-2xl">新規登録画面</h2>
       <div className="w-4/5 mx-auto">
         <div className="mt-10">
-          <label htmlFor="nickname">
+          <label htmlFor="nickName">
             <p>ユーザー名</p>
             <input
-              id="nickname"
+              id="nickName"
               className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
-              {...register('nickname')}
+              {...register('nickName')}
             />
-            <span className="text-red-600">{errors?.nickname?.message}</span>
+            <span className="text-red-600">{errors?.nickName?.message}</span>
           </label>
         </div>
         <div className="my-3">
