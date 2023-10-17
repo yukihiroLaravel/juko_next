@@ -64,8 +64,8 @@ export const StudentSignupForm: React.FC = () => {
   };
 
   return (
-    <form className="md:w-1/3 md:border mx-auto min-h-full my-10 bg-white" onSubmit={handleSubmit(submitHandler)}>
-      <h2 className="text-center mt-10 text-2xl">新規登録画面</h2>
+    <form className="md:w-1/3 md:border mx-auto min-h-full my-10 py-10 bg-white" onSubmit={handleSubmit(submitHandler)}>
+      <h2 className="text-center text-2xl">新規登録画面</h2>
       <div className="w-4/5 mx-auto">
         <div className="mt-10">
           <label htmlFor="nickName">

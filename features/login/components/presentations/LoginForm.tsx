@@ -17,8 +17,8 @@ type Props = {
 };
 export const LoginForm: FC<Props> = ({ isUnauthorized, isLoading, onSubmit, errors, register }) => {
   return (
-    <form className="md:w-1/3 md:border mx-auto min-h-full my-10 bg-white" onSubmit={onSubmit}>
-      <h2 className="text-center mt-10 text-2xl">ログイン画面</h2>
+    <form className="md:w-1/3 md:border mx-auto min-h-full my-10 py-10 bg-white" onSubmit={onSubmit}>
+      <h2 className="text-center text-2xl">ログイン画面</h2>
       <div className="w-4/5 mx-auto">
         {isUnauthorized && <div className="text-red-600 mt-2 text-center">ログインに失敗しました</div>}
         <div className="mt-10">
