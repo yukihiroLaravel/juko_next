@@ -65,7 +65,7 @@ const Chapter: NextPage = () => {
 
   const calculateChapterProgeress = (): number => {
     // チャプター取得前は0を返す
-    if (chapter === undefined) return 0;
+    if (chapter === undefined  || chapter.lessons === undefined) return 0;
 
     // 合計レッスン数
     const lessonTotalCount = chapter.lessons.length;
@@ -90,7 +90,7 @@ const Chapter: NextPage = () => {
           setCurrentLesson(newLesson);
         }
       } else {
-        const initialLesson = chapter.lessons[lessonIndex];
+        const initialLesson = chapter?.lessons?.[lessonIndex];
         if (initialLesson) {
           setCurrentLesson(initialLesson);
         }
@@ -140,7 +140,7 @@ const Chapter: NextPage = () => {
                         <ProgressBar progress={calculateChapterProgeress()} />
                       </div>
                     </li>
-                    {chapter?.lessons.map((lesson) => {
+                    {chapter?.lessons?.map((lesson) => {
                       return (
                         <StyleSideBarList
                           key={lesson.lesson_id}
@@ -171,7 +171,7 @@ const Chapter: NextPage = () => {
                       <ProgressBar progress={calculateChapterProgeress()} />
                     </div>
                   </li>
-                  {chapter?.lessons.map((lesson) => {
+                  {chapter?.lessons?.map((lesson) => {
                     return (
                       <StyleSideBarList
                         key={lesson.lesson_id}
