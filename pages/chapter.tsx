@@ -65,16 +65,16 @@ const Chapter: NextPage = () => {
 
   const calculateChapterProgeress = (): number => {
     // チャプター取得前は0を返す
-    if (chapter === undefined  || chapter.lessons === undefined) return 0;
+    if (chapter === undefined  || chapter.course.chapter.lessons === undefined) return 0;
 
     // 合計レッスン数
-    const lessonTotalCount = chapter.lessons.length;
+    const lessonTotalCount = chapter.course.chapter.lessons.length;
 
     // 合計レッスン数が0の場合は、0を返す
     if (lessonTotalCount === 0) return 0;
 
     // 進捗完了レッスン数
-    const completedLessonTotalCount = chapter.lessons.filter((lesson) => {
+    const completedLessonTotalCount = chapter.course.chapter.lessons.filter((lesson) => {
       return lesson.lessonAttendance?.status === STATUS_COMPLETED_ATTENDANCE;
     }).length;
 
@@ -85,12 +85,12 @@ const Chapter: NextPage = () => {
     if (chapter !== undefined) {
       setIsLoading(false);
       if (currentLesson !== null) {
-        const newLesson = chapter.lessons.find((lesson) => lesson.lesson_id === currentLesson.lesson_id);
+        const newLesson = chapter.course.chapter.lessons.find((lesson) => lesson.lesson_id === currentLesson.lesson_id);
         if (newLesson) {
           setCurrentLesson(newLesson);
         }
       } else {
-        const initialLesson = chapter?.lessons?.[lessonIndex];
+        const initialLesson = chapter?.course.chapter.lessons[lessonIndex];
         if (initialLesson) {
           setCurrentLesson(initialLesson);
         }
@@ -115,7 +115,7 @@ const Chapter: NextPage = () => {
   ];
 
   const clickHandler = (lessonId: number) => () => {
-    const newLesson = chapter?.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
+    const newLesson = chapter?.course.chapter.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
       lessonAttendance: LessonAttendance;
     };
     setCurrentLesson(newLesson);
@@ -140,7 +140,7 @@ const Chapter: NextPage = () => {
                         <ProgressBar progress={calculateChapterProgeress()} />
                       </div>
                     </li>
-                    {chapter?.lessons?.map((lesson) => {
+                    {chapter?.course.chapter.lessons.map((lesson) => {
                       return (
                         <StyleSideBarList
                           key={lesson.lesson_id}
@@ -162,7 +162,7 @@ const Chapter: NextPage = () => {
               <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
                 <Breadcrumb links={links} />
                 <div className="mt-10 border-black border-b pb-5">
-                  <h2 className="font-semibold text-3xl md:text-4xl">{chapter?.title}</h2>
+                  <h2 className="font-semibold text-3xl md:text-4xl">{chapter?.course.title}</h2>
                 </div>
                 <ul className="md:hidden my-5 border-black border-b">
                   <li className="mb-10">
@@ -171,7 +171,7 @@ const Chapter: NextPage = () => {
                       <ProgressBar progress={calculateChapterProgeress()} />
                     </div>
                   </li>
-                  {chapter?.lessons?.map((lesson) => {
+                  {chapter?.course.chapter.lessons.map((lesson) => {
                     return (
                       <StyleSideBarList
                         key={lesson.lesson_id}

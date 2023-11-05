@@ -35,14 +35,6 @@ type Data = {
   };
 };
 
-
-// type Data = Chapter & {
-//   lessons: (Lesson & {
-//     lessonAttendance: LessonAttendance;
-//   })[];
-//   data: Data;
-// };
-
 type Args = {
   attendanceId: string | undefined;
   chapterId: string | undefined;
@@ -51,8 +43,8 @@ type Args = {
 export const useFetchChapter = ({ attendanceId, chapterId }: Args) => {
   const fetcher = (url: string) => Axios.get(url).then((res) => res.data);
   const { data: chapter, mutate } = useSWR<Data | null>(
-    // '/api/v1/course/chapter?attendance_id=' + attendanceId + '&chapter_id=' + chapterId,
-    '/api/v1/attendance/1/course/1/chapter/1',
+    // テスト表示のためURL仮指定
+    '/api/v1/attendance/1/course/1/chapter/2',
     fetcher
   );
 
