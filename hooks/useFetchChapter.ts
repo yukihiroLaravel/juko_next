@@ -2,22 +2,23 @@ import { Axios } from '@/lib/api';
 import { Chapter } from '@/features/chapter/types/Chapter';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
-import { Instructor } from '@/features/Instructor/types/Instructor';
-import { Course } from '@/features/Course/types/Course';
+import { Instructor } from '@/features/instructor/types/Instructor';
+import { Course } from '@/features/course/types/Course';
 import useSWR from 'swr';
 
 type Data = {
-  attendance_id: number;
-  progress: number;
-  course: (Course & {
-    instructor: (Instructor & {
-    chapter: (Chapter & {
-      lessons: (Lesson & {
-        lessonAttendance: LessonAttendance;
+  data: {
+    attendance_id: number;
+    progress: number;
+    course: Course & {
+      instructor: Instructor;
+      chapter: Chapter & {
+        lessons: (Lesson & {
+          lessonAttendance: LessonAttendance;
         })[];
-      });
-    });
-  });
+      };
+    };
+  };
 };
 
 type Args = {

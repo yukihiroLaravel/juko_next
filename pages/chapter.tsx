@@ -65,7 +65,7 @@ const Chapter: NextPage = () => {
 
   const calculateChapterProgeress = (): number => {
     // チャプター取得前は0を返す
-    if (attendance === undefined  || attendance.course.chapter.lessons === undefined) return 0;
+    if (attendance === undefined) return 0;
 
     // 合計レッスン数
     const lessonTotalCount = attendance.course.chapter.lessons.length;
@@ -109,13 +109,13 @@ const Chapter: NextPage = () => {
       href: `/course?attendance_id=${query.attendanceId}`,
     },
     {
-      title: currentLesson?.title as string,
+      title: attendance?.course.title as string,
       href: '#',
     },
   ];
 
   const clickHandler = (lessonId: number) => () => {
-    const newLesson = chapter?.course.chapter.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
+    const newLesson = attendance?.course.chapter.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
       lessonAttendance: LessonAttendance;
     };
     setCurrentLesson(newLesson);
