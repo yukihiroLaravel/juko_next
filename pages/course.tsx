@@ -92,7 +92,10 @@ const Course: NextPage = () => {
                   <ProgressCard attendance={attendance} />
                 </div>
                 <div className="mt-5">
-                  <CourseProgressCard courseId={courseId} />
+                  <CourseProgressCard
+                    attendanceId={attendanceId}
+                    courseId={courseId}
+                  />
                 </div>
                 <div className="mt-5">
                   <h2 className="font-semibold text-xl md:text-2xl">
