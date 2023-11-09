@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 type Props = {
   attendanceId: string | string[] | undefined;
-  courseId: string | string[] | undefined;
+  courseId: number;
 };
 
 export const CourseProgressCard: React.FC<Props> = ({

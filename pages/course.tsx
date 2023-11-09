@@ -14,13 +14,14 @@ import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 import { ProgressCard } from '@/features/course/components/ProgressCard';
 import { CourseProgressCard } from '@/features/course/components/CourseProgressCard';
 import { useFetchCourse } from '@/hooks/useFetchCourse';
+import { Error } from '@/components/utils/Error';
 
 const Course: NextPage = () => {
   const router = useRouter();
-  const { attendance_id: attendanceId, course_id: courseId } = router.query;
+  const { attendance_id: attendanceId } = router.query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
 
-  const { attendance, isLoading } = useFetchCourse({ attendanceId });
+  const { attendance, isLoading, error } = useFetchCourse({ attendanceId });
 
   // パン屑のリンクリスト
   const links =
@@ -41,6 +42,7 @@ const Course: NextPage = () => {
     <AuthWrapper>
       <StudentLayout>
         <div className="flex">
+          {error && <Error />}
           {isLoading && (
             <div className="w-3/4 mx-auto min-h-[100vh] my-10">
               <Loading />
@@ -94,7 +96,7 @@ const Course: NextPage = () => {
                 <div className="mt-5">
                   <CourseProgressCard
                     attendanceId={attendanceId}
-                    courseId={courseId}
+                    courseId={attendance.course.course_id}
                   />
                 </div>
                 <div className="mt-5">
@@ -117,12 +119,12 @@ const Course: NextPage = () => {
                                   pathname: '/chapter',
                                   query: {
                                     attendanceId,
-                                    courseId: courseId,
+                                    courseId: attendance.course.course_id,
                                     chapterId: chapter.chapter_id,
                                     lessonIndex: index,
                                   },
                                 }}
-                                as={`/chapter?attendanceId=${attendanceId}&courseId=${courseId}&chapterId=${chapter.chapter_id}`}
+                                as={`/chapter?attendanceId=${attendanceId}&courseId=${attendance.course.course_id}&chapterId=${chapter.chapter_id}`}
                               >
                                 <a>
                                   <TitleStatusCard

@@ -2,7 +2,7 @@ import { fetcher } from '@/lib/Fetcher';
 import useSWR from 'swr';
 
 type Args = {
-  courseId: string | string[] | undefined;
+  courseId: number;
 };
 
 type Data = {

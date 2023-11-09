@@ -25,13 +25,16 @@ const Courses: NextPage = () => {
               return (
                 <Link
                   key={attendance.course.course_id}
-                  href={`/course?attendance_id=${attendance.attendance_id}&course_id=${attendance.course.course_id}`}
+                  href={`/course?attendance_id=${attendance.attendance_id}`}
                 >
                   <a>
                     <CourseCard>
                       <div className="h-auto">
                         <Thumbnail
-                          src={process.env.NEXT_PUBLIC_IMAGE_URL + attendance.course.image}
+                          src={
+                            process.env.NEXT_PUBLIC_IMAGE_URL +
+                            attendance.course.image
+                          }
                           alt="course image"
                           height={360}
                           width={640}
@@ -40,9 +43,12 @@ const Courses: NextPage = () => {
                       <div className="h-auto  ml-[13px] mt-[16px]">
                         <CourseTitle course={attendance.course} />
                         <p className="font-semibold text-[16px] mb-[16px]">
-                          講師 : {attendance.course.instructor.last_name} {attendance.course.instructor.first_name}
+                          講師 : {attendance.course.instructor.last_name}{' '}
+                          {attendance.course.instructor.first_name}
                         </p>
-                        <p className="font-semibold text-[16px] mb-[16px]">進捗 {attendance.progress}%</p>
+                        <p className="font-semibold text-[16px] mb-[16px]">
+                          進捗 {attendance.progress}%
+                        </p>
                       </div>
                     </CourseCard>
                   </a>
