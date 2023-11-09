@@ -19,6 +19,7 @@ import { StudentLayout } from '@/components/layouts/StudentLayout';
 
 type Query = {
   attendanceId?: string;
+  courseId?: string;
   chapterId?: string;
   lessonIndex?: number;
 };
@@ -49,6 +50,7 @@ const Chapter: NextPage = () => {
   const query: Query = router.query;
   const [attendance, mutate] = useFetchChapter({
     attendanceId: query.attendanceId,
+    courseId: query.courseId,
     chapterId: query.chapterId,
   });
 
@@ -105,11 +107,11 @@ const Chapter: NextPage = () => {
       href: '/courses',
     },
     {
-      title: '講座名',
+      title: attendance?.course.title,
       href: `/course?attendance_id=${query.attendanceId}`,
     },
     {
-      title: attendance?.course.title as string,
+      title: currentLesson?.title,
       href: '#',
     },
   ];

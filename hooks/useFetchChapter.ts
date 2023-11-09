@@ -23,14 +23,14 @@ type Data = {
 
 type Args = {
   attendanceId: string | undefined;
+  courseId: string | undefined;
   chapterId: string | undefined;
 };
 
-export const useFetchChapter = ({ attendanceId, chapterId }: Args) => {
+export const useFetchChapter = ({ attendanceId, courseId, chapterId }: Args) => {
   const fetcher = (url: string) => Axios.get(url).then((res) => res.data);
   const { data: attendance, mutate } = useSWR<Data | null>(
-    // テスト表示のためURL仮指定
-    '/api/v1/attendance/1/course/1/chapter/2',
+    `/api/v1/attendance/${attendanceId}/course/${courseId}/chapter/${chapterId}`,
     fetcher
   );
 
