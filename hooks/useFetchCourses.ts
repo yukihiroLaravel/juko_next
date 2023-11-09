@@ -21,7 +21,12 @@ export const useFetchCourses = () => {
     data: attendances,
     isLoading,
     error,
-  } = useSWR<Data>(text ? `/api/v1/attendance/index?text=${text}` : '/api/v1/attendance/index', fetcher);
+  } = useSWR<Data>(
+    text
+      ? `/api/v1/attendance/index?search_word=${text}`
+      : '/api/v1/attendance/index',
+    fetcher
+  );
 
   return {
     attendances: attendances?.data,
