@@ -4,6 +4,7 @@ import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import { Instructor } from '@/features/instructor/types/Instructor';
 import { Course } from '@/features/course/types/Course';
+import { fetcher } from '@/lib/Fetcher';
 import useSWR from 'swr';
 
 type Data = {
@@ -30,7 +31,9 @@ type Args = {
 export const useFetchChapter = ({ attendanceId, courseId, chapterId }: Args) => {
   const fetcher = (url: string) => Axios.get(url).then((res) => res.data);
   const { data: attendance, mutate } = useSWR<Data | null>(
-    `/api/v1/attendance/${attendanceId}/course/${courseId}/chapter/${chapterId}`,
+    attendanceId && courseId && chapterId
+      ? `/api/v1/attendance/${attendanceId}/course/${courseId}/chapter/${chapterId}`
+      : null,
     fetcher
   );
 
