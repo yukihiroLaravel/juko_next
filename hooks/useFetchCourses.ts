@@ -1,13 +1,16 @@
 import { Course } from '@/features/course/types/Course';
 import { Instructor } from '@/features/instructor/types/Instructor';
+import { useState } from 'react';
 import { Attendance } from '@/features/attendance/types/Attendance';
 import { fetcher } from '@/lib/Fetcher';
 import useSWR from 'swr';
-import { useState } from 'react';
 
-type Data = Course & {
-  instructor: Instructor;
-  attendance: Attendance;
+type Data = {
+  data: (Attendance & {
+    course: Course & {
+      instructor: Instructor;
+    };
+  })[];
 };
 
 export const useFetchCourses = () => {
@@ -15,15 +18,18 @@ export const useFetchCourses = () => {
   const updateText = (text: string) => setText(text);
 
   const {
-    data: courses,
+    data: attendances,
     isLoading,
     error,
-  } = useSWR<{
-    data: Data[];
-  }>(text ? `/api/v1/course/index?text=${text}` : '/api/v1/course/index', fetcher);
+  } = useSWR<Data>(
+    text
+      ? `/api/v1/attendance/index?search_word=${text}`
+      : '/api/v1/attendance/index',
+    fetcher
+  );
 
   return {
-    courses: courses?.data,
+    attendances: attendances?.data,
     isLoading,
     error,
     updateText,
