@@ -61,7 +61,7 @@ export const StudentEditForm: React.FC = () => {
       address: data.address,
     };
     Axios.get('/sanctum/csrf-cookie').then(() => {
-      Axios.post('/api/v1/student', bodyData)
+      Axios.post('/api/v1/student/update', bodyData)
         .then((res) => {
           isSending.current = false;
           if (res.data.result === true) {
