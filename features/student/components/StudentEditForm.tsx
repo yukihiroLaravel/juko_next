@@ -3,7 +3,7 @@ import { Axios } from '@/lib/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRef, useState } from 'react';
 import { set, useForm } from 'react-hook-form';
-import { StoreSchema } from '../schemas/StoreSchema';
+import { UpdateStoreSchema } from '../schemas/UpdateStoreSchema';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { useDropzone } from 'react-dropzone';
 
@@ -31,7 +31,7 @@ export const StudentEditForm: React.FC = () => {
     setValue,
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(StoreSchema),
+    resolver: yupResolver(UpdateStoreSchema),
     defaultValues,
   });
 
@@ -190,9 +190,6 @@ export const StudentEditForm: React.FC = () => {
         </div>
         <div className="my-3">
           <p>プロフィール画像</p>
-            <Button type="submit" className="w-4/5 py-2 hover:opacity-75 text-lg">
-              クリックしてファイルを選択
-            </Button>
         </div>
       </div>
 
@@ -202,6 +199,11 @@ export const StudentEditForm: React.FC = () => {
         height={360}
         width={640}
       />
+      <div className="text-center my-10">
+      <Button type="submit" className="w-4/5 py-2 hover:opacity-75 text-lg">
+        クリックしてファイルを選択
+      </Button>
+      </div>
       {uploadedFileName ? (
         <div>
           <span className="text-gray-600 mt-2 mr-3">アップロードされたファイル: {uploadedFileName}</span>
