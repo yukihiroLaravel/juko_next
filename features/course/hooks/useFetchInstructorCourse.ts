@@ -27,7 +27,9 @@ export const useFetchInstructorCourse = ({ courseId }: Args) => {
     mutate,
   } = useSWR<{
     data: Data;
-  }>(fetchUrl, fetcher);
+  }>(fetchUrl, fetcher, {
+    revalidateOnFocus: false,
+  });
 
   return {
     course: course?.data,
