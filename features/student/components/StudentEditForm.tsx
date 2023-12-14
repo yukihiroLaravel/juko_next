@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { UpdateStoreSchema } from '../schemas/UpdateStoreSchema';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { useDropzone } from 'react-dropzone';
+import { FieldInput } from './FieldInput';
 
 export const StudentEditForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
@@ -28,8 +29,8 @@ export const StudentEditForm: React.FC = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
-    setValue,
   } = useForm({
     mode: 'onSubmit',
     resolver: yupResolver(UpdateStoreSchema),
@@ -93,44 +94,28 @@ export const StudentEditForm: React.FC = () => {
           <div className="mt-10">
             <label htmlFor="nickName">
               <p>ユーザー名</p>
-              <input
-                id="nickName"
-                className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
-                {...register('nickName')}
-              />
+              <FieldInput name="nickName" control={control} />
               <span className="text-red-600">{errors?.nickName?.message}</span>
             </label>
           </div>
           <div className="my-3">
             <label htmlFor="lastName">
               <p>姓</p>
-              <input
-                id="lastName"
-                className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
-                {...register('lastName')}
-              />
+              <FieldInput name="lastName" control={control} />
               <span className="text-red-600">{errors?.lastName?.message}</span>
             </label>
           </div>
           <div className="my-3">
             <label htmlFor="firstName">
               <p>名</p>
-              <input
-                id="firstName"
-                className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
-                {...register('firstName')}
-              />
+              <FieldInput name="firstName" control={control} />
               <span className="text-red-600">{errors?.firstName?.message}</span>
             </label>
           </div>
           <div className="my-3">
             <label htmlFor="email">
               <p>メールアドレス</p>
-              <input
-                id="email"
-                className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
-                {...register('email')}
-              />
+              <FieldInput name="email" type="email" control={control} />
               <span className="text-red-600">{errors?.email?.message}</span>
               {isUniqueEmail && (
                 <span className="text-red-600">
@@ -142,11 +127,7 @@ export const StudentEditForm: React.FC = () => {
           <div className="my-3">
             <label htmlFor="occupation">
               <p>職業</p>
-              <input
-                id="occupation"
-                className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
-                {...register('occupation')}
-              />
+              <FieldInput name="occupation" control={control} />
               <span className="text-red-600">
                 {errors?.occupation?.message}
               </span>
@@ -155,23 +136,14 @@ export const StudentEditForm: React.FC = () => {
           <div className="my-3">
             <label htmlFor="purpose">
               <p>目的</p>
-              <input
-                id="purpose"
-                className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
-                {...register('purpose')}
-              />
+              <FieldInput name="purpose" control={control} />
               <span className="text-red-600">{errors?.purpose?.message}</span>
             </label>
           </div>
           <div className="my-3">
             <label htmlFor="birthDate">
               <p>誕生日</p>
-              <input
-                id="birthDate"
-                type="date"
-                className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
-                {...register('birthDate')}
-              />
+              <FieldInput name="birthDate" type="date" control={control} />
               <span className="text-red-600">{errors?.birthDate?.message}</span>
             </label>
           </div>
@@ -204,11 +176,7 @@ export const StudentEditForm: React.FC = () => {
           <div className="my-3">
             <label htmlFor="address">
               <p>住所</p>
-              <input
-                id="address"
-                className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
-                {...register('address')}
-              />
+              <FieldInput name="address" control={control} />
               <span className="text-red-600">{errors?.address?.message}</span>
             </label>
           </div>
