@@ -83,28 +83,24 @@ export const StudentEditForm: React.FC = () => {
               <label htmlFor="nickName">
                 <p>ユーザー名</p>
                 <FieldInput name="nickName" control={control} />
-                {/* <span className="text-red-600">{errors?.nickName?.message}</span> */}
               </label>
             </div>
             <div className="my-3">
               <label htmlFor="lastName">
                 <p>姓</p>
                 <FieldInput name="lastName" control={control} />
-                {/* <span className="text-red-600">{errors?.lastName?.message}</span> */}
               </label>
             </div>
             <div className="my-3">
               <label htmlFor="firstName">
                 <p>名</p>
                 <FieldInput name="firstName" control={control} />
-                {/* <span className="text-red-600">{errors?.firstName?.message}</span> */}
               </label>
             </div>
             <div className="my-3">
               <label htmlFor="email">
                 <p>メールアドレス</p>
                 <FieldInput name="email" type="email" control={control} />
-                {/* <span className="text-red-600">{errors?.email?.message}</span> */}
                 {isUniqueEmail && (
                   <span className="text-red-600">
                     既に登録されているメールアドレスです
@@ -125,14 +121,12 @@ export const StudentEditForm: React.FC = () => {
               <label htmlFor="purpose">
                 <p>目的</p>
                 <FieldInput name="purpose" control={control} />
-                {/* <span className="text-red-600">{errors?.purpose?.message}</span> */}
               </label>
             </div>
             <div className="my-3">
               <label htmlFor="birthDate">
                 <p>誕生日</p>
                 <FieldInput name="birthDate" type="date" control={control} />
-                {/* <span className="text-red-600">{errors?.birthDate?.message}</span> */}
               </label>
             </div>
             <div className="my-3">
@@ -158,14 +152,12 @@ export const StudentEditForm: React.FC = () => {
                     <span className="ml-2">女性</span>
                   </label>
                 </div>
-                {/* <span className="text-red-600">{errors?.sex?.message}</span> */}
               </label>
             </div>
             <div className="my-3">
               <label htmlFor="address">
                 <p>住所</p>
                 <FieldInput name="address" control={control} />
-                {/* <span className="text-red-600">{errors?.address?.message}</span> */}
               </label>
             </div>
             <div className="my-3">

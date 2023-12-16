@@ -17,7 +17,10 @@ export function FieldInput<T extends FieldValues>({
   control,
   type = 'text',
 }: FieldInputProps<T>) {
-  const { field } = useController({
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
     name,
     control,
   });
@@ -31,5 +34,10 @@ export function FieldInput<T extends FieldValues>({
     'focus:border-[#B0ABAB]'
   );
 
-  return <input id={name} type={type} className={clx} {...field} />;
+  return (
+    <>
+      <input id={name} type={type} className={clx} {...field} />
+      {error && <span className="text-red-600">{error.message}</span>}
+    </>
+  );
 }
