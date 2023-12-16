@@ -2,7 +2,6 @@ import * as yup from 'yup';
 import { PutStudent } from '../types/PutStudent';
 
 export const PutSchema: yup.Schema<PutStudent> = yup.object().shape({
-  studentId: yup.number().required(),
   nickName: yup.string().required('ニックネームを入力してください。'),
   lastName: yup.string().required('姓を入力してください。'),
   firstName: yup.string().required('名を入力してください。'),
@@ -24,4 +23,13 @@ export const PutSchema: yup.Schema<PutStudent> = yup.object().shape({
     })
     .required('性別を選択してください。'),
   address: yup.string().required('住所を入力してください。'),
+  image: yup
+    .mixed<File>()
+    .nullable()
+    .test('fileSize', 'ファイルサイズは10MBまでです。', (value) => {
+      if (value === null) return true;
+      if (value === undefined) return true;
+      return value.size <= 1024 * 1024 * 10;
+    })
+    .default(null),
 });

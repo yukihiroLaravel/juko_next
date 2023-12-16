@@ -25,6 +25,7 @@ export function GenderRadioField<T extends FieldValues>({
           className="form-radio"
           defaultChecked={field.value === 'man'}
           {...field}
+          value={'man'}
         />
         <span className="ml-2">男性</span>
       </label>
@@ -34,6 +35,7 @@ export function GenderRadioField<T extends FieldValues>({
           className="form-radio"
           defaultChecked={field.value === 'woman'}
           {...field}
+          value={'woman'}
         />
         <span className="ml-2">女性</span>
       </label>

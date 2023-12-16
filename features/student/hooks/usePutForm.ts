@@ -12,17 +12,22 @@ type Params = {
 export const usePutForm = ({ student }: Params) => {
   const [isDefaultValues, setIsDefaultValues] = useState(false);
 
-  const { setValue, handleSubmit, control } = useForm<PutStudent>({
+  const {
+    setValue,
+    handleSubmit,
+    control,
+    register,
+    formState: { errors },
+  } = useForm<PutStudent>({
     mode: 'onSubmit',
     resolver: yupResolver(PutSchema),
   });
 
   useEffect(() => {
     if (student === undefined) return;
+    if (isDefaultValues) return;
 
     const birthDate = new Date(student?.birthDate);
-
-    setValue('studentId', student?.studentId);
     setValue('nickName', student?.nickName);
     setValue('lastName', student?.lastName);
     setValue('firstName', student?.firstName);
@@ -35,9 +40,16 @@ export const usePutForm = ({ student }: Params) => {
     setIsDefaultValues(true);
   }, [student]);
 
+  const uploadImage = (file: File) => {
+    setValue('image', file);
+  };
+
   return {
+    register,
     handleSubmit,
     control,
     isDefaultValues,
+    uploadImage,
+    errors,
   };
 };

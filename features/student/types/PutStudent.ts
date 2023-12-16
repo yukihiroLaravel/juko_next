@@ -2,7 +2,6 @@ import { Student } from './Student';
 
 export type PutStudent = Pick<
   Student,
-  | 'studentId'
   | 'nickName'
   | 'lastName'
   | 'firstName'
@@ -13,4 +12,5 @@ export type PutStudent = Pick<
 > & {
   sex: string;
   birthDate: Date;
+  image: File | null;
 };

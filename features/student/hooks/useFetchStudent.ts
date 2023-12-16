@@ -15,6 +15,7 @@ export const useFetchStudent = () => {
       birth_date: string;
       sex: 'man' | 'woman';
       address: string;
+      profile_image: string | null;
     };
   }>('/api/v1/student/edit', fetcher, {
     revalidateOnFocus: false,
@@ -32,6 +33,7 @@ export const useFetchStudent = () => {
         birthDate: data?.data.birth_date,
         sex: data?.data.sex,
         address: data?.data.address,
+        profileImage: data?.data.profile_image,
       }
     : undefined;
 
