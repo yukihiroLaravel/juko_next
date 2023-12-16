@@ -65,10 +65,12 @@ export const StudentEditForm: React.FC = () => {
         .then(() => {
           isSending.current = false;
           updateUploadedFileName(null);
+          alert('更新しました');
           mutate();
         })
         .catch((error) => {
           isSending.current = false;
+          alert('更新に失敗しました');
           if (error.response.status === 422) {
             setIsUniqueEmail(true);
           }
