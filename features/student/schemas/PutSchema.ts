@@ -12,7 +12,7 @@ export const PutSchema: yup.Schema<PutStudent> = yup.object().shape({
     .required('メールアドレスを入力してください。'),
   occupation: yup.string().required('職業を入力してください。'),
   purpose: yup.string().required('目的を入力してください。'),
-  birthDate: yup.string().required('生年月日を入力してください。'),
+  birthDate: yup.date().required('生年月日を入力してください。'),
   sex: yup
     .string()
     .test('sex', '性別を選択してください。', (value) => {

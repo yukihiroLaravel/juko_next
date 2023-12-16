@@ -5,13 +5,15 @@ import {
   useController,
 } from 'react-hook-form';
 
-export function GenderRadioField({
+export function GenderRadioField<T extends FieldValues>({
+  name,
   control,
 }: {
-  control: Control<FieldValues>;
+  name: FieldPath<T>;
+  control: Control<T>;
 }) {
   const { field } = useController({
-    name: 'sex',
+    name,
     control,
   });
 

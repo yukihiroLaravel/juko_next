@@ -7,10 +7,10 @@ export type PutStudent = Pick<
   | 'lastName'
   | 'firstName'
   | 'email'
-  | 'birthDate'
   | 'occupation'
   | 'purpose'
   | 'address'
 > & {
   sex: string;
+  birthDate: Date;
 };

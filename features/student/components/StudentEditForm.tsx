@@ -8,6 +8,7 @@ import { useFetchStudent } from '../hooks/useFetchStudent';
 import { usePutForm } from '../hooks/usePutForm';
 import { Loading } from '@/components/utils/Loading';
 import { GenderRadioField } from './GenderRadioField';
+import { FieldDateInput } from './FieldDateInput';
 
 export const StudentEditForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
@@ -16,7 +17,7 @@ export const StudentEditForm: React.FC = () => {
 
   const [isUniqueEmail, setIsUniqueEmail] = useState<boolean>(false);
 
-  const { handleSubmit, control, isDefaultValues } = usePutForm({
+  const { handleSubmit, control, isDefaultValues, register } = usePutForm({
     student,
   });
 
@@ -125,14 +126,14 @@ export const StudentEditForm: React.FC = () => {
             <div className="my-3">
               <label htmlFor="birthDate">
                 <p>誕生日</p>
-                <FieldInput name="birthDate" type="date" control={control} />
+                <FieldDateInput name="birthDate" control={control} />
               </label>
             </div>
             <div className="my-3">
               <label htmlFor="sex">
                 <p>性別</p>
                 <div className="mt-2">
-                  <GenderRadioField control={control} />
+                  <GenderRadioField name="sex" control={control} />
                 </div>
               </label>
             </div>

@@ -20,6 +20,8 @@ export const usePutForm = ({ student }: Params) => {
   useEffect(() => {
     if (student === undefined) return;
 
+    const birthDate = new Date(student?.birthDate);
+
     setValue('studentId', student?.studentId);
     setValue('nickName', student?.nickName);
     setValue('lastName', student?.lastName);
@@ -27,7 +29,7 @@ export const usePutForm = ({ student }: Params) => {
     setValue('email', student?.email);
     setValue('occupation', student?.occupation);
     setValue('purpose', student?.purpose);
-    setValue('birthDate', student?.birthDate);
+    setValue('birthDate', birthDate);
     setValue('sex', student?.sex);
     setValue('address', student?.address);
     setIsDefaultValues(true);
