@@ -220,7 +220,7 @@ export const StudentEditForm: React.FC = () => {
                 {isSending.current ? (
                   <Button
                     type="button"
-                    className="w-4/5 py-2 text-lg"
+                    className="w-4/5 py-2 text-lg opacity-50 cursor-not-allowed"
                     isDisabled={true}
                   >
                     更新中...
