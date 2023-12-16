@@ -12,7 +12,6 @@ export function GenderRadioField({
 }) {
   const { field } = useController({
     name: 'sex',
-    defaultValue: 'man',
     control,
   });
 
