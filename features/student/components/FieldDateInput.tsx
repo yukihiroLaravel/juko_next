@@ -6,6 +6,7 @@ import {
   useController,
 } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
+import { ja } from 'date-fns/locale';
 
 interface FieldInputProps<T extends FieldValues> {
   name: FieldPath<T>;
@@ -38,6 +39,7 @@ export function FieldDateInput<T extends FieldValues>({
       <DatePicker
         {...field}
         dateFormat="yyyy/MM/dd"
+        locale={ja}
         selected={field.value}
         onChange={(date) => {
           if (date) {
