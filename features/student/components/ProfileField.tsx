@@ -34,7 +34,7 @@ export function ProfileField({
 
   return (
     <>
-      <p>プロフィール画像</p>
+      <p className="font-bold mb-1">プロフィール画像</p>
       {profileImage && (
         <div className="my-1">
           <Thumbnail
