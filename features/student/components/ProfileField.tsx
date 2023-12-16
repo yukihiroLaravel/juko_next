@@ -1,6 +1,5 @@
 import { Button } from '@/components/elements/Button';
 import { Thumbnail } from '@/components/elements/Thumbnail';
-import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { PutStudent } from '../types/PutStudent';
@@ -8,6 +7,7 @@ import { PutStudent } from '../types/PutStudent';
 type Props = {
   profileImage: string | null;
   uploadImage: (file: File | null) => void;
+  uploadedFileName: string | null;
   register: UseFormRegister<PutStudent>;
   errors: FieldErrors<PutStudent>;
 };
@@ -15,15 +15,12 @@ type Props = {
 export function ProfileField({
   profileImage,
   uploadImage,
+  uploadedFileName,
   register,
   errors,
 }: Props) {
-  // 画像ファイル名
-  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
-
   // 画像のキャンセル処理
   const cancelHandler = () => {
-    setUploadedFileName(null);
     uploadImage(null);
   };
 
@@ -31,7 +28,6 @@ export function ProfileField({
     onDrop: (acceptedFiles: File[]) => {
       if (acceptedFiles[0] instanceof File) {
         uploadImage(acceptedFiles[0]);
-        setUploadedFileName(acceptedFiles[0].name);
       }
     },
   });

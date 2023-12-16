@@ -16,6 +16,11 @@ export const StudentEditForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
   const { student, isLoading, error, mutate } = useFetchStudent();
   const [isUniqueEmail, setIsUniqueEmail] = useState<boolean>(false);
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+  const updateUploadedFileName = (fileName: string | null) => {
+    setUploadedFileName(fileName);
+  };
+
   const {
     handleSubmit,
     register,
@@ -26,6 +31,11 @@ export const StudentEditForm: React.FC = () => {
   } = usePutForm({
     student,
   });
+
+  const uploadImageHandler = (file: File | null) => {
+    uploadImage(file);
+    updateUploadedFileName(file?.name ?? null);
+  };
 
   const submitHandler = (data: PutStudent) => {
     isSending.current = true;
@@ -54,6 +64,7 @@ export const StudentEditForm: React.FC = () => {
       })
         .then(() => {
           isSending.current = false;
+          updateUploadedFileName(null);
           mutate();
         })
         .catch((error) => {
@@ -199,8 +210,9 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <ProfileField
-                uploadImage={uploadImage}
                 profileImage={student.profileImage}
+                uploadImage={uploadImageHandler}
+                uploadedFileName={uploadedFileName}
                 register={register}
                 errors={errors}
               />
