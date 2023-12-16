@@ -7,6 +7,7 @@ import { FieldInput } from './FieldInput';
 import { useFetchStudent } from '../hooks/useFetchStudent';
 import { usePutForm } from '../hooks/usePutForm';
 import { Loading } from '@/components/utils/Loading';
+import { GenderRadioField } from './GenderRadioField';
 
 export const StudentEditForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
@@ -68,7 +69,7 @@ export const StudentEditForm: React.FC = () => {
   return (
     <>
       {isLoading && (
-        <div className="w-3/4 mx-auto min-h-[100vh] mt-10 mb-10">
+        <div className="w-3/4 mx-auto min-h-[100vh] my-10">
           <Loading />
         </div>
       )}
@@ -112,9 +113,7 @@ export const StudentEditForm: React.FC = () => {
               <label htmlFor="occupation">
                 <p>職業</p>
                 <FieldInput name="occupation" control={control} />
-                <span className="text-red-600">
-                  {/* {errors?.occupation?.message} */}
-                </span>
+                <span className="text-red-600"></span>
               </label>
             </div>
             <div className="my-3">
@@ -133,24 +132,7 @@ export const StudentEditForm: React.FC = () => {
               <label htmlFor="sex">
                 <p>性別</p>
                 <div className="mt-2">
-                  <label className="inline-flex items-center">
-                    <input
-                      type="radio"
-                      className="form-radio"
-                      // {...register('sex', { required: true })}
-                      value="man"
-                    />
-                    <span className="ml-2">男性</span>
-                  </label>
-                  <label className="inline-flex items-center ml-6">
-                    <input
-                      type="radio"
-                      className="form-radio"
-                      // {...register('sex', { required: true })}
-                      value="woman"
-                    />
-                    <span className="ml-2">女性</span>
-                  </label>
+                  <GenderRadioField control={control} />
                 </div>
               </label>
             </div>
