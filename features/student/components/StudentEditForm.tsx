@@ -10,10 +10,11 @@ import { ProfileField } from './ProfileField';
 import { PutStudent } from '../types/PutStudent';
 import { format } from 'date-fns';
 import FieldInput from './FieldInput';
+import { Error } from '@/components/utils/Error';
 
 export const StudentEditForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
-  const { student, isLoading, mutate } = useFetchStudent();
+  const { student, isLoading, error, mutate } = useFetchStudent();
   const [isUniqueEmail, setIsUniqueEmail] = useState<boolean>(false);
   const {
     handleSubmit,
@@ -29,20 +30,28 @@ export const StudentEditForm: React.FC = () => {
   const submitHandler = (data: PutStudent) => {
     isSending.current = true;
 
+    const formData = new FormData();
+
     const birthDate = format(new Date(data.birthDate), 'yyyy-MM-dd');
-    const bodyData = {
-      nick_name: data.nickName,
-      last_name: data.lastName,
-      first_name: data.firstName,
-      email: data.email,
-      occupation: data.occupation,
-      purpose: data.purpose,
-      birth_date: birthDate,
-      sex: data.sex,
-      address: data.address,
-    };
+    formData.append('nick_name', data.nickName);
+    formData.append('last_name', data.lastName);
+    formData.append('first_name', data.firstName);
+    formData.append('email', data.email);
+    formData.append('occupation', data.occupation);
+    formData.append('purpose', data.purpose);
+    formData.append('address', data.address);
+    formData.append('birth_date', birthDate);
+    formData.append('sex', data.sex);
+    if (data.image) {
+      formData.append('profile_image', data.image);
+    }
+
     Axios.get('/sanctum/csrf-cookie').then(() => {
-      Axios.post('/api/v1/student/update', bodyData)
+      Axios.post('/api/v1/student/update', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
         .then(() => {
           isSending.current = false;
           mutate();
@@ -63,6 +72,7 @@ export const StudentEditForm: React.FC = () => {
           <Loading />
         </div>
       )}
+      {error && <Error />}
       {student && isDefaultValues && (
         <form
           className="md:w-1/3 md:border mx-auto min-h-full my-10 py-10 bg-white"
@@ -189,10 +199,10 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <ProfileField
-                name="image"
-                control={control}
                 uploadImage={uploadImage}
                 profileImage={student.profileImage}
+                register={register}
+                errors={errors}
               />
               <div className="text-center my-10">
                 {isSending.current ? (

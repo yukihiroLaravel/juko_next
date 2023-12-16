@@ -2,41 +2,29 @@ import { Button } from '@/components/elements/Button';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import {
-  Control,
-  FieldPath,
-  FieldValues,
-  useController,
-} from 'react-hook-form';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { PutStudent } from '../types/PutStudent';
 
-interface Props<T extends FieldValues> {
-  name: FieldPath<T>;
-  control: Control<T>;
+type Props = {
   profileImage: string | null;
-  uploadImage: (file: File) => void;
-}
+  uploadImage: (file: File | null) => void;
+  register: UseFormRegister<PutStudent>;
+  errors: FieldErrors<PutStudent>;
+};
 
-export function ProfileField<T extends FieldValues>({
-  name,
-  control,
+export function ProfileField({
   profileImage,
   uploadImage,
-}: Props<T>) {
-  const {
-    field,
-    fieldState: { error },
-  } = useController({
-    name,
-    control,
-  });
-
+  register,
+  errors,
+}: Props) {
   // 画像ファイル名
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
 
   // 画像のキャンセル処理
   const cancelHandler = () => {
     setUploadedFileName(null);
-    field.onChange(null);
+    uploadImage(null);
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -82,7 +70,7 @@ export function ProfileField<T extends FieldValues>({
               'border-2 border-dotted h-80 flex justify-center items-center',
           })}
         >
-          <input {...getInputProps()} {...field} />
+          <input {...getInputProps()} {...register('image')} />
           <div className="flex flex-col justify-center items-center ">
             <svg
               aria-hidden="true"
@@ -103,7 +91,9 @@ export function ProfileField<T extends FieldValues>({
           </div>
         </div>
       )}
-      {error && <span className="text-red-600">{error.message}</span>}
+      {errors.image && (
+        <span className="text-red-600">{errors.image.message}</span>
+      )}
     </>
   );
 }

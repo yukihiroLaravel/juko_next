@@ -40,8 +40,12 @@ export const usePutForm = ({ student }: Params) => {
     setIsDefaultValues(true);
   }, [student]);
 
-  const uploadImage = (file: File) => {
-    setValue('image', file);
+  const uploadImage = (file: File | null) => {
+    if (file === null) {
+      setValue('image', null);
+    } else {
+      setValue('image', file);
+    }
   };
 
   return {
