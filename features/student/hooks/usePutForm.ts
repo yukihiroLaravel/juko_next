@@ -1,8 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { Student } from '../types/Student';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { UpdateStoreSchema } from '../schemas/UpdateStoreSchema';
 import { useEffect, useState } from 'react';
+import { PutStudent } from '../types/PutStudent';
+import { PutSchema } from '../schemas/PutSchema';
 
 type Params = {
   student: Student | undefined;
@@ -11,13 +12,14 @@ type Params = {
 export const usePutForm = ({ student }: Params) => {
   const [isDefaultValues, setIsDefaultValues] = useState(false);
 
-  const { setValue, handleSubmit, control } = useForm({
+  const { setValue, handleSubmit, control } = useForm<PutStudent>({
     mode: 'onSubmit',
-    resolver: yupResolver(UpdateStoreSchema),
+    resolver: yupResolver(PutSchema),
   });
 
   useEffect(() => {
     if (student === undefined) return;
+
     setValue('studentId', student?.studentId);
     setValue('nickName', student?.nickName);
     setValue('lastName', student?.lastName);

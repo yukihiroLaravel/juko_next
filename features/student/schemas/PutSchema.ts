@@ -1,7 +1,7 @@
 import * as yup from 'yup';
-import { StoreStudent } from '../types/StoreStudent';
+import { PutStudent } from '../types/PutStudent';
 
-export const UpdateStoreSchema: yup.Schema<StoreStudent> = yup.object().shape({
+export const PutSchema: yup.Schema<PutStudent> = yup.object().shape({
   studentId: yup.number().required(),
   nickName: yup.string().required('ニックネームを入力してください。'),
   lastName: yup.string().required('姓を入力してください。'),
