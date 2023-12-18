@@ -1,5 +1,3 @@
-import { Course } from './Course';
-
 export type UpdateCourse = {
   course_id: number | undefined;
   title: string | undefined;

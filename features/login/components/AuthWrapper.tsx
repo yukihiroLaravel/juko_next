@@ -9,7 +9,10 @@ type Props = {
 };
 
 export const AuthWrapper: FC<Props> = ({ children }) => {
-  const { isValidating, error } = useSWR('/api/user', fetcher);
+  const { isValidating, error } = useSWR('/api/user', fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   useEffect(() => {
     if (!isValidating && error) {
