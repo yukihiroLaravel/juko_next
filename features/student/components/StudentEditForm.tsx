@@ -1,16 +1,16 @@
-import { Button } from '@/components/elements/Button';
-import { Axios } from '@/lib/api';
 import { useRef, useState } from 'react';
+import { Button } from '@/components/elements/Button';
+import { Loading } from '@/components/utils/Loading';
+import { FieldDateInput } from '@/components/elements/FieldDateInput';
+import FieldInput from '@/components/elements/FieldInput';
+import { Error } from '@/components/utils/Error';
+import { GenderRadioField } from './GenderRadioField';
+import { ProfileField } from './ProfileField';
 import { useFetchStudent } from '../hooks/useFetchStudent';
 import { usePutForm } from '../hooks/usePutForm';
-import { Loading } from '@/components/utils/Loading';
-import { GenderRadioField } from './GenderRadioField';
-import { FieldDateInput } from './FieldDateInput';
-import { ProfileField } from './ProfileField';
 import { PutStudent } from '../types/PutStudent';
+import { Axios } from '@/lib/api';
 import { format } from 'date-fns';
-import FieldInput from './FieldInput';
-import { Error } from '@/components/utils/Error';
 
 export const StudentEditForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
