@@ -1,6 +1,6 @@
 import { Student } from './Student';
 
-export type StoreStudent = Pick<
+export type PutStudent = Pick<
   Student,
   | 'nickName'
   | 'lastName'
@@ -8,8 +8,9 @@ export type StoreStudent = Pick<
   | 'email'
   | 'occupation'
   | 'purpose'
-  | 'birthDate'
   | 'address'
 > & {
   sex: string;
+  birthDate: Date;
+  image: File | null;
 };

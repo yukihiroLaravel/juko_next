@@ -22,7 +22,7 @@ const Edit: NextPage = () => {
   });
 
   const { register, setValue, errors, handleSubmit } = useUpdateCourse({
-    course: course,
+    course,
   });
 
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
@@ -38,11 +38,16 @@ const Edit: NextPage = () => {
 
   const submitHandler = handleSubmit(async (data) => {
     const formData = new FormData();
-    formData.append('title', data.title);
+
+    if (data.title) {
+      formData.append('title', data.title);
+    }
     if (data.image instanceof File) {
       formData.append('image', data.image);
     }
-    formData.append('status', data.status);
+    if (data.status) {
+      formData.append('status', data.status);
+    }
 
     await Axios.post(`api/v1/instructor/course/${course_id}`, formData, {
       headers: {
@@ -76,7 +81,10 @@ const Edit: NextPage = () => {
           router.push('/instructor/courses');
         })
         .catch((err) => {
-          if (err.response.data.message === 'This course has already been taken by students.') {
+          if (
+            err.response.data.message ===
+            'This course has already been taken by students.'
+          ) {
             alert('この講座はすでに受講生がいるため、更新できません。');
             return;
           }
@@ -108,7 +116,9 @@ const Edit: NextPage = () => {
                       defaultValue={course.title}
                       {...register('title')}
                     />
-                    {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+                    {errors.title && (
+                      <p className="text-red-500">{errors.title.message}</p>
+                    )}
                   </label>
                 </div>
                 <div className="mb-5">
@@ -118,7 +128,9 @@ const Edit: NextPage = () => {
                     onChange={() => {
                       setValue(
                         'status',
-                        course.status === COURSE_STATUS.PUBLIC ? COURSE_STATUS.PRIVATE : COURSE_STATUS.PUBLIC
+                        course.status === COURSE_STATUS.PUBLIC
+                          ? COURSE_STATUS.PRIVATE
+                          : COURSE_STATUS.PUBLIC
                       );
                     }}
                   />
@@ -134,15 +146,23 @@ const Edit: NextPage = () => {
                     />
                     {uploadedFileName ? (
                       <div>
-                        <span className="text-gray-600 mt-2 mr-3">アップロードされたファイル: {uploadedFileName}</span>
-                        <Button type="button" className="p-2" color="danger" clickHandler={cancelHandler}>
+                        <span className="text-gray-600 mt-2 mr-3">
+                          アップロードされたファイル: {uploadedFileName}
+                        </span>
+                        <Button
+                          type="button"
+                          className="p-2"
+                          color="danger"
+                          clickHandler={cancelHandler}
+                        >
                           取り消し
                         </Button>
                       </div>
                     ) : (
                       <div
                         {...getRootProps({
-                          className: 'border-2 border-dotted h-80 flex justify-center items-center',
+                          className:
+                            'border-2 border-dotted h-80 flex justify-center items-center',
                         })}
                       >
                         <input {...getInputProps()} {...register('image')} />
@@ -166,7 +186,9 @@ const Edit: NextPage = () => {
                         </div>
                       </div>
                     )}
-                    {errors.image && <p className="text-red-500">{errors.image.message}</p>}
+                    {errors.image && (
+                      <p className="text-red-500">{errors.image.message}</p>
+                    )}
                   </label>
                 </div>
                 <div className="my-5 text-center flex justify-between">
