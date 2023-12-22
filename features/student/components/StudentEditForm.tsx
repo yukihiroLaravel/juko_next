@@ -5,7 +5,7 @@ import { FieldDateInput } from '@/components/elements/FieldDateInput';
 import FieldInput from '@/components/elements/FieldInput';
 import { Error } from '@/components/utils/Error';
 import { GenderRadioField } from './GenderRadioField';
-import { ProfileField } from './ProfileField';
+import { ProfileField } from '@/components/elements/ProfileField';
 import { useFetchStudent } from '../hooks/useFetchStudent';
 import { usePutForm } from '../hooks/usePutForm';
 import { PutStudent } from '../types/PutStudent';
@@ -215,8 +215,8 @@ export const StudentEditForm: React.FC = () => {
                 profileImage={student.profileImage}
                 uploadImage={uploadImageHandler}
                 uploadedFileName={uploadedFileName}
-                register={register}
-                errors={errors}
+                register={register('image')}
+                error={errors.image?.message}
               />
               <div className="text-center my-10">
                 {isSending.current ? (

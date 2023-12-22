@@ -7,7 +7,7 @@ import { PutInstructor } from '../types/PutInstructor';
 import { Error } from '@/components/utils/Error';
 import FieldInput from '@/components/elements/FieldInput';
 import { usePutForm } from '../hooks/usePutForm';
-import { ProfileField } from './ProfileField';
+import { ProfileField } from '@/components/elements/ProfileField';
 
 export const EditForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
@@ -149,8 +149,8 @@ export const EditForm: React.FC = () => {
                 profileImage={instructor.profileImage}
                 uploadImage={uploadImageHandler}
                 uploadedFileName={uploadedFileName}
-                register={register}
-                errors={errors}
+                register={register('image')}
+                error={errors.image?.message}
               />
               <div className="text-center my-10">
                 {isSending.current ? (

@@ -1,15 +1,14 @@
 import { Button } from '@/components/elements/Button';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { useDropzone } from 'react-dropzone';
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
-import { PutStudent } from '../types/PutStudent';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 type Props = {
   profileImage: string | null;
   uploadImage: (file: File | null) => void;
   uploadedFileName: string | null;
-  register: UseFormRegister<PutStudent>;
-  errors: FieldErrors<PutStudent>;
+  register: UseFormRegisterReturn;
+  error: string | undefined;
 };
 
 export function ProfileField({
@@ -17,7 +16,7 @@ export function ProfileField({
   uploadImage,
   uploadedFileName,
   register,
-  errors,
+  error,
 }: Props) {
   // 画像のキャンセル処理
   const cancelHandler = () => {
@@ -66,7 +65,7 @@ export function ProfileField({
               'border-2 border-dotted h-80 flex justify-center items-center',
           })}
         >
-          <input {...getInputProps()} {...register('image')} />
+          <input {...getInputProps()} {...register} />
           <div className="flex flex-col justify-center items-center ">
             <svg
               aria-hidden="true"
@@ -87,9 +86,7 @@ export function ProfileField({
           </div>
         </div>
       )}
-      {errors.image && (
-        <span className="text-red-600">{errors.image.message}</span>
-      )}
+      {error && <span className="text-red-600">{error}</span>}
     </>
   );
 }
