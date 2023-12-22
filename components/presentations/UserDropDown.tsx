@@ -1,17 +1,18 @@
 import React, { FC, useState } from 'react';
 import clsx from 'clsx';
-import Link from 'next/link';
 
 type Props = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   logoutHandler: () => void;
+  renderUserEditLink: () => JSX.Element;
 };
 
 export const UserDropDown: FC<Props> = ({
   isOpen,
   setIsOpen,
   logoutHandler,
+  renderUserEditLink,
 }) => {
   return (
     <div className="mr-5 relative inline-block top-5">
@@ -34,11 +35,7 @@ export const UserDropDown: FC<Props> = ({
         )}
       >
         <div className="py-1">
-          <Link href="/student/edit">
-            <a className="text-gray-700 block px-4 py-2 text-sm">
-              ユーザー情報編集
-            </a>
-          </Link>
+          {renderUserEditLink()}
           <button
             className="text-gray-700 px-4 py-2 text-sm w-full text-start"
             onClick={logoutHandler}
