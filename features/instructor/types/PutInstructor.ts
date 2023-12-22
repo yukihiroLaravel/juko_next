@@ -2,7 +2,7 @@ import { Instructor } from './Instructor';
 
 export type PutInstructor = Pick<
   Instructor,
-  'nickName' | 'lastName' | 'firstName' | 'email'
+  'nick_name' | 'last_name' | 'first_name' | 'email'
 > & {
   image: File | null;
 };

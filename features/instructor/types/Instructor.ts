@@ -1,8 +1,8 @@
 export type Instructor = {
-  instructorId: number;
-  nickName: string;
-  lastName: string;
-  firstName: string;
+  instructor_id: number;
+  nick_name: string;
+  last_name: string;
+  first_name: string;
   email: string;
-  profileImage: string | null;
+  profile_image: string | null;
 };

@@ -39,9 +39,9 @@ export const EditForm: React.FC = () => {
 
     const formData = new FormData();
 
-    formData.append('nick_name', data.nickName);
-    formData.append('last_name', data.lastName);
-    formData.append('first_name', data.firstName);
+    formData.append('nick_name', data.nick_name);
+    formData.append('last_name', data.last_name);
+    formData.append('first_name', data.first_name);
     formData.append('email', data.email);
     if (data.image) {
       formData.append('profile_image', data.image);
@@ -85,43 +85,43 @@ export const EditForm: React.FC = () => {
           <h2 className="text-center text-2xl">ユーザー情報編集</h2>
           <div className="w-4/5 mx-auto">
             <div className="mt-10">
-              <label htmlFor="nickName">
+              <label htmlFor="nick_name">
                 <p className="font-bold mb-1">講師名</p>
                 <FieldInput
-                  defaultValue={instructor.nickName}
-                  {...register('nickName')}
+                  defaultValue={instructor.nick_name}
+                  {...register('nick_name')}
                 />
-                {errors.nickName && (
+                {errors.nick_name && (
                   <span className="text-red-600">
-                    {errors.nickName.message}
+                    {errors.nick_name.message}
                   </span>
                 )}
               </label>
             </div>
             <div className="my-3">
-              <label htmlFor="lastName">
+              <label htmlFor="last_name">
                 <p className="font-bold mb-1">姓</p>
                 <FieldInput
-                  defaultValue={instructor.lastName}
-                  {...register('lastName')}
+                  defaultValue={instructor.last_name}
+                  {...register('last_name')}
                 />
-                {errors.lastName && (
+                {errors.last_name && (
                   <span className="text-red-600">
-                    {errors.lastName.message}
+                    {errors.last_name.message}
                   </span>
                 )}
               </label>
             </div>
             <div className="my-3">
-              <label htmlFor="firstName">
+              <label htmlFor="first_name">
                 <p className="font-bold mb-1">名</p>
                 <FieldInput
-                  defaultValue={instructor.firstName}
-                  {...register('firstName')}
+                  defaultValue={instructor.first_name}
+                  {...register('first_name')}
                 />
-                {errors.firstName && (
+                {errors.first_name && (
                   <span className="text-red-600">
-                    {errors.firstName.message}
+                    {errors.first_name.message}
                   </span>
                 )}
               </label>
@@ -146,7 +146,7 @@ export const EditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <ProfileField
-                profileImage={instructor.profileImage}
+                profileImage={instructor.profile_image}
                 uploadImage={uploadImageHandler}
                 uploadedFileName={uploadedFileName}
                 register={register('image')}

@@ -2,9 +2,9 @@ import * as yup from 'yup';
 import { PutInstructor } from '../types/PutInstructor';
 
 export const PutSchema: yup.Schema<PutInstructor> = yup.object().shape({
-  nickName: yup.string().required('ニックネームを入力してください。'),
-  lastName: yup.string().required('姓を入力してください。'),
-  firstName: yup.string().required('名を入力してください。'),
+  nick_name: yup.string().required('ニックネームを入力してください。'),
+  last_name: yup.string().required('姓を入力してください。'),
+  first_name: yup.string().required('名を入力してください。'),
   email: yup
     .string()
     .email('メールアドレスの形式が正しくありません。')

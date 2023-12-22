@@ -27,14 +27,14 @@ export const usePutForm = ({ student }: Params) => {
     if (student === undefined) return;
     if (isDefaultValues) return;
 
-    const birthDate = new Date(student?.birthDate);
-    setValue('nickName', student?.nickName);
-    setValue('lastName', student?.lastName);
-    setValue('firstName', student?.firstName);
+    const birthDate = new Date(student?.birth_date);
+    setValue('nick_name', student?.nick_name);
+    setValue('last_name', student?.last_name);
+    setValue('first_name', student?.first_name);
     setValue('email', student?.email);
     setValue('occupation', student?.occupation);
     setValue('purpose', student?.purpose);
-    setValue('birthDate', birthDate);
+    setValue('birth_date', birthDate);
     setValue('sex', student?.sex);
     setValue('address', student?.address);
     setValue('image', null);

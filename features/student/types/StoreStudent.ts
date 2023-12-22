@@ -2,13 +2,13 @@ import { Student } from './Student';
 
 export type StoreStudent = Pick<
   Student,
-  | 'nickName'
-  | 'lastName'
-  | 'firstName'
+  | 'nick_name'
+  | 'last_name'
+  | 'first_name'
   | 'email'
   | 'occupation'
   | 'purpose'
-  | 'birthDate'
+  | 'birth_date'
   | 'address'
 > & {
   sex: string;

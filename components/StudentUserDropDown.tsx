@@ -23,7 +23,7 @@ export const StudentUserDropDown: FC = () => {
       setIsOpen={setIsOpen}
       logoutHandler={clickHandler}
       renderUserEditLink={() => (
-        <Link href="/instructor/edit">
+        <Link href="/student/edit">
           <a className="text-gray-700 block px-4 py-2 text-sm">
             ユーザー情報編集
           </a>

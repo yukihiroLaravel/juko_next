@@ -27,9 +27,9 @@ export const usePutForm = ({ instructor }: Params) => {
     if (instructor === undefined) return;
     if (isDefaultValues) return;
 
-    setValue('nickName', instructor?.nickName);
-    setValue('lastName', instructor?.lastName);
-    setValue('firstName', instructor?.firstName);
+    setValue('nick_name', instructor?.nick_name);
+    setValue('last_name', instructor?.last_name);
+    setValue('first_name', instructor?.first_name);
     setValue('email', instructor?.email);
     setValue('image', null);
     setIsDefaultValues(true);

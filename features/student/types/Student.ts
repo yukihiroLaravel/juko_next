@@ -1,13 +1,13 @@
 export type Student = {
-  studentId: number;
-  nickName: string;
-  lastName: string;
-  firstName: string;
+  student_id: number;
+  nick_name: string;
+  last_name: string;
+  first_name: string;
   email: string;
   occupation: string;
   purpose: string;
-  birthDate: string;
+  birth_date: string;
   sex: 'man' | 'woman';
   address: string;
-  profileImage: string | null;
+  profile_image: string | null;
 };

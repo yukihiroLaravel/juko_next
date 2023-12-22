@@ -42,10 +42,10 @@ export const StudentEditForm: React.FC = () => {
 
     const formData = new FormData();
 
-    const birthDate = format(new Date(data.birthDate), 'yyyy-MM-dd');
-    formData.append('nick_name', data.nickName);
-    formData.append('last_name', data.lastName);
-    formData.append('first_name', data.firstName);
+    const birthDate = format(new Date(data.birth_date), 'yyyy-MM-dd');
+    formData.append('nick_name', data.nick_name);
+    formData.append('last_name', data.last_name);
+    formData.append('first_name', data.first_name);
     formData.append('email', data.email);
     formData.append('occupation', data.occupation);
     formData.append('purpose', data.purpose);
@@ -94,43 +94,43 @@ export const StudentEditForm: React.FC = () => {
           <h2 className="text-center text-2xl">ユーザー情報編集</h2>
           <div className="w-4/5 mx-auto">
             <div className="mt-10">
-              <label htmlFor="nickName">
+              <label htmlFor="nick_name">
                 <p className="font-bold mb-1">ユーザー名</p>
                 <FieldInput
-                  defaultValue={student.nickName}
-                  {...register('nickName')}
+                  defaultValue={student.nick_name}
+                  {...register('nick_name')}
                 />
-                {errors.nickName && (
+                {errors.nick_name && (
                   <span className="text-red-600">
-                    {errors.nickName.message}
+                    {errors.nick_name.message}
                   </span>
                 )}
               </label>
             </div>
             <div className="my-3">
-              <label htmlFor="lastName">
+              <label htmlFor="last_name">
                 <p className="font-bold mb-1">姓</p>
                 <FieldInput
-                  defaultValue={student.lastName}
-                  {...register('lastName')}
+                  defaultValue={student.last_name}
+                  {...register('last_name')}
                 />
-                {errors.lastName && (
+                {errors.last_name && (
                   <span className="text-red-600">
-                    {errors.lastName.message}
+                    {errors.last_name.message}
                   </span>
                 )}
               </label>
             </div>
             <div className="my-3">
-              <label htmlFor="firstName">
+              <label htmlFor="first_name">
                 <p className="font-bold mb-1">名</p>
                 <FieldInput
-                  defaultValue={student.firstName}
-                  {...register('firstName')}
+                  defaultValue={student.first_name}
+                  {...register('first_name')}
                 />
-                {errors.firstName && (
+                {errors.first_name && (
                   <span className="text-red-600">
-                    {errors.firstName.message}
+                    {errors.first_name.message}
                   </span>
                 )}
               </label>
@@ -182,10 +182,10 @@ export const StudentEditForm: React.FC = () => {
             <div className="my-3">
               <label htmlFor="birthDate">
                 <p className="font-bold mb-1">誕生日</p>
-                <FieldDateInput name="birthDate" control={control} />
-                {errors.birthDate && (
+                <FieldDateInput name="birth_date" control={control} />
+                {errors.birth_date && (
                   <span className="text-red-600">
-                    {errors.birthDate.message}
+                    {errors.birth_date.message}
                   </span>
                 )}
               </label>
@@ -212,7 +212,7 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <ProfileField
-                profileImage={student.profileImage}
+                profileImage={student.profile_image}
                 uploadImage={uploadImageHandler}
                 uploadedFileName={uploadedFileName}
                 register={register('image')}
