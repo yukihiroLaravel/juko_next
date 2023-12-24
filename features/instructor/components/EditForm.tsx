@@ -1,20 +1,17 @@
-import { useRef, useState } from 'react';
 import { Button } from '@/components/elements/Button';
-import { Loading } from '@/components/utils/Loading';
-import { FieldDateInput } from '@/components/elements/FieldDateInput';
-import FieldInput from '@/components/elements/FieldInput';
-import { Error } from '@/components/utils/Error';
-import { GenderRadioField } from './GenderRadioField';
-import { ProfileField } from '@/components/elements/ProfileField';
-import { useFetchStudent } from '../hooks/useFetchStudent';
-import { usePutForm } from '../hooks/usePutForm';
-import { PutStudent } from '../types/PutStudent';
 import { Axios } from '@/lib/api';
-import { format } from 'date-fns';
+import { useRef, useState } from 'react';
+import { useFetchInstructor } from '../hooks/useFetchInstructor';
+import { Loading } from '@/components/utils/Loading';
+import { PutInstructor } from '../types/PutInstructor';
+import { Error } from '@/components/utils/Error';
+import FieldInput from '@/components/elements/FieldInput';
+import { usePutForm } from '../hooks/usePutForm';
+import { ProfileField } from '@/components/elements/ProfileField';
 
-export const StudentEditForm: React.FC = () => {
+export const EditForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
-  const { student, isLoading, error, mutate } = useFetchStudent();
+  const { instructor, isLoading, error, mutate } = useFetchInstructor();
   const [isUniqueEmail, setIsUniqueEmail] = useState<boolean>(false);
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const updateUploadedFileName = (fileName: string | null) => {
@@ -29,7 +26,7 @@ export const StudentEditForm: React.FC = () => {
     uploadImage,
     errors,
   } = usePutForm({
-    student,
+    instructor,
   });
 
   const uploadImageHandler = (file: File | null) => {
@@ -37,27 +34,21 @@ export const StudentEditForm: React.FC = () => {
     updateUploadedFileName(file?.name ?? null);
   };
 
-  const submitHandler = (data: PutStudent) => {
+  const submitHandler = (data: PutInstructor) => {
     isSending.current = true;
 
     const formData = new FormData();
 
-    const birthDate = format(new Date(data.birth_date), 'yyyy-MM-dd');
     formData.append('nick_name', data.nick_name);
     formData.append('last_name', data.last_name);
     formData.append('first_name', data.first_name);
     formData.append('email', data.email);
-    formData.append('occupation', data.occupation);
-    formData.append('purpose', data.purpose);
-    formData.append('address', data.address);
-    formData.append('birth_date', birthDate);
-    formData.append('sex', data.sex);
     if (data.image) {
       formData.append('profile_image', data.image);
     }
 
     Axios.get('/sanctum/csrf-cookie').then(() => {
-      Axios.post('/api/v1/student/update', formData, {
+      Axios.post('/api/v1/instructor/update', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -86,7 +77,7 @@ export const StudentEditForm: React.FC = () => {
         </div>
       )}
       {error && <Error />}
-      {student && isDefaultValues && (
+      {instructor && isDefaultValues && (
         <form
           className="md:w-1/3 md:border mx-auto min-h-full my-10 py-10 bg-white"
           onSubmit={handleSubmit(submitHandler)}
@@ -95,9 +86,9 @@ export const StudentEditForm: React.FC = () => {
           <div className="w-4/5 mx-auto">
             <div className="mt-10">
               <label htmlFor="nick_name">
-                <p className="font-bold mb-1">ユーザー名</p>
+                <p className="font-bold mb-1">講師名</p>
                 <FieldInput
-                  defaultValue={student.nick_name}
+                  defaultValue={instructor.nick_name}
                   {...register('nick_name')}
                 />
                 {errors.nick_name && (
@@ -111,7 +102,7 @@ export const StudentEditForm: React.FC = () => {
               <label htmlFor="last_name">
                 <p className="font-bold mb-1">姓</p>
                 <FieldInput
-                  defaultValue={student.last_name}
+                  defaultValue={instructor.last_name}
                   {...register('last_name')}
                 />
                 {errors.last_name && (
@@ -125,7 +116,7 @@ export const StudentEditForm: React.FC = () => {
               <label htmlFor="first_name">
                 <p className="font-bold mb-1">名</p>
                 <FieldInput
-                  defaultValue={student.first_name}
+                  defaultValue={instructor.first_name}
                   {...register('first_name')}
                 />
                 {errors.first_name && (
@@ -139,7 +130,7 @@ export const StudentEditForm: React.FC = () => {
               <label htmlFor="email">
                 <p className="font-bold mb-1">メールアドレス</p>
                 <FieldInput
-                  defaultValue={student.email}
+                  defaultValue={instructor.email}
                   type="email"
                   {...register('email')}
                 />
@@ -154,65 +145,8 @@ export const StudentEditForm: React.FC = () => {
               </label>
             </div>
             <div className="my-3">
-              <label htmlFor="occupation">
-                <p className="font-bold mb-1">職業</p>
-                <FieldInput
-                  defaultValue={student.occupation}
-                  {...register('occupation')}
-                />
-                {errors.occupation && (
-                  <span className="text-red-600">
-                    {errors.occupation.message}
-                  </span>
-                )}
-              </label>
-            </div>
-            <div className="my-3">
-              <label htmlFor="purpose">
-                <p className="font-bold mb-1">目的</p>
-                <FieldInput
-                  defaultValue={student.purpose}
-                  {...register('purpose')}
-                />
-                {errors.purpose && (
-                  <span className="text-red-600">{errors.purpose.message}</span>
-                )}
-              </label>
-            </div>
-            <div className="my-3">
-              <label htmlFor="birthDate">
-                <p className="font-bold mb-1">誕生日</p>
-                <FieldDateInput name="birth_date" control={control} />
-                {errors.birth_date && (
-                  <span className="text-red-600">
-                    {errors.birth_date.message}
-                  </span>
-                )}
-              </label>
-            </div>
-            <div className="my-3">
-              <label htmlFor="sex">
-                <p className="font-bold mb-1">性別</p>
-                <div className="mt-2">
-                  <GenderRadioField name="sex" control={control} />
-                </div>
-              </label>
-            </div>
-            <div className="my-3">
-              <label htmlFor="address">
-                <p className="font-bold mb-1">住所</p>
-                <FieldInput
-                  defaultValue={student.address}
-                  {...register('address')}
-                />
-                {errors.address && (
-                  <span className="text-red-600">{errors.address.message}</span>
-                )}
-              </label>
-            </div>
-            <div className="my-3">
               <ProfileField
-                profileImage={student.profile_image}
+                profileImage={instructor.profile_image}
                 uploadImage={uploadImageHandler}
                 uploadedFileName={uploadedFileName}
                 register={register('image')}

@@ -1,14 +1,11 @@
-import { link } from 'fs';
 import Link from 'next/link';
 import { FC } from 'react';
 
-type Link = {
-  title: string;
-  href: string;
-};
-
 type Props = {
-  links: Link[];
+  links: {
+    title: string | undefined;
+    href: string;
+  }[];
 };
 
 const Icon = () => {
@@ -52,7 +49,9 @@ export const Breadcrumb: FC<Props> = ({ links }) => {
               <li key={index} className="inline-flex items-center">
                 <div className="flex items-center">
                   <Icon />
-                  <span className="font-medium text-gray-500">{link.title}</span>
+                  <span className="font-medium text-gray-500">
+                    {link.title}
+                  </span>
                 </div>
               </li>
             );

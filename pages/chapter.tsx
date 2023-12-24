@@ -76,9 +76,11 @@ const Chapter: NextPage = () => {
     if (lessonTotalCount === 0) return 0;
 
     // 進捗完了レッスン数
-    const completedLessonTotalCount = attendance.course.chapter.lessons.filter((lesson) => {
-      return lesson.lessonAttendance?.status === STATUS_COMPLETED_ATTENDANCE;
-    }).length;
+    const completedLessonTotalCount = attendance.course.chapter.lessons.filter(
+      (lesson) => {
+        return lesson.lessonAttendance?.status === STATUS_COMPLETED_ATTENDANCE;
+      }
+    ).length;
 
     return Math.floor((completedLessonTotalCount / lessonTotalCount) * 100);
   };
@@ -87,7 +89,9 @@ const Chapter: NextPage = () => {
     if (attendance !== undefined) {
       setIsLoading(false);
       if (currentLesson !== null) {
-        const newLesson = attendance.course.chapter.lessons.find((lesson) => lesson.lesson_id === currentLesson.lesson_id);
+        const newLesson = attendance.course.chapter.lessons.find(
+          (lesson) => lesson.lesson_id === currentLesson.lesson_id
+        );
         if (newLesson) {
           setCurrentLesson(newLesson);
         }
@@ -117,7 +121,9 @@ const Chapter: NextPage = () => {
   ];
 
   const clickHandler = (lessonId: number) => () => {
-    const newLesson = attendance?.course.chapter.lessons.find((lesson) => lesson.lesson_id === lessonId) as Lesson & {
+    const newLesson = attendance?.course.chapter.lessons.find(
+      (lesson) => lesson.lesson_id === lessonId
+    ) as Lesson & {
       lessonAttendance: LessonAttendance;
     };
     setCurrentLesson(newLesson);
@@ -138,7 +144,9 @@ const Chapter: NextPage = () => {
                   <ul className="mt-2">
                     <li className="mb-10">
                       <div className="text-center">
-                        <p className="font-semibold mb-3">チャプター進捗 {calculateChapterProgeress()}%</p>
+                        <p className="font-semibold mb-3">
+                          チャプター進捗 {calculateChapterProgeress()}%
+                        </p>
                         <ProgressBar progress={calculateChapterProgeress()} />
                       </div>
                     </li>
@@ -147,29 +155,46 @@ const Chapter: NextPage = () => {
                         <StyleSideBarList
                           key={lesson.lesson_id}
                           onClick={clickHandler(lesson.lesson_id)}
-                          isSelected={lesson.lesson_id === currentLesson?.lesson_id}
+                          isSelected={
+                            lesson.lesson_id === currentLesson?.lesson_id
+                          }
                         >
-                          <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
-                          <StatusIcon status={lesson.lessonAttendance.status} size="small" />
+                          <p className="text-xl	text-[#6D8DFF]">
+                            {lesson.title}
+                          </p>
+                          <StatusIcon
+                            status={lesson.lessonAttendance.status}
+                            size="small"
+                          />
                         </StyleSideBarList>
                       );
                     })}
                   </ul>
-                  <ToggleButton isShowedSideBar={isShowedSideBar} setIsShowedSideBar={setIsShowedSideBar} />
+                  <ToggleButton
+                    isShowedSideBar={isShowedSideBar}
+                    setIsShowedSideBar={setIsShowedSideBar}
+                  />
                 </SideBar>
               ) : (
-                <ToggleButton isShowedSideBar={isShowedSideBar} setIsShowedSideBar={setIsShowedSideBar} />
+                <ToggleButton
+                  isShowedSideBar={isShowedSideBar}
+                  setIsShowedSideBar={setIsShowedSideBar}
+                />
               )}
 
               <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
                 <Breadcrumb links={links} />
                 <div className="mt-10 border-black border-b pb-5">
-                  <h2 className="font-semibold text-3xl md:text-4xl">{attendance?.course.title}</h2>
+                  <h2 className="font-semibold text-3xl md:text-4xl">
+                    {attendance?.course.title}
+                  </h2>
                 </div>
                 <ul className="md:hidden my-5 border-black border-b">
                   <li className="mb-10">
                     <div className="text-center">
-                      <p className="font-semibold mb-3">チャプター進捗 {calculateChapterProgeress()}%</p>
+                      <p className="font-semibold mb-3">
+                        チャプター進捗 {calculateChapterProgeress()}%
+                      </p>
                       <ProgressBar progress={calculateChapterProgeress()} />
                     </div>
                   </li>
@@ -178,16 +203,23 @@ const Chapter: NextPage = () => {
                       <StyleSideBarList
                         key={lesson.lesson_id}
                         onClick={clickHandler(lesson.lesson_id)}
-                        isSelected={lesson.lesson_id === currentLesson?.lesson_id}
+                        isSelected={
+                          lesson.lesson_id === currentLesson?.lesson_id
+                        }
                       >
                         <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
-                        <StatusIcon status={lesson.lessonAttendance.status} size="small" />
+                        <StatusIcon
+                          status={lesson.lessonAttendance.status}
+                          size="small"
+                        />
                       </StyleSideBarList>
                     );
                   })}
                 </ul>
                 <div className="mt-5 mx-auto">
-                  <h2 className="font-semibold text-[25px] md:text-[30px]">{currentLesson?.title}</h2>
+                  <h2 className="font-semibold text-[25px] md:text-[30px]">
+                    {currentLesson?.title}
+                  </h2>
                 </div>
                 <div className="my-5 overflow-auto">
                   {(width as number) > 0 && currentLesson && (
@@ -202,9 +234,13 @@ const Chapter: NextPage = () => {
                   <>
                     <div className="flex justify-start">
                       <StatusButton
-                        selected={currentLesson?.lessonAttendance.status === STATUS_BEFORE_ATTENDANCE}
+                        selected={
+                          currentLesson?.lessonAttendance.status ===
+                          STATUS_BEFORE_ATTENDANCE
+                        }
                         lessonAttendance={{
-                          lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
+                          lesson_attendance_id:
+                            currentLesson.lessonAttendance.lesson_attendance_id,
                           status: STATUS_BEFORE_ATTENDANCE,
                         }}
                         mutate={mutate}
@@ -213,9 +249,13 @@ const Chapter: NextPage = () => {
                       </StatusButton>
                       <span className="ml-10" />
                       <StatusButton
-                        selected={currentLesson?.lessonAttendance.status === STATUS_IN_ATTENDANCE}
+                        selected={
+                          currentLesson?.lessonAttendance.status ===
+                          STATUS_IN_ATTENDANCE
+                        }
                         lessonAttendance={{
-                          lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
+                          lesson_attendance_id:
+                            currentLesson.lessonAttendance.lesson_attendance_id,
                           status: STATUS_IN_ATTENDANCE,
                         }}
                         mutate={mutate}
@@ -224,9 +264,13 @@ const Chapter: NextPage = () => {
                       </StatusButton>
                       <span className="ml-10" />
                       <StatusButton
-                        selected={currentLesson?.lessonAttendance.status === STATUS_COMPLETED_ATTENDANCE}
+                        selected={
+                          currentLesson?.lessonAttendance.status ===
+                          STATUS_COMPLETED_ATTENDANCE
+                        }
                         lessonAttendance={{
-                          lesson_attendance_id: currentLesson.lessonAttendance.lesson_attendance_id,
+                          lesson_attendance_id:
+                            currentLesson.lessonAttendance.lesson_attendance_id,
                           status: STATUS_COMPLETED_ATTENDANCE,
                         }}
                         mutate={mutate}
@@ -237,7 +281,9 @@ const Chapter: NextPage = () => {
                   </>
                 )}
                 <div className="mt-5">
-                  <p className="whitespace-pre-wrap">{currentLesson?.remarks}</p>
+                  <p className="whitespace-pre-wrap">
+                    {currentLesson?.remarks}
+                  </p>
                 </div>
               </div>
             </>

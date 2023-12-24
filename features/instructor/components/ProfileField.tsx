@@ -2,14 +2,14 @@ import { Button } from '@/components/elements/Button';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { useDropzone } from 'react-dropzone';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
-import { PutStudent } from '../types/PutStudent';
+import { PutInstructor } from '../types/PutInstructor';
 
 type Props = {
   profileImage: string | null;
   uploadImage: (file: File | null) => void;
   uploadedFileName: string | null;
-  register: UseFormRegister<PutStudent>;
-  errors: FieldErrors<PutStudent>;
+  register: UseFormRegister<PutInstructor>;
+  errors: FieldErrors<PutInstructor>;
 };
 
 export function ProfileField({

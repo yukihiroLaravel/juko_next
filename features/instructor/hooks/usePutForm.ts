@@ -1,15 +1,15 @@
 import { useForm } from 'react-hook-form';
-import { Student } from '../types/Student';
+import { Instructor } from '../types/Instructor';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
-import { PutStudent } from '../types/PutStudent';
+import { PutInstructor } from '../types/PutInstructor';
 import { PutSchema } from '../schemas/PutSchema';
 
 type Params = {
-  student: Student | undefined;
+  instructor: Instructor | undefined;
 };
 
-export const usePutForm = ({ student }: Params) => {
+export const usePutForm = ({ instructor }: Params) => {
   const [isDefaultValues, setIsDefaultValues] = useState(false);
 
   const {
@@ -18,28 +18,22 @@ export const usePutForm = ({ student }: Params) => {
     control,
     register,
     formState: { errors },
-  } = useForm<PutStudent>({
+  } = useForm<PutInstructor>({
     mode: 'onSubmit',
     resolver: yupResolver(PutSchema),
   });
 
   useEffect(() => {
-    if (student === undefined) return;
+    if (instructor === undefined) return;
     if (isDefaultValues) return;
 
-    const birthDate = new Date(student?.birth_date);
-    setValue('nick_name', student?.nick_name);
-    setValue('last_name', student?.last_name);
-    setValue('first_name', student?.first_name);
-    setValue('email', student?.email);
-    setValue('occupation', student?.occupation);
-    setValue('purpose', student?.purpose);
-    setValue('birth_date', birthDate);
-    setValue('sex', student?.sex);
-    setValue('address', student?.address);
+    setValue('nick_name', instructor?.nick_name);
+    setValue('last_name', instructor?.last_name);
+    setValue('first_name', instructor?.first_name);
+    setValue('email', instructor?.email);
     setValue('image', null);
     setIsDefaultValues(true);
-  }, [student]);
+  }, [instructor]);
 
   const uploadImage = (file: File | null) => {
     if (file === null) {

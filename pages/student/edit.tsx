@@ -2,7 +2,7 @@ import { StudentLayout } from '@/components/layouts/StudentLayout';
 import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 import { StudentEditForm } from '@/features/student/components/StudentEditForm';
 
-export default function Signup() {
+export default function Edit() {
   return (
     <AuthWrapper>
       <StudentLayout>

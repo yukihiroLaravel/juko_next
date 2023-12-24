@@ -4,4 +4,5 @@ export type Instructor = {
   last_name: string;
   first_name: string;
   email: string;
+  profile_image: string | null;
 };
