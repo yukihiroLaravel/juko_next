@@ -1,11 +1,13 @@
+import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { SideBar } from '@/components/elements/SideBar';
 import { ToggleButton } from '@/components/elements/ToggleButton';
 import { InstructorHeader } from '@/components/layouts/InstructorHeader';
 import { useFetchInstructorChapters } from '@/features/chapter/hooks/useFetchInstructorChapters';
+import { EditForm } from '@/features/lesson/components/EditForm';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const StyleSideBarList = styled.li<{ isSelected: boolean }>`
@@ -29,8 +31,7 @@ const Edit: NextPage = () => {
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
 
   const { course_id, chapter_id, lesson_id } = router.query;
-
-  const { chapter } = useFetchInstructorChapters({
+  const { chapter, isLoading } = useFetchInstructorChapters({
     courseId: course_id,
     chapterId: chapter_id,
   });
@@ -40,6 +41,29 @@ const Edit: NextPage = () => {
       chapter?.lessons.find((lesson) => lesson.lesson_id === lessonId) ?? null;
     setCurrentLesson(newLesson);
   };
+
+  // パン屑のリンクリスト
+  const links = [
+    {
+      title: '講座一覧',
+      href: '/courses',
+    },
+    {
+      title: '講座詳細',
+      href: '#',
+    },
+    {
+      title: chapter?.title ?? '',
+      href: '#',
+    },
+  ];
+
+  useEffect(() => {
+    if (chapter?.lessons.length) {
+      const newLesson = chapter?.lessons[0] as Lesson;
+      setCurrentLesson(newLesson);
+    }
+  }, [chapter]);
 
   return (
     <>
@@ -75,7 +99,11 @@ const Edit: NextPage = () => {
         )}
         {/* コンテンツ */}
         <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
-          <h2 className="font-semibold text-3xl ml-20">{chapter?.title}</h2>
+          <Breadcrumb links={links} />
+          <div className="my-10">
+            <h2 className="font-semibold text-3xl ml-20">{chapter?.title}</h2>
+          </div>
+          {!isLoading && currentLesson && <EditForm lesson={currentLesson} />}
         </div>
       </div>
     </>

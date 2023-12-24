@@ -3,4 +3,5 @@ export type Lesson = {
   remarks: string;
   title: string;
   url: string;
+  status: 'private' | 'public';
 };

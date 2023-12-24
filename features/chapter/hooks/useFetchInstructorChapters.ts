@@ -25,8 +25,6 @@ export const useFetchInstructorChapters = ({ courseId, chapterId }: Params) => {
     }
   );
 
-  console.log(data);
-
   return {
     chapter: data?.data,
     error,
