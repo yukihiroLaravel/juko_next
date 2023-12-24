@@ -3,34 +3,33 @@ import { Lesson } from '../types/Lesson';
 import { PutLesson } from '../types/PutLesson';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PutSchema } from '../schemas/PutSchema';
-import { useEffect, useState } from 'react';
 
 type Params = {
   lesson: Lesson;
 };
 
 export const usePutForm = ({ lesson }: Params) => {
-  const [isDefaultValues, setIsDefaultValues] = useState(false);
-
-  const { register, handleSubmit } = useForm<PutLesson>({
+  const { register, handleSubmit, setValue } = useForm<PutLesson>({
     mode: 'onSubmit',
     resolver: yupResolver(PutSchema),
+    defaultValues: {
+      title: lesson.title,
+      remarks: lesson.remarks,
+      url: lesson.url,
+      status: lesson.status,
+    },
   });
 
-  useEffect(() => {
-    if (lesson === undefined) return;
-    if (isDefaultValues) return;
-
-    register('remarks');
-    register('title');
-    register('url');
-    register('status');
-    setIsDefaultValues(true);
-  }, [lesson]);
+  const updateValue = (
+    key: keyof PutLesson,
+    value: PutLesson[keyof PutLesson]
+  ) => {
+    setValue(key, value);
+  };
 
   return {
     register,
     handleSubmit,
-    isDefaultValues,
+    updateValue,
   };
 };

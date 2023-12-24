@@ -11,7 +11,7 @@ type Params = {
 export const useFetchInstructorChapters = ({ courseId, chapterId }: Params) => {
   const shouldFetch = courseId !== undefined && chapterId !== undefined;
 
-  const { data, error, isLoading } = useSWR<{
+  const { data, error, isLoading, mutate } = useSWR<{
     data: Chapter & {
       lessons: Lesson[];
     };
@@ -29,5 +29,6 @@ export const useFetchInstructorChapters = ({ courseId, chapterId }: Params) => {
     chapter: data?.data,
     error,
     isLoading,
+    mutate,
   };
 };

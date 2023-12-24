@@ -1,5 +1,6 @@
 import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { SideBar } from '@/components/elements/SideBar';
+import { SideBarList } from '@/components/elements/SideBarList';
 import { ToggleButton } from '@/components/elements/ToggleButton';
 import { InstructorHeader } from '@/components/layouts/InstructorHeader';
 import { useFetchInstructorChapters } from '@/features/chapter/hooks/useFetchInstructorChapters';
@@ -8,21 +9,6 @@ import { Lesson } from '@/features/lesson/types/Lesson';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-
-const StyleSideBarList = styled.li<{ isSelected: boolean }>`
-  border-top: 1px solid #b5b5b5;
-  min-height: 4rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: ${({ isSelected }) => isSelected && '#ddd'};
-  cursor: pointer;
-  padding: 0.5rem;
-  :hover {
-    opacity: 0.8;
-  }
-`;
 
 const Edit: NextPage = () => {
   const router = useRouter();
@@ -30,8 +16,8 @@ const Edit: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
 
-  const { course_id, chapter_id, lesson_id } = router.query;
-  const { chapter, isLoading } = useFetchInstructorChapters({
+  const { course_id, chapter_id } = router.query;
+  const { chapter, isLoading, mutate } = useFetchInstructorChapters({
     courseId: course_id,
     chapterId: chapter_id,
   });
@@ -58,6 +44,12 @@ const Edit: NextPage = () => {
     },
   ];
 
+  const courseId = Number(course_id);
+  const chapterId = Number(chapter_id);
+
+  // フォームを表示するかどうか
+  const isDisplayForm = !isLoading && currentLesson && courseId && chapterId;
+
   useEffect(() => {
     if (chapter?.lessons.length) {
       const newLesson = chapter?.lessons[0] as Lesson;
@@ -67,22 +59,20 @@ const Edit: NextPage = () => {
 
   return (
     <>
-      {/* ヘッダー */}
       <InstructorHeader />
       <div className="flex">
-        {/* サイドバー */}
         {isShowedSideBar ? (
           <SideBar>
             <ul className="mt-2">
               {chapter?.lessons.map((lesson) => {
                 return (
-                  <StyleSideBarList
+                  <SideBarList
                     key={lesson.lesson_id}
                     onClick={clickHandler(lesson.lesson_id)}
                     isSelected={lesson.lesson_id === currentLesson?.lesson_id}
                   >
-                    <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
-                  </StyleSideBarList>
+                    {lesson.title}
+                  </SideBarList>
                 );
               })}
             </ul>
@@ -97,13 +87,20 @@ const Edit: NextPage = () => {
             setIsShowedSideBar={setIsShowedSideBar}
           />
         )}
-        {/* コンテンツ */}
         <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
           <Breadcrumb links={links} />
           <div className="my-10">
             <h2 className="font-semibold text-3xl ml-20">{chapter?.title}</h2>
           </div>
-          {!isLoading && currentLesson && <EditForm lesson={currentLesson} />}
+          {isDisplayForm && (
+            <EditForm
+              key={currentLesson.lesson_id}
+              courseId={courseId}
+              chapterId={chapterId}
+              lesson={currentLesson}
+              mutate={mutate}
+            />
+          )}
         </div>
       </div>
     </>
