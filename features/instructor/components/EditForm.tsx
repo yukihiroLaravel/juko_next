@@ -18,16 +18,10 @@ export const EditForm: React.FC = () => {
     setUploadedFileName(fileName);
   };
 
-  const {
-    handleSubmit,
-    register,
-    control,
-    isDefaultValues,
-    uploadImage,
-    errors,
-  } = usePutForm({
-    instructor,
-  });
+  const { handleSubmit, register, isDefaultValues, uploadImage, errors } =
+    usePutForm({
+      instructor,
+    });
 
   const uploadImageHandler = (file: File | null) => {
     uploadImage(file);
