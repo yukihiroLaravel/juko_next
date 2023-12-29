@@ -17,7 +17,7 @@ const Edit: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
 
-  const { course_id, chapter_id } = router.query;
+  const { course_id, chapter_id, lesson_id } = router.query;
   const { chapter, isLoading, error, mutate } = useFetchInstructorChapters({
     courseId: course_id,
     chapterId: chapter_id,
@@ -50,11 +50,24 @@ const Edit: NextPage = () => {
 
   // コンテンツを表示するかどうか
   const isDisplay =
-    !isLoading && currentLesson && courseId && chapterId && chapter;
+    !isLoading &&
+    currentLesson &&
+    courseId &&
+    chapterId &&
+    lesson_id &&
+    chapter;
 
   useEffect(() => {
+    // 既に現在のレッスンが設定されている場合は何もしない
+    if (currentLesson) {
+      return;
+    }
+
+    // クエリパラメータのlesson_idがある場合は、そのレッスンを表示する
     if (chapter?.lessons.length) {
-      const newLesson = chapter?.lessons[0] as Lesson;
+      const newLesson = chapter.lessons.find(
+        (lesson) => lesson.lesson_id === Number(lesson_id)
+      ) as Lesson;
       setCurrentLesson(newLesson);
     }
   }, [chapter]);
@@ -63,7 +76,7 @@ const Edit: NextPage = () => {
     <>
       <InstructorHeader />
       {error && <Error />}
-      {isDisplay && (
+      {isDisplay ? (
         <div className="flex">
           {isShowedSideBar ? (
             <SideBar>
@@ -105,6 +118,8 @@ const Edit: NextPage = () => {
             />
           </div>
         </div>
+      ) : (
+        <Error />
       )}
     </>
   );
