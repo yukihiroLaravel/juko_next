@@ -9,7 +9,12 @@ type Params = {
 };
 
 export const usePutForm = ({ lesson }: Params) => {
-  const { register, handleSubmit, setValue } = useForm<PutLesson>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<PutLesson>({
     mode: 'onSubmit',
     resolver: yupResolver(PutSchema),
     defaultValues: {
@@ -31,5 +36,6 @@ export const usePutForm = ({ lesson }: Params) => {
     register,
     handleSubmit,
     updateValue,
+    errors,
   };
 };

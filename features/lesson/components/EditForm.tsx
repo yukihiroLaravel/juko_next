@@ -1,10 +1,10 @@
 import { SwitchButton } from '@/components/elements/SwitchButton';
 import { LESSON_STATUS, Lesson } from '../types/Lesson';
 import { usePutForm } from '../hooks/usePutForm';
-import FieldInput from '@/features/student/components/FieldInput';
 import { Button } from '@/components/elements/Button';
 import { Axios } from '@/lib/api';
 import { useRef } from 'react';
+import FieldInput from '@/components/elements/FieldInput';
 
 type Props = {
   courseId: number;
@@ -21,7 +21,7 @@ export const EditForm: React.FC<Props> = ({
 }) => {
   const isSending = useRef<boolean>(false);
 
-  const { register, updateValue, handleSubmit } = usePutForm({
+  const { register, updateValue, handleSubmit, errors } = usePutForm({
     lesson,
   });
 
@@ -85,12 +85,18 @@ export const EditForm: React.FC<Props> = ({
           <label htmlFor="title">
             <p className="font-bold mb-1">レッスンタイトル</p>
             <FieldInput defaultValue={lesson.title} {...register('title')} />
+            {errors.title && (
+              <span className="text-red-600">{errors.title.message}</span>
+            )}
           </label>
         </div>
         <div className="mt-10">
           <label htmlFor="url">
             <p className="font-bold mb-1">動画URL</p>
             <FieldInput defaultValue={lesson.url} {...register('url')} />
+            {errors.url && (
+              <span className="text-red-600">{errors.url.message}</span>
+            )}
           </label>
         </div>
         <div className="mt-10">
@@ -111,6 +117,9 @@ export const EditForm: React.FC<Props> = ({
             defaultValue={lesson.remarks}
             {...register('remarks')}
           />
+          {errors.remarks && (
+            <span className="text-red-600">{errors.remarks.message}</span>
+          )}
         </div>
         <div className="my-5 text-center flex justify-between">
           <Button
@@ -124,7 +133,7 @@ export const EditForm: React.FC<Props> = ({
           {isSending.current ? (
             <Button
               type="button"
-              className="w-4/5 py-2 text-lg opacity-50 cursor-not-allowed"
+              className="py-2 px-5 opacity-50 cursor-not-allowed"
               isDisabled={true}
             >
               更新中...
