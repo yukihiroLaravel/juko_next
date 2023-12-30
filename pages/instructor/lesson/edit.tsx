@@ -33,10 +33,10 @@ const Edit: NextPage = () => {
   const links = [
     {
       title: '講座一覧',
-      href: '/courses',
+      href: '/instructor/courses',
     },
     {
-      title: '講座詳細',
+      title: 'チャプター&レッスン一覧',
       href: '#',
     },
     {
