@@ -81,6 +81,11 @@ export const EditForm: React.FC<Props> = ({
     >
       <h2 className="text-center text-2xl">レッスン編集</h2>
       <div className="w-4/5 mx-auto">
+        <div className="flex justify-end items-center text-sm">
+          <Button type="button" className="py-2 px-5">
+            プレビュー
+          </Button>
+        </div>
         <div className="mt-10">
           <label htmlFor="title">
             <p className="font-bold mb-1">レッスンタイトル</p>
