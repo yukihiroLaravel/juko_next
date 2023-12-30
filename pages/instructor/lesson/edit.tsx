@@ -76,7 +76,7 @@ const Edit: NextPage = () => {
     <>
       <InstructorHeader />
       {error && <Error />}
-      {isDisplay ? (
+      {isDisplay && (
         <div className="flex">
           {isShowedSideBar ? (
             <SideBar>
@@ -118,8 +118,6 @@ const Edit: NextPage = () => {
             />
           </div>
         </div>
-      ) : (
-        <Error />
       )}
     </>
   );
