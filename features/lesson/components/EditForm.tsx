@@ -34,7 +34,7 @@ export const EditForm: React.FC<Props> = ({
 
     isSending.current = true;
     await Axios.get('/sanctum/csrf-cookie').then(() => {
-      Axios.patch(
+      Axios.put(
         `/api/v1/instructor/course/${courseId}/chapter/${chapterId}/lesson/${lesson.lesson_id}`,
         data
       )
