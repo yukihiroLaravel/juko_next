@@ -68,7 +68,11 @@ export const EditForm: React.FC<Props> = ({
           .catch((e) => {
             isSending.current = false;
             console.error(e);
-            alert('削除に失敗しました');
+            if (e.response.data.message === 'This lesson has attendance.') {
+              alert('受講者がいるため削除できません');
+            } else {
+              alert('削除に失敗しました');
+            }
           });
       });
     }
