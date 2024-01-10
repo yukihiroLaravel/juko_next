@@ -107,7 +107,7 @@ const Edit: NextPage = () => {
           <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
             <Breadcrumb links={links} />
             <div className="my-10">
-              <h2 className="font-semibold text-3xl ml-20">{chapter.title}</h2>
+              <h2 className="font-semibold text-3xl">{chapter.title}</h2>
             </div>
             <EditForm
               key={currentLesson.lesson_id}
