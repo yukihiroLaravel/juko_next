@@ -53,7 +53,12 @@ const StyledSwitch = styled.div`
 export const SwitchButton: React.FC<Props> = ({ checked, onChange }) => {
   return (
     <StyledSwitch>
-      <Checkbox id="checkbox" type="checkbox" defaultChecked={checked} onChange={() => onChange()} />
+      <Checkbox
+        id="checkbox"
+        type="checkbox"
+        defaultChecked={checked}
+        onChange={() => onChange()}
+      />
       <Label htmlFor="checkbox" />
     </StyledSwitch>
   );
