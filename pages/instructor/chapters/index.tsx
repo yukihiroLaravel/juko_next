@@ -9,18 +9,19 @@ import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { TitleCard as ChapterTitleCard } from '@/features/chapter/components/TitleCard';
 import Link from 'next/link';
 import { Error } from '@/components/utils/Error';
 import { Button } from '@/components/elements/Button';
-import { DrugCard } from '@/features/lesson/components/DrugCard';
+import { ChapterWithLessonsBlock } from '@/features/chapter/components/ChapterWithLessonsBlock';
 
 const Index: NextPage = () => {
   const router = useRouter();
   const { course_id: courseId } = router.query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
 
-  const { course, isLoading, error } = useFetchInstructorCourse({ courseId });
+  const { course, isLoading, error, mutate } = useFetchInstructorCourse({
+    courseId,
+  });
 
   // パン屑のリンクリスト
   const links =
@@ -119,15 +120,12 @@ const Index: NextPage = () => {
                 </div>
                 {course.chapters.map((chapter) => {
                   return (
-                    <div key={chapter.chapter_id}>
-                      <div className="my-3">
-                        <ChapterTitleCard title={chapter.title} />
-                      </div>
-                      <div className="my-5 mx-auto w-11/12">
-                        <DrugCard chapter={chapter} />
-                        <Button className="p-2">レッスン作成</Button>
-                      </div>
-                    </div>
+                    <ChapterWithLessonsBlock
+                      key={chapter.chapter_id}
+                      courseId={course.course_id}
+                      chapter={chapter}
+                      mutate={mutate}
+                    />
                   );
                 })}
               </div>
