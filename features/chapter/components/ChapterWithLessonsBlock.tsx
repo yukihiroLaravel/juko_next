@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { Chapter } from '../types/Chapter';
 import { Button } from '@/components/elements/Button';
-import { DrugCard } from '@/features/lesson/components/DrugCard';
+import { DragCardList } from '@/features/lesson/components/DragCardList';
 import { TitleCard as ChapterTitleCard } from '@/features/chapter/components/TitleCard';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { Axios } from '@/lib/api';
@@ -53,7 +53,7 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
         <ChapterTitleCard title={chapter.title} />
       </div>
       <div className="my-5 mx-auto w-11/12">
-        <DrugCard chapter={chapter} />
+        <DragCardList courseId={courseId} chapter={chapter} mutate={mutate} />
         {isShowedAddLesson && (
           <div className="my-5">
             <div className="bg-[#ECF7FF] shadow-md rounded-md p-8 flex justify-between items-center">
