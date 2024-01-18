@@ -74,6 +74,25 @@ export const Dragcard: FC<Props> = ({
           if (error.response.status === 422) {
             console.log(error.response.data.errors);
           }
+          alert('エラーが発生しました');
+        });
+    });
+  };
+
+  const handleDeleteLesson = async () => {
+    await Axios.get('/sanctum/csrf-cookie').then(async () => {
+      await Axios.delete(
+        `/api/v1/instructor/course/${courseId}/chapter/${chapterId}/lesson/${lesson.lesson_id}`
+      )
+        .then((res) => {
+          // TODO レスポンスの型を作る
+          mutate();
+        })
+        .catch((error) => {
+          if (error.response.status === 422) {
+            console.log(error.response.data.errors);
+          }
+          alert('エラーが発生しました');
         });
     });
   };
@@ -183,7 +202,15 @@ export const Dragcard: FC<Props> = ({
                         ? '非公開'
                         : '公開'}
                     </li>
-                    <li className="py-1 px-8 hover:bg-gray-200">削除</li>
+                    <li
+                      className="py-1 px-8 hover:bg-gray-200"
+                      onClick={() => {
+                        handleDeleteLesson();
+                        setIsShowedDropdownMenu(false);
+                      }}
+                    >
+                      削除
+                    </li>
                   </ul>
                 </div>
               )}
