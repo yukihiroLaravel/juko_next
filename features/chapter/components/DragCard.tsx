@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { CHAPTER_STATUS, Chapter } from '../types/Chapter';
 import { Axios } from '@/lib/api';
+import { ChapterCard } from './ChapterCard';
 
 type Props = {
   courseId: number;
@@ -51,13 +52,7 @@ export const DragCard: FC<Props> = ({ courseId, chapter, mutate }) => {
   };
 
   return (
-    <div
-      className={`min-h-[12vh] flex justify-between items-center px-8 py-10 rounded text-gray-700 shadow-md relative ${
-        chapter.status === CHAPTER_STATUS.PRIVATE
-          ? 'bg-gray-200'
-          : 'bg-[#89cada]'
-      }`}
-    >
+    <ChapterCard chapter={chapter} className="relative">
       <h3 className="font-semibold text-lg md:text-3xl">{chapter.title}</h3>
       <button
         className="p-2"
@@ -118,6 +113,6 @@ export const DragCard: FC<Props> = ({ courseId, chapter, mutate }) => {
           </ul>
         </div>
       )}
-    </div>
+    </ChapterCard>
   );
 };
