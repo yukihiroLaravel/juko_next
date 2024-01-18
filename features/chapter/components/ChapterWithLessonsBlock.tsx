@@ -2,9 +2,9 @@ import { FC, useState } from 'react';
 import { Chapter } from '../types/Chapter';
 import { Button } from '@/components/elements/Button';
 import { DragCardList } from '@/features/lesson/components/DragCardList';
-import { TitleCard as ChapterTitleCard } from '@/features/chapter/components/TitleCard';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { Axios } from '@/lib/api';
+import { DragCard } from './DragCard';
 
 type Props = {
   courseId: number;
@@ -50,7 +50,7 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
   return (
     <div key={chapter.chapter_id}>
       <div className="my-3">
-        <ChapterTitleCard title={chapter.title} />
+        <DragCard courseId={courseId} chapter={chapter} mutate={mutate} />
       </div>
       <div className="my-5 mx-auto w-11/12">
         <DragCardList courseId={courseId} chapter={chapter} mutate={mutate} />
