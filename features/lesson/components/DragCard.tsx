@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { Lesson } from '../types/Lesson';
+import { LESSON_STATUS, Lesson } from '../types/Lesson';
 import { Button } from '@/components/elements/Button';
 import { Axios } from '@/lib/api';
 
@@ -39,7 +39,7 @@ export const Dragcard: FC<Props> = ({
         {
           title,
           url: 'aaaa',
-          status: 'public',
+          status: LESSON_STATUS.PUBLIC,
         }
       )
         .then((res) => {
@@ -49,9 +49,31 @@ export const Dragcard: FC<Props> = ({
           mutate();
         })
         .catch((error) => {
-          // if (error.response.status === 422) {
-          //   console.log(error.response.data.errors);
-          // }
+          if (error.response.status === 422) {
+            console.log(error.response.data.errors);
+          }
+        });
+    });
+  };
+
+  const handleUpdateStatus = async (status: LESSON_STATUS) => {
+    await Axios.get('/sanctum/csrf-cookie').then(async () => {
+      await Axios.put(
+        `/api/v1/instructor/course/${courseId}/chapter/${chapterId}/lesson/${lesson.lesson_id}`,
+        {
+          title: lesson.title,
+          url: 'aaaa',
+          status: status,
+        }
+      )
+        .then((res) => {
+          // TODO レスポンスの型を作る
+          mutate();
+        })
+        .catch((error) => {
+          if (error.response.status === 422) {
+            console.log(error.response.data.errors);
+          }
         });
     });
   };
@@ -70,7 +92,13 @@ export const Dragcard: FC<Props> = ({
         >
           <div className="my-5">
             {/* TODO カードはコンポーネント化 */}
-            <div className="bg-[#ECF7FF] shadow-md rounded-md px-8 py-10 flex justify-between items-center relative">
+            <div
+              className={`shadow-md rounded-md px-8 py-10 flex justify-between items-center relative ${
+                lesson.status === LESSON_STATUS.PRIVATE
+                  ? 'bg-gray-200'
+                  : 'bg-[#ECF7FF]'
+              }`}
+            >
               {isClickedEditName ? (
                 <>
                   <input
@@ -140,7 +168,21 @@ export const Dragcard: FC<Props> = ({
                     >
                       名前変更
                     </li>
-                    <li className="py-1 px-8 hover:bg-gray-200">公開</li>
+                    <li
+                      className="py-1 px-8 hover:bg-gray-200"
+                      onClick={() => {
+                        handleUpdateStatus(
+                          lesson.status === LESSON_STATUS.PUBLIC
+                            ? LESSON_STATUS.PRIVATE
+                            : LESSON_STATUS.PUBLIC
+                        );
+                        setIsShowedDropdownMenu(false);
+                      }}
+                    >
+                      {lesson.status === LESSON_STATUS.PUBLIC
+                        ? '非公開'
+                        : '公開'}
+                    </li>
                     <li className="py-1 px-8 hover:bg-gray-200">削除</li>
                   </ul>
                 </div>
