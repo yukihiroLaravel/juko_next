@@ -32,6 +32,24 @@ export const DragCard: FC<Props> = ({ courseId, chapter, mutate }) => {
     });
   };
 
+  const handleDeleteLesson = async () => {
+    await Axios.get('/sanctum/csrf-cookie').then(async () => {
+      await Axios.delete(
+        `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}`
+      )
+        .then((res) => {
+          // TODO レスポンスの型を作る
+          console.log(res.data);
+          mutate();
+        })
+        .catch((error) => {
+          if (error.response.status === 422) {
+            console.log(error.response.data.errors);
+          }
+        });
+    });
+  };
+
   return (
     <div
       className={`min-h-[12vh] flex justify-between items-center px-8 py-10 rounded text-gray-700 shadow-md relative ${
@@ -91,7 +109,7 @@ export const DragCard: FC<Props> = ({ courseId, chapter, mutate }) => {
             <li
               className="py-1 px-8 hover:bg-gray-200"
               onClick={() => {
-                // handleDeleteLesson();
+                handleDeleteLesson();
                 setIsShowedDropdownMenu(false);
               }}
             >
