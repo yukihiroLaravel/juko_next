@@ -5,10 +5,16 @@ import clsx from 'clsx';
 type Props = {
   chapter: Chapter;
   className?: string;
+  cardRef: React.Ref<HTMLDivElement> | undefined;
   children: React.ReactNode;
 };
 
-export const ChapterCard: FC<Props> = ({ chapter, className, children }) => {
+export const ChapterCard: FC<Props> = ({
+  chapter,
+  className,
+  cardRef = undefined,
+  children,
+}) => {
   const cardClassName = clsx(
     'min-h-[12vh]',
     'flex',
@@ -26,5 +32,9 @@ export const ChapterCard: FC<Props> = ({ chapter, className, children }) => {
     className
   );
 
-  return <div className={cardClassName}>{children}</div>;
+  return (
+    <div className={cardClassName} ref={cardRef}>
+      {children}
+    </div>
+  );
 };

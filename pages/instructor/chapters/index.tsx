@@ -13,6 +13,11 @@ import Link from 'next/link';
 import { Error } from '@/components/utils/Error';
 import { Button } from '@/components/elements/Button';
 import { ChapterWithLessonsBlock } from '@/features/chapter/components/ChapterWithLessonsBlock';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Chapter } from '@/features/chapter/types/Chapter';
+import { Lesson } from '@/features/lesson/types/Lesson';
+import { Axios } from '@/lib/api';
 
 const Index: NextPage = () => {
   const router = useRouter();
@@ -22,6 +27,42 @@ const Index: NextPage = () => {
   const { course, isLoading, error, mutate } = useFetchInstructorCourse({
     courseId,
   });
+
+  const moveCard = (dragIndex: number, hoverIndex: number) => {
+    if (course === undefined) return;
+    if (course.chapters === undefined) return;
+    // チャプターを並び変えてAPIへ送信
+    // dragIndexとhoverIndexの要素だけを入れ替える
+    const newChapters = [...course.chapters];
+    const dragCard = newChapters[dragIndex] as Chapter & {
+      lessons: Lesson[];
+    };
+    newChapters.splice(dragIndex, 1);
+    newChapters.splice(hoverIndex, 0, dragCard);
+
+    // {chapter_id: 1, order: 1}, {chapter_id: 2, order: 2}のような形にする
+    const body = newChapters.map((chapter, index) => {
+      return {
+        chapter_id: chapter.chapter_id,
+        order: index + 1,
+      };
+    });
+
+    // APIへ送信
+    Axios.get('/sanctum/csrf-cookie').then(async () => {
+      await Axios.post(`/api/v1/instructor/course/${courseId}/chapter/sort`, {
+        chapters: body,
+      })
+        .then((res) => {
+          if (res.data.result === true) {
+            mutate();
+          }
+        })
+        .catch((error) => {
+          console.log(error.response.data.errors);
+        });
+    });
+  };
 
   // パン屑のリンクリスト
   const links =
@@ -118,16 +159,20 @@ const Index: NextPage = () => {
                     </a>
                   </Link>
                 </div>
-                {course.chapters.map((chapter) => {
-                  return (
-                    <ChapterWithLessonsBlock
-                      key={chapter.chapter_id}
-                      courseId={course.course_id}
-                      chapter={chapter}
-                      mutate={mutate}
-                    />
-                  );
-                })}
+                <DndProvider backend={HTML5Backend}>
+                  {course.chapters.map((chapter, index) => {
+                    return (
+                      <ChapterWithLessonsBlock
+                        key={chapter.chapter_id}
+                        chapterIndex={index}
+                        courseId={course.course_id}
+                        chapter={chapter}
+                        mutate={mutate}
+                        moveCard={moveCard}
+                      />
+                    );
+                  })}
+                </DndProvider>
               </div>
             </>
           )}

@@ -1,23 +1,27 @@
 import { FC, useState } from 'react';
 import { Chapter } from '../types/Chapter';
 import { Button } from '@/components/elements/Button';
-import { DragCardList } from '@/features/lesson/components/DragCardList';
+// import { DragCardList } from '@/features/lesson/components/DragCardList';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { Axios } from '@/lib/api';
-import { DragCard } from './DragCard';
+import { DraggableCard } from './DraggableCard';
 
 type Props = {
   courseId: number;
+  chapterIndex: number;
   chapter: Chapter & {
     lessons: Lesson[];
   };
   mutate: () => void;
+  moveCard: (dragIndex: number, hoverIndex: number) => void;
 };
 
 export const ChapterWithLessonsBlock: FC<Props> = ({
   courseId,
+  chapterIndex,
   chapter,
   mutate,
+  moveCard,
 }) => {
   const [isShowedAddLesson, setIsShowedAddLesson] = useState<boolean>(false);
 
@@ -50,10 +54,16 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
   return (
     <div key={chapter.chapter_id}>
       <div className="my-3">
-        <DragCard courseId={courseId} chapter={chapter} mutate={mutate} />
+        <DraggableCard
+          courseId={courseId}
+          chapterIndex={chapterIndex}
+          chapter={chapter}
+          mutate={mutate}
+          moveCard={moveCard}
+        />
       </div>
       <div className="my-5 mx-auto w-11/12">
-        <DragCardList courseId={courseId} chapter={chapter} mutate={mutate} />
+        {/* <DragCardList courseId={courseId} chapter={chapter} mutate={mutate} /> */}
         {isShowedAddLesson && (
           <div className="my-5">
             <div className="bg-[#ECF7FF] shadow-md rounded-md p-8 flex justify-between items-center">

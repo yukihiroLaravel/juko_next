@@ -1,14 +1,52 @@
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { CHAPTER_STATUS, Chapter } from '../types/Chapter';
 import { Axios } from '@/lib/api';
 import { ChapterCard } from './ChapterCard';
+import { useDrag, useDrop } from 'react-dnd';
 
 type Props = {
   courseId: number;
+  chapterIndex: number;
   chapter: Chapter;
   mutate: () => void;
+  moveCard: (dragIndex: number, hoverIndex: number) => void;
 };
-export const DragCard: FC<Props> = ({ courseId, chapter, mutate }) => {
+
+export const DraggableCard: FC<Props> = ({
+  courseId,
+  chapterIndex,
+  chapter,
+  mutate,
+  moveCard,
+}) => {
+  const [, drag] = useDrag(() => ({
+    type: 'card',
+    item: { id: chapter.chapter_id, index: chapterIndex },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
+
+  const [, drop] = useDrop(() => ({
+    accept: 'card',
+    drop(item: { id: number; index: number }) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = chapterIndex;
+      // 同じカードをオーバーしている場合は無視
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      // カードを並び替える
+      moveCard(dragIndex, hoverIndex);
+    },
+  }));
+
+  const ref = useRef(null);
+  drag(drop(ref));
+
   const [isShowedDropdownMenu, setIsShowedDropdownMenu] =
     useState<boolean>(false);
 
@@ -52,7 +90,7 @@ export const DragCard: FC<Props> = ({ courseId, chapter, mutate }) => {
   };
 
   return (
-    <ChapterCard chapter={chapter} className="relative">
+    <ChapterCard chapter={chapter} className="relative" cardRef={ref}>
       <h3 className="font-semibold text-lg md:text-3xl">{chapter.title}</h3>
       <button
         className="p-2"
