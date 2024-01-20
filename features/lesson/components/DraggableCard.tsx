@@ -4,6 +4,8 @@ import { Button } from '@/components/elements/Button';
 import { Axios } from '@/lib/api';
 import { useDrag, useDrop } from 'react-dnd';
 import { LessonCard } from './LessonCard';
+import { GridDotsIcon } from '@/components/elements/GridDotsIcon';
+import { DotsIcon } from '@/components/elements/DotsIcon';
 
 type Props = {
   courseId: number;
@@ -130,7 +132,14 @@ export const DraggableCard: FC<Props> = ({
 
   return (
     <div className="my-5">
-      <LessonCard status={lesson.status} className="relative" cardRef={ref}>
+      <LessonCard
+        status={lesson.status}
+        className="relative flex items-center justify-between"
+        cardRef={ref}
+      >
+        <div className="cursor-move h-full m-0 px-2 py-10 border-r border-gray-300">
+          <GridDotsIcon />
+        </div>
         {isClickedEditName ? (
           <>
             <input
@@ -140,7 +149,7 @@ export const DraggableCard: FC<Props> = ({
               value={title}
               onChange={handleChangeName}
             />
-            <div>
+            <div className="mr-2">
               <Button
                 className="py-2 px-6"
                 clickHandler={() => {
@@ -164,30 +173,14 @@ export const DraggableCard: FC<Props> = ({
         )}
         {!isClickedEditName && (
           <button
-            className="p-2"
+            className="pr-4"
             onClick={() => setIsShowedDropdownMenu(!isShowedDropdownMenu)}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="icon icon-tabler icon-tabler-dots-vertical text-gray-500"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-              <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-              <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-            </svg>
+            <DotsIcon />
           </button>
         )}
         {isShowedDropdownMenu && (
-          <div className="absolute top-20 right-10 bg-white shadow-md rounded-md z-10">
+          <div className="absolute top-20 right-5 bg-white shadow-md rounded-md z-10">
             <ul>
               <li
                 className="py-1 px-8 hover:bg-gray-200"
