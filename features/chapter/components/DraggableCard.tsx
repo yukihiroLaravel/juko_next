@@ -3,10 +3,10 @@ import { CHAPTER_STATUS, Chapter } from '../types/Chapter';
 import { Axios } from '@/lib/api';
 import { ChapterCard } from './ChapterCard';
 import { useDrag, useDrop } from 'react-dnd';
-import { DotsIcon } from '@/components/icons/DotsIcon';
 import { GridDotsIcon } from '@/components/icons/GridDotsIcon';
 import { Button } from '@/components/elements/Button';
 import { useUpdateTitle } from '../hooks/useUpdateTitle';
+import { DotIconDropDown } from './DotIconDropDown';
 
 type Props = {
   courseId: number;
@@ -158,49 +158,22 @@ export const DraggableCard: FC<Props> = ({
         <h3 className="font-semibold text-lg md:text-3xl">{chapter.title}</h3>
       )}
       {!isClickedEditTitle && (
-        <button
-          className="p-4"
-          onClick={() => setIsShowedDropdownMenu(!isShowedDropdownMenu)}
-        >
-          <DotsIcon />
-        </button>
-      )}
-      {isShowedDropdownMenu && (
-        <div className="absolute top-20 right-10 bg-white shadow-md rounded-md z-10">
-          <ul>
-            <li
-              className="py-1 px-8 hover:bg-gray-200"
-              onClick={() => {
-                updateIsClickedEditTitle();
-                setIsShowedDropdownMenu(false);
-              }}
-            >
-              名前変更
-            </li>
-            <li
-              className="py-1 px-8 hover:bg-gray-200"
-              onClick={() => {
-                handleUpdateStatus(
-                  chapter.status === CHAPTER_STATUS.PUBLIC
-                    ? CHAPTER_STATUS.PRIVATE
-                    : CHAPTER_STATUS.PUBLIC
-                );
-                setIsShowedDropdownMenu(false);
-              }}
-            >
-              {chapter.status === CHAPTER_STATUS.PUBLIC ? '非公開' : '公開'}
-            </li>
-            <li
-              className="py-1 px-8 hover:bg-gray-200"
-              onClick={() => {
-                handleDeleteLesson();
-                setIsShowedDropdownMenu(false);
-              }}
-            >
-              削除
-            </li>
-          </ul>
-        </div>
+        <DotIconDropDown
+          chapter={chapter}
+          changeNameHandler={() => {
+            updateIsClickedEditTitle();
+          }}
+          changeStatusHandler={() => {
+            handleUpdateStatus(
+              chapter.status === CHAPTER_STATUS.PUBLIC
+                ? CHAPTER_STATUS.PRIVATE
+                : CHAPTER_STATUS.PUBLIC
+            );
+          }}
+          deleteHandler={() => {
+            handleDeleteLesson();
+          }}
+        />
       )}
     </ChapterCard>
   );

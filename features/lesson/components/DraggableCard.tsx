@@ -1,13 +1,13 @@
-import { FC, useRef, useState } from 'react';
+import { FC, useRef } from 'react';
 import { LESSON_STATUS, Lesson } from '../types/Lesson';
 import { Button } from '@/components/elements/Button';
 import { Axios } from '@/lib/api';
 import { useDrag, useDrop } from 'react-dnd';
 import { LessonCard } from './LessonCard';
 import { GridDotsIcon } from '@/components/icons/GridDotsIcon';
-import { DotsIcon } from '@/components/icons/DotsIcon';
 import Link from 'next/link';
 import { useUpdateTitle } from '../hooks/useUpdateTitle';
+import { DotIconDropDown } from '@/features/lesson/components/DotIconDropDown';
 
 type Props = {
   courseId: number;
@@ -53,9 +53,6 @@ export const DraggableCard: FC<Props> = ({
 
   const ref = useRef(null);
   drag(drop(ref));
-
-  const [isShowedDropdownMenu, setIsShowedDropdownMenu] =
-    useState<boolean>(false);
 
   const {
     isClickedEditTitle,
@@ -169,49 +166,22 @@ export const DraggableCard: FC<Props> = ({
         </Link>
       )}
       {!isClickedEditTitle && (
-        <button
-          className="pr-4"
-          onClick={() => setIsShowedDropdownMenu(!isShowedDropdownMenu)}
-        >
-          <DotsIcon />
-        </button>
-      )}
-      {isShowedDropdownMenu && (
-        <div className="absolute top-20 right-5 bg-white shadow-md rounded-md z-10">
-          <ul>
-            <li
-              className="py-1 px-8 hover:bg-gray-200"
-              onClick={() => {
-                updateIsClickedEditTitle();
-                setIsShowedDropdownMenu(false);
-              }}
-            >
-              名前変更
-            </li>
-            <li
-              className="py-1 px-8 hover:bg-gray-200"
-              onClick={() => {
-                handleUpdateStatus(
-                  lesson.status === LESSON_STATUS.PUBLIC
-                    ? LESSON_STATUS.PRIVATE
-                    : LESSON_STATUS.PUBLIC
-                );
-                setIsShowedDropdownMenu(false);
-              }}
-            >
-              {lesson.status === LESSON_STATUS.PUBLIC ? '非公開' : '公開'}
-            </li>
-            <li
-              className="py-1 px-8 hover:bg-gray-200"
-              onClick={() => {
-                handleDeleteLesson();
-                setIsShowedDropdownMenu(false);
-              }}
-            >
-              削除
-            </li>
-          </ul>
-        </div>
+        <DotIconDropDown
+          lesson={lesson}
+          changeNameHandler={() => {
+            updateIsClickedEditTitle();
+          }}
+          changeStatusHandler={() => {
+            handleUpdateStatus(
+              lesson.status === LESSON_STATUS.PUBLIC
+                ? LESSON_STATUS.PRIVATE
+                : LESSON_STATUS.PUBLIC
+            );
+          }}
+          deleteHandler={() => {
+            handleDeleteLesson();
+          }}
+        />
       )}
     </LessonCard>
   );
