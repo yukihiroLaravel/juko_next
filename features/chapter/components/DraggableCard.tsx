@@ -102,7 +102,7 @@ export const DraggableCard: FC<Props> = ({
 
   const handleUpdateTitle = async () => {
     await Axios.get('/sanctum/csrf-cookie').then(async () => {
-      await Axios.put(
+      await Axios.patch(
         `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}`,
         {
           title,
@@ -148,7 +148,7 @@ export const DraggableCard: FC<Props> = ({
         <h3 className="font-semibold text-lg md:text-3xl">{chapter.title}</h3>
       )}
       {isClickedEditName && (
-        <>
+        <div className="mx-2">
           <Button
             className="p-2"
             type="button"
@@ -159,17 +159,20 @@ export const DraggableCard: FC<Props> = ({
           >
             キャンセル
           </Button>
+          <span className="mr-2" />
           <Button className="p-2 px-6" clickHandler={handleUpdateTitle}>
             保存
           </Button>
-        </>
+        </div>
       )}
-      <button
-        className="p-4"
-        onClick={() => setIsShowedDropdownMenu(!isShowedDropdownMenu)}
-      >
-        <DotsIcon />
-      </button>
+      {!isClickedEditName && (
+        <button
+          className="p-4"
+          onClick={() => setIsShowedDropdownMenu(!isShowedDropdownMenu)}
+        >
+          <DotsIcon />
+        </button>
+      )}
       {isShowedDropdownMenu && (
         <div className="absolute top-20 right-10 bg-white shadow-md rounded-md z-10">
           <ul>

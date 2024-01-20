@@ -175,7 +175,6 @@ export const DraggableCard: FC<Props> = ({
       )}
       {isClickedEditName && (
         <div className="mx-2">
-          <span className="mr-2" />
           <Button
             className="p-2"
             color="danger"
@@ -183,6 +182,7 @@ export const DraggableCard: FC<Props> = ({
           >
             キャンセル
           </Button>
+          <span className="mr-2" />
           <Button
             className="py-2 px-6"
             clickHandler={() => {
