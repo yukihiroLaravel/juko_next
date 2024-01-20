@@ -19,11 +19,15 @@ import { Chapter } from '@/features/chapter/types/Chapter';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { Axios } from '@/lib/api';
 import { PutStatusDropDown } from '@/features/chapter/components/PutStatusDropDown';
+import { CirclePlusIcon } from '@/components/icons/CirclePlusIcon';
+import { ChapterCard } from '@/features/chapter/components/ChapterCard';
 
 const Index: NextPage = () => {
   const router = useRouter();
   const { course_id: courseId } = router.query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
+  const [isShowedAddChapter, setIsShowedAddChapter] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>('');
 
   const { course, isLoading, error, mutate } = useFetchInstructorCourse({
     courseId,
@@ -53,6 +57,22 @@ const Index: NextPage = () => {
     Axios.get('/sanctum/csrf-cookie').then(async () => {
       await Axios.post(`/api/v1/instructor/course/${courseId}/chapter/sort`, {
         chapters: body,
+      })
+        .then((res) => {
+          if (res.data.result === true) {
+            mutate();
+          }
+        })
+        .catch((error) => {
+          console.log(error.response.data.errors);
+        });
+    });
+  };
+
+  const handleAddChapter = async () => {
+    await Axios.get('/sanctum/csrf-cookie').then(async () => {
+      await Axios.post(`/api/v1/instructor/course/${courseId}/chapter`, {
+        title,
       })
         .then((res) => {
           if (res.data.result === true) {
@@ -143,17 +163,58 @@ const Index: NextPage = () => {
                   />
                 </div>
                 <div className="mt-5 flex justify-between">
-                  <Link href={`/instructor/courses/${course.course_id}/edit`}>
-                    <a>
-                      {/* TODO アイコン */}
-                      <Button className="p-2">チャプター作成</Button>
-                    </a>
-                  </Link>
+                  <Button
+                    className="p-2 flex items-center"
+                    clickHandler={() =>
+                      setIsShowedAddChapter(!isShowedAddChapter)
+                    }
+                  >
+                    <CirclePlusIcon strokeWidth={1} />
+                    チャプター作成
+                  </Button>
                   <PutStatusDropDown
                     courseId={course.course_id}
                     mutate={mutate}
                   />
                 </div>
+                {isShowedAddChapter && (
+                  <ChapterCard
+                    status="private"
+                    cardRef={undefined}
+                    className="my-3"
+                  >
+                    <div className="shadow-md rounded-md p-8 flex justify-between items-center">
+                      <input
+                        type="text"
+                        className="w-1/2 border border-gray-300 rounded-md p-2"
+                        placeholder="チャプター名を入力"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                      <div>
+                        <Button
+                          className="py-2 px-6"
+                          clickHandler={() => {
+                            handleAddChapter();
+                            setIsShowedAddChapter(!isShowedAddChapter);
+                          }}
+                        >
+                          保存
+                        </Button>
+                        <span className="mx-2" />
+                        <Button
+                          className="p-2"
+                          color="danger"
+                          clickHandler={() =>
+                            setIsShowedAddChapter(!isShowedAddChapter)
+                          }
+                        >
+                          キャンセル
+                        </Button>
+                      </div>
+                    </div>
+                  </ChapterCard>
+                )}
                 <DndProvider backend={HTML5Backend}>
                   {course.chapters.map((chapter, index) => {
                     return (

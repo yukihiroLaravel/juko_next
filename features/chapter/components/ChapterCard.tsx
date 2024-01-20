@@ -1,16 +1,16 @@
 import { FC } from 'react';
-import { CHAPTER_STATUS, Chapter } from '../types/Chapter';
+import { CHAPTER_STATUS } from '../types/Chapter';
 import clsx from 'clsx';
 
 type Props = {
-  chapter: Chapter;
+  status?: CHAPTER_STATUS;
   className?: string;
   cardRef: React.Ref<HTMLDivElement> | undefined;
   children: React.ReactNode;
 };
 
 export const ChapterCard: FC<Props> = ({
-  chapter,
+  status = CHAPTER_STATUS.PRIVATE,
   className,
   cardRef = undefined,
   children,
@@ -21,8 +21,8 @@ export const ChapterCard: FC<Props> = ({
     'text-gray-700',
     'shadow-md',
     {
-      'bg-gray-200': chapter.status === CHAPTER_STATUS.PRIVATE,
-      'bg-[#89cada]': chapter.status !== CHAPTER_STATUS.PRIVATE,
+      'bg-gray-200': status === CHAPTER_STATUS.PRIVATE,
+      'bg-[#89cada]': status !== CHAPTER_STATUS.PRIVATE,
     },
     className
   );

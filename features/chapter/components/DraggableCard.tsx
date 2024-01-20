@@ -124,7 +124,7 @@ export const DraggableCard: FC<Props> = ({
 
   return (
     <ChapterCard
-      chapter={chapter}
+      status={chapter.status}
       className="relative flex items-center justify-between"
       cardRef={ref}
     >

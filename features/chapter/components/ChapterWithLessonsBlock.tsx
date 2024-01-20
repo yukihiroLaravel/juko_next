@@ -5,6 +5,7 @@ import { DraggableCardList as LessonDraggableCardList } from '@/features/lesson/
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { Axios } from '@/lib/api';
 import { DraggableCard as ChapterDraggableCard } from './DraggableCard';
+import { CirclePlusIcon } from '@/components/icons/CirclePlusIcon';
 
 type Props = {
   courseId: number;
@@ -96,10 +97,11 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
         )}
         {!isShowedAddLesson && (
           <Button
-            className="p-2"
+            className="p-2 flex items-center"
             clickHandler={() => setIsShowedAddLesson(!isShowedAddLesson)}
           >
-            レッスンを追加
+            <CirclePlusIcon strokeWidth={1} />
+            レッスン作成
           </Button>
         )}
       </div>
