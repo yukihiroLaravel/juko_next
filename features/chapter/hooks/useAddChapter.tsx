@@ -41,8 +41,6 @@ export const useAddChapter = () => {
             {...register('title')}
           />
           <div>
-            <Button className="py-2 px-6">保存</Button>
-            <span className="mx-2" />
             <Button
               className="p-2"
               color="danger"
@@ -50,6 +48,8 @@ export const useAddChapter = () => {
             >
               キャンセル
             </Button>
+            <span className="mx-2" />
+            <Button className="py-2 px-6">保存</Button>
           </div>
         </div>
         <div>
