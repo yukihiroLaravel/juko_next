@@ -160,7 +160,7 @@ export const DraggableCard: FC<Props> = ({
           key={lesson.lesson_id}
           href={`/instructor/lesson/edit?course_id=${courseId}&chapter_id=${chapterId}&lesson_id=${lesson.lesson_id}`}
         >
-          <p className="text-xl w-11/12 px-2 py-10 overflow-auto">
+          <p className="text-xl w-11/12 pl-5 py-10 overflow-auto">
             {lesson.title}
           </p>
         </Link>
