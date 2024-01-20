@@ -6,6 +6,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import { DotsIcon } from '@/components/icons/DotsIcon';
 import { GridDotsIcon } from '@/components/icons/GridDotsIcon';
 import { Button } from '@/components/elements/Button';
+import { useUpdateTitle } from '../hooks/useUpdateTitle';
 
 type Props = {
   courseId: number;
@@ -22,6 +23,15 @@ export const DraggableCard: FC<Props> = ({
   mutate,
   moveCard,
 }) => {
+  const {
+    isClickedEditTitle,
+    updateIsClickedEditTitle,
+    renderUpdateChapter,
+    handleSubmit,
+    errors,
+    reset,
+  } = useUpdateTitle({ title: chapter.title });
+
   const [, drag] = useDrag(() => ({
     type: 'card',
     item: { id: chapter.chapter_id, index: chapterIndex },
@@ -53,14 +63,6 @@ export const DraggableCard: FC<Props> = ({
   const [isShowedDropdownMenu, setIsShowedDropdownMenu] =
     useState<boolean>(false);
 
-  const [title, setTitle] = useState<string>(chapter.title);
-
-  const [isClickedEditName, setIsClickedEditName] = useState<boolean>(false);
-
-  const handelChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
-
   const handleUpdateStatus = async (status: CHAPTER_STATUS) => {
     await Axios.get('/sanctum/csrf-cookie').then(async () => {
       await Axios.patch(
@@ -69,15 +71,12 @@ export const DraggableCard: FC<Props> = ({
           status,
         }
       )
-        .then((res) => {
-          // TODO レスポンスの型を作る
-          console.log(res.data);
+        .then(() => {
           mutate();
         })
         .catch((error) => {
-          if (error.response.status === 422) {
-            console.log(error.response.data.errors);
-          }
+          console.error(error);
+          alert('チャプターの公開設定の変更に失敗しました');
         });
     });
   };
@@ -87,37 +86,31 @@ export const DraggableCard: FC<Props> = ({
       await Axios.delete(
         `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}`
       )
-        .then((res) => {
-          // TODO レスポンスの型を作る
-          console.log(res.data);
+        .then(() => {
           mutate();
         })
         .catch((error) => {
-          if (error.response.status === 422) {
-            console.log(error.response.data.errors);
-          }
+          console.error(error);
+          alert('チャプターの削除に失敗しました');
         });
     });
   };
 
-  const handleUpdateTitle = async () => {
+  const handleUpdateTitle = async (data: { title: string }) => {
     await Axios.get('/sanctum/csrf-cookie').then(async () => {
       await Axios.patch(
         `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}`,
         {
-          title,
+          title: data.title,
         }
       )
-        .then((res) => {
-          // TODO レスポンスの型を作る
-          console.log(res.data);
-          setIsClickedEditName(false);
+        .then(() => {
+          updateIsClickedEditTitle();
           mutate();
         })
         .catch((error) => {
-          if (error.response.status === 422) {
-            console.log(error.response.data.errors);
-          }
+          console.error(error);
+          alert('チャプター名の変更に失敗しました');
         });
     });
   };
@@ -125,7 +118,9 @@ export const DraggableCard: FC<Props> = ({
   return (
     <ChapterCard
       status={chapter.status}
-      className="relative flex items-center justify-between"
+      className={`relative flex items-center ${
+        isClickedEditTitle ? '' : 'justify-between'
+      }`}
       cardRef={ref}
     >
       <div
@@ -136,36 +131,33 @@ export const DraggableCard: FC<Props> = ({
       >
         <GridDotsIcon />
       </div>
-      {isClickedEditName ? (
-        <input
-          type="text"
-          className="w-2/3 border border-gray-300 rounded-md p-2 text-xl"
-          placeholder="チャプター名を入力"
-          value={title}
-          onChange={handelChangeTitle}
-        />
+      {isClickedEditTitle ? (
+        <div className="flex-col w-2/3 ml-2">
+          <form className="flex" onSubmit={handleSubmit(handleUpdateTitle)}>
+            {renderUpdateChapter()}
+            <div className="mx-2 flex">
+              <Button
+                className="p-2"
+                color="danger"
+                clickHandler={() => {
+                  updateIsClickedEditTitle();
+                  reset();
+                }}
+              >
+                キャンセル
+              </Button>
+              <span className="mr-2" />
+              <Button className="py-2 px-6">保存</Button>
+            </div>
+          </form>
+          {errors.title && (
+            <div className="text-red-600">{errors.title.message}</div>
+          )}
+        </div>
       ) : (
         <h3 className="font-semibold text-lg md:text-3xl">{chapter.title}</h3>
       )}
-      {isClickedEditName && (
-        <div className="mx-2">
-          <Button
-            className="p-2"
-            type="button"
-            color="danger"
-            clickHandler={() => {
-              setIsClickedEditName(false);
-            }}
-          >
-            キャンセル
-          </Button>
-          <span className="mr-2" />
-          <Button className="p-2 px-6" clickHandler={handleUpdateTitle}>
-            保存
-          </Button>
-        </div>
-      )}
-      {!isClickedEditName && (
+      {!isClickedEditTitle && (
         <button
           className="p-4"
           onClick={() => setIsShowedDropdownMenu(!isShowedDropdownMenu)}
@@ -179,7 +171,7 @@ export const DraggableCard: FC<Props> = ({
             <li
               className="py-1 px-8 hover:bg-gray-200"
               onClick={() => {
-                setIsClickedEditName(true);
+                updateIsClickedEditTitle();
                 setIsShowedDropdownMenu(false);
               }}
             >

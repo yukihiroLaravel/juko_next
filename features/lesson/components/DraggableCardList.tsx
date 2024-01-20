@@ -13,8 +13,6 @@ type Props = {
 };
 
 export const DraggableCardList: FC<Props> = ({ courseId, chapter, mutate }) => {
-  // TODO ドラッグするたびにAPIへ送信する
-
   const moveCard = (dragIndex: number, hoverIndex: number) => {
     if (chapter.lessons === undefined) return;
     // レッスンを並び変えてAPIへ送信
