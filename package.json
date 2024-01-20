@@ -12,6 +12,7 @@
     "tsc": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
+    "@headlessui/react": "^1.7.18",
     "@hookform/resolvers": "^2.9.11",
     "@types/node": "18.7.21",
     "@types/react": "18.0.21",

@@ -18,6 +18,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Chapter } from '@/features/chapter/types/Chapter';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { Axios } from '@/lib/api';
+import { PutStatusDropDown } from '@/features/chapter/components/PutStatusDropDown';
 
 const Index: NextPage = () => {
   const router = useRouter();
@@ -93,8 +94,8 @@ const Index: NextPage = () => {
             <>
               {isShowedSideBar ? (
                 <SideBar>
-                  <ul className="mt-[30px]">
-                    <li className="mb-[20px]">
+                  <ul className="mt-5">
+                    <li className="mb-5">
                       <Thumbnail
                         src={process.env.NEXT_PUBLIC_IMAGE_URL + course.image}
                         alt="course"
@@ -102,26 +103,22 @@ const Index: NextPage = () => {
                         width={640}
                       />
                     </li>
-                    <li className="mb-[20px]">
+                    <li className="mb-5">
                       <div className="bg-[#89cada] w-full text-center rounded text-gray-700">
                         <p className="font-semibold text-2xl py-5 ">
                           {course.title}
                         </p>
                       </div>
                     </li>
-                    <li className="mb-[20px]">
-                      <div className="bg-[#89cada] w-full text-center rounded text-gray-700">
-                        <p className="font-semibold text-2xl py-5 ">
-                          受講生一覧
-                        </p>
-                      </div>
+                    <li className="mb-5">
+                      <Link href="#">
+                        <a className="underline">受講生一覧</a>
+                      </Link>
                     </li>
-                    <li className="mb-[20px]">
-                      <div className="bg-[#89cada] w-full text-center rounded text-gray-700">
-                        <p className="font-semibold text-2xl py-5 ">
-                          お知らせ一覧
-                        </p>
-                      </div>
+                    <li className="mb-5">
+                      <Link href="#">
+                        <a className="underline">お知らせ一覧</a>
+                      </Link>
                     </li>
                   </ul>
                   <ToggleButton
@@ -152,12 +149,12 @@ const Index: NextPage = () => {
                       <Button className="p-2">チャプター作成</Button>
                     </a>
                   </Link>
-                  <Link href={`/instructor/courses/${course.course_id}/edit`}>
-                    <a>
-                      {/* TODO アイコン */}
-                      <Button className="p-2">一括変更</Button>
-                    </a>
-                  </Link>
+                  {/* TODO アイコン */}
+                  {/* プルダウンで公開、非公開を表示する */}
+                  <PutStatusDropDown
+                    courseId={course.course_id}
+                    mutate={mutate}
+                  />
                 </div>
                 <DndProvider backend={HTML5Backend}>
                   {course.chapters.map((chapter, index) => {
