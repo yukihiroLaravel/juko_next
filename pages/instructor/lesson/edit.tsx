@@ -37,7 +37,7 @@ const Edit: NextPage = () => {
     },
     {
       title: 'チャプター&レッスン一覧',
-      href: '#',
+      href: `/instructor/chapters?course_id=${course_id}`,
     },
     {
       title: chapter?.title ?? '',

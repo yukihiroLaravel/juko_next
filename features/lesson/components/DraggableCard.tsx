@@ -6,6 +6,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import { LessonCard } from './LessonCard';
 import { GridDotsIcon } from '@/components/elements/GridDotsIcon';
 import { DotsIcon } from '@/components/elements/DotsIcon';
+import Link from 'next/link';
 
 type Props = {
   courseId: number;
@@ -134,42 +135,36 @@ export const DraggableCard: FC<Props> = ({
     <div className="my-5">
       <LessonCard
         status={lesson.status}
-        className="relative flex items-center justify-between"
+        className="relative flex items-center"
         cardRef={ref}
       >
-        <div className="cursor-move h-full m-0 px-2 py-10 border-r border-gray-300">
+        <div
+          className="cursor-move h-full m-0 px-2 py-10 border-r border-gray-300"
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
           <GridDotsIcon />
         </div>
         {isClickedEditName ? (
           <>
             <input
               type="text"
-              className="w-1/2 border border-gray-300 rounded-md p-2 text-xl"
+              className="w-2/3 border border-gray-300 rounded-md p-2 text-xl"
               placeholder="レッスン名を入力"
               value={title}
               onChange={handleChangeName}
             />
-            <div className="mr-2">
-              <Button
-                className="py-2 px-6"
-                clickHandler={() => {
-                  handleAddLesson();
-                }}
-              >
-                保存
-              </Button>
-              <span className="mx-2" />
-              <Button
-                className="p-2"
-                color="danger"
-                clickHandler={() => setIsClickedEditName(!isClickedEditName)}
-              >
-                キャンセル
-              </Button>
-            </div>
           </>
         ) : (
-          <span className="text-xl">{lesson.title}</span>
+          <Link
+            key={lesson.lesson_id}
+            href={`/instructor/lesson/edit?course_id=${courseId}&chapter_id=${chapterId}&lesson_id=${lesson.lesson_id}`}
+          >
+            <p className="text-xl w-11/12 px-2 py-10 overflow-auto">
+              {lesson.title}
+            </p>
+          </Link>
         )}
         {!isClickedEditName && (
           <button
@@ -178,6 +173,26 @@ export const DraggableCard: FC<Props> = ({
           >
             <DotsIcon />
           </button>
+        )}
+        {isClickedEditName && (
+          <div className="mx-2">
+            <Button
+              className="py-2 px-6"
+              clickHandler={() => {
+                handleAddLesson();
+              }}
+            >
+              保存
+            </Button>
+            <span className="mr-2" />
+            <Button
+              className="p-2"
+              color="danger"
+              clickHandler={() => setIsClickedEditName(!isClickedEditName)}
+            >
+              キャンセル
+            </Button>
+          </div>
         )}
         {isShowedDropdownMenu && (
           <div className="absolute top-20 right-5 bg-white shadow-md rounded-md z-10">
