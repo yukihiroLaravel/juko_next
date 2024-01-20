@@ -20,14 +20,14 @@ import { Lesson } from '@/features/lesson/types/Lesson';
 import { Axios } from '@/lib/api';
 import { PutStatusDropDown } from '@/features/chapter/components/PutStatusDropDown';
 import { CirclePlusIcon } from '@/components/icons/CirclePlusIcon';
-import { ChapterCard } from '@/features/chapter/components/ChapterCard';
+import { useAddChapter } from '@/features/chapter/hooks/useAddChapter';
 
 const Index: NextPage = () => {
   const router = useRouter();
   const { course_id: courseId } = router.query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
-  const [isShowedAddChapter, setIsShowedAddChapter] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>('');
+  const { updateIsShowedAddChapter, handleSubmit, renderAddChapter } =
+    useAddChapter();
 
   const { course, isLoading, error, mutate } = useFetchInstructorCourse({
     courseId,
@@ -69,18 +69,18 @@ const Index: NextPage = () => {
     });
   };
 
-  const handleAddChapter = async () => {
-    await Axios.get('/sanctum/csrf-cookie').then(async () => {
+  const handleAddChapter = async (data: { title: string }) => {
+    return await Axios.get('/sanctum/csrf-cookie').then(async () => {
       await Axios.post(`/api/v1/instructor/course/${courseId}/chapter`, {
-        title,
+        title: data.title,
       })
-        .then((res) => {
-          if (res.data.result === true) {
-            mutate();
-          }
+        .then(() => {
+          mutate();
+          updateIsShowedAddChapter();
         })
         .catch((error) => {
-          console.log(error.response.data.errors);
+          console.error(error);
+          alert('チャプターの作成に失敗しました');
         });
     });
   };
@@ -165,9 +165,7 @@ const Index: NextPage = () => {
                 <div className="mt-5 flex justify-between">
                   <Button
                     className="p-2 flex items-center"
-                    clickHandler={() =>
-                      setIsShowedAddChapter(!isShowedAddChapter)
-                    }
+                    clickHandler={() => updateIsShowedAddChapter()}
                   >
                     <CirclePlusIcon strokeWidth={1} />
                     チャプター作成
@@ -177,44 +175,9 @@ const Index: NextPage = () => {
                     mutate={mutate}
                   />
                 </div>
-                {isShowedAddChapter && (
-                  <ChapterCard
-                    status="private"
-                    cardRef={undefined}
-                    className="my-3"
-                  >
-                    <div className="shadow-md rounded-md p-8 flex justify-between items-center">
-                      <input
-                        type="text"
-                        className="w-1/2 border border-gray-300 rounded-md p-2"
-                        placeholder="チャプター名を入力"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                      />
-                      <div>
-                        <Button
-                          className="py-2 px-6"
-                          clickHandler={() => {
-                            handleAddChapter();
-                            setIsShowedAddChapter(!isShowedAddChapter);
-                          }}
-                        >
-                          保存
-                        </Button>
-                        <span className="mx-2" />
-                        <Button
-                          className="p-2"
-                          color="danger"
-                          clickHandler={() =>
-                            setIsShowedAddChapter(!isShowedAddChapter)
-                          }
-                        >
-                          キャンセル
-                        </Button>
-                      </div>
-                    </div>
-                  </ChapterCard>
-                )}
+                <form onSubmit={handleSubmit(handleAddChapter)}>
+                  {renderAddChapter()}
+                </form>
                 <DndProvider backend={HTML5Backend}>
                   {course.chapters.map((chapter, index) => {
                     return (
