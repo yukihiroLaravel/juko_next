@@ -8,15 +8,16 @@ import { SideBar } from '@/components/elements/SideBar';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { Loading } from '@/components/utils/Loading';
-import { TitleCard as ChapterTitleCard } from '@/features/chapter/components/TitleCard';
-import { TitleStatusCard } from '@/features/lesson/components/TitleStatusCard';
 import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 import { ProgressCard } from '@/features/course/components/ProgressCard';
 import { CourseProgressCard } from '@/features/course/components/CourseProgressCard';
 import { useFetchCourse } from '@/hooks/useFetchCourse';
 import { Error } from '@/components/utils/Error';
+import { ChapterCard } from '@/features/chapter/components/ChapterCard';
+import { LessonCard } from '@/features/lesson/components/LessonCard';
+import { StatusIcon } from '@/features/lesson/components/StatusIcon';
 
-const Course: NextPage = () => {
+const Index: NextPage = () => {
   const router = useRouter();
   const { attendance_id: attendanceId } = router.query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
@@ -108,7 +109,15 @@ const Course: NextPage = () => {
                   return (
                     <div key={chapter.chapter_id}>
                       <div className="my-3">
-                        <ChapterTitleCard title={chapter.title} />
+                        <ChapterCard
+                          cardRef={undefined}
+                          status="public"
+                          className="flex items-center justify-center"
+                        >
+                          <h3 className="font-semibold text-lg md:text-3xl">
+                            {chapter.title}
+                          </h3>
+                        </ChapterCard>
                       </div>
                       <div className="my-5 mx-auto w-11/12 text-center">
                         {chapter.lessons.map((lesson, index) => {
@@ -127,10 +136,20 @@ const Course: NextPage = () => {
                                 as={`/chapter?attendanceId=${attendanceId}&courseId=${attendance.course.course_id}&chapterId=${chapter.chapter_id}`}
                               >
                                 <a>
-                                  <TitleStatusCard
-                                    status={lesson.lessonAttendance.status}
-                                    title={lesson.title}
-                                  />
+                                  <LessonCard
+                                    cardRef={undefined}
+                                    status="public"
+                                    className="flex items-center flex-start"
+                                  >
+                                    <span className="mr-3" />
+                                    <StatusIcon
+                                      status={lesson.lessonAttendance.status}
+                                    />
+                                    <span className="ml-3" />
+                                    <p className="w-11/12 text-xl md:text-2xl">
+                                      {lesson.title}
+                                    </p>
+                                  </LessonCard>
                                 </a>
                               </Link>
                             </div>
@@ -149,4 +168,4 @@ const Course: NextPage = () => {
   );
 };
 
-export default Course;
+export default Index;
