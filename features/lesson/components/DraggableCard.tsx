@@ -100,15 +100,12 @@ export const DraggableCard: FC<Props> = ({
           status: status,
         }
       )
-        .then((res) => {
-          // TODO レスポンスの型を作る
+        .then(() => {
           mutate();
         })
         .catch((error) => {
-          if (error.response.status === 422) {
-            console.log(error.response.data.errors);
-          }
-          alert('エラーが発生しました');
+          console.error(error);
+          alert('講座の状態の変更に失敗しました');
         });
     });
   };
@@ -118,15 +115,12 @@ export const DraggableCard: FC<Props> = ({
       await Axios.delete(
         `/api/v1/instructor/course/${courseId}/chapter/${chapterId}/lesson/${lesson.lesson_id}`
       )
-        .then((res) => {
-          // TODO レスポンスの型を作る
+        .then(() => {
           mutate();
         })
         .catch((error) => {
-          if (error.response.status === 422) {
-            console.log(error.response.data.errors);
-          }
-          alert('エラーが発生しました');
+          console.error(error);
+          alert('講座の削除に失敗しました');
         });
     });
   };

@@ -5,7 +5,7 @@ import clsx from 'clsx';
 type Props = {
   status?: LESSON_STATUS;
   className?: string;
-  cardRef?: React.Ref<HTMLDivElement>;
+  cardRef: React.Ref<HTMLDivElement> | undefined;
   children: React.ReactNode;
 };
 

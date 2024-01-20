@@ -26,7 +26,7 @@ const Index: NextPage = () => {
   const router = useRouter();
   const { course_id: courseId } = router.query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
-  const { updateIsShowedAddChapter, handleSubmit, renderAddChapter } =
+  const { updateIsShowedAddChapter, handleSubmit, renderAddChapter, reset } =
     useAddChapter();
 
   const { course, isLoading, error, mutate } = useFetchInstructorCourse({
@@ -58,13 +58,13 @@ const Index: NextPage = () => {
       await Axios.post(`/api/v1/instructor/course/${courseId}/chapter/sort`, {
         chapters: body,
       })
-        .then((res) => {
-          if (res.data.result === true) {
-            mutate();
-          }
+        .then(() => {
+          console.log('並び替え成功');
+          mutate();
         })
         .catch((error) => {
-          console.log(error.response.data.errors);
+          console.error(error);
+          alert('チャプターの並び替えに失敗しました');
         });
     });
   };
@@ -75,8 +75,9 @@ const Index: NextPage = () => {
         title: data.title,
       })
         .then(() => {
-          mutate();
+          reset();
           updateIsShowedAddChapter();
+          mutate();
         })
         .catch((error) => {
           console.error(error);
@@ -165,7 +166,7 @@ const Index: NextPage = () => {
                 <div className="mt-5 flex justify-between">
                   <Button
                     className="p-2 flex items-center"
-                    clickHandler={() => updateIsShowedAddChapter()}
+                    clickHandler={updateIsShowedAddChapter}
                   >
                     <CirclePlusIcon strokeWidth={1} />
                     チャプター作成

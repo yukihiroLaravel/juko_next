@@ -6,6 +6,7 @@ import { Lesson } from '@/features/lesson/types/Lesson';
 import { Axios } from '@/lib/api';
 import { DraggableCard as ChapterDraggableCard } from './DraggableCard';
 import { CirclePlusIcon } from '@/components/icons/CirclePlusIcon';
+import { useAddLesson } from '@/features/lesson/hooks/useAddLesson';
 
 type Props = {
   courseId: number;
@@ -24,30 +25,29 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
   mutate,
   moveCard,
 }) => {
-  const [isShowedAddLesson, setIsShowedAddLesson] = useState<boolean>(false);
-
-  // TODO React Hook Formを使うかも
-  const [title, setTitle] = useState<string>('');
-
-  const handleAddLesson = async () => {
+  const {
+    isShowedAddLesson,
+    updateIsShowedAddLesson,
+    handleSubmit,
+    renderAddLesson,
+    reset,
+  } = useAddLesson();
+  const handleAddLesson = async (data: { title: string }) => {
     await Axios.get('/sanctum/csrf-cookie').then(async () => {
       await Axios.post(
         `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}/lesson`,
         {
-          title,
+          title: data.title,
         }
       )
-        .then((res) => {
-          if (res.data.result === true) {
-            setTitle('');
-            setIsShowedAddLesson(false);
-            mutate();
-          }
+        .then(() => {
+          updateIsShowedAddLesson();
+          reset();
+          mutate();
         })
         .catch((error) => {
-          if (error.response.status === 422) {
-            console.log(error.response.data.errors);
-          }
+          console.error(error);
+          alert('レッスンの作成に失敗しました');
         });
     });
   };
@@ -69,36 +69,13 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
           chapter={chapter}
           mutate={mutate}
         />
-        {isShowedAddLesson && (
-          <div className="my-5">
-            <div className="bg-[#ECF7FF] shadow-md rounded-md p-8 flex justify-between items-center">
-              <input
-                type="text"
-                className="w-1/2 border border-gray-300 rounded-md p-2"
-                placeholder="レッスン名を入力"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <div>
-                <Button className="py-2 px-6" clickHandler={handleAddLesson}>
-                  保存
-                </Button>
-                <span className="mx-2" />
-                <Button
-                  className="p-2"
-                  color="danger"
-                  clickHandler={() => setIsShowedAddLesson(!isShowedAddLesson)}
-                >
-                  キャンセル
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        <form onSubmit={handleSubmit(handleAddLesson)}>
+          {renderAddLesson()}
+        </form>
         {!isShowedAddLesson && (
           <Button
             className="p-2 flex items-center"
-            clickHandler={() => setIsShowedAddLesson(!isShowedAddLesson)}
+            clickHandler={updateIsShowedAddLesson}
           >
             <CirclePlusIcon strokeWidth={1} />
             レッスン作成

@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { ChapterCard } from '../components/ChapterCard';
 import { Button } from '@/components/elements/Button';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LessonCard } from '../components/LessonCard';
 
-export const useAddChapter = () => {
-  const [isShowedAddChapter, setIsShowedAddChapter] = useState<boolean>(false);
-  const updateIsShowedAddChapter = () => {
-    setIsShowedAddChapter(!isShowedAddChapter);
+export const useAddLesson = () => {
+  const [isShowedAddLesson, setIsShowedAddLesson] = useState<boolean>(false);
+  const updateIsShowedAddLesson = () => {
+    setIsShowedAddLesson(!isShowedAddLesson);
   };
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
+    reset,
   } = useForm<{
     title: string;
   }>({
@@ -24,20 +24,20 @@ export const useAddChapter = () => {
       yup.object().shape({
         title: yup
           .string()
-          .required('チャプター名を入力してください')
+          .required('レッスン名を入力してください')
           .max(50, '50文字以内で入力してください'),
       })
     ),
   });
 
-  const renderAddChapter = () => {
-    return isShowedAddChapter ? (
-      <ChapterCard status="private" cardRef={undefined} className="my-3 p-8 ">
+  const renderAddLesson = () => {
+    return isShowedAddLesson ? (
+      <LessonCard status="private" cardRef={undefined} className="my-3 p-8">
         <div className="flex justify-between items-center">
           <input
             type="text"
             className="w-1/2 border border-gray-300 rounded-md p-2"
-            placeholder="チャプター名を入力"
+            placeholder="レッスン名を入力"
             {...register('title')}
           />
           <div>
@@ -46,7 +46,7 @@ export const useAddChapter = () => {
             <Button
               className="p-2"
               color="danger"
-              clickHandler={() => setIsShowedAddChapter(!isShowedAddChapter)}
+              clickHandler={() => setIsShowedAddLesson(!isShowedAddLesson)}
             >
               キャンセル
             </Button>
@@ -57,17 +57,17 @@ export const useAddChapter = () => {
             <span className="text-red-600">{errors.title.message}</span>
           )}
         </div>
-      </ChapterCard>
+      </LessonCard>
     ) : (
       <></>
     );
   };
 
   return {
-    isShowedAddChapter,
-    updateIsShowedAddChapter,
+    isShowedAddLesson,
+    updateIsShowedAddLesson,
     handleSubmit,
+    renderAddLesson,
     reset,
-    renderAddChapter,
   };
 };
