@@ -51,13 +51,11 @@ export const PutStatusDropDown: FC<Props> = ({ courseId, mutate }) => {
     }
 
     await Axios.get('/sanctum/csrf-cookie').then(async () => {
-      await Axios.put(`/api/v1/instructor/course/${courseId}/status`, {
+      await Axios.put(`/api/v1/instructor/course/${courseId}/chapter/status`, {
         status,
       })
-        .then((res) => {
-          if (res.data.result === true) {
-            mutate();
-          }
+        .then(() => {
+          mutate();
         })
         .catch((error) => {
           console.error(error);
