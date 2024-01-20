@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
 import { Chapter } from '../types/Chapter';
 import { Button } from '@/components/elements/Button';
-// import { DragCardList } from '@/features/lesson/components/DragCardList';
+import { DraggableCardList as LessonDraggableCardList } from '@/features/lesson/components/DraggableCardList';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { Axios } from '@/lib/api';
-import { DraggableCard } from './DraggableCard';
+import { DraggableCard as ChapterDraggableCard } from './DraggableCard';
 
 type Props = {
   courseId: number;
@@ -54,7 +54,7 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
   return (
     <div key={chapter.chapter_id}>
       <div className="my-3">
-        <DraggableCard
+        <ChapterDraggableCard
           courseId={courseId}
           chapterIndex={chapterIndex}
           chapter={chapter}
@@ -63,7 +63,11 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
         />
       </div>
       <div className="my-5 mx-auto w-11/12">
-        {/* <DragCardList courseId={courseId} chapter={chapter} mutate={mutate} /> */}
+        <LessonDraggableCardList
+          courseId={courseId}
+          chapter={chapter}
+          mutate={mutate}
+        />
         {isShowedAddLesson && (
           <div className="my-5">
             <div className="bg-[#ECF7FF] shadow-md rounded-md p-8 flex justify-between items-center">
