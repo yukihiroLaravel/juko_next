@@ -3,6 +3,7 @@ import { Menu, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import { FC, Fragment } from 'react';
 import { CHAPTER_STATUS } from '../types/Chapter';
+import { ChevronDown } from '@/components/icons/ChevronDown';
 
 type Props = {
   courseId: number;
@@ -40,7 +41,8 @@ export const PutStatusDropDown: FC<Props> = ({ courseId, mutate }) => {
     'text-white',
     'px-3',
     'py-2',
-    'shadow-sm'
+    'shadow-sm',
+    'flex'
   );
 
   const handlePutStatus = async (status: CHAPTER_STATUS) => {
@@ -66,7 +68,10 @@ export const PutStatusDropDown: FC<Props> = ({ courseId, mutate }) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className={buttonClassName}>一括変更</Menu.Button>
+        <Menu.Button className={buttonClassName}>
+          一括変更
+          <ChevronDown />
+        </Menu.Button>
       </div>
       <Transition
         as={Fragment}

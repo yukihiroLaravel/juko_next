@@ -149,8 +149,6 @@ const Index: NextPage = () => {
                       <Button className="p-2">チャプター作成</Button>
                     </a>
                   </Link>
-                  {/* TODO アイコン */}
-                  {/* プルダウンで公開、非公開を表示する */}
                   <PutStatusDropDown
                     courseId={course.course_id}
                     mutate={mutate}
