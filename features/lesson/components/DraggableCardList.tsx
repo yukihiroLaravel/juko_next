@@ -55,15 +55,16 @@ export const DraggableCardList: FC<Props> = ({ courseId, chapter, mutate }) => {
     <>
       {chapter.lessons.map((lesson, index) => {
         return (
-          <DraggableCard
-            key={lesson.lesson_id}
-            courseId={courseId}
-            chapterId={chapter.chapter_id}
-            lesson={lesson}
-            index={index}
-            mutate={mutate}
-            moveCard={moveCard}
-          />
+          <div key={lesson.lesson_id} className="my-5">
+            <DraggableCard
+              courseId={courseId}
+              chapterId={chapter.chapter_id}
+              lesson={lesson}
+              index={index}
+              mutate={mutate}
+              moveCard={moveCard}
+            />
+          </div>
         );
       })}
     </>

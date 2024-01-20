@@ -60,11 +60,11 @@ export const DraggableCard: FC<Props> = ({
 
   const [isClickedEditName, setIsClickedEditName] = useState<boolean>(false);
 
-  const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
-  const handleAddLesson = async () => {
+  const handleUpdateLesson = async () => {
     await Axios.get('/sanctum/csrf-cookie').then(async () => {
       // TODO パラメーター、urlとstatusは仮値
       // TODO React Hook Formを使うかも
@@ -132,106 +132,104 @@ export const DraggableCard: FC<Props> = ({
   };
 
   return (
-    <div className="my-5">
-      <LessonCard
-        status={lesson.status}
-        className="relative flex items-center"
-        cardRef={ref}
+    <LessonCard
+      status={lesson.status}
+      className="relative flex items-center"
+      cardRef={ref}
+    >
+      <div
+        className="cursor-move h-full m-0 px-2 py-10 border-r border-gray-300"
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
       >
-        <div
-          className="cursor-move h-full m-0 px-2 py-10 border-r border-gray-300"
-          onClick={(event) => {
-            event.stopPropagation();
-          }}
+        <GridDotsIcon />
+      </div>
+      {isClickedEditName ? (
+        <>
+          <input
+            type="text"
+            className="w-2/3 border border-gray-300 rounded-md p-2 text-xl"
+            placeholder="レッスン名を入力"
+            value={title}
+            onChange={handleChangeTitle}
+          />
+        </>
+      ) : (
+        <Link
+          key={lesson.lesson_id}
+          href={`/instructor/lesson/edit?course_id=${courseId}&chapter_id=${chapterId}&lesson_id=${lesson.lesson_id}`}
         >
-          <GridDotsIcon />
+          <p className="text-xl w-11/12 px-2 py-10 overflow-auto">
+            {lesson.title}
+          </p>
+        </Link>
+      )}
+      {!isClickedEditName && (
+        <button
+          className="pr-4"
+          onClick={() => setIsShowedDropdownMenu(!isShowedDropdownMenu)}
+        >
+          <DotsIcon />
+        </button>
+      )}
+      {isClickedEditName && (
+        <div className="mx-2">
+          <span className="mr-2" />
+          <Button
+            className="p-2"
+            color="danger"
+            clickHandler={() => setIsClickedEditName(!isClickedEditName)}
+          >
+            キャンセル
+          </Button>
+          <Button
+            className="py-2 px-6"
+            clickHandler={() => {
+              handleUpdateLesson();
+            }}
+          >
+            保存
+          </Button>
         </div>
-        {isClickedEditName ? (
-          <>
-            <input
-              type="text"
-              className="w-2/3 border border-gray-300 rounded-md p-2 text-xl"
-              placeholder="レッスン名を入力"
-              value={title}
-              onChange={handleChangeName}
-            />
-          </>
-        ) : (
-          <Link
-            key={lesson.lesson_id}
-            href={`/instructor/lesson/edit?course_id=${courseId}&chapter_id=${chapterId}&lesson_id=${lesson.lesson_id}`}
-          >
-            <p className="text-xl w-11/12 px-2 py-10 overflow-auto">
-              {lesson.title}
-            </p>
-          </Link>
-        )}
-        {!isClickedEditName && (
-          <button
-            className="pr-4"
-            onClick={() => setIsShowedDropdownMenu(!isShowedDropdownMenu)}
-          >
-            <DotsIcon />
-          </button>
-        )}
-        {isClickedEditName && (
-          <div className="mx-2">
-            <Button
-              className="py-2 px-6"
-              clickHandler={() => {
-                handleAddLesson();
+      )}
+      {isShowedDropdownMenu && (
+        <div className="absolute top-20 right-5 bg-white shadow-md rounded-md z-10">
+          <ul>
+            <li
+              className="py-1 px-8 hover:bg-gray-200"
+              onClick={() => {
+                setIsClickedEditName(true);
+                setIsShowedDropdownMenu(false);
               }}
             >
-              保存
-            </Button>
-            <span className="mr-2" />
-            <Button
-              className="p-2"
-              color="danger"
-              clickHandler={() => setIsClickedEditName(!isClickedEditName)}
+              名前変更
+            </li>
+            <li
+              className="py-1 px-8 hover:bg-gray-200"
+              onClick={() => {
+                handleUpdateStatus(
+                  lesson.status === LESSON_STATUS.PUBLIC
+                    ? LESSON_STATUS.PRIVATE
+                    : LESSON_STATUS.PUBLIC
+                );
+                setIsShowedDropdownMenu(false);
+              }}
             >
-              キャンセル
-            </Button>
-          </div>
-        )}
-        {isShowedDropdownMenu && (
-          <div className="absolute top-20 right-5 bg-white shadow-md rounded-md z-10">
-            <ul>
-              <li
-                className="py-1 px-8 hover:bg-gray-200"
-                onClick={() => {
-                  setIsClickedEditName(true);
-                  setIsShowedDropdownMenu(false);
-                }}
-              >
-                名前変更
-              </li>
-              <li
-                className="py-1 px-8 hover:bg-gray-200"
-                onClick={() => {
-                  handleUpdateStatus(
-                    lesson.status === LESSON_STATUS.PUBLIC
-                      ? LESSON_STATUS.PRIVATE
-                      : LESSON_STATUS.PUBLIC
-                  );
-                  setIsShowedDropdownMenu(false);
-                }}
-              >
-                {lesson.status === LESSON_STATUS.PUBLIC ? '非公開' : '公開'}
-              </li>
-              <li
-                className="py-1 px-8 hover:bg-gray-200"
-                onClick={() => {
-                  handleDeleteLesson();
-                  setIsShowedDropdownMenu(false);
-                }}
-              >
-                削除
-              </li>
-            </ul>
-          </div>
-        )}
-      </LessonCard>
-    </div>
+              {lesson.status === LESSON_STATUS.PUBLIC ? '非公開' : '公開'}
+            </li>
+            <li
+              className="py-1 px-8 hover:bg-gray-200"
+              onClick={() => {
+                handleDeleteLesson();
+                setIsShowedDropdownMenu(false);
+              }}
+            >
+              削除
+            </li>
+          </ul>
+        </div>
+      )}
+    </LessonCard>
   );
 };

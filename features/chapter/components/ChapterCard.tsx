@@ -17,11 +17,6 @@ export const ChapterCard: FC<Props> = ({
 }) => {
   const cardClassName = clsx(
     'min-h-[12vh]',
-    'flex',
-    'justify-between',
-    'items-center',
-    'px-8',
-    'py-10',
     'rounded',
     'text-gray-700',
     'shadow-md',
