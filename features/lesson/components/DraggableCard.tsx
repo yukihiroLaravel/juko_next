@@ -7,6 +7,7 @@ import { LessonCard } from './LessonCard';
 import { GridDotsIcon } from '@/components/icons/GridDotsIcon';
 import { DotsIcon } from '@/components/icons/DotsIcon';
 import Link from 'next/link';
+import { useUpdateTitle } from '../hooks/useUpdateTitle';
 
 type Props = {
   courseId: number;
@@ -56,36 +57,33 @@ export const DraggableCard: FC<Props> = ({
   const [isShowedDropdownMenu, setIsShowedDropdownMenu] =
     useState<boolean>(false);
 
-  const [title, setTitle] = useState<string>(lesson.title);
+  const {
+    isClickedEditTitle,
+    updateIsClickedEditTitle,
+    renderAddLesson,
+    handleSubmit,
+    errors,
+    reset,
+  } = useUpdateTitle({ title: lesson.title });
 
-  const [isClickedEditName, setIsClickedEditName] = useState<boolean>(false);
-
-  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
-
-  const handleUpdateLesson = async () => {
+  const handleUpdateLesson = async (data: { title: string }) => {
     await Axios.get('/sanctum/csrf-cookie').then(async () => {
       // TODO パラメーター、urlとstatusは仮値
-      // TODO React Hook Formを使うかも
       await Axios.put(
         `/api/v1/instructor/course/${courseId}/chapter/${chapterId}/lesson/${lesson.lesson_id}`,
         {
-          title,
+          title: data.title,
           url: 'aaaa',
           status: LESSON_STATUS.PUBLIC,
         }
       )
-        .then((res) => {
-          // TODO レスポンスの型を作る
-          setTitle('');
-          setIsClickedEditName(false);
+        .then(() => {
+          updateIsClickedEditTitle();
           mutate();
         })
         .catch((error) => {
-          if (error.response.status === 422) {
-            console.log(error.response.data.errors);
-          }
+          console.error(error);
+          alert('レッスンの更新に失敗しました');
         });
     });
   };
@@ -105,7 +103,7 @@ export const DraggableCard: FC<Props> = ({
         })
         .catch((error) => {
           console.error(error);
-          alert('講座の状態の変更に失敗しました');
+          alert('レッスン状態の変更に失敗しました');
         });
     });
   };
@@ -120,7 +118,7 @@ export const DraggableCard: FC<Props> = ({
         })
         .catch((error) => {
           console.error(error);
-          alert('講座の削除に失敗しました');
+          alert('レッスン削除に失敗しました');
         });
     });
   };
@@ -131,24 +129,35 @@ export const DraggableCard: FC<Props> = ({
       className="relative flex items-center"
       cardRef={ref}
     >
-      <div
-        className="cursor-move h-full m-0 px-2 py-10 border-r border-gray-300"
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
-      >
+      <div className="cursor-move h-full m-0 px-2 py-10 border-r border-gray-300">
         <GridDotsIcon />
       </div>
-      {isClickedEditName ? (
-        <>
-          <input
-            type="text"
-            className="w-2/3 border border-gray-300 rounded-md p-2 text-xl"
-            placeholder="レッスン名を入力"
-            value={title}
-            onChange={handleChangeTitle}
-          />
-        </>
+      {isClickedEditTitle ? (
+        <div className="flex-col w-2/3">
+          <form
+            className="mx-2 flex"
+            onSubmit={handleSubmit(handleUpdateLesson)}
+          >
+            {renderAddLesson()}
+            <div className="mx-2 flex">
+              <Button
+                className="p-2"
+                color="danger"
+                clickHandler={() => {
+                  updateIsClickedEditTitle();
+                  reset();
+                }}
+              >
+                キャンセル
+              </Button>
+              <span className="mr-2" />
+              <Button className="py-2 px-6">保存</Button>
+            </div>
+          </form>
+          {errors.title && (
+            <div className="text-red-600">{errors.title.message}</div>
+          )}
+        </div>
       ) : (
         <Link
           key={lesson.lesson_id}
@@ -159,7 +168,7 @@ export const DraggableCard: FC<Props> = ({
           </p>
         </Link>
       )}
-      {!isClickedEditName && (
+      {!isClickedEditTitle && (
         <button
           className="pr-4"
           onClick={() => setIsShowedDropdownMenu(!isShowedDropdownMenu)}
@@ -167,33 +176,13 @@ export const DraggableCard: FC<Props> = ({
           <DotsIcon />
         </button>
       )}
-      {isClickedEditName && (
-        <div className="mx-2">
-          <Button
-            className="p-2"
-            color="danger"
-            clickHandler={() => setIsClickedEditName(!isClickedEditName)}
-          >
-            キャンセル
-          </Button>
-          <span className="mr-2" />
-          <Button
-            className="py-2 px-6"
-            clickHandler={() => {
-              handleUpdateLesson();
-            }}
-          >
-            保存
-          </Button>
-        </div>
-      )}
       {isShowedDropdownMenu && (
         <div className="absolute top-20 right-5 bg-white shadow-md rounded-md z-10">
           <ul>
             <li
               className="py-1 px-8 hover:bg-gray-200"
               onClick={() => {
-                setIsClickedEditName(true);
+                updateIsClickedEditTitle();
                 setIsShowedDropdownMenu(false);
               }}
             >
