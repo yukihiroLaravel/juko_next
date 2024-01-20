@@ -4,8 +4,8 @@ import { Button } from '@/components/elements/Button';
 import { Axios } from '@/lib/api';
 import { useDrag, useDrop } from 'react-dnd';
 import { LessonCard } from './LessonCard';
-import { GridDotsIcon } from '@/components/elements/GridDotsIcon';
-import { DotsIcon } from '@/components/elements/DotsIcon';
+import { GridDotsIcon } from '@/components/icons/GridDotsIcon';
+import { DotsIcon } from '@/components/icons/DotsIcon';
 import Link from 'next/link';
 
 type Props = {
