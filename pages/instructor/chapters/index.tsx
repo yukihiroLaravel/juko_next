@@ -103,13 +103,13 @@ const Index: NextPage = () => {
   return (
     <AuthWrapper>
       <InstructorLayout>
+        {error && <Error />}
+        {isLoading && (
+          <div className="w-3/4 mx-auto min-h-[100vh] my-10">
+            <Loading />
+          </div>
+        )}
         <div className="flex">
-          {error && <Error />}
-          {isLoading && (
-            <div className="w-3/4 mx-auto min-h-[100vh] my-10">
-              <Loading />
-            </div>
-          )}
           {course && (
             <>
               {isShowedSideBar ? (
