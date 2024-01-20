@@ -82,6 +82,7 @@ export const DraggableCard: FC<Props> = ({
   };
 
   const handleDeleteLesson = async () => {
+    if (!confirm('削除してもよろしいですか？')) return;
     await Axios.get('/sanctum/csrf-cookie').then(async () => {
       await Axios.delete(
         `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}`
