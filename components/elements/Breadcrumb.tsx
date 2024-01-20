@@ -28,18 +28,21 @@ const Icon = () => {
 export const Breadcrumb: FC<Props> = ({ links }) => {
   const lastIndex = links.length - 1;
   return (
-    <nav className="flex mt-[30px]" aria-label="Breadcrumb">
+    <nav className="flex mt-5" aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-3">
         {links.map((link, index) => {
           if (index === 0) {
             return (
-              <li key={index} className="inline-flex items-center">
+              <li
+                key={index}
+                className="inline-flex items-center cursor-pointer"
+              >
                 <div className="flex items-center">
                   <Link
                     href={link.href}
                     className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900"
                   >
-                    {link.title}
+                    <span className="underline">{link.title}</span>
                   </Link>
                 </div>
               </li>
@@ -57,14 +60,14 @@ export const Breadcrumb: FC<Props> = ({ links }) => {
             );
           }
           return (
-            <li key={index} className="inline-flex items-center">
+            <li key={index} className="inline-flex items-center cursor-pointer">
               <div className="flex items-center">
                 <Icon />
                 <Link
                   href={link.href}
                   className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900"
                 >
-                  {link.title}
+                  <span className="underline">{link.title}</span>
                 </Link>
               </div>
             </li>
