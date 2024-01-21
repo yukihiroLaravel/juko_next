@@ -70,7 +70,9 @@ const Register: NextPage = () => {
                   className="rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
                   {...register('title')}
                 />
-                {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+                {errors.title && (
+                  <p className="text-red-500">{errors.title.message}</p>
+                )}
               </label>
             </div>
             <div className="my-10">
@@ -78,7 +80,9 @@ const Register: NextPage = () => {
                 <p className="font-bold">講座画像</p>
                 {uploadedFileName ? (
                   <>
-                    <span className="text-gray-600 mt-2 mr-3">アップロードされたファイル: {uploadedFileName}</span>
+                    <span className="text-gray-600 mt-2 mr-3">
+                      アップロードされたファイル: {uploadedFileName}
+                    </span>
                     <Button
                       type="button"
                       className="p-1"
@@ -94,7 +98,8 @@ const Register: NextPage = () => {
                 ) : (
                   <div
                     {...getRootProps({
-                      className: 'border-2 border-dotted h-80 flex justify-center items-center',
+                      className:
+                        'border-2 border-dotted h-80 flex justify-center items-center',
                     })}
                   >
                     <input {...getInputProps()} {...register('image')} />
@@ -118,7 +123,9 @@ const Register: NextPage = () => {
                     </div>
                   </div>
                 )}
-                {errors.image && <p className="text-red-500">{errors.image.message}</p>}
+                {errors.image && (
+                  <p className="text-red-500">{errors.image.message}</p>
+                )}
               </label>
             </div>
             <div className="my-5 text-center">

@@ -19,7 +19,12 @@ const SButton = styled(Button)`
   }
 `;
 
-export const StatusButton: FC<Props> = ({ children, selected = false, lessonAttendance, mutate }) => {
+export const StatusButton: FC<Props> = ({
+  children,
+  selected = false,
+  lessonAttendance,
+  mutate,
+}) => {
   const color = selected ? 'secondary' : 'primary';
 
   const clickHandler = async () => {

@@ -70,7 +70,7 @@ const Edit: NextPage = () => {
       ) as Lesson;
       setCurrentLesson(newLesson);
     }
-  }, [chapter]);
+  }, [chapter, currentLesson, lesson_id]);
 
   return (
     <>

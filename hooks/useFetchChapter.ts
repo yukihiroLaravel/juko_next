@@ -28,7 +28,11 @@ type Args = {
   chapterId: string | undefined;
 };
 
-export const useFetchChapter = ({ attendanceId, courseId, chapterId }: Args) => {
+export const useFetchChapter = ({
+  attendanceId,
+  courseId,
+  chapterId,
+}: Args) => {
   const fetcher = (url: string) => Axios.get(url).then((res) => res.data);
   const { data: attendance, mutate } = useSWR<Data | null>(
     attendanceId && courseId && chapterId

@@ -7,5 +7,10 @@ type Props = {
 };
 
 export const StudentHeader: FC<Props> = ({ isLogin = true }) => {
-  return <Header isLogin={isLogin} renderUserDropDown={() => <StudentUserDropDown />} />;
+  return (
+    <Header
+      isLogin={isLogin}
+      renderUserDropDown={() => <StudentUserDropDown />}
+    />
+  );
 };

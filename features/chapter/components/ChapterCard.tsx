@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { CHAPTER_STATUS } from '../types/Chapter';
 import clsx from 'clsx';
 
