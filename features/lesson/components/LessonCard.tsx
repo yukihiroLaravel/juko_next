@@ -21,7 +21,7 @@ export const LessonCard: FC<Props> = ({
     'shadow-md',
     {
       'bg-gray-200': status === LESSON_STATUS.PRIVATE,
-      'bg-[#ECF7FF]': status !== LESSON_STATUS.PRIVATE,
+      'bg-[#ECF7FF]': status === LESSON_STATUS.PUBLIC,
     },
     className
   );
