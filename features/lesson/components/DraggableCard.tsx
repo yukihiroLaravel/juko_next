@@ -127,7 +127,7 @@ export const DraggableCard: FC<Props> = ({
       className="relative flex items-center"
       cardRef={ref}
     >
-      <div className="cursor-move h-full m-0 px-2 py-10 border-r border-gray-300">
+      <div className="cursor-move h-full m-0 px-2 py-5 border-r border-gray-300">
         <GridDotsIcon />
       </div>
       {isClickedEditTitle ? (
@@ -161,7 +161,7 @@ export const DraggableCard: FC<Props> = ({
           key={lesson.lesson_id}
           href={`/instructor/lesson/edit?course_id=${courseId}&chapter_id=${chapterId}&lesson_id=${lesson.lesson_id}`}
         >
-          <p className="text-xl w-11/12 pl-5 py-10 overflow-auto">
+          <p className="text-xl w-11/12 pl-5 py-5 overflow-auto">
             {lesson.title}
           </p>
         </Link>

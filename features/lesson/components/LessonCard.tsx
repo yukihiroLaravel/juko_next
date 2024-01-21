@@ -16,7 +16,6 @@ export const LessonCard: FC<Props> = ({
   children,
 }) => {
   const cardClassName = clsx(
-    'min-h-[12vh]',
     'rounded',
     'text-gray-700',
     'shadow-md',
