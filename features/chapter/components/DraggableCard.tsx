@@ -32,7 +32,7 @@ export const DraggableCard: FC<Props> = ({
     reset,
   } = useUpdateTitle({ title: chapter.title });
 
-  const [, drag] = useDrag(() => ({
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: 'card',
     item: { id: chapter.chapter_id, index: chapterIndex },
     collect: (monitor) => ({
@@ -59,9 +59,6 @@ export const DraggableCard: FC<Props> = ({
 
   const ref = useRef(null);
   drag(drop(ref));
-
-  const [isShowedDropdownMenu, setIsShowedDropdownMenu] =
-    useState<boolean>(false);
 
   const handleUpdateStatus = async (status: CHAPTER_STATUS) => {
     await Axios.get('/sanctum/csrf-cookie').then(async () => {
@@ -123,6 +120,7 @@ export const DraggableCard: FC<Props> = ({
         isClickedEditTitle ? '' : 'justify-between'
       }`}
       cardRef={ref}
+      isDragging={isDragging}
     >
       <div
         className="cursor-move h-full m-0 px-2 py-10 border-r border-gray-300"

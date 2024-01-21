@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { CHAPTER_STATUS } from '../types/Chapter';
 import clsx from 'clsx';
 
@@ -6,6 +6,7 @@ type Props = {
   status?: CHAPTER_STATUS;
   className?: string;
   cardRef: React.Ref<HTMLDivElement> | undefined;
+  isDragging?: boolean;
   children: React.ReactNode;
 };
 
@@ -13,6 +14,7 @@ export const ChapterCard: FC<Props> = ({
   status = CHAPTER_STATUS.PRIVATE,
   className,
   cardRef = undefined,
+  isDragging = false,
   children,
 }) => {
   const cardClassName = clsx(
@@ -26,6 +28,30 @@ export const ChapterCard: FC<Props> = ({
     },
     className
   );
+
+  useEffect(() => {
+    const handleScroll = (e: DragEvent) => {
+      if (!isDragging) return;
+
+      const { clientY } = e;
+      const shouldScrollUp = clientY < 100;
+      const shouldScrollDown = window.innerHeight - clientY < 100;
+
+      if (shouldScrollUp) {
+        window.scrollBy(0, -10);
+      } else if (shouldScrollDown) {
+        window.scrollBy(0, 10);
+      }
+    };
+
+    if (isDragging) {
+      window.addEventListener('drag', handleScroll);
+    }
+
+    return () => {
+      window.removeEventListener('drag', handleScroll);
+    };
+  }, [isDragging]);
 
   return (
     <div className={cardClassName} ref={cardRef}>
