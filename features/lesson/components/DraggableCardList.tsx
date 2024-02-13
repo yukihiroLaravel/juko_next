@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const DraggableCardList: FC<Props> = ({ courseId, chapter, mutate }) => {
-  const moveCard = (dragIndex: number, hoverIndex: number) => {
+  const moveCard = async (dragIndex: number, hoverIndex: number) => {
     if (chapter.lessons === undefined) return;
     // レッスンを並び変えてAPIへ送信
     // dragIndexとhoverIndexの要素だけを入れ替える
@@ -31,17 +31,15 @@ export const DraggableCardList: FC<Props> = ({ courseId, chapter, mutate }) => {
     });
 
     // APIへ送信
-    Axios.get('/sanctum/csrf-cookie').then(async () => {
+    await Axios.get('/sanctum/csrf-cookie').then(async () => {
       await Axios.post(
         `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}/lesson/sort`,
         {
           lessons: body,
         }
       )
-        .then((res) => {
-          if (res.data.result === true) {
-            mutate();
-          }
+        .then(() => {
+          mutate();
         })
         .catch((error) => {
           console.log(error.response.data.errors);
@@ -55,6 +53,7 @@ export const DraggableCardList: FC<Props> = ({ courseId, chapter, mutate }) => {
         return (
           <div key={lesson.lesson_id} className="my-5">
             <DraggableCard
+              key={crypto.randomUUID()}
               courseId={courseId}
               chapterId={chapter.chapter_id}
               lesson={lesson}

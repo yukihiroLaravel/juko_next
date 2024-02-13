@@ -183,7 +183,7 @@ const Index: NextPage = () => {
                   {course.chapters.map((chapter, index) => {
                     return (
                       <ChapterWithLessonsBlock
-                        key={chapter.chapter_id}
+                        key={crypto.randomUUID()}
                         chapterIndex={index}
                         courseId={course.course_id}
                         chapter={chapter}
