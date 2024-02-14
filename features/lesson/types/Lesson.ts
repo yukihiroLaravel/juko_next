@@ -11,4 +11,4 @@ export const LESSON_STATUS = {
   PRIVATE: 'private',
 } as const;
 
-export type LESSON_STATUS = typeof LESSON_STATUS[keyof typeof LESSON_STATUS];
+export type LESSON_STATUS = (typeof LESSON_STATUS)[keyof typeof LESSON_STATUS];

@@ -10,4 +10,4 @@ export const COURSE_STATUS = {
   PRIVATE: 'private',
 } as const;
 
-export type CourseStatus = typeof COURSE_STATUS[keyof typeof COURSE_STATUS];
+export type CourseStatus = (typeof COURSE_STATUS)[keyof typeof COURSE_STATUS];
