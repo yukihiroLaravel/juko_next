@@ -27,6 +27,7 @@
     "eslint": "8.24.0",
     "eslint-config-next": "12.3.1",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-tailwindcss": "^3.14.1",
     "next": "12.3.1",
     "next-http-proxy-middleware": "^1.2.5",
     "postcss": "^8.4.18",
