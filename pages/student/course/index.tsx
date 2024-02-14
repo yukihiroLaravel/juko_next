@@ -139,14 +139,14 @@ const Index: NextPage = () => {
                                   <LessonCard
                                     cardRef={undefined}
                                     status="public"
-                                    className="flex-start flex items-center"
+                                    className="flex items-center justify-center"
                                   >
                                     <span className="mr-3" />
                                     <StatusIcon
                                       status={lesson.lessonAttendance.status}
                                     />
                                     <span className="ml-3" />
-                                    <p className="w-11/12 text-xl md:text-2xl">
+                                    <p className="w-11/12 px-2 py-5 text-xl md:text-2xl">
                                       {lesson.title}
                                     </p>
                                   </LessonCard>
