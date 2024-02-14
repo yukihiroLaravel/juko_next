@@ -5,9 +5,9 @@ type Props = {
 };
 export const ProgressBar: FC<Props> = ({ progress }) => {
   return (
-    <div className="w-4/5 bg-gray-200 rounded-full h-2.5 mx-auto">
+    <div className="mx-auto h-2.5 w-4/5 rounded-full bg-gray-200">
       <div
-        className="bg-blue-600 h-2.5 rounded-full"
+        className="h-2.5 rounded-full bg-blue-600"
         style={{ width: progress + '%' }}
       ></div>
     </div>

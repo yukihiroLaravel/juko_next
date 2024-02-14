@@ -11,7 +11,7 @@ type Props = {
 const Icon = () => {
   return (
     <svg
-      className="mr-2 w-6 h-6 text-gray-400"
+      className="mr-2 size-6 text-gray-400"
       fill="currentColor"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
@@ -28,14 +28,14 @@ const Icon = () => {
 export const Breadcrumb: FC<Props> = ({ links }) => {
   const lastIndex = links.length - 1;
   return (
-    <nav className="flex mt-5" aria-label="Breadcrumb">
+    <nav className="mt-5 flex" aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-3">
         {links.map((link, index) => {
           if (index === 0) {
             return (
               <li
                 key={index}
-                className="inline-flex items-center cursor-pointer"
+                className="inline-flex cursor-pointer items-center"
               >
                 <div className="flex items-center">
                   <Link
@@ -60,7 +60,7 @@ export const Breadcrumb: FC<Props> = ({ links }) => {
             );
           }
           return (
-            <li key={index} className="inline-flex items-center cursor-pointer">
+            <li key={index} className="inline-flex cursor-pointer items-center">
               <div className="flex items-center">
                 <Icon />
                 <Link

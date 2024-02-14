@@ -106,7 +106,7 @@ const Index: NextPage = () => {
       <InstructorLayout>
         {error && <Error />}
         {isLoading && (
-          <div className="w-3/4 mx-auto min-h-[100vh] my-10">
+          <div className="mx-auto my-10 min-h-[100vh] w-3/4">
             <Loading />
           </div>
         )}
@@ -125,8 +125,8 @@ const Index: NextPage = () => {
                       />
                     </li>
                     <li className="mb-5">
-                      <div className="bg-[#89cada] w-full text-center rounded text-gray-700">
-                        <p className="font-semibold text-2xl py-5 ">
+                      <div className="w-full rounded bg-[#89cada] text-center text-gray-700">
+                        <p className="py-5 text-2xl font-semibold ">
                           {course.title}
                         </p>
                       </div>
@@ -153,9 +153,9 @@ const Index: NextPage = () => {
                   setIsShowedSideBar={setIsShowedSideBar}
                 />
               )}
-              <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
+              <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
                 <Breadcrumb links={links} />
-                <div className="pb-10 border-black border-b my-5 md:hidden">
+                <div className="my-5 border-b border-black pb-10 md:hidden">
                   <Thumbnail
                     src={process.env.NEXT_PUBLIC_IMAGE_URL + course.image}
                     alt="course"
@@ -165,7 +165,7 @@ const Index: NextPage = () => {
                 </div>
                 <div className="mt-5 flex justify-between">
                   <Button
-                    className="p-2 flex items-center"
+                    className="flex items-center p-2"
                     clickHandler={updateIsShowedAddChapter}
                   >
                     <CirclePlusIcon strokeWidth={1} />

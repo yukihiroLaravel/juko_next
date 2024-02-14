@@ -96,7 +96,7 @@ const Edit: NextPage = () => {
   return (
     <>
       {isLoading && (
-        <div className="w-3/4 mx-auto min-h-[100vh] my-10">
+        <div className="mx-auto my-10 min-h-[100vh] w-3/4">
           <Loading />
         </div>
       )}
@@ -105,14 +105,14 @@ const Edit: NextPage = () => {
           <InstructorHeader />
           <FormLayout>
             <form onSubmit={submitHandler}>
-              <h2 className="text-center text-2xl py-8">講座編集</h2>
-              <div className="w-4/5 mx-auto">
-                <div className="mt-10 mb-5">
+              <h2 className="py-8 text-center text-2xl">講座編集</h2>
+              <div className="mx-auto w-4/5">
+                <div className="mb-5 mt-10">
                   <label htmlFor="title">
                     <p className="font-bold">講座名</p>
                     <input
                       id="title"
-                      className="p-2 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+                      className="w-full rounded border-b-2 p-2 focus:border-[#B0ABAB] focus:outline-none"
                       defaultValue={course.title}
                       {...register('title')}
                     />
@@ -122,7 +122,7 @@ const Edit: NextPage = () => {
                   </label>
                 </div>
                 <div className="mb-5">
-                  <p className="font-bold mb-3">非公開/公開</p>
+                  <p className="mb-3 font-bold">非公開/公開</p>
                   <SwitchButton
                     checked={course.status === COURSE_STATUS.PUBLIC}
                     onChange={() => {
@@ -146,7 +146,7 @@ const Edit: NextPage = () => {
                     />
                     {uploadedFileName ? (
                       <div>
-                        <span className="text-gray-600 mt-2 mr-3">
+                        <span className="mr-3 mt-2 text-gray-600">
                           アップロードされたファイル: {uploadedFileName}
                         </span>
                         <Button
@@ -166,10 +166,10 @@ const Edit: NextPage = () => {
                         })}
                       >
                         <input {...getInputProps()} {...register('image')} />
-                        <div className="flex flex-col justify-center items-center ">
+                        <div className="flex flex-col items-center justify-center ">
                           <svg
                             aria-hidden="true"
-                            className="block w-8 h-8 text-gray-400"
+                            className="block size-8 text-gray-400"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -191,16 +191,16 @@ const Edit: NextPage = () => {
                     )}
                   </label>
                 </div>
-                <div className="my-5 text-center flex justify-between">
+                <div className="my-5 flex justify-between text-center">
                   <Button
                     type="button"
                     color="danger"
-                    className="hover:opacity-75 py-2 px-5"
+                    className="px-5 py-2 hover:opacity-75"
                     clickHandler={deleteHandler}
                   >
                     削除
                   </Button>
-                  <Button type="submit" className="hover:opacity-75 py-2 px-5">
+                  <Button type="submit" className="px-5 py-2 hover:opacity-75">
                     更新
                   </Button>
                 </div>

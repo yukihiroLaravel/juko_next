@@ -20,7 +20,7 @@ const InstructorCourses: NextPage = () => {
       <div className="container mx-auto mb-10">
         {isLoading && <Loading />}
         {error && <Error />}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-[30px]">
+        <div className="grid grid-cols-1 gap-[30px] lg:grid-cols-3">
           {courses?.map((course) => {
             return (
               <Link
@@ -37,7 +37,7 @@ const InstructorCourses: NextPage = () => {
                         width={640}
                       />
                     </div>
-                    <div className="h-auto  ml-[13px] mt-[16px]">
+                    <div className="ml-[13px]  mt-[16px] h-auto">
                       <CourseTitle course={course} />
                     </div>
                   </CourseCard>

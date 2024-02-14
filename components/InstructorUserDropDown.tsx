@@ -24,7 +24,7 @@ export const InstructorUserDropDown: FC = () => {
       logoutHandler={clickHandler}
       renderUserEditLink={() => (
         <Link href="/instructor/edit">
-          <a className="text-gray-700 block px-4 py-2 text-sm">
+          <a className="block px-4 py-2 text-sm text-gray-700">
             ユーザー情報編集
           </a>
         </Link>
