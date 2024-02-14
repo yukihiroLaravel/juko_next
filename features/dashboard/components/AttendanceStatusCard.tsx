@@ -36,22 +36,33 @@ export default function AttendanceStatusCard({ courseId }: Props) {
         <p className="text-lg">チャプターごとの完了人数</p>
         <div className="mt-4">
           <ResponsiveContainer width="100%" height={200}>
-            <BarChart layout="vertical" data={data}>
+            <BarChart
+              layout="vertical"
+              data={data}
+              margin={{ top: 0, right: 0, left: 30, bottom: 0 }}
+            >
               <XAxis
                 type="number"
                 tick={{ fontSize: '0.8rem' }}
+                tickFormatter={(value) => {
+                  // 小数は表示しない
+                  if (value % 1 !== 0) return '';
+                  return value;
+                }}
                 label={{
                   value: '人数',
                   position: 'insideBottomRight',
                   offset: 0,
-                  fontSize: '0.8rem',
+                  fontSize: '0.5rem',
                 }}
               />
               <YAxis
                 dataKey="label"
                 type="category"
                 tickFormatter={(value) => {
-                  return value.length > 3 ? `${value.slice(0, 3)}...` : value;
+                  // ラベルが長い場合は省略
+                  if (value.length > 6) return `${value.slice(0, 6)}...`;
+                  return value;
                 }}
                 tick={{
                   fontSize: '0.8rem',
