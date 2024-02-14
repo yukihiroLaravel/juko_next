@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const StyleSideBarList = styled.li<{ isSelected: boolean }>`
+const StyleSideBarList = styled('div')<{ isSelected: boolean }>`
   border-top: 1px solid #b5b5b5;
   min-height: 4rem;
   display: flex;

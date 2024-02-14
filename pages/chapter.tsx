@@ -28,7 +28,7 @@ const STATUS_BEFORE_ATTENDANCE = 'before_attendance';
 const STATUS_IN_ATTENDANCE = 'in_attendance';
 const STATUS_COMPLETED_ATTENDANCE = 'completed_attendance';
 
-const StyleSideBarList = styled.li<{ isSelected: boolean }>`
+const StyleSideBarList = styled('li')<{ isSelected: boolean }>`
   border-top: 1px solid #b5b5b5;
   min-height: 4rem;
   display: flex;
