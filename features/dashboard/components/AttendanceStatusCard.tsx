@@ -3,10 +3,10 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import Card from './Card';
 
 export default function AttendanceStatusCard() {
   const chapters = [
@@ -23,15 +23,15 @@ export default function AttendanceStatusCard() {
   }));
 
   return (
-    <div className="flex w-full rounded-lg border border-gray-200 bg-[#FFFDE9] p-4 shadow-md">
-      <div className="flex w-1/3 flex-col justify-center">
+    <Card>
+      <div className="flex flex-col justify-center sm:w-1/3">
         <p className="text-center text-lg">受講人数</p>
         <div className="mt-4 flex items-center justify-center">
           <p className="text-6xl font-bold">10</p>
           <p className="ml-2 text-2xl">人</p>
         </div>
       </div>
-      <div className="w-2/3">
+      <div className="sm:w-2/3">
         <p className="text-lg">チャプターごとの完了人数</p>
         <div className="mt-4">
           <ResponsiveContainer width="100%" height={200}>
@@ -72,6 +72,6 @@ export default function AttendanceStatusCard() {
           </ResponsiveContainer>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

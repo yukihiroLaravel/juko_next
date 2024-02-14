@@ -80,7 +80,7 @@ export default function CourseTagList() {
   ];
   /* 横スクロール可能なタグリスト */
   return (
-    <div className="flex overflow-x-auto">
+    <div className="flex overflow-x-auto bg-white">
       {courses.map((course) => (
         <CourseTag
           key={course.course_id}

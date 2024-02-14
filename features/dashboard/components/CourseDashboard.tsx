@@ -3,5 +3,5 @@ interface Props {
 }
 
 export default function CourseDashboard({ children }: Props) {
-  return <div className="size-full bg-white">{children}</div>;
+  return <div className="size-full">{children}</div>;
 }
