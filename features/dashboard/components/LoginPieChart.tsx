@@ -1,19 +1,26 @@
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
-export default function LoginPieChart() {
+interface Props {
+  title: string;
+  loginRateValue: number;
+}
+
+export default function LoginPieChart({ title, loginRateValue }: Props) {
+  const notLoginRateValue = 100 - loginRateValue;
+
   const data = [
-    { name: 'ログイン', value: 80 },
-    { name: '未ログイン', value: 20 },
+    { name: 'ログイン', value: loginRateValue },
+    { name: '未ログイン', value: notLoginRateValue },
   ];
 
-  const COLORS = ['#00A5D4', '#E5E5E5'];
+  const COLORS = ['#00A5D4', '#b0b0b0'];
 
   return (
     <div className="h-64 w-full">
       <div className="flex w-full items-center justify-between">
         <div className="flex flex-col justify-center">
-          <h2 className="text-center">Your Chart Title</h2>
-          <p className="text-2xl">80%</p>
+          <h2 className="text-center">{title}</h2>
+          <p className="text-2xl">{loginRateValue}%</p>
         </div>
       </div>
       <ResponsiveContainer width="100%" height="100%">

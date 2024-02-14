@@ -6,6 +6,9 @@ import CourseDashboard from '@/features/dashboard/components/CourseDashboard';
 import CourseTagList from '@/features/dashboard/components/CourseTagList';
 import LoginPieChart from '@/features/dashboard/components/LoginPieChart';
 import MainContainer from '@/features/dashboard/components/MainContainer';
+import MonthlyLoginChart from '@/features/dashboard/components/MonthlyLoginChart';
+import WeeklyLoginChart from '@/features/dashboard/components/WeeklyLoginChart';
+import YearlyLoginChart from '@/features/dashboard/components/YearlyLoginChart';
 import { useState } from 'react';
 
 export default function Dashboard() {
@@ -33,9 +36,15 @@ export default function Dashboard() {
             <h2 className="text-xl font-bold">受講生ログイン率</h2>
           </div>
           <Card>
-            {Array.from({ length: 3 }).map((_, index) => (
-              <LoginPieChart key={index} />
-            ))}
+            {selectedCourse && (
+              <WeeklyLoginChart courseId={selectedCourse.course_id} />
+            )}
+            {selectedCourse && (
+              <MonthlyLoginChart courseId={selectedCourse.course_id} />
+            )}
+            {selectedCourse && (
+              <YearlyLoginChart courseId={selectedCourse.course_id} />
+            )}
           </Card>
         </MainContainer>
       </CourseDashboard>
