@@ -12,7 +12,9 @@ export const CourseProgressCard: React.FC<Props> = ({
   attendanceId,
   courseId,
 }) => {
-  const { data: progress } = useFetchProgress({ courseId });
+  const { data: progress } = useFetchProgress({
+    attendanceId: Number(attendanceId),
+  });
 
   const numberOfTotalChapters = progress?.number_of_total_chapters ?? 0;
   const numberOfCompletedChapters = progress?.number_of_completed_chapters ?? 0;

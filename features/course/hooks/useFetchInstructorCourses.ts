@@ -20,7 +20,12 @@ export const useFetchInstructorCourses = () => {
     error,
   } = useSWR<{
     data: Data[];
-  }>(text ? `/api/v1/instructor/course/index?text=${text}` : '/api/v1/instructor/course/index', fetcher);
+  }>(
+    text
+      ? `/api/v1/instructor/course/index?text=${text}`
+      : '/api/v1/instructor/course/index',
+    fetcher
+  );
 
   return {
     courses: courses?.data,

@@ -27,7 +27,11 @@ type Args = {
 export const useFetchCourse = ({ attendanceId }: Args) => {
   const shouldFetch = attendanceId !== undefined;
   const fetchUrl = shouldFetch ? `/api/v1/attendance/${attendanceId}` : null;
-  const { data: attendance, isLoading, error } = useSWR<Data>(fetchUrl, fetcher);
+  const {
+    data: attendance,
+    isLoading,
+    error,
+  } = useSWR<Data>(fetchUrl, fetcher);
 
   return {
     attendance: attendance?.data,

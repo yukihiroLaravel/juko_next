@@ -2,7 +2,7 @@ import { fetcher } from '@/lib/Fetcher';
 import useSWR from 'swr';
 
 type Args = {
-  courseId: number;
+  attendanceId: number;
 };
 
 type Data = {
@@ -13,9 +13,11 @@ type Data = {
   continue_lesson_id: number | null;
 };
 
-export const useFetchProgress = ({ courseId }: Args) => {
-  const shouldFetch = courseId !== undefined;
-  const fetchUrl = shouldFetch ? `/api/v1/course/${courseId}/progress` : null;
+export const useFetchProgress = ({ attendanceId }: Args) => {
+  const shouldFetch = attendanceId !== undefined;
+  const fetchUrl = shouldFetch
+    ? `/api/v1/attendance/${attendanceId}/progress`
+    : null;
   const { data, isLoading, error, mutate } = useSWR<{
     data: Data;
   }>(fetchUrl, fetcher);

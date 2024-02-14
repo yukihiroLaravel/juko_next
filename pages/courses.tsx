@@ -25,7 +25,7 @@ const Courses: NextPage = () => {
               return (
                 <Link
                   key={attendance.course.course_id}
-                  href={`/course?attendance_id=${attendance.attendance_id}`}
+                  href={`/student/course?attendance_id=${attendance.attendance_id}`}
                 >
                   <a>
                     <CourseCard>

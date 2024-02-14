@@ -11,7 +11,9 @@ export const Header: FC<Props> = ({ isLogin = true, renderUserDropDown }) => {
       <div className="flex min-h-full justify-between">
         <div className="flex items-center">
           <a href="#" className="ml-5">
-            <h1 className="font-bold text-3xl text-[#FBF459]">受講管理アプリ</h1>
+            <h1 className="font-bold text-3xl text-[#FBF459]">
+              受講管理アプリ
+            </h1>
           </a>
         </div>
         {isLogin && renderUserDropDown()}

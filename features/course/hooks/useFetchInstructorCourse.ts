@@ -1,15 +1,12 @@
 import { Chapter } from '@/features/chapter/types/Chapter';
 import { Course } from '@/features/course/types/Course';
 import { Lesson } from '@/features/lesson/types/Lesson';
-import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/Fetcher';
 
 type Data = Course & {
   chapters: (Chapter & {
-    lessons: (Lesson & {
-      lessonAttendance: LessonAttendance;
-    })[];
+    lessons: Lesson[];
   })[];
 };
 
