@@ -7,19 +7,18 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import Card from './Card';
+import { useFetchAttendanceStatus } from '@/features/attendance/hooks/useFetchAttendanceStatus';
 
-export default function AttendanceStatusCard() {
-  const chapters = [
-    { label: 'チャプター1', value: 10 },
-    { label: 'チャプター2', value: 5 },
-    { label: 'チャプター3', value: 7 },
-    { label: 'チャプター4', value: 3 },
-    { label: 'チャプター5', value: 8 },
-  ];
+interface Props {
+  courseId: number | undefined;
+}
 
-  const data = chapters.map((chapter, index) => ({
-    label: chapter.label,
-    value: chapter.value,
+export default function AttendanceStatusCard({ courseId }: Props) {
+  const { attendanceStatus } = useFetchAttendanceStatus({ courseId });
+
+  const data = attendanceStatus?.chapters.map((chapter) => ({
+    label: chapter.title,
+    value: chapter.completed_count,
   }));
 
   return (
@@ -27,7 +26,9 @@ export default function AttendanceStatusCard() {
       <div className="flex flex-col justify-center sm:w-1/3">
         <p className="text-center text-lg">受講人数</p>
         <div className="mt-4 flex items-center justify-center">
-          <p className="text-6xl font-bold">10</p>
+          <p className="text-6xl font-bold">
+            {attendanceStatus?.students_count}
+          </p>
           <p className="ml-2 text-2xl">人</p>
         </div>
       </div>

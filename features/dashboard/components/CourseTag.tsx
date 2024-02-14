@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 interface Props {
   course: Course;
-  selectedCourseId: number;
+  selectedCourseId: number | undefined;
   clickHandler: (course: Course) => void;
 }
 
