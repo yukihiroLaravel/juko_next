@@ -9,5 +9,4 @@ export const CHAPTER_STATUS = {
   PRIVATE: 'private',
 } as const;
 
-export type CHAPTER_STATUS =
-  (typeof CHAPTER_STATUS)[keyof typeof CHAPTER_STATUS];
+export type CHAPTER_STATUS = typeof CHAPTER_STATUS[keyof typeof CHAPTER_STATUS];
