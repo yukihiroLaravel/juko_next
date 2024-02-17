@@ -7,7 +7,7 @@ interface Props {
   clickHandler: (course: Course) => void;
 }
 
-export default function CourseTag({
+export default function CourseTab({
   course,
   selectedCourseId,
   clickHandler,

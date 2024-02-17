@@ -3,8 +3,7 @@ import { Course } from '@/features/course/types/Course';
 import AttendanceStatusCard from '@/features/dashboard/components/AttendanceStatusCard';
 import Card from '@/features/dashboard/components/Card';
 import CourseDashboard from '@/features/dashboard/components/CourseDashboard';
-import CourseTagList from '@/features/dashboard/components/CourseTagList';
-import LoginPieChart from '@/features/dashboard/components/LoginPieChart';
+import CourseTabList from '@/features/dashboard/components/CourseTabList';
 import MainContainer from '@/features/dashboard/components/MainContainer';
 import MonthlyLoginChart from '@/features/dashboard/components/MonthlyLoginChart';
 import WeeklyLoginChart from '@/features/dashboard/components/WeeklyLoginChart';
@@ -23,7 +22,7 @@ export default function Dashboard() {
     <main className="h-full min-h-screen">
       <InstructorHeader />
       <CourseDashboard>
-        <CourseTagList
+        <CourseTabList
           selectedCourse={selectedCourse}
           updateSelectedCourse={updateSelectedCourse}
         />

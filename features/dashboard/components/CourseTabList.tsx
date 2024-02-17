@@ -1,5 +1,5 @@
 import { Course } from '@/features/course/types/Course';
-import CourseTag from './CourseTag';
+import CourseTab from '@/features/dashboard/components/CourseTab';
 import { useFetchInstructorCourses } from '@/features/course/hooks/useFetchInstructorCourses';
 import { useEffect } from 'react';
 
@@ -8,7 +8,7 @@ interface Props {
   updateSelectedCourse: (course: Course) => void;
 }
 
-export default function CourseTagList({
+export default function CourseTabList({
   updateSelectedCourse,
   selectedCourse,
 }: Props) {
@@ -26,7 +26,7 @@ export default function CourseTagList({
   return (
     <div className="flex overflow-x-auto bg-white shadow-md">
       {courses?.map((course) => (
-        <CourseTag
+        <CourseTab
           key={course.course_id}
           course={course}
           selectedCourseId={selectedCourse?.course_id}
