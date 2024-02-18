@@ -16,7 +16,7 @@ export default function LoginPieChart({ title, loginRateValue }: Props) {
   const COLORS = ['#00A5D4', '#b0b0b0'];
 
   return (
-    <div className="h-64 w-full">
+    <div className="h-80 w-full pb-10">
       <div className="flex w-full items-center justify-between">
         <div className="flex flex-col justify-center">
           <h2 className="text-center">{title}</h2>

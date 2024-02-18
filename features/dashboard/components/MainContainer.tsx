@@ -3,5 +3,5 @@ interface Props {
 }
 
 export default function MainContainer({ children }: Props) {
-  return <div className="mx-auto flex w-4/5 flex-col">{children}</div>;
+  return <div className="mx-auto flex w-4/5 flex-col gap-5">{children}</div>;
 }

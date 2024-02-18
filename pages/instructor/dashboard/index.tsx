@@ -27,24 +27,24 @@ export default function Dashboard() {
           updateSelectedCourse={updateSelectedCourse}
         />
         <MainContainer>
-          <div className="my-4">
+          <div className="pt-5">
             <h2 className="text-xl font-bold">受講状況</h2>
+            <AttendanceStatusCard courseId={selectedCourse?.course_id} />
           </div>
-          <AttendanceStatusCard courseId={selectedCourse?.course_id} />
-          <div className="my-4">
+          <div className="pb-5">
             <h2 className="text-xl font-bold">受講生ログイン率</h2>
+            <Card>
+              {selectedCourse && (
+                <WeeklyLoginChart courseId={selectedCourse.course_id} />
+              )}
+              {selectedCourse && (
+                <MonthlyLoginChart courseId={selectedCourse.course_id} />
+              )}
+              {selectedCourse && (
+                <YearlyLoginChart courseId={selectedCourse.course_id} />
+              )}
+            </Card>
           </div>
-          <Card>
-            {selectedCourse && (
-              <WeeklyLoginChart courseId={selectedCourse.course_id} />
-            )}
-            {selectedCourse && (
-              <MonthlyLoginChart courseId={selectedCourse.course_id} />
-            )}
-            {selectedCourse && (
-              <YearlyLoginChart courseId={selectedCourse.course_id} />
-            )}
-          </Card>
         </MainContainer>
       </CourseDashboard>
     </main>
