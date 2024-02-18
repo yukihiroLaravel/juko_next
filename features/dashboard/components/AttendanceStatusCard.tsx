@@ -39,11 +39,11 @@ export default function AttendanceStatusCard({ courseId }: Props) {
             <BarChart
               layout="vertical"
               data={data}
-              margin={{ top: 0, right: 0, left: 30, bottom: 0 }}
+              margin={{ top: 0, right: 10, left: 30, bottom: 35 }}
             >
               <XAxis
                 type="number"
-                tick={{ fontSize: '0.8rem' }}
+                tick={{ fontSize: '1.2rem' }}
                 tickFormatter={(value) => {
                   // 小数は表示しない
                   if (value % 1 !== 0) return '';
@@ -52,8 +52,7 @@ export default function AttendanceStatusCard({ courseId }: Props) {
                 label={{
                   value: '人数',
                   position: 'insideBottomRight',
-                  offset: 0,
-                  fontSize: '0.5rem',
+                  offset: -10,
                 }}
               />
               <YAxis
