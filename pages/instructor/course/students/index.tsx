@@ -3,6 +3,8 @@ import { SideBar } from '@/components/elements/SideBar';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { ToggleButton } from '@/components/elements/ToggleButton';
 import { InstructorLayout } from '@/components/layouts/InstructorLayout';
+import { Error } from '@/components/utils/Error';
+import { Loading } from '@/components/utils/Loading';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { StudentsHeadingBox } from '@/features/instructor-students/components/StudentsHeadingBox';
 import { StudentsTableBox } from '@/features/instructor-students/components/StudentsTableBox';
@@ -17,13 +19,19 @@ const Index: NextPage = () => {
   const { course_id: courseId } = router.query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
 
-  const { course } = useFetchInstructorCourse({
+  const { course, error, isLoading } = useFetchInstructorCourse({
     courseId,
   });
 
   return (
     <InstructorAuthWrapper>
       <InstructorLayout>
+        {error && <Error />}
+        {isLoading && (
+          <div className="mx-auto my-10 min-h-[100vh] w-3/4">
+            <Loading />
+          </div>
+        )}
         <div className="flex">
           {course && (
             <>
