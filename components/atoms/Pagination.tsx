@@ -1,44 +1,62 @@
+import { Button } from '../elements/Button';
+
 type Props = {
   currentPage: number;
-  count: number;
+  total: number;
+  goToPage: (page: number) => void;
 };
 
-export const Pagination: React.FC<Props> = ({ currentPage, count }) => {
-  // 最初と最後と現在のページの前後を表示する
+export const Pagination: React.FC<Props> = ({
+  currentPage,
+  total,
+  goToPage,
+}) => {
+  const totalPages = Math.ceil(total / 10);
   const startPage = Math.max(1, currentPage - 2);
-  const endPage = Math.min(count, currentPage + 2);
+  const endPage = Math.min(totalPages, currentPage + 2);
+
   const pages = Array.from(
     { length: endPage - startPage + 1 },
-    (_, i) => startPage + i
+    (_, i) => i + startPage
   );
 
   return (
     <div className="flex items-center justify-center">
       <div className="flex items-center gap-2">
-        <button
-          className="rounded bg-gray-200 px-3 py-1"
-          disabled={currentPage === 1}
+        <Button
+          isDisabled={currentPage === 1}
+          size="sm"
+          clickHandler={() => {
+            goToPage(currentPage - 1);
+          }}
         >
           前へ
-        </button>
+        </Button>
         {pages.map((page) => (
-          <button
+          <Button
             key={page}
-            className={`px-3 py-1 ${
+            className={`${
               page === currentPage
-                ? 'rounded bg-gray-200'
-                : 'border border-gray-200 bg-white'
+                ? 'bg-primary text-white'
+                : 'border-gray-200 bg-white text-black'
             }`}
+            size="sm"
+            clickHandler={() => {
+              goToPage(page);
+            }}
           >
             {page}
-          </button>
+          </Button>
         ))}
-        <button
-          className="rounded bg-gray-200 px-3 py-1"
-          disabled={currentPage === count}
+        <Button
+          isDisabled={currentPage === totalPages}
+          size="sm"
+          clickHandler={() => {
+            goToPage(currentPage + 1);
+          }}
         >
           次へ
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import { Student } from '@/features/student/types/Student';
 import {
   Table,
   TableBody,
@@ -6,22 +5,15 @@ import {
   TableHead,
   TableRow,
 } from '@/components/atoms/Table';
-import { useFetchInstructorStudents } from '../hooks/useFetchInstructorStudents';
-import { useRouter } from 'next/router';
-import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
+import { Course } from '@/features/course/types/Course';
+import { Student } from '@/features/student/types/Student';
 
-export const StudentsTable: React.FC = () => {
-  const router = useRouter();
-  const { course_id: courseId } = router.query;
+type Props = {
+  students: Student[];
+  course: Course;
+};
 
-  const { course } = useFetchInstructorCourse({
-    courseId,
-  });
-
-  const { students } = useFetchInstructorStudents({
-    courseId: courseId as string | undefined,
-  });
-
+export const StudentsTable: React.FC<Props> = ({ students, course }) => {
   return (
     <Table>
       <TableHead>
@@ -35,7 +27,7 @@ export const StudentsTable: React.FC = () => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {students?.map((student) => (
+        {students.map((student) => (
           <TableRow key={student.student_id}>
             <TableCell>{student.student_id}</TableCell>
             <TableCell>{student.nick_name}</TableCell>
