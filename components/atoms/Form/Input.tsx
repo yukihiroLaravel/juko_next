@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { forwardRef, InputHTMLAttributes } from 'react';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -5,7 +6,14 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(({ type, ...rest }, ref) => {
-  return <input type={type} ref={ref} {...rest} />;
+  const inputClassName = clsx(
+    'p-1',
+    'rounded',
+    'border-b-2',
+    'focus:outline-none',
+    'focus:border-[#B0ABAB]'
+  );
+  return <input type={type} className={inputClassName} ref={ref} {...rest} />;
 });
 
 Input.displayName = 'Input';

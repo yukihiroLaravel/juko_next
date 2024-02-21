@@ -6,7 +6,7 @@ import useSWR from 'swr';
 type Params = {
   per_page: number;
   page: number;
-  sort_by: string;
+  sort_by: 'nick_name' | 'email' | 'last_login_at' | 'attendanced_at';
   order: string;
 };
 

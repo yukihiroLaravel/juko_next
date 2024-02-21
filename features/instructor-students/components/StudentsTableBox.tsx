@@ -23,7 +23,7 @@ export const StudentsTableBox: FC = () => {
   return (
     <>
       <Box className="flex items-end justify-end">
-        <StudentsSearchForm />
+        <StudentsSearchForm updateParams={updateParams} />
       </Box>
       {students && course && (
         <StudentsTable
