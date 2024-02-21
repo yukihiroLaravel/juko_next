@@ -10,4 +10,6 @@ export type Student = {
   sex: 'man' | 'woman';
   address: string;
   profile_image: string | null;
+  last_login_at: string;
+  attendanced_at: string;
 };

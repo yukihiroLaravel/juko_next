@@ -3,5 +3,5 @@ type Props = {
 };
 
 export const TableHead: React.FC<Props> = ({ children }) => {
-  return <thead className="bg-gray-200">{children}</thead>;
+  return <thead className="bg-blue-400 font-bold">{children}</thead>;
 };

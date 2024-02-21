@@ -6,34 +6,21 @@ import {
   TableHead,
   TableRow,
 } from '@/components/atoms/Table';
+import { useFetchInstructorStudents } from '../hooks/useFetchInstructorStudents';
+import { useRouter } from 'next/router';
+import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 
-type Props = {
-  // students: Student[];
-};
+export const StudentsTable: React.FC = () => {
+  const router = useRouter();
+  const { course_id: courseId } = router.query;
 
-export const StudentsTable: React.FC<Props> = (
-  {
-    // students
-  }
-) => {
-  const students = [
-    {
-      id: 1,
-      name: 'John Doe',
-      email: 'test@examle.com',
-      courseTitle: 'React入門',
-      lastLogin: '2021/07/01',
-      createdAt: '2021/07/01',
-    },
-    {
-      id: 2,
-      name: 'Jane Doe',
-      email: 'test2@examle.com',
-      courseTitle: 'Vue入門',
-      lastLogin: '2021/07/01',
-      createdAt: '2021/07/01',
-    },
-  ];
+  const { course } = useFetchInstructorCourse({
+    courseId,
+  });
+
+  const { students } = useFetchInstructorStudents({
+    courseId: courseId as string | undefined,
+  });
 
   return (
     <Table>
@@ -48,14 +35,14 @@ export const StudentsTable: React.FC<Props> = (
         </TableRow>
       </TableHead>
       <TableBody>
-        {students.map((student) => (
-          <TableRow key={student.id}>
-            <TableCell>{student.id}</TableCell>
-            <TableCell>{student.name}</TableCell>
+        {students?.map((student) => (
+          <TableRow key={student.student_id}>
+            <TableCell>{student.student_id}</TableCell>
+            <TableCell>{student.nick_name}</TableCell>
             <TableCell>{student.email}</TableCell>
-            <TableCell>{student.courseTitle}</TableCell>
-            <TableCell>{student.lastLogin}</TableCell>
-            <TableCell>{student.createdAt}</TableCell>
+            <TableCell>{course?.title}</TableCell>
+            <TableCell>{student.last_login_at}</TableCell>
+            <TableCell>{student.attendanced_at}</TableCell>
           </TableRow>
         ))}
       </TableBody>
