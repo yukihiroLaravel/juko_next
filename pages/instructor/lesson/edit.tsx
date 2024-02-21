@@ -104,10 +104,10 @@ const Edit: NextPage = () => {
               setIsShowedSideBar={setIsShowedSideBar}
             />
           )}
-          <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
+          <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
             <Breadcrumb links={links} />
             <div className="my-10">
-              <h2 className="font-semibold text-3xl">{chapter.title}</h2>
+              <h2 className="text-3xl font-semibold">{chapter.title}</h2>
             </div>
             <EditForm
               key={currentLesson.lesson_id}

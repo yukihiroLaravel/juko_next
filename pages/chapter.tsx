@@ -28,7 +28,7 @@ const STATUS_BEFORE_ATTENDANCE = 'before_attendance';
 const STATUS_IN_ATTENDANCE = 'in_attendance';
 const STATUS_COMPLETED_ATTENDANCE = 'completed_attendance';
 
-const StyleSideBarList = styled.li<{ isSelected: boolean }>`
+const StyleSideBarList = styled('li')<{ isSelected: boolean }>`
   border-top: 1px solid #b5b5b5;
   min-height: 4rem;
   display: flex;
@@ -134,7 +134,7 @@ const Chapter: NextPage = () => {
       <StudentLayout>
         <div className="flex">
           {isLoading ? (
-            <div className="w-3/4 mx-auto min-h-[100vh] mt-10 mb-10">
+            <div className="mx-auto my-10 min-h-[100vh] w-3/4">
               <Loading />
             </div>
           ) : (
@@ -144,7 +144,7 @@ const Chapter: NextPage = () => {
                   <ul className="mt-2">
                     <li className="mb-10">
                       <div className="text-center">
-                        <p className="font-semibold mb-3">
+                        <p className="mb-3 font-semibold">
                           チャプター進捗 {calculateChapterProgeress()}%
                         </p>
                         <ProgressBar progress={calculateChapterProgeress()} />
@@ -182,17 +182,17 @@ const Chapter: NextPage = () => {
                 />
               )}
 
-              <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
+              <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
                 <Breadcrumb links={links} />
-                <div className="mt-10 border-black border-b pb-5">
-                  <h2 className="font-semibold text-3xl md:text-4xl">
+                <div className="mt-10 border-b border-black pb-5">
+                  <h2 className="text-3xl font-semibold md:text-4xl">
                     {attendance?.course.title}
                   </h2>
                 </div>
-                <ul className="md:hidden my-5 border-black border-b">
+                <ul className="my-5 border-b border-black md:hidden">
                   <li className="mb-10">
                     <div className="text-center">
-                      <p className="font-semibold mb-3">
+                      <p className="mb-3 font-semibold">
                         チャプター進捗 {calculateChapterProgeress()}%
                       </p>
                       <ProgressBar progress={calculateChapterProgeress()} />
@@ -216,8 +216,8 @@ const Chapter: NextPage = () => {
                     );
                   })}
                 </ul>
-                <div className="mt-5 mx-auto">
-                  <h2 className="font-semibold text-[25px] md:text-[30px]">
+                <div className="mx-auto mt-5">
+                  <h2 className="text-[25px] font-semibold md:text-[30px]">
                     {currentLesson?.title}
                   </h2>
                 </div>

@@ -2,12 +2,12 @@ export const Error = () => {
   return (
     <div
       id="alert-2"
-      className="flex p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200"
+      className="mb-4 flex rounded-lg bg-red-100 p-4 dark:bg-red-200"
       role="alert"
     >
       <svg
         aria-hidden="true"
-        className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800"
+        className="size-5 shrink-0 text-red-700 dark:text-red-800"
         fill="currentColor"
         viewBox="0 0 20 20"
         xmlns="http://www.w3.org/2000/svg"
@@ -24,13 +24,13 @@ export const Error = () => {
       </div>
       <button
         type="button"
-        className="ml-auto -mx-1.5 -my-1.5 bg-red-100 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex h-8 w-8 dark:bg-red-200 dark:text-red-600 dark:hover:bg-red-300"
+        className="-m-1.5 ml-auto inline-flex size-8 rounded-lg bg-red-100 p-1.5 text-red-500 hover:bg-red-200 focus:ring-2 focus:ring-red-400 dark:bg-red-200 dark:text-red-600 dark:hover:bg-red-300"
         data-dismiss-target="#alert-2"
         aria-label="Close"
       >
         <span className="sr-only">閉じる</span>
         <svg
-          className="w-5 h-5"
+          className="size-5"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"

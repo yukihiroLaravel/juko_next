@@ -8,7 +8,6 @@ export const CirclePlusIcon: FC<Props> = ({ strokeWidth = 2 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="icon icon-tabler icon-tabler-circle-plus"
       width="24"
       height="24"
       viewBox="0 0 24 24"

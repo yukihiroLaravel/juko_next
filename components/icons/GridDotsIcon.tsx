@@ -8,7 +8,6 @@ export const GridDotsIcon: FC<Props> = ({ strokeWidth = 1 }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="icon icon-tabler icon-tabler-grid-dots"
       width="24"
       height="24"
       viewBox="0 0 24 24"

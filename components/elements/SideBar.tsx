@@ -6,10 +6,10 @@ type Props = {
 export const SideBar: FC<Props> = ({ children }) => {
   return (
     <aside
-      className="hidden md:block shrink-0 w-1/5 relative border-[#000000] border-r-[1px]"
+      className="relative hidden w-1/5 shrink-0 border-r-[1px] border-[#000000] md:block"
       aria-label="Sidebar"
     >
-      <div className="overflow-y-auto py-4 px-3 rounded">{children}</div>
+      <div className="overflow-y-auto rounded px-3 py-4">{children}</div>
     </aside>
   );
 };

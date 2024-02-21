@@ -1,10 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-const Icon = styled.div<{
-  background: string;
-  size: string;
-}>`
+const Icon = styled('div')<{ background: string; size: string }>`
   min-width: ${(props) => props.size};
   min-height: ${(props) => props.size};
   width: ${(props) => props.size};
@@ -15,9 +12,7 @@ const Icon = styled.div<{
   align-items: center;
 `;
 
-const IconSvg = styled.svg<{
-  checkIconSize: string;
-}>`
+const IconSvg = styled('svg')<{ checkIconSize: string }>`
   width: 0.75rem;
   height: 0.75rem;
   margin: 0 auto;
@@ -30,6 +25,7 @@ type Props = {
   status: 'before_attendance' | 'in_attendance' | 'completed_attendance';
   size?: 'small' | 'medium';
 };
+
 export const StatusIcon: FC<Props> = ({ status, size = 'medium' }) => {
   const getIconSize = (size: 'small' | 'medium') => {
     switch (size) {

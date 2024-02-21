@@ -45,7 +45,7 @@ const Index: NextPage = () => {
         <div className="flex">
           {error && <Error />}
           {isLoading && (
-            <div className="w-3/4 mx-auto min-h-[100vh] my-10">
+            <div className="mx-auto my-10 min-h-[100vh] w-3/4">
               <Loading />
             </div>
           )}
@@ -80,9 +80,9 @@ const Index: NextPage = () => {
                   setIsShowedSideBar={setIsShowedSideBar}
                 />
               )}
-              <div className="w-3/4 mx-auto min-h-[100vh] mb-10">
+              <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
                 <Breadcrumb links={links} />
-                <div className="pb-10 border-black border-b my-5 md:hidden">
+                <div className="my-5 border-b border-black pb-10 md:hidden">
                   <Thumbnail
                     src={
                       process.env.NEXT_PUBLIC_IMAGE_URL +
@@ -101,7 +101,7 @@ const Index: NextPage = () => {
                   />
                 </div>
                 <div className="mt-5">
-                  <h2 className="font-semibold text-xl md:text-2xl">
+                  <h2 className="text-xl font-semibold md:text-2xl">
                     コースカリキュラム
                   </h2>
                 </div>
@@ -114,12 +114,12 @@ const Index: NextPage = () => {
                           status="public"
                           className="flex items-center justify-center"
                         >
-                          <h3 className="font-semibold text-lg md:text-3xl">
+                          <h3 className="text-lg font-semibold md:text-3xl">
                             {chapter.title}
                           </h3>
                         </ChapterCard>
                       </div>
-                      <div className="my-5 mx-auto w-11/12 text-center">
+                      <div className="mx-auto my-5 w-11/12 text-center">
                         {chapter.lessons.map((lesson, index) => {
                           return (
                             <div className="my-5" key={lesson.lesson_id}>
@@ -139,14 +139,14 @@ const Index: NextPage = () => {
                                   <LessonCard
                                     cardRef={undefined}
                                     status="public"
-                                    className="flex items-center flex-start"
+                                    className="flex items-center justify-center"
                                   >
                                     <span className="mr-3" />
                                     <StatusIcon
                                       status={lesson.lessonAttendance.status}
                                     />
                                     <span className="ml-3" />
-                                    <p className="w-11/12 text-xl md:text-2xl">
+                                    <p className="w-11/12 px-2 py-5 text-xl md:text-2xl">
                                       {lesson.title}
                                     </p>
                                   </LessonCard>

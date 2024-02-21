@@ -17,7 +17,7 @@ export const ToggleButton: FC<Props> = ({
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="bg-[#AAAAAA] w-6 h-10 absolute right-[-24px] top-1/2 stroke-[#D9D9D9] fill-[#D9D9D9]"
+        className="absolute right-[-24px] top-1/2 h-10 w-6 bg-[#AAAAAA] fill-[#D9D9D9] stroke-[#D9D9D9]"
       >
         <path
           strokeLinecap="round"
@@ -37,7 +37,7 @@ export const ToggleButton: FC<Props> = ({
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="bg-[#AAAAAA] w-6 h-10 stroke-[#D9D9D9] fill-[#D9D9D9] top-1/2"
+        className="top-1/2 h-10 w-6 bg-[#AAAAAA] fill-[#D9D9D9] stroke-[#D9D9D9]"
       >
         <path
           strokeLinecap="round"

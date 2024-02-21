@@ -20,7 +20,7 @@ const Courses: NextPage = () => {
         {isLoading && <Loading />}
         {error && <Error />}
         <div className="container mx-auto mb-10">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-[30px]">
+          <div className="grid grid-cols-1 gap-[30px] lg:grid-cols-3">
             {attendances?.map((attendance) => {
               return (
                 <Link
@@ -40,13 +40,13 @@ const Courses: NextPage = () => {
                           width={640}
                         />
                       </div>
-                      <div className="h-auto  ml-[13px] mt-[16px]">
+                      <div className="ml-[13px]  mt-[16px] h-auto">
                         <CourseTitle course={attendance.course} />
-                        <p className="font-semibold text-[16px] mb-[16px]">
+                        <p className="mb-[16px] text-[16px] font-semibold">
                           講師 : {attendance.course.instructor.last_name}{' '}
                           {attendance.course.instructor.first_name}
                         </p>
-                        <p className="font-semibold text-[16px] mb-[16px]">
+                        <p className="mb-[16px] text-[16px] font-semibold">
                           進捗 {attendance.progress}%
                         </p>
                       </div>

@@ -6,13 +6,13 @@ type Props = {
   onChange: () => void;
 };
 
-const Checkbox = styled.input`
+const Checkbox = styled('input')`
   height: 0;
   width: 0;
   visibility: hidden;
 `;
 
-const Label = styled.label`
+const Label = styled('label')`
   cursor: pointer;
   text-indent: -9999px;
   width: 50px;
@@ -35,7 +35,7 @@ const Label = styled.label`
   }
 `;
 
-const StyledSwitch = styled.div`
+const StyledSwitch = styled('div')`
   ${Checkbox}:checked + ${Label} {
     background: #4caf50;
   }

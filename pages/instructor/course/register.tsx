@@ -60,14 +60,14 @@ const Register: NextPage = () => {
       <InstructorHeader />
       <FormLayout>
         <form onSubmit={handleSubmit(submitHandler)}>
-          <h2 className="text-center text-2xl py-8">講座登録</h2>
-          <div className="w-4/5 mx-auto">
+          <h2 className="py-8 text-center text-2xl">講座登録</h2>
+          <div className="mx-auto w-4/5">
             <div className="my-10">
               <label htmlFor="title">
                 <p className="font-bold">講座名</p>
                 <input
                   id="title"
-                  className="rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+                  className="w-full rounded border-b-2 focus:border-[#B0ABAB] focus:outline-none"
                   {...register('title')}
                 />
                 {errors.title && (
@@ -80,7 +80,7 @@ const Register: NextPage = () => {
                 <p className="font-bold">講座画像</p>
                 {uploadedFileName ? (
                   <>
-                    <span className="text-gray-600 mt-2 mr-3">
+                    <span className="mr-3 mt-2 text-gray-600">
                       アップロードされたファイル: {uploadedFileName}
                     </span>
                     <Button
@@ -103,10 +103,10 @@ const Register: NextPage = () => {
                     })}
                   >
                     <input {...getInputProps()} {...register('image')} />
-                    <div className="flex flex-col justify-center items-center ">
+                    <div className="flex flex-col items-center justify-center ">
                       <svg
                         aria-hidden="true"
-                        className="block w-8 h-8 text-gray-400"
+                        className="block size-8 text-gray-400"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
