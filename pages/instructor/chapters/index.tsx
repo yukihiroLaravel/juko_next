@@ -21,6 +21,7 @@ import { Axios } from '@/lib/api';
 import { PutStatusDropDown } from '@/features/chapter/components/PutStatusDropDown';
 import { CirclePlusIcon } from '@/components/icons/CirclePlusIcon';
 import { useAddChapter } from '@/features/chapter/hooks/useAddChapter';
+import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
 
 const Index: NextPage = () => {
   const router = useRouter();
@@ -102,7 +103,7 @@ const Index: NextPage = () => {
       : [];
 
   return (
-    <AuthWrapper>
+    <InstructorAuthWrapper>
       <InstructorLayout>
         {error && <Error />}
         {isLoading && (
@@ -132,7 +133,9 @@ const Index: NextPage = () => {
                       </div>
                     </li>
                     <li className="mb-5">
-                      <Link href="#">
+                      <Link
+                        href={`/instructor/course/students/?course_id=${course.course_id}`}
+                      >
                         <a className="underline">受講生一覧</a>
                       </Link>
                     </li>
@@ -198,7 +201,7 @@ const Index: NextPage = () => {
           )}
         </div>
       </InstructorLayout>
-    </AuthWrapper>
+    </InstructorAuthWrapper>
   );
 };
 

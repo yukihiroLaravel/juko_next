@@ -1,11 +1,12 @@
 import Box from '@/components/atoms/Box';
-import { Typography } from '@/components/atoms/Typography';
+import { Pagination } from '@/components/atoms/Pagination';
 import { SideBar } from '@/components/elements/SideBar';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { ToggleButton } from '@/components/elements/ToggleButton';
 import { InstructorLayout } from '@/components/layouts/InstructorLayout';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
-import { StudentsHeadingBox } from '@/features/instructorStudents/components/StudentsHeadingBox';
+import { StudentsHeadingBox } from '@/features/instructor-students/components/StudentsHeadingBox';
+import { StudentsTable } from '@/features/instructor-students/components/StudentsTable';
 import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
 import { NextPage } from 'next';
 import Link from 'next/link';
@@ -68,8 +69,12 @@ const Index: NextPage = () => {
               )}
             </>
           )}
-          <Box className="flex w-full flex-col gap-2">
+          <Box className="flex w-full flex-col items-center gap-2">
             <StudentsHeadingBox>受講生一覧</StudentsHeadingBox>
+            <Box className="flex w-4/5 flex-col gap-2">
+              <StudentsTable />
+              <Pagination currentPage={5} count={10} />
+            </Box>
           </Box>
         </div>
       </InstructorLayout>
