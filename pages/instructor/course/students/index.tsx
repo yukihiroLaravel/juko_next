@@ -46,8 +46,8 @@ const Index: NextPage = () => {
                       </div>
                     </li>
                     <li className="mb-5">
-                      <Link href="#">
-                        <a className="underline">受講生一覧</a>
+                      <Link href={`/instructor/chapters?course_id=${courseId}`}>
+                        <a className="underline">チャプター一覧</a>
                       </Link>
                     </li>
                     <li className="mb-5">
