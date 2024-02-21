@@ -10,6 +10,8 @@ import { Course } from '@/features/course/types/Course';
 import { Student } from '@/features/student/types/Student';
 import { SortIcon } from './SortIcon';
 import { dateToHumanReadable } from '@/lib/DateLogic';
+import Image from 'next/image';
+import { UserIcon } from '@/components/icons/UserIcon';
 
 type Props = {
   students: Student[];
@@ -125,7 +127,22 @@ export const StudentsTable: React.FC<Props> = ({
       <TableBody>
         {students.map((student) => (
           <TableRow key={student.student_id}>
-            <TableCell>{student.student_id}</TableCell>
+            <TableCell>
+              {student.profile_image ? (
+                <Image
+                  src={
+                    process.env.NEXT_PUBLIC_IMAGE_URL + student.profile_image
+                  }
+                  alt={student.nick_name}
+                  height={40}
+                  width={40}
+                />
+              ) : (
+                <Box className="flex items-center justify-center">
+                  <UserIcon size={40} />
+                </Box>
+              )}
+            </TableCell>
             <TableCell>{student.nick_name}</TableCell>
             <TableCell>{student.email}</TableCell>
             <TableCell>{course?.title}</TableCell>
