@@ -6,6 +6,7 @@ import { ToggleButton } from '@/components/elements/ToggleButton';
 import { InstructorLayout } from '@/components/layouts/InstructorLayout';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { StudentsHeadingBox } from '@/features/instructor-students/components/StudentsHeadingBox';
+import { StudentsSearchForm } from '@/features/instructor-students/components/StudentsSearchForm';
 import { StudentsTable } from '@/features/instructor-students/components/StudentsTable';
 import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
 import { NextPage } from 'next';
@@ -72,6 +73,9 @@ const Index: NextPage = () => {
           <Box className="flex w-full flex-col items-center gap-2">
             <StudentsHeadingBox>受講生一覧</StudentsHeadingBox>
             <Box className="flex w-4/5 flex-col gap-2">
+              <Box className="flex items-end justify-end">
+                <StudentsSearchForm />
+              </Box>
               <StudentsTable />
               <Pagination currentPage={5} count={10} />
             </Box>

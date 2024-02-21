@@ -9,7 +9,7 @@ type Props = {
 
 export const StudentsHeadingBox: React.FC<Props> = ({ children }) => {
   return (
-    <Box className="flex w-full items-center justify-between">
+    <Box className="flex w-full items-center justify-between p-2">
       <Typography variant="h1">{children}</Typography>
       <Box className="mr-5">
         <Button className="flex items-center gap-1">
