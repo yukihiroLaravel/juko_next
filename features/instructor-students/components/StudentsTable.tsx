@@ -9,6 +9,7 @@ import {
 import { Course } from '@/features/course/types/Course';
 import { Student } from '@/features/student/types/Student';
 import { SortIcon } from './SortIcon';
+import { dateToHumanReadable } from '@/lib/DateLogic';
 
 type Props = {
   students: Student[];
@@ -128,7 +129,9 @@ export const StudentsTable: React.FC<Props> = ({
             <TableCell>{student.nick_name}</TableCell>
             <TableCell>{student.email}</TableCell>
             <TableCell>{course?.title}</TableCell>
-            <TableCell>{student.last_login_at}</TableCell>
+            <TableCell>
+              {dateToHumanReadable(new Date(student.last_login_at))}
+            </TableCell>
             <TableCell>{student.attendanced_at}</TableCell>
           </TableRow>
         ))}
