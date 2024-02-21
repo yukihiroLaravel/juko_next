@@ -46,6 +46,7 @@ export const useFetchInstructorStudents = ({ courseId }: Args) => {
   return {
     students: data?.data.students,
     pagination: data?.data.pagination,
+    params,
     updateParams,
     isLoading,
     error,

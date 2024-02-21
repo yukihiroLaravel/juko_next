@@ -15,9 +15,10 @@ export const StudentsTableBox: FC = () => {
     courseId,
   });
 
-  const { students, pagination, updateParams } = useFetchInstructorStudents({
-    courseId: courseId as string | undefined,
-  });
+  const { students, pagination, params, updateParams } =
+    useFetchInstructorStudents({
+      courseId: courseId as string | undefined,
+    });
 
   return (
     <>
@@ -25,7 +26,19 @@ export const StudentsTableBox: FC = () => {
         <StudentsSearchForm />
       </Box>
       {students && course && (
-        <StudentsTable students={students} course={course} />
+        <StudentsTable
+          students={students}
+          course={course}
+          selectedSort={{
+            sortBy: params.sort_by as
+              | 'nick_name'
+              | 'email'
+              | 'last_login_at'
+              | 'attendanced_at',
+            order: params.order as 'asc' | 'desc',
+          }}
+          updateParams={updateParams}
+        />
       )}
       <Pagination
         total={pagination?.total ?? 0}
