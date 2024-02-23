@@ -6,7 +6,7 @@ export const CaretDownIcon = () => {
       height="24"
       viewBox="0 0 24 24"
       strokeWidth="1.5"
-      stroke="blue"
+      stroke="currentColor"
       fill="white"
       strokeLinecap="round"
       strokeLinejoin="round"
