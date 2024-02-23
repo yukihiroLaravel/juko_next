@@ -79,7 +79,7 @@ const Index: NextPage = () => {
           )}
           <Box className="flex w-full flex-col items-center gap-2">
             <StudentsHeadingBox>受講生一覧</StudentsHeadingBox>
-            <Box className="flex w-11/12 flex-col gap-2">
+            <Box className="flex w-11/12 flex-col gap-10">
               <StudentsTableBox />
             </Box>
           </Box>
