@@ -20,6 +20,7 @@ export const Button: FC<Props> = ({
 }) => {
   const buttonClassName = clsx(
     'rounded',
+    'hover:opacity-80',
     color === 'primary' && 'bg-primary',
     color === 'danger' && 'bg-danger',
     color === 'secondary' && 'bg-slate-300',

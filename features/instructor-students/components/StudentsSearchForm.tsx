@@ -1,7 +1,7 @@
 import Box from '@/components/atoms/Box';
 import { Form } from '@/components/atoms/Form';
 import Input from '@/components/atoms/Form/Input';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { ja } from 'date-fns/locale';
