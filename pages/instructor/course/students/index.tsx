@@ -1,4 +1,3 @@
-import Box from '@/components/atoms/Box';
 import { SideBar } from '@/components/atoms/SideBar/SideBar';
 import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
 import { ToggleButton } from '@/components/atoms/Button/ToggleButton';
@@ -7,12 +6,12 @@ import { Error } from '@/components/utils/Error';
 import { Loading } from '@/components/utils/Loading';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { StudentsHeadingBox } from '@/features/instructor-students/components/StudentsHeadingBox';
-import { StudentsTableBox } from '@/features/instructor-students/components/StudentsTableBox';
 import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { StudentsTableBox } from '@/features/instructor-students/components/StudentsTableBox';
 
 const Index: NextPage = () => {
   const router = useRouter();
@@ -77,12 +76,12 @@ const Index: NextPage = () => {
               )}
             </>
           )}
-          <Box className="flex w-full flex-col items-center gap-2">
+          <div className="flex w-full flex-col items-center gap-2">
             <StudentsHeadingBox>受講生一覧</StudentsHeadingBox>
-            <Box className="flex w-11/12 flex-col gap-10">
+            <div className="flex w-11/12 flex-col gap-10">
               <StudentsTableBox />
-            </Box>
-          </Box>
+            </div>
+          </div>
         </div>
       </InstructorLayout>
     </InstructorAuthWrapper>
