@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { InstructorUserDropDown } from '../InstructorUserDropDown';
+import { InstructorUserDropDown } from '../user-dropdown/InstructorUserDropDown';
 import { Header } from './presentations/Header';
 
 type Props = {

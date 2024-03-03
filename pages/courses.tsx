@@ -8,7 +8,7 @@ import { CourseTitle } from '@/features/course/components/CourseTitle';
 import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 import { Loading } from '@/components/utils/Loading';
 import { Error } from '@/components/utils/Error';
-import { StudentLayout } from '@/components/layouts/StudentLayout';
+import { StudentLayout } from '@/components/organisms/header/StudentLayout';
 
 const Courses: NextPage = () => {
   const { attendances, isLoading, error, updateText } = useFetchCourses();

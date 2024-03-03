@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import clsx from 'clsx';
-import { UserIcon } from '../icons/UserIcon';
+import { UserIcon } from '../../../icons/UserIcon';
 
 type Props = {
   isOpen: boolean;

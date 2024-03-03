@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { StudentLayout } from '@/components/layouts/StudentLayout';
+import { StudentLayout } from '@/components/organisms/header/StudentLayout';
 import { ToggleButton } from '@/components/elements/ToggleButton';
 import { SideBar } from '@/components/elements/SideBar';
 import { Thumbnail } from '@/components/elements/Thumbnail';

@@ -2,7 +2,7 @@ import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { SideBar } from '@/components/elements/SideBar';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { ToggleButton } from '@/components/elements/ToggleButton';
-import { InstructorLayout } from '@/components/layouts/InstructorLayout';
+import { InstructorLayout } from '@/components/organisms/header/InstructorLayout';
 import { Loading } from '@/components/utils/Loading';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { AuthWrapper } from '@/features/login/components/AuthWrapper';

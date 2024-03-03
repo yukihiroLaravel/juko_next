@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { StudentUserDropDown } from '../StudentUserDropDown';
+import { StudentUserDropDown } from '../user-dropdown/StudentUserDropDown';
 import { Header } from './presentations/Header';
 
 type Props = {

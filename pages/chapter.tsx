@@ -15,7 +15,7 @@ import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
 import styled from 'styled-components';
 import { AuthWrapper } from '@/features/login/components/AuthWrapper';
-import { StudentLayout } from '@/components/layouts/StudentLayout';
+import { StudentLayout } from '@/components/organisms/header/StudentLayout';
 
 type Query = {
   attendanceId?: string;

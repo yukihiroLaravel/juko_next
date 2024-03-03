@@ -1,13 +1,12 @@
-import { InstructorHeader } from '@/components/layouts/InstructorHeader';
+import { InstructorLayout } from '@/components/organisms/header';
 import { InstructorLoginForm } from '@/features/login/components/InstructorLoginForm';
 import { NextPage } from 'next';
 
 const Login: NextPage = () => {
   return (
-    <>
-      <InstructorHeader isLogin={false} />
+    <InstructorLayout isLogin={false}>
       <InstructorLoginForm />
-    </>
+    </InstructorLayout>
   );
 };
 

@@ -2,7 +2,7 @@ import { Breadcrumb } from '@/components/elements/Breadcrumb';
 import { SideBar } from '@/components/elements/SideBar';
 import { SideBarList } from '@/components/elements/SideBarList';
 import { ToggleButton } from '@/components/elements/ToggleButton';
-import { InstructorHeader } from '@/components/layouts/InstructorHeader';
+import { InstructorLayout } from '@/components/organisms/header';
 import { Error } from '@/components/utils/Error';
 import { useFetchInstructorChapters } from '@/features/chapter/hooks/useFetchInstructorChapters';
 import { EditForm } from '@/features/lesson/components/EditForm';
@@ -73,8 +73,7 @@ const Edit: NextPage = () => {
   }, [chapter, currentLesson, lesson_id]);
 
   return (
-    <>
-      <InstructorHeader />
+    <InstructorLayout>
       {error && <Error />}
       {isDisplay && (
         <div className="flex">
@@ -119,7 +118,7 @@ const Edit: NextPage = () => {
           </div>
         </div>
       )}
-    </>
+    </InstructorLayout>
   );
 };
 

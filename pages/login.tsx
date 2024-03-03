@@ -1,4 +1,4 @@
-import { StudentHeader } from '@/components/layouts/StudentHeader';
+import { StudentHeader } from '@/components/organisms/header/StudentHeader';
 import { StudentLoginForm } from '@/features/login/components/StudentLoginForm';
 import { NextPage } from 'next';
 

@@ -1,4 +1,4 @@
-import { StudentHeader } from '@/components/layouts/StudentHeader';
+import { StudentHeader } from '@/components/organisms/header/StudentHeader';
 import { StudentSignupForm } from '@/features/student/components/StudentSignupForm';
 
 export default function Signup() {

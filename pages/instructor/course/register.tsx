@@ -1,4 +1,3 @@
-import { InstructorHeader } from '@/components/layouts/InstructorHeader';
 import { NextPage } from 'next';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
@@ -9,6 +8,7 @@ import { Button } from '@/components/elements/Button';
 import { useState } from 'react';
 import { Axios } from '@/lib/api';
 import { FormLayout } from '@/features/course/components/FormLayout';
+import { InstructorLayout } from '@/components/organisms/header';
 
 const Register: NextPage = () => {
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
@@ -56,8 +56,7 @@ const Register: NextPage = () => {
   };
 
   return (
-    <>
-      <InstructorHeader />
+    <InstructorLayout>
       <FormLayout>
         <form onSubmit={handleSubmit(submitHandler)}>
           <h2 className="py-8 text-center text-2xl">講座登録</h2>
@@ -136,7 +135,7 @@ const Register: NextPage = () => {
           </div>
         </form>
       </FormLayout>
-    </>
+    </InstructorLayout>
   );
 };
 

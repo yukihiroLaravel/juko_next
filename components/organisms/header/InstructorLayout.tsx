@@ -2,12 +2,13 @@ import { FC } from 'react';
 import { InstructorHeader } from './InstructorHeader';
 
 type Props = {
+  isLogin?: boolean;
   children: React.ReactNode;
 };
-export const InstructorLayout: FC<Props> = ({ children }) => {
+export const InstructorLayout: FC<Props> = ({ isLogin = true, children }) => {
   return (
     <>
-      <InstructorHeader />
+      <InstructorHeader isLogin={isLogin} />
       <main>{children}</main>
     </>
   );

@@ -1,4 +1,4 @@
-import { InstructorHeader } from '@/components/layouts/InstructorHeader';
+import { InstructorLayout } from '@/components/organisms/header';
 import { Course } from '@/features/course/types/Course';
 import AttendanceStatusCard from '@/features/dashboard/components/AttendanceStatusCard';
 import Card from '@/features/dashboard/components/Card';
@@ -19,8 +19,7 @@ export default function Dashboard() {
   };
 
   return (
-    <main className="h-full min-h-screen">
-      <InstructorHeader />
+    <InstructorLayout>
       <CourseDashboard>
         <CourseTabList
           selectedCourse={selectedCourse}
@@ -47,6 +46,6 @@ export default function Dashboard() {
           </div>
         </MainContainer>
       </CourseDashboard>
-    </main>
+    </InstructorLayout>
   );
 }

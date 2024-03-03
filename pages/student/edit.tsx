@@ -1,4 +1,4 @@
-import { StudentLayout } from '@/components/layouts/StudentLayout';
+import { StudentLayout } from '@/components/organisms/header/StudentLayout';
 import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 import { StudentEditForm } from '@/features/student/components/StudentEditForm';
 
