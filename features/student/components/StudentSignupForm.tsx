@@ -1,4 +1,4 @@
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { Axios } from '@/lib/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRef, useState } from 'react';
@@ -190,18 +190,11 @@ export const StudentSignupForm: React.FC = () => {
         </div>
         <div className="my-10 text-center">
           {isSending.current ? (
-            <Button
-              type="button"
-              className="w-4/5 py-2 text-lg"
-              isDisabled={true}
-            >
+            <Button type="button" size="lg" isDisabled={true}>
               登録中...
             </Button>
           ) : (
-            <Button
-              type="submit"
-              className="w-4/5 py-2 text-lg hover:opacity-75"
-            >
+            <Button type="submit" size="lg">
               登録
             </Button>
           )}

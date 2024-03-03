@@ -5,13 +5,12 @@ import { ToggleButton } from '@/components/elements/ToggleButton';
 import { InstructorLayout } from '@/components/organisms/header/InstructorLayout';
 import { Loading } from '@/components/utils/Loading';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
-import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Link from 'next/link';
 import { Error } from '@/components/utils/Error';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { ChapterWithLessonsBlock } from '@/features/chapter/components/ChapterWithLessonsBlock';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -167,12 +166,11 @@ const Index: NextPage = () => {
                   />
                 </div>
                 <div className="mt-5 flex justify-between">
-                  <Button
-                    className="flex items-center p-2"
-                    clickHandler={updateIsShowedAddChapter}
-                  >
-                    <CirclePlusIcon strokeWidth={1} />
-                    チャプター作成
+                  <Button size="sm" clickHandler={updateIsShowedAddChapter}>
+                    <div className="flex items-center gap-1">
+                      <CirclePlusIcon strokeWidth={1} />
+                      チャプター作成
+                    </div>
                   </Button>
                   <PutStatusDropDown
                     courseId={course.course_id}

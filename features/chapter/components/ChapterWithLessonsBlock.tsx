@@ -1,6 +1,6 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Chapter } from '../types/Chapter';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { DraggableCardList as LessonDraggableCardList } from '@/features/lesson/components/DraggableCardList';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { Axios } from '@/lib/api';
@@ -63,7 +63,7 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
           moveCard={moveCard}
         />
       </div>
-      <div className="my-5 mx-auto w-11/12">
+      <div className="mx-auto my-5 w-11/12">
         <LessonDraggableCardList
           courseId={courseId}
           chapter={chapter}
@@ -73,12 +73,11 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
           {renderAddLesson()}
         </form>
         {!isShowedAddLesson && (
-          <Button
-            className="p-2 flex items-center"
-            clickHandler={updateIsShowedAddLesson}
-          >
-            <CirclePlusIcon strokeWidth={1} />
-            レッスン作成
+          <Button size="sm" clickHandler={updateIsShowedAddLesson}>
+            <div className="flex items-center justify-center gap-1">
+              <CirclePlusIcon strokeWidth={1} />
+              レッスン作成
+            </div>
           </Button>
         )}
       </div>

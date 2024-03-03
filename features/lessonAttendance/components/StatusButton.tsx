@@ -2,7 +2,7 @@ import { Axios } from '@/lib/api';
 import { FC, ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 
 type Props = {
   children: ReactNode;

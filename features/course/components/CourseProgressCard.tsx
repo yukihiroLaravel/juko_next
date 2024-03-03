@@ -1,6 +1,6 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Text } from 'recharts';
 import { useFetchProgress } from '../hooks/useFetchProgress';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import Link from 'next/link';
 
 type Props = {
@@ -116,7 +116,7 @@ export const CourseProgressCard: React.FC<Props> = ({
           </div>
           <div className="p-5">
             {progress?.continue_lesson_id && (
-              <Button className="px-10 py-6 text-2xl">続きからはじめる</Button>
+              <Button size="lg">続きからはじめる</Button>
             )}
           </div>
         </div>
@@ -166,19 +166,21 @@ export const CourseProgressCard: React.FC<Props> = ({
           </div>
         </div>
         <div className="p-5 text-center">
-          <Link
-            href={{
-              pathname: '/chapter',
-              query: {
-                attendanceId,
-                courseId: courseId,
-                lessonIndex: progress?.continue_lesson_id,
-              },
-            }}
-            as={`/chapter?attendanceId=${attendanceId}&courseId=${courseId}`}
-          >
-            <Button className="w-full px-3 py-1">続きからはじめる</Button>
-          </Link>
+          {progress?.continue_lesson_id && (
+            <Link
+              href={{
+                pathname: '/student/chapter',
+                query: {
+                  attendanceId,
+                  courseId: courseId,
+                  lessonIndex: progress?.continue_lesson_id,
+                },
+              }}
+              as={`/studet/chapter?attendanceId=${attendanceId}&courseId=${courseId}`}
+            >
+              <Button size="lg">続きからはじめる</Button>
+            </Link>
+          )}
         </div>
       </div>
     </>

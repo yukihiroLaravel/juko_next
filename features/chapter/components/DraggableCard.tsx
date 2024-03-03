@@ -4,7 +4,7 @@ import { Axios } from '@/lib/api';
 import { ChapterCard } from './ChapterCard';
 import { useDrag, useDrop } from 'react-dnd';
 import { GridDotsIcon } from '@/components/icons/GridDotsIcon';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { useUpdateTitle } from '../hooks/useUpdateTitle';
 import { DotIconDropDown } from './DotIconDropDown';
 
@@ -123,7 +123,7 @@ export const DraggableCard: FC<Props> = ({
       isDragging={isDragging}
     >
       <div
-        className="cursor-move h-full m-0 px-2 py-10 border-r border-gray-300"
+        className="m-0 h-full cursor-move border-r border-gray-300 px-2 py-10"
         onClick={(event) => {
           event.stopPropagation();
         }}
@@ -131,12 +131,12 @@ export const DraggableCard: FC<Props> = ({
         <GridDotsIcon />
       </div>
       {isClickedEditTitle ? (
-        <div className="flex-col w-2/3 ml-2">
+        <div className="ml-2 w-2/3 flex-col">
           <form className="flex" onSubmit={handleSubmit(handleUpdateTitle)}>
             {renderUpdateChapter()}
             <div className="mx-2 flex">
               <Button
-                className="p-2"
+                size="sm"
                 color="danger"
                 clickHandler={() => {
                   updateIsClickedEditTitle();
@@ -146,7 +146,9 @@ export const DraggableCard: FC<Props> = ({
                 キャンセル
               </Button>
               <span className="mr-2" />
-              <Button className="py-2 px-6">保存</Button>
+              <Button size="md" type="submit">
+                保存
+              </Button>
             </div>
           </form>
           {errors.title && (
@@ -154,7 +156,7 @@ export const DraggableCard: FC<Props> = ({
           )}
         </div>
       ) : (
-        <h3 className="font-semibold text-lg md:text-3xl">{chapter.title}</h3>
+        <h3 className="text-lg font-semibold md:text-3xl">{chapter.title}</h3>
       )}
       {!isClickedEditTitle && (
         <DotIconDropDown

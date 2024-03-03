@@ -1,4 +1,4 @@
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { SwitchButton } from '@/components/elements/SwitchButton';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { InstructorLayout } from '@/components/organisms/header';
@@ -151,7 +151,7 @@ const Index: NextPage = () => {
                         </span>
                         <Button
                           type="button"
-                          className="p-2"
+                          size="sm"
                           color="danger"
                           clickHandler={cancelHandler}
                         >
@@ -195,14 +195,11 @@ const Index: NextPage = () => {
                   <Button
                     type="button"
                     color="danger"
-                    className="px-5 py-2 hover:opacity-75"
                     clickHandler={deleteHandler}
                   >
                     削除
                   </Button>
-                  <Button type="submit" className="px-5 py-2 hover:opacity-75">
-                    更新
-                  </Button>
+                  <Button type="submit">更新</Button>
                 </div>
               </div>
             </form>

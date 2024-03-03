@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { StoreSchema } from '@/features/course/schemas/StoreSchema';
 import { StoreCourse } from '@/features/course/types/StoreCourse';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { useState } from 'react';
 import { Axios } from '@/lib/api';
 import { FormLayout } from '@/features/course/components/FormLayout';
@@ -86,7 +86,7 @@ const Index: NextPage = () => {
                       </span>
                       <Button
                         type="button"
-                        className="p-1"
+                        size="sm"
                         color="danger"
                         clickHandler={() => {
                           setValue('image', undefined);
@@ -130,7 +130,7 @@ const Index: NextPage = () => {
                 </label>
               </div>
               <div className="my-5 text-center">
-                <Button type="submit" className="w-4/5 py-2 hover:opacity-75">
+                <Button type="submit" size="lg">
                   登録
                 </Button>
               </div>

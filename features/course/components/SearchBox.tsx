@@ -1,4 +1,4 @@
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { FC, useState } from 'react';
 
 type Props = {
@@ -20,11 +20,7 @@ export const SearchBox: FC<Props> = ({ updateText }) => {
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <Button
-        type="button"
-        className="rounded-none rounded-r-md px-4 py-2"
-        clickHandler={clickHandler}
-      >
+      <Button type="button" clickHandler={clickHandler}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24"

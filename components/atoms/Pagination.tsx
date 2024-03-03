@@ -1,4 +1,4 @@
-import { Button } from '../elements/Button';
+import { Button } from '@/components/atoms/Button';
 
 type Props = {
   currentPage: number;
@@ -35,11 +35,7 @@ export const Pagination: React.FC<Props> = ({
         {pages.map((page) => (
           <Button
             key={page}
-            className={`${
-              page === currentPage
-                ? 'bg-primary text-white'
-                : 'border-gray-200 bg-white text-black'
-            }`}
+            color={page === currentPage ? 'primary' : 'secondary'}
             size="sm"
             clickHandler={() => {
               goToPage(page);

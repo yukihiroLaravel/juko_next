@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ChapterCard } from '../components/ChapterCard';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -32,24 +32,26 @@ export const useAddChapter = () => {
 
   const renderAddChapter = () => {
     return isShowedAddChapter ? (
-      <ChapterCard status="private" cardRef={undefined} className="my-3 p-8 ">
-        <div className="flex justify-between items-center">
+      <ChapterCard status="private" cardRef={undefined} className="my-3 p-8">
+        <div className="flex items-center justify-between">
           <input
             type="text"
-            className="w-1/2 border border-gray-300 rounded-md p-2"
+            className="w-1/2 rounded-md border border-gray-300 p-2"
             placeholder="チャプター名を入力"
             {...register('title')}
           />
           <div>
             <Button
-              className="p-2"
+              size="sm"
               color="danger"
               clickHandler={() => setIsShowedAddChapter(!isShowedAddChapter)}
             >
               キャンセル
             </Button>
             <span className="mx-2" />
-            <Button className="py-2 px-6">保存</Button>
+            <Button size="md" type="submit">
+              保存
+            </Button>
           </div>
         </div>
         <div>

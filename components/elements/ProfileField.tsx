@@ -1,4 +1,4 @@
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { Thumbnail } from '@/components/elements/Thumbnail';
 import { useDropzone } from 'react-dropzone';
 import { UseFormRegisterReturn } from 'react-hook-form';
@@ -51,7 +51,7 @@ export function ProfileField({
           </span>
           <Button
             type="button"
-            className="p-2"
+            size="sm"
             color="danger"
             clickHandler={cancelHandler}
           >

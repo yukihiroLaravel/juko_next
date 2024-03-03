@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { Loading } from '@/components/utils/Loading';
 import { FieldDateInput } from '@/components/elements/FieldDateInput';
 import FieldInput from '@/components/elements/FieldInput';
@@ -220,18 +220,11 @@ export const StudentEditForm: React.FC = () => {
               />
               <div className="my-10 text-center">
                 {isSending.current ? (
-                  <Button
-                    type="button"
-                    className="w-4/5 cursor-not-allowed py-2 text-lg opacity-50"
-                    isDisabled={true}
-                  >
+                  <Button type="button" size="lg" isDisabled={true}>
                     更新中...
                   </Button>
                 ) : (
-                  <Button
-                    type="submit"
-                    className="w-4/5 py-2 text-lg hover:opacity-75"
-                  >
+                  <Button type="submit" size="lg">
                     更新
                   </Button>
                 )}
