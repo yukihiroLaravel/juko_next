@@ -1,6 +1,6 @@
 import { Button } from '@/components/atoms/Button/Button';
-import { SwitchButton } from '@/components/elements/SwitchButton';
-import { Thumbnail } from '@/components/elements/Thumbnail';
+import { SwitchButton } from '@/components/atoms/Button/SwitchButton';
+import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
 import { InstructorLayout } from '@/components/organisms/header';
 import { Loading } from '@/components/utils/Loading';
 import { FormLayout } from '@/features/course/components/FormLayout';

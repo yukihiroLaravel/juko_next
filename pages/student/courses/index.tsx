@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { useFetchCourses } from '@/hooks/useFetchCourses';
 import { CourseCard } from '@/features/course/components/CourseCard';
 import { CourseHeader } from '@/features/course/components/CourseHeader';
-import { Thumbnail } from '@/components/elements/Thumbnail';
+import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
 import { CourseTitle } from '@/features/course/components/CourseTitle';
 import { AuthWrapper } from '@/features/login/components/AuthWrapper';
 import { Loading } from '@/components/utils/Loading';

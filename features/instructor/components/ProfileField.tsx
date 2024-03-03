@@ -1,5 +1,5 @@
 import { Button } from '@/components/atoms/Button/Button';
-import { Thumbnail } from '@/components/elements/Thumbnail';
+import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
 import { useDropzone } from 'react-dropzone';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { PutInstructor } from '../types/PutInstructor';

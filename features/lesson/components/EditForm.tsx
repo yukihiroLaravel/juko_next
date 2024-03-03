@@ -1,10 +1,10 @@
-import { SwitchButton } from '@/components/elements/SwitchButton';
+import { SwitchButton } from '@/components/atoms/Button/SwitchButton';
 import { LESSON_STATUS, Lesson } from '../types/Lesson';
 import { usePutForm } from '../hooks/usePutForm';
 import { Button } from '@/components/atoms/Button/Button';
 import { Axios } from '@/lib/api';
 import { useRef } from 'react';
-import FieldInput from '@/components/elements/FieldInput';
+import FieldInput from '@/components/atoms/Field/FieldInput';
 
 type Props = {
   courseId: number;
@@ -86,9 +86,7 @@ export const EditForm: React.FC<Props> = ({
       <h2 className="text-center text-2xl">レッスン編集</h2>
       <div className="mx-auto w-4/5">
         <div className="flex items-center justify-end text-sm">
-          <Button type="button" className="px-5 py-2">
-            プレビュー
-          </Button>
+          <Button type="button">プレビュー</Button>
         </div>
         <div className="mt-10">
           <label htmlFor="title">

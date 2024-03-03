@@ -1,7 +1,7 @@
-import { Breadcrumb } from '@/components/elements/Breadcrumb';
-import { SideBar } from '@/components/elements/SideBar';
-import { SideBarList } from '@/components/elements/SideBarList';
-import { ToggleButton } from '@/components/elements/ToggleButton';
+import { Breadcrumb } from '@/components/atoms/Breadcrumb/Breadcrumb';
+import { SideBar } from '@/components/atoms/SideBar/SideBar';
+import { SideBarList } from '@/components/atoms/SideBar/SideBarList';
+import { ToggleButton } from '@/components/atoms/Button/ToggleButton';
 import { InstructorLayout } from '@/components/organisms/header';
 import { Error } from '@/components/utils/Error';
 import { useFetchInstructorChapters } from '@/features/chapter/hooks/useFetchInstructorChapters';

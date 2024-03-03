@@ -5,9 +5,9 @@ import { useFetchInstructor } from '../hooks/useFetchInstructor';
 import { Loading } from '@/components/utils/Loading';
 import { PutInstructor } from '../types/PutInstructor';
 import { Error } from '@/components/utils/Error';
-import FieldInput from '@/components/elements/FieldInput';
+import FieldInput from '@/components/atoms/Field/FieldInput';
 import { usePutForm } from '../hooks/usePutForm';
-import { ProfileField } from '@/components/elements/ProfileField';
+import { ProfileField } from '@/features/user/components/ProfileField';
 
 export const EditForm: React.FC = () => {
   const isSending = useRef<boolean>(false);

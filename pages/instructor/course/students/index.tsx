@@ -1,7 +1,7 @@
 import Box from '@/components/atoms/Box';
-import { SideBar } from '@/components/elements/SideBar';
-import { Thumbnail } from '@/components/elements/Thumbnail';
-import { ToggleButton } from '@/components/elements/ToggleButton';
+import { SideBar } from '@/components/atoms/SideBar/SideBar';
+import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
+import { ToggleButton } from '@/components/atoms/Button/ToggleButton';
 import { InstructorLayout } from '@/components/organisms/header/InstructorLayout';
 import { Error } from '@/components/utils/Error';
 import { Loading } from '@/components/utils/Loading';

@@ -1,4 +1,4 @@
-import { ProgressBar } from '@/components/elements/ProgressBar';
+import { ProgressBar } from '@/components/atoms/ProgressBar/ProgressBar';
 import { Course } from '../types/Course';
 import { Attendance } from '@/features/attendance/types/Attendance';
 

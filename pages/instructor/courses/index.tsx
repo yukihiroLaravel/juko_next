@@ -3,7 +3,7 @@ import { Loading } from '@/components/utils/Loading';
 import { Error } from '@/components/utils/Error';
 import { CourseCard } from '@/features/course/components/CourseCard';
 import { CourseHeader } from '@/features/course/components/CourseHeader';
-import { Thumbnail } from '@/components/elements/Thumbnail';
+import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
 import { CourseTitle } from '@/features/course/components/CourseTitle';
 import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
 import Link from 'next/link';

@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react';
 import { Button } from '@/components/atoms/Button/Button';
 import { Loading } from '@/components/utils/Loading';
-import { FieldDateInput } from '@/components/elements/FieldDateInput';
-import FieldInput from '@/components/elements/FieldInput';
+import { FieldDateInput } from '@/components/atoms/Field/FieldDateInput';
+import FieldInput from '@/components/atoms/Field/FieldInput';
 import { Error } from '@/components/utils/Error';
 import { GenderRadioField } from './GenderRadioField';
-import { ProfileField } from '@/components/elements/ProfileField';
+import { ProfileField } from '@/features/user/components/ProfileField';
 import { useFetchStudent } from '../hooks/useFetchStudent';
 import { usePutForm } from '../hooks/usePutForm';
 import { PutStudent } from '../types/PutStudent';

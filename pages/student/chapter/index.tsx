@@ -1,12 +1,12 @@
-import { ToggleButton } from '@/components/elements/ToggleButton';
-import { ProgressBar } from '@/components/elements/ProgressBar';
-import { SideBar } from '@/components/elements/SideBar';
+import { ToggleButton } from '@/components/atoms/Button/ToggleButton';
+import { ProgressBar } from '@/components/atoms/ProgressBar/ProgressBar';
+import { SideBar } from '@/components/atoms/SideBar/SideBar';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import { Breadcrumb } from '@/components/elements/Breadcrumb';
+import { Breadcrumb } from '@/components/atoms/Breadcrumb/Breadcrumb';
 import { StatusIcon } from '@/features/lesson/components/StatusIcon';
 import { StatusButton } from '@/features/lessonAttendance/components/StatusButton';
-import { Movie } from '@/components/elements/Movie';
+import { Movie } from '@/components/atoms/Movie/Movie';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useFetchChapter } from '@/hooks/useFetchChapter';
 import { useRouter } from 'next/router';
