@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { StudentsSearchForm } from './StudentsSearchForm';
 import { StudentsTable } from './StudentsTable';
-import { Pagination } from '@/components/atoms/Pagination';
+import { Pagination } from '@/components/atoms/Pagination/Pagination';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { useFetchInstructorStudents } from '../hooks/useFetchInstructorStudents';
 import { useRouter } from 'next/router';
