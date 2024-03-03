@@ -5,16 +5,16 @@ import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { Breadcrumb } from '@/components/atoms/Breadcrumb/Breadcrumb';
 import { StatusIcon } from '@/features/lesson/components/StatusIcon';
-import { StatusButton } from '@/features/lessonAttendance/components/StatusButton';
+import { StatusButton } from '@/features/lesson-attendance/components/StatusButton';
 import { Movie } from '@/components/atoms/Movie/Movie';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useFetchChapter } from '@/hooks/useFetchChapter';
 import { useRouter } from 'next/router';
 import { Loading } from '@/components/utils/Loading';
 import { Lesson } from '@/features/lesson/types/Lesson';
-import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
+import { LessonAttendance } from '@/features/lesson-attendance/types/LessonAttendance';
 import styled from 'styled-components';
-import { AuthWrapper } from '@/features/login/components/AuthWrapper';
+import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuthWrapper';
 import { StudentLayout } from '@/components/organisms/header/StudentLayout';
 
 type Query = {
@@ -130,7 +130,7 @@ const Index: NextPage = () => {
   };
 
   return (
-    <AuthWrapper>
+    <StudentAuthWrapper>
       <StudentLayout>
         <div className="flex">
           {isLoading ? (
@@ -290,7 +290,7 @@ const Index: NextPage = () => {
           )}
         </div>
       </StudentLayout>
-    </AuthWrapper>
+    </StudentAuthWrapper>
   );
 };
 

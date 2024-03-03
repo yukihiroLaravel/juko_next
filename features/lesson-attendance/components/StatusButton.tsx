@@ -1,7 +1,7 @@
 import { Axios } from '@/lib/api';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
-import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
+import { LessonAttendance } from '@/features/lesson-attendance/types/LessonAttendance';
 import { Button } from '@/components/atoms/Button/Button';
 
 type Props = {

@@ -1,15 +1,15 @@
 import { StudentLayout } from '@/components/organisms/header/StudentLayout';
-import { AuthWrapper } from '@/features/login/components/AuthWrapper';
+import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuthWrapper';
 import { StudentEditForm } from '@/features/student/components/StudentEditForm';
 import { NextPage } from 'next';
 
 const Index: NextPage = () => {
   return (
-    <AuthWrapper>
+    <StudentAuthWrapper>
       <StudentLayout>
         <StudentEditForm />
       </StudentLayout>
-    </AuthWrapper>
+    </StudentAuthWrapper>
   );
 };
 

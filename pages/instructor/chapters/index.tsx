@@ -20,7 +20,7 @@ import { Axios } from '@/lib/api';
 import { PutStatusDropDown } from '@/features/chapter/components/PutStatusDropDown';
 import { CirclePlusIcon } from '@/components/icons/CirclePlusIcon';
 import { useAddChapter } from '@/features/chapter/hooks/useAddChapter';
-import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
+import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 
 const Index: NextPage = () => {
   const router = useRouter();

@@ -6,7 +6,7 @@ import { Error } from '@/components/utils/Error';
 import { Loading } from '@/components/utils/Loading';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { StudentsHeadingBox } from '@/features/instructor-students/components/StudentsHeadingBox';
-import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
+import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

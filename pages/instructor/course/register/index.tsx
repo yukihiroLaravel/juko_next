@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { Axios } from '@/lib/api';
 import { FormLayout } from '@/features/course/components/FormLayout';
 import { InstructorLayout } from '@/components/organisms/header';
-import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
+import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 
 const Index: NextPage = () => {
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);

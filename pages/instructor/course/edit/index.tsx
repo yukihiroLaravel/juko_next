@@ -7,7 +7,7 @@ import { FormLayout } from '@/features/course/components/FormLayout';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { useUpdateCourse } from '@/features/course/hooks/useUpdateCourse';
 import { COURSE_STATUS } from '@/features/course/types/Course';
-import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
+import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 import { Axios } from '@/lib/api';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';

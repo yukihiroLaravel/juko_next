@@ -8,7 +8,7 @@ import MainContainer from '@/features/dashboard/components/MainContainer';
 import MonthlyLoginChart from '@/features/dashboard/components/MonthlyLoginChart';
 import WeeklyLoginChart from '@/features/dashboard/components/WeeklyLoginChart';
 import YearlyLoginChart from '@/features/dashboard/components/YearlyLoginChart';
-import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
+import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 import { useState } from 'react';
 
 export default function Dashboard() {

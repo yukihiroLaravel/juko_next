@@ -1,7 +1,7 @@
 import { Axios } from '@/lib/api';
 import { Chapter } from '@/features/chapter/types/Chapter';
 import { Lesson } from '@/features/lesson/types/Lesson';
-import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
+import { LessonAttendance } from '@/features/lesson-attendance/types/LessonAttendance';
 import { Instructor } from '@/features/instructor/types/Instructor';
 import { Course } from '@/features/course/types/Course';
 import { fetcher } from '@/lib/Fetcher';

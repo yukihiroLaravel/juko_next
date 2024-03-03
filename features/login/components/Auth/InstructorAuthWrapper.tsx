@@ -8,21 +8,18 @@ type Props = {
   children: ReactNode;
 };
 
-export const AuthWrapper: FC<Props> = ({ children }) => {
-  const { isValidating, error } = useSWR('/api/user', fetcher, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+export const InstructorAuthWrapper: FC<Props> = ({ children }) => {
+  const { isValidating, error } = useSWR('/api/user', fetcher);
 
   useEffect(() => {
     if (!isValidating && error) {
-      Router.push('/login');
+      Router.push('/instructor/login');
     }
   }, [isValidating, error]);
 
   if (isValidating)
     return (
-      <div className="w-3/4 mx-auto min-h-[100vh] mt-10 mb-10">
+      <div className="mx-auto my-10 min-h-[100vh] w-3/4">
         <Loading />
       </div>
     );

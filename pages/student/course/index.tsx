@@ -8,7 +8,7 @@ import { SideBar } from '@/components/atoms/SideBar/SideBar';
 import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
 import { Breadcrumb } from '@/components/atoms/Breadcrumb/Breadcrumb';
 import { Loading } from '@/components/utils/Loading';
-import { AuthWrapper } from '@/features/login/components/AuthWrapper';
+import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuthWrapper';
 import { ProgressCard } from '@/features/course/components/ProgressCard';
 import { CourseProgressCard } from '@/features/course/components/CourseProgressCard';
 import { useFetchCourse } from '@/hooks/useFetchCourse';
@@ -40,7 +40,7 @@ const Index: NextPage = () => {
       : [];
 
   return (
-    <AuthWrapper>
+    <StudentAuthWrapper>
       <StudentLayout>
         <div className="flex">
           {error && <Error />}
@@ -164,7 +164,7 @@ const Index: NextPage = () => {
           )}
         </div>
       </StudentLayout>
-    </AuthWrapper>
+    </StudentAuthWrapper>
   );
 };
 

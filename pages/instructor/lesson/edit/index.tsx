@@ -7,7 +7,7 @@ import { Error } from '@/components/utils/Error';
 import { useFetchInstructorChapters } from '@/features/chapter/hooks/useFetchInstructorChapters';
 import { EditForm } from '@/features/lesson/components/EditForm';
 import { Lesson } from '@/features/lesson/types/Lesson';
-import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
+import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';

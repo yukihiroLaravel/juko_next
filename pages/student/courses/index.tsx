@@ -5,7 +5,7 @@ import { CourseCard } from '@/features/course/components/CourseCard';
 import { CourseHeader } from '@/features/course/components/CourseHeader';
 import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
 import { CourseTitle } from '@/features/course/components/CourseTitle';
-import { AuthWrapper } from '@/features/login/components/AuthWrapper';
+import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuthWrapper';
 import { Loading } from '@/components/utils/Loading';
 import { Error } from '@/components/utils/Error';
 import { StudentLayout } from '@/components/organisms/header/StudentLayout';
@@ -14,7 +14,7 @@ const Index: NextPage = () => {
   const { attendances, isLoading, error, updateText } = useFetchCourses();
 
   return (
-    <AuthWrapper>
+    <StudentAuthWrapper>
       <StudentLayout>
         <CourseHeader updateText={updateText} />
         {isLoading && <Loading />}
@@ -58,7 +58,7 @@ const Index: NextPage = () => {
           </div>
         </div>
       </StudentLayout>
-    </AuthWrapper>
+    </StudentAuthWrapper>
   );
 };
 

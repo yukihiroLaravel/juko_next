@@ -5,7 +5,7 @@ import { CourseCard } from '@/features/course/components/CourseCard';
 import { CourseHeader } from '@/features/course/components/CourseHeader';
 import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
 import { CourseTitle } from '@/features/course/components/CourseTitle';
-import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
+import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 import Link from 'next/link';
 import { InstructorLayout } from '@/components/organisms/header';
 import { useFetchInstructorCourses } from '@/features/course/hooks/useFetchInstructorCourses';
