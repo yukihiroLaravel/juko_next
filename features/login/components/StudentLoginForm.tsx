@@ -33,7 +33,7 @@ export const StudentLoginForm: FC = () => {
           isSending.current = false;
           setValue('password', '');
           if (res.data.result === true) {
-            Router.push('/courses');
+            Router.push('/student/courses');
           }
         })
         .catch((error) => {

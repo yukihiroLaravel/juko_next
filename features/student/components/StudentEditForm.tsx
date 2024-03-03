@@ -81,21 +81,21 @@ export const StudentEditForm: React.FC = () => {
   return (
     <>
       {isLoading && (
-        <div className="w-3/4 mx-auto min-h-[100vh] my-10">
+        <div className="mx-auto my-10 min-h-[100vh] w-3/4">
           <Loading />
         </div>
       )}
       {error && <Error />}
       {student && isDefaultValues && (
         <form
-          className="md:w-1/3 md:border mx-auto min-h-full my-10 py-10 bg-white"
+          className="mx-auto my-10 min-h-full bg-white py-10 md:w-1/3 md:border"
           onSubmit={handleSubmit(submitHandler)}
         >
           <h2 className="text-center text-2xl">ユーザー情報編集</h2>
-          <div className="w-4/5 mx-auto">
+          <div className="mx-auto w-4/5">
             <div className="mt-10">
               <label htmlFor="nick_name">
-                <p className="font-bold mb-1">ユーザー名</p>
+                <p className="mb-1 font-bold">ユーザー名</p>
                 <FieldInput
                   defaultValue={student.nick_name}
                   {...register('nick_name')}
@@ -109,7 +109,7 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="last_name">
-                <p className="font-bold mb-1">姓</p>
+                <p className="mb-1 font-bold">姓</p>
                 <FieldInput
                   defaultValue={student.last_name}
                   {...register('last_name')}
@@ -123,7 +123,7 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="first_name">
-                <p className="font-bold mb-1">名</p>
+                <p className="mb-1 font-bold">名</p>
                 <FieldInput
                   defaultValue={student.first_name}
                   {...register('first_name')}
@@ -137,7 +137,7 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="email">
-                <p className="font-bold mb-1">メールアドレス</p>
+                <p className="mb-1 font-bold">メールアドレス</p>
                 <FieldInput
                   defaultValue={student.email}
                   type="email"
@@ -155,7 +155,7 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="occupation">
-                <p className="font-bold mb-1">職業</p>
+                <p className="mb-1 font-bold">職業</p>
                 <FieldInput
                   defaultValue={student.occupation}
                   {...register('occupation')}
@@ -169,7 +169,7 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="purpose">
-                <p className="font-bold mb-1">目的</p>
+                <p className="mb-1 font-bold">目的</p>
                 <FieldInput
                   defaultValue={student.purpose}
                   {...register('purpose')}
@@ -181,7 +181,7 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="birthDate">
-                <p className="font-bold mb-1">誕生日</p>
+                <p className="mb-1 font-bold">誕生日</p>
                 <FieldDateInput name="birth_date" control={control} />
                 {errors.birth_date && (
                   <span className="text-red-600">
@@ -192,7 +192,7 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="sex">
-                <p className="font-bold mb-1">性別</p>
+                <p className="mb-1 font-bold">性別</p>
                 <div className="mt-2">
                   <GenderRadioField name="sex" control={control} />
                 </div>
@@ -200,7 +200,7 @@ export const StudentEditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="address">
-                <p className="font-bold mb-1">住所</p>
+                <p className="mb-1 font-bold">住所</p>
                 <FieldInput
                   defaultValue={student.address}
                   {...register('address')}
@@ -218,11 +218,11 @@ export const StudentEditForm: React.FC = () => {
                 register={register('image')}
                 error={errors.image?.message}
               />
-              <div className="text-center my-10">
+              <div className="my-10 text-center">
                 {isSending.current ? (
                   <Button
                     type="button"
-                    className="w-4/5 py-2 text-lg opacity-50 cursor-not-allowed"
+                    className="w-4/5 cursor-not-allowed py-2 text-lg opacity-50"
                     isDisabled={true}
                   >
                     更新中...
@@ -230,7 +230,7 @@ export const StudentEditForm: React.FC = () => {
                 ) : (
                   <Button
                     type="submit"
-                    className="w-4/5 py-2 hover:opacity-75 text-lg"
+                    className="w-4/5 py-2 text-lg hover:opacity-75"
                   >
                     更新
                   </Button>

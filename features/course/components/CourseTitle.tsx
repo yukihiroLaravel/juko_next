@@ -15,7 +15,7 @@ type Props = {
 export const CourseTitle: FC<Props> = ({ course }) => {
   return (
     <>
-      <p className="font-semibold text-[16px] mb-[16px]">{course.title}</p>
+      <p className="mb-[16px] text-[16px] font-semibold">{course.title}</p>
     </>
   );
 };

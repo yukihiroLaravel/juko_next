@@ -30,7 +30,7 @@ const Index: NextPage = () => {
       ? [
           {
             title: '講座一覧',
-            href: '/courses',
+            href: '/student/courses',
           },
           {
             title: attendance?.course?.title ?? '',
@@ -125,7 +125,7 @@ const Index: NextPage = () => {
                             <div className="my-5" key={lesson.lesson_id}>
                               <Link
                                 href={{
-                                  pathname: '/chapter',
+                                  pathname: '/student/chapter',
                                   query: {
                                     attendanceId,
                                     courseId: attendance.course.course_id,
@@ -133,7 +133,7 @@ const Index: NextPage = () => {
                                     lessonIndex: index,
                                   },
                                 }}
-                                as={`/chapter?attendanceId=${attendanceId}&courseId=${attendance.course.course_id}&chapterId=${chapter.chapter_id}`}
+                                as={`/student/chapter?attendanceId=${attendanceId}&courseId=${attendance.course.course_id}&chapterId=${chapter.chapter_id}`}
                               >
                                 <a>
                                   <LessonCard

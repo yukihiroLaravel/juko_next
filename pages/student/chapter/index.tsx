@@ -42,7 +42,7 @@ const StyleSideBarList = styled('li')<{ isSelected: boolean }>`
   }
 `;
 
-const Chapter: NextPage = () => {
+const Index: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
 
   const [width] = useWindowSize();
@@ -108,11 +108,11 @@ const Chapter: NextPage = () => {
   const links = [
     {
       title: '講座一覧',
-      href: '/courses',
+      href: '/student/courses',
     },
     {
       title: attendance?.course.title,
-      href: `/course?attendance_id=${query.attendanceId}`,
+      href: `/student/course?attendance_id=${query.attendanceId}`,
     },
     {
       title: currentLesson?.title,
@@ -294,4 +294,4 @@ const Chapter: NextPage = () => {
   );
 };
 
-export default Chapter;
+export default Index;

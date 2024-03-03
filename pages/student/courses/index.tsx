@@ -10,7 +10,7 @@ import { Loading } from '@/components/utils/Loading';
 import { Error } from '@/components/utils/Error';
 import { StudentLayout } from '@/components/organisms/header/StudentLayout';
 
-const Courses: NextPage = () => {
+const Index: NextPage = () => {
   const { attendances, isLoading, error, updateText } = useFetchCourses();
 
   return (
@@ -62,4 +62,4 @@ const Courses: NextPage = () => {
   );
 };
 
-export default Courses;
+export default Index;

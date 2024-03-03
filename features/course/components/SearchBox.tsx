@@ -16,13 +16,13 @@ export const SearchBox: FC<Props> = ({ updateText }) => {
       <input
         type="text"
         placeholder="講座検索"
-        className="px-4 py-2 border border-gray-300 rounded-tl-md rounded-bl-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="rounded-l-md border border-gray-300 px-4 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
       <Button
         type="button"
-        className="px-4 py-2 rounded-none rounded-tr-md rounded-br-md"
+        className="rounded-none rounded-r-md px-4 py-2"
         clickHandler={clickHandler}
       >
         <svg
