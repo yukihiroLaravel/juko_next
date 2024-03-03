@@ -7,13 +7,14 @@ import { FormLayout } from '@/features/course/components/FormLayout';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { useUpdateCourse } from '@/features/course/hooks/useUpdateCourse';
 import { COURSE_STATUS } from '@/features/course/types/Course';
+import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
 import { Axios } from '@/lib/api';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-const Edit: NextPage = () => {
+const Index: NextPage = () => {
   const router = useRouter();
   const { course_id } = router.query;
 
@@ -94,7 +95,7 @@ const Edit: NextPage = () => {
   };
 
   return (
-    <>
+    <InstructorAuthWrapper>
       {isLoading && (
         <div className="mx-auto my-10 min-h-[100vh] w-3/4">
           <Loading />
@@ -208,8 +209,8 @@ const Edit: NextPage = () => {
           </FormLayout>
         </InstructorLayout>
       )}
-    </>
+    </InstructorAuthWrapper>
   );
 };
 
-export default Edit;
+export default Index;

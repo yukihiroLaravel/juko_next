@@ -1,13 +1,16 @@
 import { InstructorLayout } from '@/components/organisms/header/InstructorLayout';
 import { EditForm } from '@/features/instructor/components/EditForm';
-import { AuthWrapper } from '@/features/login/components/AuthWrapper';
+import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
+import { NextPage } from 'next';
 
-export default function Edit() {
+const Index: NextPage = () => {
   return (
-    <AuthWrapper>
+    <InstructorAuthWrapper>
       <InstructorLayout>
         <EditForm />
       </InstructorLayout>
-    </AuthWrapper>
+    </InstructorAuthWrapper>
   );
-}
+};
+
+export default Index;

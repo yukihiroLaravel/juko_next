@@ -1,6 +1,5 @@
 import { NextPage } from 'next';
 import { Loading } from '@/components/utils/Loading';
-import { useFetchInstructorCourses } from '@/features/course/hooks/useFetchInstructorCourses';
 import { Error } from '@/components/utils/Error';
 import { CourseCard } from '@/features/course/components/CourseCard';
 import { CourseHeader } from '@/features/course/components/CourseHeader';
@@ -9,8 +8,9 @@ import { CourseTitle } from '@/features/course/components/CourseTitle';
 import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
 import Link from 'next/link';
 import { InstructorLayout } from '@/components/organisms/header';
+import { useFetchInstructorCourses } from '@/features/course/hooks/useFetchInstructorCourses';
 
-const InstructorCourses: NextPage = () => {
+const Index: NextPage = () => {
   const { courses, isLoading, error, updateText } = useFetchInstructorCourses();
 
   return (
@@ -52,4 +52,4 @@ const InstructorCourses: NextPage = () => {
   );
 };
 
-export default InstructorCourses;
+export default Index;

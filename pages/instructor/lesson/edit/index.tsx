@@ -7,11 +7,12 @@ import { Error } from '@/components/utils/Error';
 import { useFetchInstructorChapters } from '@/features/chapter/hooks/useFetchInstructorChapters';
 import { EditForm } from '@/features/lesson/components/EditForm';
 import { Lesson } from '@/features/lesson/types/Lesson';
+import { InstructorAuthWrapper } from '@/features/login/components/InstructorAuthWrapper';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const Edit: NextPage = () => {
+const Index: NextPage = () => {
   const router = useRouter();
 
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
@@ -73,53 +74,57 @@ const Edit: NextPage = () => {
   }, [chapter, currentLesson, lesson_id]);
 
   return (
-    <InstructorLayout>
-      {error && <Error />}
-      {isDisplay && (
-        <div className="flex">
-          {isShowedSideBar ? (
-            <SideBar>
-              <ul className="mt-2">
-                {chapter.lessons.map((lesson) => {
-                  return (
-                    <SideBarList
-                      key={lesson.lesson_id}
-                      onClick={clickHandler(lesson.lesson_id)}
-                      isSelected={lesson.lesson_id === currentLesson?.lesson_id}
-                    >
-                      {lesson.title}
-                    </SideBarList>
-                  );
-                })}
-              </ul>
+    <InstructorAuthWrapper>
+      <InstructorLayout>
+        {error && <Error />}
+        {isDisplay && (
+          <div className="flex">
+            {isShowedSideBar ? (
+              <SideBar>
+                <ul className="mt-2">
+                  {chapter.lessons.map((lesson) => {
+                    return (
+                      <SideBarList
+                        key={lesson.lesson_id}
+                        onClick={clickHandler(lesson.lesson_id)}
+                        isSelected={
+                          lesson.lesson_id === currentLesson?.lesson_id
+                        }
+                      >
+                        {lesson.title}
+                      </SideBarList>
+                    );
+                  })}
+                </ul>
+                <ToggleButton
+                  isShowedSideBar={isShowedSideBar}
+                  setIsShowedSideBar={setIsShowedSideBar}
+                />
+              </SideBar>
+            ) : (
               <ToggleButton
                 isShowedSideBar={isShowedSideBar}
                 setIsShowedSideBar={setIsShowedSideBar}
               />
-            </SideBar>
-          ) : (
-            <ToggleButton
-              isShowedSideBar={isShowedSideBar}
-              setIsShowedSideBar={setIsShowedSideBar}
-            />
-          )}
-          <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
-            <Breadcrumb links={links} />
-            <div className="my-10">
-              <h2 className="text-3xl font-semibold">{chapter.title}</h2>
+            )}
+            <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
+              <Breadcrumb links={links} />
+              <div className="my-10">
+                <h2 className="text-3xl font-semibold">{chapter.title}</h2>
+              </div>
+              <EditForm
+                key={currentLesson.lesson_id}
+                courseId={courseId}
+                chapterId={chapterId}
+                lesson={currentLesson}
+                mutate={mutate}
+              />
             </div>
-            <EditForm
-              key={currentLesson.lesson_id}
-              courseId={courseId}
-              chapterId={chapterId}
-              lesson={currentLesson}
-              mutate={mutate}
-            />
           </div>
-        </div>
-      )}
-    </InstructorLayout>
+        )}
+      </InstructorLayout>
+    </InstructorAuthWrapper>
   );
 };
 
-export default Edit;
+export default Index;
