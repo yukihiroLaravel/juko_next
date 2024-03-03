@@ -1,4 +1,3 @@
-import Box from '@/components/atoms/Box';
 import { CaretDownFilledIcon } from '@/components/icons/CaretDownFilledIcon';
 import { CaretDownIcon } from '@/components/icons/CaretDownIcon';
 import { CaretUpFilledIcon } from '@/components/icons/CaretUpFilledIcon';
@@ -30,11 +29,11 @@ export const SortIcon: FC<Props> = ({
   );
 
   return (
-    <Box
+    <div
       className="flex cursor-pointer items-center justify-center"
       onClick={clickHandler}
     >
       {icon}
-    </Box>
+    </div>
   );
 };

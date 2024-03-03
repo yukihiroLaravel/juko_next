@@ -1,4 +1,3 @@
-import Box from '@/components/atoms/Box';
 import {
   Table,
   TableBody,
@@ -42,7 +41,7 @@ export const StudentsTable: React.FC<Props> = ({
         <TableRow>
           <TableCell>#</TableCell>
           <TableCell>
-            <Box className="flex items-center justify-center">
+            <div className="flex items-center justify-center">
               名前
               <SortIcon
                 selectedSort={selectedSort}
@@ -59,10 +58,10 @@ export const StudentsTable: React.FC<Props> = ({
                   });
                 }}
               />
-            </Box>
+            </div>
           </TableCell>
           <TableCell>
-            <Box className="flex items-center justify-center">
+            <div className="flex items-center justify-center">
               メールアドレス
               <SortIcon
                 selectedSort={selectedSort}
@@ -79,11 +78,11 @@ export const StudentsTable: React.FC<Props> = ({
                   });
                 }}
               />
-            </Box>
+            </div>
           </TableCell>
           <TableCell>講座名</TableCell>
           <TableCell>
-            <Box className="flex items-center justify-center">
+            <div className="flex items-center justify-center">
               最終ログイン日時
               <SortIcon
                 selectedSort={selectedSort}
@@ -100,10 +99,10 @@ export const StudentsTable: React.FC<Props> = ({
                   });
                 }}
               />
-            </Box>
+            </div>
           </TableCell>
           <TableCell>
-            <Box className="flex items-center justify-center">
+            <div className="flex items-center justify-center">
               受講日
               <SortIcon
                 selectedSort={selectedSort}
@@ -120,7 +119,7 @@ export const StudentsTable: React.FC<Props> = ({
                   });
                 }}
               />
-            </Box>
+            </div>
           </TableCell>
         </TableRow>
       </TableHead>
@@ -138,9 +137,9 @@ export const StudentsTable: React.FC<Props> = ({
                   width={40}
                 />
               ) : (
-                <Box className="flex items-center justify-center">
+                <div className="flex items-center justify-center">
                   <UserIcon size={40} />
-                </Box>
+                </div>
               )}
             </TableCell>
             <TableCell>{student.nick_name}</TableCell>

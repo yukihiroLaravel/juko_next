@@ -2,13 +2,13 @@ import { NextPage } from 'next';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { StudentLayout } from '@/components/layouts/StudentLayout';
-import { ToggleButton } from '@/components/elements/ToggleButton';
-import { SideBar } from '@/components/elements/SideBar';
-import { Thumbnail } from '@/components/elements/Thumbnail';
-import { Breadcrumb } from '@/components/elements/Breadcrumb';
+import { StudentLayout } from '@/components/organisms/header/StudentLayout';
+import { ToggleButton } from '@/components/atoms/Button/ToggleButton';
+import { SideBar } from '@/components/atoms/SideBar/SideBar';
+import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
+import { Breadcrumb } from '@/components/atoms/Breadcrumb/Breadcrumb';
 import { Loading } from '@/components/utils/Loading';
-import { AuthWrapper } from '@/features/login/components/AuthWrapper';
+import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuthWrapper';
 import { ProgressCard } from '@/features/course/components/ProgressCard';
 import { CourseProgressCard } from '@/features/course/components/CourseProgressCard';
 import { useFetchCourse } from '@/hooks/useFetchCourse';
@@ -30,7 +30,7 @@ const Index: NextPage = () => {
       ? [
           {
             title: '講座一覧',
-            href: '/courses',
+            href: '/student/courses',
           },
           {
             title: attendance?.course?.title ?? '',
@@ -40,7 +40,7 @@ const Index: NextPage = () => {
       : [];
 
   return (
-    <AuthWrapper>
+    <StudentAuthWrapper>
       <StudentLayout>
         <div className="flex">
           {error && <Error />}
@@ -125,7 +125,7 @@ const Index: NextPage = () => {
                             <div className="my-5" key={lesson.lesson_id}>
                               <Link
                                 href={{
-                                  pathname: '/chapter',
+                                  pathname: '/student/chapter',
                                   query: {
                                     attendanceId,
                                     courseId: attendance.course.course_id,
@@ -133,7 +133,7 @@ const Index: NextPage = () => {
                                     lessonIndex: index,
                                   },
                                 }}
-                                as={`/chapter?attendanceId=${attendanceId}&courseId=${attendance.course.course_id}&chapterId=${chapter.chapter_id}`}
+                                as={`/student/chapter?attendanceId=${attendanceId}&courseId=${attendance.course.course_id}&chapterId=${chapter.chapter_id}`}
                               >
                                 <a>
                                   <LessonCard
@@ -164,7 +164,7 @@ const Index: NextPage = () => {
           )}
         </div>
       </StudentLayout>
-    </AuthWrapper>
+    </StudentAuthWrapper>
   );
 };
 

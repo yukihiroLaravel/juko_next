@@ -2,11 +2,11 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import { AuthWrapper } from '@/features/login/components/AuthWrapper';
+import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuthWrapper';
 
 const Home: NextPage = () => {
   return (
-    <AuthWrapper>
+    <StudentAuthWrapper>
       <div className={styles.container}>
         <Head>
           <title>Create Next App</title>
@@ -73,7 +73,7 @@ const Home: NextPage = () => {
           </a>
         </footer>
       </div>
-    </AuthWrapper>
+    </StudentAuthWrapper>
   );
 };
 

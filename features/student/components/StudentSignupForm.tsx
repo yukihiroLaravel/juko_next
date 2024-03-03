@@ -1,8 +1,8 @@
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { Axios } from '@/lib/api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRef, useState } from 'react';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { StoreSchema } from '../schemas/StoreSchema';
 
 export const StudentSignupForm: React.FC = () => {
@@ -65,17 +65,17 @@ export const StudentSignupForm: React.FC = () => {
 
   return (
     <form
-      className="md:w-1/3 md:border mx-auto min-h-full my-10 py-10 bg-white"
+      className="mx-auto my-10 min-h-full bg-white py-10 md:w-1/3 md:border"
       onSubmit={handleSubmit(submitHandler)}
     >
       <h2 className="text-center text-2xl">新規登録画面</h2>
-      <div className="w-4/5 mx-auto">
+      <div className="mx-auto w-4/5">
         <div className="mt-10">
           <label htmlFor="nickName">
             <p>ユーザー名</p>
             <input
               id="nickName"
-              className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('nickName')}
             />
             <span className="text-red-600">{errors?.nickName?.message}</span>
@@ -86,7 +86,7 @@ export const StudentSignupForm: React.FC = () => {
             <p>姓</p>
             <input
               id="lastName"
-              className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('lastName')}
             />
             <span className="text-red-600">{errors?.lastName?.message}</span>
@@ -97,7 +97,7 @@ export const StudentSignupForm: React.FC = () => {
             <p>名</p>
             <input
               id="firstName"
-              className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('firstName')}
             />
             <span className="text-red-600">{errors?.firstName?.message}</span>
@@ -108,7 +108,7 @@ export const StudentSignupForm: React.FC = () => {
             <p>メールアドレス</p>
             <input
               id="email"
-              className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('email')}
             />
             <span className="text-red-600">{errors?.email?.message}</span>
@@ -124,7 +124,7 @@ export const StudentSignupForm: React.FC = () => {
             <p>職業</p>
             <input
               id="occupation"
-              className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('occupation')}
             />
             <span className="text-red-600">{errors?.occupation?.message}</span>
@@ -135,7 +135,7 @@ export const StudentSignupForm: React.FC = () => {
             <p>目的</p>
             <input
               id="purpose"
-              className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('purpose')}
             />
             <span className="text-red-600">{errors?.purpose?.message}</span>
@@ -147,7 +147,7 @@ export const StudentSignupForm: React.FC = () => {
             <input
               id="birthDate"
               type="date"
-              className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('birthDate')}
             />
             <span className="text-red-600">{errors?.birthDate?.message}</span>
@@ -160,16 +160,14 @@ export const StudentSignupForm: React.FC = () => {
               <label className="inline-flex items-center">
                 <input
                   type="radio"
-                  className="form-radio"
                   {...register('sex', { required: true })}
                   value="man"
                 />
                 <span className="ml-2">男性</span>
               </label>
-              <label className="inline-flex items-center ml-6">
+              <label className="ml-6 inline-flex items-center">
                 <input
                   type="radio"
-                  className="form-radio"
                   {...register('sex', { required: true })}
                   value="woman"
                 />
@@ -184,26 +182,19 @@ export const StudentSignupForm: React.FC = () => {
             <p>住所</p>
             <input
               id="address"
-              className="p-1 rounded border-b-2 w-full focus:outline-none focus:border-[#B0ABAB]"
+              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('address')}
             />
             <span className="text-red-600">{errors?.address?.message}</span>
           </label>
         </div>
-        <div className="text-center my-10">
+        <div className="my-10 text-center">
           {isSending.current ? (
-            <Button
-              type="button"
-              className="w-4/5 py-2 text-lg"
-              isDisabled={true}
-            >
+            <Button type="button" size="lg" isDisabled={true}>
               登録中...
             </Button>
           ) : (
-            <Button
-              type="submit"
-              className="w-4/5 py-2 hover:opacity-75 text-lg"
-            >
+            <Button type="submit" size="lg">
               登録
             </Button>
           )}

@@ -1,6 +1,6 @@
 import { FC, useRef } from 'react';
 import { LESSON_STATUS, Lesson } from '../types/Lesson';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { Axios } from '@/lib/api';
 import { useDrag, useDrop } from 'react-dnd';
 import { LessonCard } from './LessonCard';
@@ -127,11 +127,11 @@ export const DraggableCard: FC<Props> = ({
       className="relative flex items-center"
       cardRef={ref}
     >
-      <div className="cursor-move h-full m-0 px-2 py-5 border-r border-gray-300">
+      <div className="m-0 h-full cursor-move border-r border-gray-300 px-2 py-5">
         <GridDotsIcon />
       </div>
       {isClickedEditTitle ? (
-        <div className="flex-col w-2/3">
+        <div className="w-2/3 flex-col">
           <form
             className="mx-2 flex"
             onSubmit={handleSubmit(handleUpdateLesson)}
@@ -139,7 +139,7 @@ export const DraggableCard: FC<Props> = ({
             {renderAddLesson()}
             <div className="mx-2 flex">
               <Button
-                className="p-2"
+                size="sm"
                 color="danger"
                 clickHandler={() => {
                   updateIsClickedEditTitle();
@@ -149,7 +149,7 @@ export const DraggableCard: FC<Props> = ({
                 キャンセル
               </Button>
               <span className="mr-2" />
-              <Button className="py-2 px-6">保存</Button>
+              <Button size="md">保存</Button>
             </div>
           </form>
           {errors.title && (
@@ -161,7 +161,7 @@ export const DraggableCard: FC<Props> = ({
           key={lesson.lesson_id}
           href={`/instructor/lesson/edit?course_id=${courseId}&chapter_id=${chapterId}&lesson_id=${lesson.lesson_id}`}
         >
-          <p className="text-xl w-11/12 pl-5 py-5 overflow-auto">
+          <p className="w-11/12 overflow-auto py-5 pl-5 text-xl">
             {lesson.title}
           </p>
         </Link>

@@ -7,7 +7,7 @@ type Props = {
 
 export const CourseCard: FC<Props> = ({ children }) => {
   return (
-    <div className="mx-[10px] lg:mx-[0px] lg:w-[300px] xl:w-[370px] h-auto border-[#100D59] border-solid border-2 rounded-[10px] overflow-hidden bg-white">
+    <div className="mx-[10px] h-auto overflow-hidden rounded-[10px] border-2 border-solid border-[#100D59] bg-white lg:mx-[0px] lg:w-[300px] xl:w-[370px]">
       {children}
     </div>
   );

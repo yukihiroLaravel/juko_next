@@ -1,13 +1,13 @@
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { Axios } from '@/lib/api';
 import { useRef, useState } from 'react';
 import { useFetchInstructor } from '../hooks/useFetchInstructor';
 import { Loading } from '@/components/utils/Loading';
 import { PutInstructor } from '../types/PutInstructor';
 import { Error } from '@/components/utils/Error';
-import FieldInput from '@/components/elements/FieldInput';
+import FieldInput from '@/components/atoms/Field/FieldInput';
 import { usePutForm } from '../hooks/usePutForm';
-import { ProfileField } from '@/components/elements/ProfileField';
+import { ProfileField } from '@/features/user/components/ProfileField';
 
 export const EditForm: React.FC = () => {
   const isSending = useRef<boolean>(false);
@@ -66,21 +66,21 @@ export const EditForm: React.FC = () => {
   return (
     <>
       {isLoading && (
-        <div className="w-3/4 mx-auto min-h-[100vh] my-10">
+        <div className="mx-auto my-10 min-h-[100vh] w-3/4">
           <Loading />
         </div>
       )}
       {error && <Error />}
       {instructor && isDefaultValues && (
         <form
-          className="md:w-1/3 md:border mx-auto min-h-full my-10 py-10 bg-white"
+          className="mx-auto my-10 min-h-full bg-white py-10 md:w-1/3 md:border"
           onSubmit={handleSubmit(submitHandler)}
         >
           <h2 className="text-center text-2xl">ユーザー情報編集</h2>
-          <div className="w-4/5 mx-auto">
+          <div className="mx-auto w-4/5">
             <div className="mt-10">
               <label htmlFor="nick_name">
-                <p className="font-bold mb-1">講師名</p>
+                <p className="mb-1 font-bold">講師名</p>
                 <FieldInput
                   defaultValue={instructor.nick_name}
                   {...register('nick_name')}
@@ -94,7 +94,7 @@ export const EditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="last_name">
-                <p className="font-bold mb-1">姓</p>
+                <p className="mb-1 font-bold">姓</p>
                 <FieldInput
                   defaultValue={instructor.last_name}
                   {...register('last_name')}
@@ -108,7 +108,7 @@ export const EditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="first_name">
-                <p className="font-bold mb-1">名</p>
+                <p className="mb-1 font-bold">名</p>
                 <FieldInput
                   defaultValue={instructor.first_name}
                   {...register('first_name')}
@@ -122,7 +122,7 @@ export const EditForm: React.FC = () => {
             </div>
             <div className="my-3">
               <label htmlFor="email">
-                <p className="font-bold mb-1">メールアドレス</p>
+                <p className="mb-1 font-bold">メールアドレス</p>
                 <FieldInput
                   defaultValue={instructor.email}
                   type="email"
@@ -146,20 +146,13 @@ export const EditForm: React.FC = () => {
                 register={register('image')}
                 error={errors.image?.message}
               />
-              <div className="text-center my-10">
+              <div className="my-10 text-center">
                 {isSending.current ? (
-                  <Button
-                    type="button"
-                    className="w-4/5 py-2 text-lg opacity-50 cursor-not-allowed"
-                    isDisabled={true}
-                  >
+                  <Button type="button" size="lg" isDisabled={true}>
                     更新中...
                   </Button>
                 ) : (
-                  <Button
-                    type="submit"
-                    className="w-4/5 py-2 hover:opacity-75 text-lg"
-                  >
+                  <Button type="submit" size="lg">
                     更新
                   </Button>
                 )}

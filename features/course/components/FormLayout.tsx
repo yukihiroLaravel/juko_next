@@ -3,7 +3,7 @@ type Props = {
 };
 export const FormLayout: React.FC<Props> = ({ children }) => {
   return (
-    <div className="md:border md:w-3/6 min-h-[80vh] my-10 bg-white mx-auto">
+    <div className="mx-auto my-10 min-h-[80vh] bg-white md:w-3/6 md:border">
       {children}
     </div>
   );

@@ -1,5 +1,5 @@
-import { Button } from '@/components/elements/Button';
-import { Thumbnail } from '@/components/elements/Thumbnail';
+import { Button } from '@/components/atoms/Button/Button';
+import { Thumbnail } from '@/components/atoms/Thumbnail/Thumbnail';
 import { useDropzone } from 'react-dropzone';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { PutInstructor } from '../types/PutInstructor';
@@ -34,7 +34,7 @@ export function ProfileField({
 
   return (
     <>
-      <p className="font-bold mb-1">プロフィール画像</p>
+      <p className="mb-1 font-bold">プロフィール画像</p>
       {profileImage && (
         <div className="my-1">
           <Thumbnail
@@ -47,12 +47,12 @@ export function ProfileField({
       )}
       {uploadedFileName ? (
         <div>
-          <span className="text-gray-600 mt-2 mr-3">
+          <span className="mr-3 mt-2 text-gray-600">
             アップロードされたファイル: {uploadedFileName}
           </span>
           <Button
             type="button"
-            className="p-2"
+            size="sm"
             color="danger"
             clickHandler={cancelHandler}
           >
@@ -67,10 +67,10 @@ export function ProfileField({
           })}
         >
           <input {...getInputProps()} {...register('image')} />
-          <div className="flex flex-col justify-center items-center ">
+          <div className="flex flex-col items-center justify-center ">
             <svg
               aria-hidden="true"
-              className="block w-8 h-8 text-gray-400"
+              className="block size-8 text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

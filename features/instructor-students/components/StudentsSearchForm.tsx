@@ -1,7 +1,6 @@
-import Box from '@/components/atoms/Box';
 import { Form } from '@/components/atoms/Form';
 import Input from '@/components/atoms/Form/Input';
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { ja } from 'date-fns/locale';
@@ -44,7 +43,7 @@ export const StudentsSearchForm: React.FC<Props> = ({ updateParams }) => {
         onChange={(e) => setSearch({ ...search, name: e.target.value })}
       />
       <label>受講日</label>
-      <Box className="flex gap-2">
+      <div className="flex gap-2">
         <DatePicker
           className="p-1"
           selected={search.startDate}
@@ -62,7 +61,7 @@ export const StudentsSearchForm: React.FC<Props> = ({ updateParams }) => {
           dateFormat="yyyy/MM/dd"
           placeholderText="終了日"
         />
-      </Box>
+      </div>
       <Button type="submit">検索</Button>
     </Form>
   );

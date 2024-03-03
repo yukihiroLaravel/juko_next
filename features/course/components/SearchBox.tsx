@@ -1,4 +1,4 @@
-import { Button } from '@/components/elements/Button';
+import { Button } from '@/components/atoms/Button/Button';
 import { FC, useState } from 'react';
 
 type Props = {
@@ -16,15 +16,11 @@ export const SearchBox: FC<Props> = ({ updateText }) => {
       <input
         type="text"
         placeholder="講座検索"
-        className="px-4 py-2 border border-gray-300 rounded-tl-md rounded-bl-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="rounded-l-md border border-gray-300 px-4 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <Button
-        type="button"
-        className="px-4 py-2 rounded-none rounded-tr-md rounded-br-md"
-        clickHandler={clickHandler}
-      >
+      <Button type="button" clickHandler={clickHandler}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24"

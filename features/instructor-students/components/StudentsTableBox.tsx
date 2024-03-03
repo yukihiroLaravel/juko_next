@@ -1,8 +1,7 @@
-import Box from '@/components/atoms/Box';
 import { FC } from 'react';
 import { StudentsSearchForm } from './StudentsSearchForm';
 import { StudentsTable } from './StudentsTable';
-import { Pagination } from '@/components/atoms/Pagination';
+import { Pagination } from '@/components/atoms/Pagination/Pagination';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { useFetchInstructorStudents } from '../hooks/useFetchInstructorStudents';
 import { useRouter } from 'next/router';
@@ -22,9 +21,9 @@ export const StudentsTableBox: FC = () => {
 
   return (
     <>
-      <Box className="flex items-end justify-end">
+      <div className="flex items-end justify-end">
         <StudentsSearchForm updateParams={updateParams} />
-      </Box>
+      </div>
       {students && course && (
         <StudentsTable
           students={students}

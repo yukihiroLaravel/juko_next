@@ -6,10 +6,10 @@ type Props = {
 };
 export const CourseHeader: FC<Props> = ({ updateText }) => {
   return (
-    <div className="w-full border-[#100D59] border-b-2 mb-10">
-      <div className="mt-10 mb-5 flex justify-between">
-        <h2 className="font-semibold text-3xl ml-20">講座一覧</h2>
-        <div className="justify-end mr-20">
+    <div className="mb-10 w-full border-b-2 border-[#100D59]">
+      <div className="mb-5 mt-10 flex justify-between">
+        <h2 className="ml-20 text-3xl font-semibold">講座一覧</h2>
+        <div className="mr-20 justify-end">
           <SearchBox updateText={updateText} />
         </div>
       </div>

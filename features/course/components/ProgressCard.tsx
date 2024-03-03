@@ -1,4 +1,4 @@
-import { ProgressBar } from '@/components/elements/ProgressBar';
+import { ProgressBar } from '@/components/atoms/ProgressBar/ProgressBar';
 import { Course } from '../types/Course';
 import { Attendance } from '@/features/attendance/types/Attendance';
 
@@ -10,10 +10,10 @@ type Props = {
 
 export const ProgressCard: React.FC<Props> = ({ attendance }) => {
   return (
-    <div className="bg-[#89cada] w-full text-center rounded text-gray-700">
-      <p className="font-semibold text-2xl py-5 ">{attendance.course.title}</p>
+    <div className="w-full rounded bg-[#89cada] text-center text-gray-700">
+      <p className="py-5 text-2xl font-semibold ">{attendance.course.title}</p>
       <ProgressBar progress={attendance.progress} />
-      <p className="text-xl py-5">{attendance.progress}% 完了</p>
+      <p className="py-5 text-xl">{attendance.progress}% 完了</p>
     </div>
   );
 };

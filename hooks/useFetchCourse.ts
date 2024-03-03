@@ -1,7 +1,7 @@
 import { Chapter } from '@/features/chapter/types/Chapter';
 import { Course } from '@/features/course/types/Course';
 import { Lesson } from '@/features/lesson/types/Lesson';
-import { LessonAttendance } from '@/features/lessonAttendance/types/LessonAttendance';
+import { LessonAttendance } from '@/features/lesson-attendance/types/LessonAttendance';
 import { Instructor } from '@/features/instructor/types/Instructor';
 import { Attendance } from '@/features/attendance/types/Attendance';
 import useSWR from 'swr';
