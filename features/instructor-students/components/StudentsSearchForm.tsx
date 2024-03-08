@@ -12,6 +12,9 @@ type Props = {
       page: number;
       sort_by: 'nick_name' | 'email' | 'last_login_at' | 'attendanced_at';
       order: 'asc' | 'desc';
+      input_text: string;
+      start_date: string;
+      end_date: string;
     }>
   ) => void;
 };
@@ -31,11 +34,15 @@ export const StudentsSearchForm: React.FC<Props> = ({ updateParams }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(search);
+    updateParams({
+      input_text: search.name,
+      start_date: search.startDate ? formatDate(search.startDate) : '',
+      end_date: search.endDate ? formatDate(search.endDate) : '',
+    });
   };
 
   return (
-    <Form className="flex flex-col gap-3">
+    <Form className="flex flex-col gap-3" onSubmit={handleSubmit}>
       <label>名前/メールアドレス</label>
       <Input
         type="text"
@@ -65,4 +72,14 @@ export const StudentsSearchForm: React.FC<Props> = ({ updateParams }) => {
       <Button type="submit">検索</Button>
     </Form>
   );
+};
+
+const formatDate = (date: Date | null): string => {
+  if (!date) return '';
+
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2); // 月は0から始まるため+1する
+  const day = ('0' + date.getDate()).slice(-2);
+
+  return `${year}-${month}-${day}`;
 };

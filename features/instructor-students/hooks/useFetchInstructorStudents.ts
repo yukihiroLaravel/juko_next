@@ -8,6 +8,9 @@ type Params = {
   page: number;
   sort_by: 'nick_name' | 'email' | 'last_login_at' | 'attendanced_at';
   order: string;
+  input_text: string;
+  start_date: string;
+  end_date: string;
 };
 
 type Args = {
@@ -20,6 +23,9 @@ export const useFetchInstructorStudents = ({ courseId }: Args) => {
     page: 1,
     sort_by: 'nick_name',
     order: 'desc',
+    input_text: "",
+    start_date: "",
+    end_date: "",
   });
 
   const updateParams = (newParams: Partial<Params>) => {
