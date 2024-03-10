@@ -8,9 +8,9 @@ type Params = {
   page: number;
   sort_by: 'nick_name' | 'email' | 'last_login_at' | 'attendanced_at';
   order: string;
-  input_text?: string | null;
-  start_date?: string | null;
-  end_date?: string | null;
+  input_text?: string;
+  start_date?: string;
+  end_date?: string;
 };
 
 type Args = {
