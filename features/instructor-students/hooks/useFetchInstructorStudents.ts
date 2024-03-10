@@ -71,10 +71,10 @@ const getFetchUrl = (
     searchParams.append('input_text', input_text);
   }
   if (start_date) {
-    searchParams.append('start_date', `${start_date} 00:00:00`);
+    searchParams.append('start_date', `${start_date} 00:00:00`); // YYYY-MM-DD HH:MM:SS形式
   }
   if (end_date) {
-    searchParams.append('end_date', `${end_date} 23:59:59`);
+    searchParams.append('end_date', `${end_date} 23:59:59`); // YYYY-MM-DD HH:MM:SS形式
   }
   
   return courseId
