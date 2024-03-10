@@ -8,6 +8,9 @@ type Params = {
   page: number;
   sort_by: 'nick_name' | 'email' | 'last_login_at' | 'attendanced_at';
   order: string;
+  input_text?: string;
+  start_date?: string;
+  end_date?: string;
 };
 
 type Args = {
@@ -58,9 +61,23 @@ const getFetchUrl = (
   courseId: string | string[] | undefined,
   params: Params
 ) => {
+  const { per_page, page, sort_by, order, input_text, start_date, end_date} = params
+  const searchParams = new URLSearchParams();
+  searchParams.append('per_page', String(per_page));
+  searchParams.append('page', String(page));
+  searchParams.append('sort_by', sort_by);
+  searchParams.append('order', order);
+  if (input_text) {
+    searchParams.append('input_text', input_text);
+  }
+  if (start_date) {
+    searchParams.append('start_date', `${start_date} 00:00:00`); // YYYY-MM-DD HH:MM:SS形式
+  }
+  if (end_date) {
+    searchParams.append('end_date', `${end_date} 23:59:59`); // YYYY-MM-DD HH:MM:SS形式
+  }
+  
   return courseId
-    ? `/api/v1/instructor/course/${courseId}/student/index?${new URLSearchParams(
-        params as any
-      )}`
+    ? `/api/v1/instructor/course/${courseId}/student/index?${searchParams}`
     : null;
 };
