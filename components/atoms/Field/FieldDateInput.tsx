@@ -44,9 +44,7 @@ export function FieldDateInput<T extends FieldValues>({
         locale={ja}
         selected={field.value}
         onChange={(date) => {
-          if (date) {
-            field.onChange(date);
-          }
+          field.onChange(date ? date : null);
         }}
         className={clx}
         placeholderText={placeholderText}
