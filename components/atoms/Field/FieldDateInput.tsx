@@ -11,11 +11,13 @@ import { ja } from 'date-fns/locale';
 interface FieldInputProps<T extends FieldValues> {
   name: FieldPath<T>;
   control: Control<T>;
+  placeholderText?: string;
 }
 
 export function FieldDateInput<T extends FieldValues>({
   name,
   control,
+  placeholderText = '',
 }: FieldInputProps<T>) {
   const {
     field,
@@ -42,11 +44,10 @@ export function FieldDateInput<T extends FieldValues>({
         locale={ja}
         selected={field.value}
         onChange={(date) => {
-          if (date) {
-            field.onChange(date);
-          }
+          field.onChange(date ? date : null);
         }}
         className={clx}
+        placeholderText={placeholderText}
       />
       {error && <span className="text-red-600">{error.message}</span>}
     </>
