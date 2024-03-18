@@ -5,6 +5,7 @@ import { Button } from '@/components/atoms/Button/Button';
 import { Axios } from '@/lib/api';
 import { useRef } from 'react';
 import FieldInput from '@/components/atoms/Field/FieldInput';
+import Link from 'next/link';
 
 type Props = {
   courseId: number;
@@ -86,7 +87,20 @@ export const EditForm: React.FC<Props> = ({
       <h2 className="text-center text-2xl">レッスン編集</h2>
       <div className="mx-auto w-4/5">
         <div className="flex items-center justify-end text-sm">
-          <Button type="button">プレビュー</Button>
+        <Link
+          href={{
+            pathname: '/instructor/lesson/preview',
+            query: {
+              courseId: courseId,
+              chapterId: chapterId,
+              lessonId: lesson.lesson_id,
+            },
+          }}
+        >
+          <a target='_blank' rel='noopener noreferrer'>
+            <Button type="button">プレビュー</Button>
+          </a>
+        </Link>
         </div>
         <div className="mt-10">
           <label htmlFor="title">
