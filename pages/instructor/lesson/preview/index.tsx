@@ -17,6 +17,7 @@ import { Breadcrumb } from '@/components/atoms/Breadcrumb/Breadcrumb';
 import { Movie } from '@/components/atoms/Movie/Movie';
 import { Button } from '@/components/atoms/Button/Button';
 import { number } from "yup";
+import { LessonAttendanceStatus } from '@/features/lesson-attendance/types/LessonAttendance';
 
 type Query = {
   courseId?: string;
@@ -42,14 +43,6 @@ const StyleSideBarList = styled('li')<{ isSelected: boolean }>`
   }
 `;
 
-const SButton = styled(Button)`
-  font-size: 20px;
-  padding: 0.5rem 1rem;
-  @media (max-width: 640px) {
-    font-size: 13px;
-  }
-`;
-
 const Index: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
   const [width] = useWindowSize();
@@ -65,13 +58,10 @@ const Index: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   
-  type LessonAttendanceStatus = {
-    [lessonId: number]: 'before_attendance' | 'in_attendance' | 'completed_attendance';
-  };
   const generateLessonAttendanceStatusList = (lessons: Lesson[]) => {
     const lessonAttendanceStatusList: LessonAttendanceStatus = {};
     lessons.forEach(lesson => {
-      lessonAttendanceStatusList[lesson.lesson_id] = 'before_attendance';
+      lessonAttendanceStatusList[lesson.lesson_id] = STATUS_BEFORE_ATTENDANCE;
     });
     return lessonAttendanceStatusList;
   };
@@ -235,23 +225,23 @@ const Index: NextPage = () => {
                 {currentLesson && (
                   <>
                     <div className="flex justify-start">
-                      <SButton type="button" color={lessonAttendanceStatusList[currentLesson?.lesson_id] ===
+                      <Button type="button" color={lessonAttendanceStatusList[currentLesson?.lesson_id] ===
                           STATUS_BEFORE_ATTENDANCE ? 'primary' : 'secondary'} 
-                          clickHandler={() => {updateLessonAttendanceStatus(currentLesson?.lesson_id, "before_attendance")}}>
+                          clickHandler={() => {updateLessonAttendanceStatus(currentLesson?.lesson_id, STATUS_BEFORE_ATTENDANCE)}}>
                         Lesson未実施
-                      </SButton>
+                      </Button>
                       <span className="ml-10" />
-                      <SButton type="button" color={lessonAttendanceStatusList[currentLesson?.lesson_id] ===
+                      <Button type="button" color={lessonAttendanceStatusList[currentLesson?.lesson_id] ===
                           STATUS_IN_ATTENDANCE ? 'primary' : 'secondary'} 
-                          clickHandler={() => {updateLessonAttendanceStatus(currentLesson?.lesson_id, "in_attendance")}}>
+                          clickHandler={() => {updateLessonAttendanceStatus(currentLesson?.lesson_id, STATUS_IN_ATTENDANCE)}}>
                         Lesson開始
-                      </SButton>
+                      </Button>
                       <span className="ml-10" />
-                      <SButton type="button" color={lessonAttendanceStatusList[currentLesson?.lesson_id] ===
+                      <Button type="button" color={lessonAttendanceStatusList[currentLesson?.lesson_id] ===
                           STATUS_COMPLETED_ATTENDANCE ? 'primary' : 'secondary'} 
-                          clickHandler={() => {updateLessonAttendanceStatus(currentLesson?.lesson_id, "completed_attendance")}}>
+                          clickHandler={() => {updateLessonAttendanceStatus(currentLesson?.lesson_id, STATUS_COMPLETED_ATTENDANCE)}}>
                         Lesson開始
-                      </SButton>
+                      </Button>
                     </div>
                   </>
                 )}
