@@ -17,17 +17,13 @@ import { Breadcrumb } from '@/components/atoms/Breadcrumb/Breadcrumb';
 import { Movie } from '@/components/atoms/Movie/Movie';
 import { Button } from '@/components/atoms/Button/Button';
 import { number } from "yup";
-import { LessonAttendanceStatus } from '@/features/lesson-attendance/types/LessonAttendance';
+import { LessonAttendance, LessonAttendanceStatus, LESSON_ATTENDANCE_STATUS } from '@/features/lesson-attendance/types/LessonAttendance';
 
 type Query = {
   courseId?: string;
   chapterId?: string;
   lessonId?: number;
 };
-
-const STATUS_BEFORE_ATTENDANCE = 'before_attendance';
-const STATUS_IN_ATTENDANCE = 'in_attendance';
-const STATUS_COMPLETED_ATTENDANCE = 'completed_attendance';
 
 const StyleSideBarList = styled('li')<{ isSelected: boolean }>`
   border-top: 1px solid #b5b5b5;
@@ -56,24 +52,26 @@ const Index: NextPage = () => {
     courseId: query.courseId,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
-  
-  const generateLessonAttendanceStatusList = (lessons: Lesson[]) => {
-    const lessonAttendanceStatusList: LessonAttendanceStatus = {};
-    lessons.forEach(lesson => {
-      lessonAttendanceStatusList[lesson.lesson_id] = STATUS_BEFORE_ATTENDANCE;
-    });
-    return lessonAttendanceStatusList;
-  };
-  const initialLessonAttendanceStatusList = chapter ? generateLessonAttendanceStatusList(chapter.lessons) : {};
-  const [lessonAttendanceStatusList, setLessonAttendanceStatusList] = useState<LessonAttendanceStatus>(initialLessonAttendanceStatusList);
-  
-  const updateLessonAttendanceStatus = (lessonId: number, status: 'before_attendance' | 'in_attendance' | 'completed_attendance') => {
-    setLessonAttendanceStatusList(prevStatus => {
-      const newStatus = { ...prevStatus };
-      newStatus[lessonId] = status;
+
+  type LessonList =  
+    | (Lesson & {
+        lessonAttendance: LessonAttendance;
+        isCurrentLesson: boolean;
+      })
+    | undefined;
+
+  const [lessonList, setLessonList] = useState<LessonList[]>([]);
+
+  const updateLessonAttendanceStatus = (lessonId: number | undefined, status: LessonAttendanceStatus) => {
+    setLessonList(prevStatus => {
+      const newStatus = prevStatus.map(lesson => {
+        if (lesson?.lesson_id === lessonId && lesson) {
+          lesson.lessonAttendance.status = status;
+        }
+        return lesson;
+      });
       return newStatus;
-    });
+    });    
   };
 
   const lessonId = query.lessonId ? Number(query.lessonId) : 0;
@@ -83,21 +81,26 @@ const Index: NextPage = () => {
   useEffect(() => {
     if (chapter !== undefined) {
       setIsLoading(false);
-      if (currentLesson !== null) {
-        const newLesson = chapter.lessons.find(
-          (lesson) => lesson.lesson_id === currentLesson.lesson_id
-        );
-        if (newLesson) {
-          setCurrentLesson(newLesson);
-        }
-      } else {
-        const initialLesson = chapter?.lessons.find(item => item.lesson_id === lessonId);
-        if (initialLesson) {
-          setCurrentLesson(initialLesson);
+      if (lessonList.length === 0) {
+        let initialLessonList: LessonList[] = [];
+        chapter.lessons.forEach((element) => {
+          let obj: LessonList
+          obj = {
+            ...element,
+            lessonAttendance: {
+              lesson_attendance_id: 1,
+              status: LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE,
+            },
+            isCurrentLesson: (element.lesson_id === lessonId),
+          }
+          initialLessonList.push(obj)
+        });
+        if (initialLessonList) {
+          setLessonList(initialLessonList);
         }
       }
     }
-  }, [chapter, currentLesson, lessonId]);
+  }, [chapter, lessonList, lessonId]);
   
   // パン屑のリンクリスト
   const links = [
@@ -116,10 +119,17 @@ const Index: NextPage = () => {
   ];
 
   const clickHandler = (lessonId: number) => () => {
-    const newLesson = chapter?.lessons.find(
-      (lesson) => lesson.lesson_id === lessonId
-    ) as (Lesson | null);
-    setCurrentLesson(newLesson);
+    setLessonList(prevStatus => {
+      const newStatus = prevStatus.map(lesson => {
+        if (lesson?.lesson_id === lessonId && lesson) {
+          lesson.isCurrentLesson = true;
+        } else if(lesson?.lesson_id !== lessonId && lesson){
+          lesson.isCurrentLesson = false;
+        }
+        return lesson;
+      });
+      return newStatus;
+    }); 
   };
 
   return (
@@ -143,23 +153,23 @@ const Index: NextPage = () => {
                         <ProgressBar progress={calculateChapterProgeress} />
                       </div>
                     </li>
-                    {chapter?.lessons.map((lesson) => {
+                    {lessonList.map((lesson) => {
                       return (
-                        <StyleSideBarList
-                          key={lesson.lesson_id}
-                          onClick={clickHandler(lesson.lesson_id)}
-                          isSelected={
-                            lesson.lesson_id === currentLesson?.lesson_id
-                          }
-                        >
-                          <p className="text-xl	text-[#6D8DFF]">
-                            {lesson.title}
-                          </p>
-                          <StatusIcon
-                            status={lessonAttendanceStatusList[lesson.lesson_id] || 'before_attendance'}
-                            size="small"
-                          />
-                        </StyleSideBarList>
+                        lesson && (
+                          <StyleSideBarList
+                            key={lesson.lesson_id}
+                            onClick={clickHandler(lesson.lesson_id)}
+                            isSelected={lesson.isCurrentLesson}
+                          >
+                            <p className="text-xl	text-[#6D8DFF]">
+                              {lesson.title}
+                            </p>
+                            <StatusIcon
+                              status={lesson.lessonAttendance.status}
+                              size="small"
+                            />
+                          </StyleSideBarList>
+                        )
                       );
                     })}
                   </ul>
@@ -190,64 +200,64 @@ const Index: NextPage = () => {
                       <ProgressBar progress={calculateChapterProgeress} />
                     </div>
                   </li>
-                  {chapter?.lessons.map((lesson) => {
+                  {lessonList.map((lesson) => {
                     return (
-                      <StyleSideBarList
-                        key={lesson.lesson_id}
-                        onClick={clickHandler(lesson.lesson_id)}
-                        isSelected={
-                          lesson.lesson_id === currentLesson?.lesson_id
-                        }
-                      >
-                        <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
-                        <StatusIcon
-                          status={lessonAttendanceStatusList[lesson.lesson_id] || 'before_attendance'}
-                          size="small"
-                        />
-                      </StyleSideBarList>
+                      lesson && (
+                        <StyleSideBarList
+                          key={lesson.lesson_id}
+                          onClick={clickHandler(lesson.lesson_id)}
+                          isSelected={lesson.isCurrentLesson}
+                        >
+                          <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
+                          <StatusIcon
+                            status={lesson.lessonAttendance.status}
+                            size="small"
+                          />
+                        </StyleSideBarList>
+                      )
                     );
                   })}
                 </ul>
                 <div className="mx-auto mt-5">
                   <h2 className="text-[25px] font-semibold md:text-[30px]">
-                    {currentLesson?.title}
+                    {lessonList.find(lesson => lesson?.isCurrentLesson === true)?.title}
                   </h2>
                 </div>
                 <div className="my-5 overflow-auto">
-                  {(width as number) > 0 && currentLesson && (
+                  {(width as number) > 0 && (
                     <Movie
-                      videoId={currentLesson.url}
+                      videoId={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.url || ''}
                       height={(width as number) > 640 ? 405 : 180}
                       width={(width as number) > 640 ? 720 : 320}
                     />
                   )}
                 </div>
-                {currentLesson && (
+                {(
                   <>
                     <div className="flex justify-start">
-                      <Button type="button" color={lessonAttendanceStatusList[currentLesson?.lesson_id] ===
-                          STATUS_BEFORE_ATTENDANCE ? 'primary' : 'secondary'} 
-                          clickHandler={() => {updateLessonAttendanceStatus(currentLesson?.lesson_id, STATUS_BEFORE_ATTENDANCE)}}>
+                      <Button type="button" color={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lessonAttendance.status === LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE
+                          ? 'primary' : 'secondary'} 
+                          clickHandler={() => {updateLessonAttendanceStatus(lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lesson_id, LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE)}}>
                         Lesson未実施
                       </Button>
                       <span className="ml-10" />
-                      <Button type="button" color={lessonAttendanceStatusList[currentLesson?.lesson_id] ===
-                          STATUS_IN_ATTENDANCE ? 'primary' : 'secondary'} 
-                          clickHandler={() => {updateLessonAttendanceStatus(currentLesson?.lesson_id, STATUS_IN_ATTENDANCE)}}>
+                      <Button type="button" color={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lessonAttendance.status === LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE 
+                          ? 'primary' : 'secondary'} 
+                          clickHandler={() => {updateLessonAttendanceStatus(lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lesson_id, LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE)}}>
                         Lesson開始
                       </Button>
                       <span className="ml-10" />
-                      <Button type="button" color={lessonAttendanceStatusList[currentLesson?.lesson_id] ===
-                          STATUS_COMPLETED_ATTENDANCE ? 'primary' : 'secondary'} 
-                          clickHandler={() => {updateLessonAttendanceStatus(currentLesson?.lesson_id, STATUS_COMPLETED_ATTENDANCE)}}>
-                        Lesson開始
+                      <Button type="button" color={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lessonAttendance.status === LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE 
+                          ? 'primary' : 'secondary'} 
+                          clickHandler={() => {updateLessonAttendanceStatus(lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lesson_id, LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE)}}>
+                        Lesson完了
                       </Button>
                     </div>
                   </>
                 )}
                 <div className="mt-5">
                   <p className="whitespace-pre-wrap">
-                    {currentLesson?.remarks}
+                    {lessonList.find(lesson => lesson?.isCurrentLesson === true)?.remarks}
                   </p>
                 </div>
               </div>
