@@ -10,14 +10,12 @@ import styled from 'styled-components';
 import { StatusIcon } from '@/features/lesson/components/StatusIcon';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useRouter } from 'next/router';
-import { Lesson } from '@/features/lesson/types/Lesson';
 import { useFetchInstructorChapters } from '@/features/chapter/hooks/useFetchInstructorChapters';
 import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { Breadcrumb } from '@/components/atoms/Breadcrumb/Breadcrumb';
 import { Movie } from '@/components/atoms/Movie/Movie';
 import { Button } from '@/components/atoms/Button/Button';
-import { number } from "yup";
-import { LessonAttendance, LessonAttendanceStatus, LESSON_ATTENDANCE_STATUS } from '@/features/lesson-attendance/types/LessonAttendance';
+import { LessonAttendanceStatus, LESSON_ATTENDANCE_STATUS, LessonList } from '@/features/lesson-attendance/types/LessonAttendance';
 
 type Query = {
   courseId?: string;
@@ -44,7 +42,7 @@ const Index: NextPage = () => {
   const [width] = useWindowSize();
   const router = useRouter();
   const query: Query = router.query;
-  const { chapter, error, mutate } = useFetchInstructorChapters({
+  const { chapter } = useFetchInstructorChapters({
     courseId: query.courseId,
     chapterId: query.chapterId,
   });
@@ -52,16 +50,7 @@ const Index: NextPage = () => {
     courseId: query.courseId,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  type LessonList =  
-    | (Lesson & {
-        lessonAttendance: LessonAttendance;
-        isCurrentLesson: boolean;
-      })
-    | undefined;
-
   const [lessonList, setLessonList] = useState<LessonList[]>([]);
-
   const updateLessonAttendanceStatus = (lessonId: number | undefined, status: LessonAttendanceStatus) => {
     setLessonList(prevStatus => {
       const newStatus = prevStatus.map(lesson => {
@@ -73,7 +62,6 @@ const Index: NextPage = () => {
       return newStatus;
     });    
   };
-
   const lessonId = query.lessonId ? Number(query.lessonId) : 0;
   // 進捗は固定の値(0%)
   const calculateChapterProgeress = 0;
@@ -82,25 +70,22 @@ const Index: NextPage = () => {
     if (chapter !== undefined) {
       setIsLoading(false);
       if (lessonList.length === 0) {
-        let initialLessonList: LessonList[] = [];
-        chapter.lessons.forEach((element) => {
-          let obj: LessonList
-          obj = {
-            ...element,
+        const initialLessonList = chapter.lessons.map((lesson) => {
+          return {
+            ...lesson,
             lessonAttendance: {
               lesson_attendance_id: 1,
               status: LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE,
             },
-            isCurrentLesson: (element.lesson_id === lessonId),
-          }
-          initialLessonList.push(obj)
+            isCurrentLesson: lesson.lesson_id === lessonId,
+          };
         });
         if (initialLessonList) {
           setLessonList(initialLessonList);
         }
       }
     }
-  }, [chapter, lessonList, lessonId]);
+  }, [chapter]);
   
   // パン屑のリンクリスト
   const links = [
@@ -234,19 +219,17 @@ const Index: NextPage = () => {
                 </div>
                 {(
                   <>
-                    <div className="flex justify-start">
+                    <div className="flex justify-start gap-10">
                       <Button type="button" color={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lessonAttendance.status === LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE
                           ? 'primary' : 'secondary'} 
                           clickHandler={() => {updateLessonAttendanceStatus(lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lesson_id, LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE)}}>
                         Lesson未実施
                       </Button>
-                      <span className="ml-10" />
                       <Button type="button" color={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lessonAttendance.status === LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE 
                           ? 'primary' : 'secondary'} 
                           clickHandler={() => {updateLessonAttendanceStatus(lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lesson_id, LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE)}}>
                         Lesson開始
                       </Button>
-                      <span className="ml-10" />
                       <Button type="button" color={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lessonAttendance.status === LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE 
                           ? 'primary' : 'secondary'} 
                           clickHandler={() => {updateLessonAttendanceStatus(lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lesson_id, LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE)}}>
