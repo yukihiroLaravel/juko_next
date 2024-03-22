@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { NextPage } from 'next';
 import { InstructorLayout } from '@/components/organisms/header';
 import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 import { useEffect, useState } from 'react';
@@ -15,7 +15,12 @@ import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstru
 import { Breadcrumb } from '@/components/atoms/Breadcrumb/Breadcrumb';
 import { Movie } from '@/components/atoms/Movie/Movie';
 import { Button } from '@/components/atoms/Button/Button';
-import { LessonAttendanceStatus, LESSON_ATTENDANCE_STATUS, LessonList } from '@/features/lesson-attendance/types/LessonAttendance';
+import {
+  LessonAttendanceStatus,
+  LESSON_ATTENDANCE_STATUS,
+  LessonAttendance,
+} from '@/features/lesson-attendance/types/LessonAttendance';
+import { Lesson } from '@/features/lesson/types/Lesson';
 
 type Query = {
   courseId?: string;
@@ -42,25 +47,33 @@ const Index: NextPage = () => {
   const [width] = useWindowSize();
   const router = useRouter();
   const query: Query = router.query;
+  const { course } = useFetchInstructorCourse({
+    courseId: query.courseId,
+  });
   const { chapter } = useFetchInstructorChapters({
     courseId: query.courseId,
     chapterId: query.chapterId,
   });
-  const { course } = useFetchInstructorCourse({
-    courseId: query.courseId,
-  });
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [lessonList, setLessonList] = useState<LessonList[]>([]);
-  const updateLessonAttendanceStatus = (lessonId: number | undefined, status: LessonAttendanceStatus) => {
-    setLessonList(prevStatus => {
-      const newStatus = prevStatus.map(lesson => {
-        if (lesson?.lesson_id === lessonId && lesson) {
+  const [lessons, setLessons] = useState<
+    (Lesson & {
+      lessonAttendance: LessonAttendance;
+      isCurrentLesson: boolean;
+    })[]
+  >([]);
+  const updateLessonAttendanceStatus = (
+    lessonId: number | undefined,
+    status: LessonAttendanceStatus
+  ) => {
+    setLessons((prevLessons) => {
+      const newLessons = prevLessons.map((lesson) => {
+        if (lesson.lesson_id === lessonId) {
           lesson.lessonAttendance.status = status;
         }
         return lesson;
       });
-      return newStatus;
-    });    
+      return newLessons;
+    });
   };
   const lessonId = query.lessonId ? Number(query.lessonId) : 0;
   // 進捗は固定の値(0%)
@@ -69,8 +82,8 @@ const Index: NextPage = () => {
   useEffect(() => {
     if (chapter !== undefined) {
       setIsLoading(false);
-      if (lessonList.length === 0) {
-        const initialLessonList = chapter.lessons.map((lesson) => {
+      if (lessons.length === 0) {
+        const initialLessons = chapter.lessons.map((lesson) => {
           return {
             ...lesson,
             lessonAttendance: {
@@ -80,13 +93,13 @@ const Index: NextPage = () => {
             isCurrentLesson: lesson.lesson_id === lessonId,
           };
         });
-        if (initialLessonList) {
-          setLessonList(initialLessonList);
+        if (initialLessons) {
+          setLessons(initialLessons);
         }
       }
     }
   }, [chapter]);
-  
+
   // パン屑のリンクリスト
   const links = [
     {
@@ -103,18 +116,19 @@ const Index: NextPage = () => {
     },
   ];
 
-  const clickHandler = (lessonId: number) => () => {
-    setLessonList(prevStatus => {
-      const newStatus = prevStatus.map(lesson => {
-        if (lesson?.lesson_id === lessonId && lesson) {
+  // 現在のレッスンをクリックしたときの処理
+  const updateCurrentLesson = (lessonId: number) => () => {
+    setLessons((prevLessons) => {
+      const newLessons = prevLessons.map((lesson) => {
+        if (lesson.lesson_id === lessonId) {
           lesson.isCurrentLesson = true;
-        } else if(lesson?.lesson_id !== lessonId && lesson){
+        } else if (lesson?.lesson_id !== lessonId) {
           lesson.isCurrentLesson = false;
         }
         return lesson;
       });
-      return newStatus;
-    }); 
+      return newLessons;
+    });
   };
 
   return (
@@ -138,12 +152,12 @@ const Index: NextPage = () => {
                         <ProgressBar progress={calculateChapterProgeress} />
                       </div>
                     </li>
-                    {lessonList.map((lesson) => {
+                    {lessons.map((lesson) => {
                       return (
                         lesson && (
                           <StyleSideBarList
                             key={lesson.lesson_id}
-                            onClick={clickHandler(lesson.lesson_id)}
+                            onClick={updateCurrentLesson(lesson.lesson_id)}
                             isSelected={lesson.isCurrentLesson}
                           >
                             <p className="text-xl	text-[#6D8DFF]">
@@ -171,12 +185,12 @@ const Index: NextPage = () => {
               )}
               <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
                 <Breadcrumb links={links} />
-                  <div className="mt-10 border-b border-black pb-5">
-                    <h2 className="text-3xl font-semibold md:text-4xl">
-                      {course?.title}
-                    </h2>
-                  </div>
-                  <ul className="my-5 border-b border-black md:hidden">
+                <div className="mt-10 border-b border-black pb-5">
+                  <h2 className="text-3xl font-semibold md:text-4xl">
+                    {course?.title}
+                  </h2>
+                </div>
+                <ul className="my-5 border-b border-black md:hidden">
                   <li className="mb-10">
                     <div className="text-center">
                       <p className="mb-3 font-semibold">
@@ -185,15 +199,17 @@ const Index: NextPage = () => {
                       <ProgressBar progress={calculateChapterProgeress} />
                     </div>
                   </li>
-                  {lessonList.map((lesson) => {
+                  {lessons.map((lesson) => {
                     return (
                       lesson && (
                         <StyleSideBarList
                           key={lesson.lesson_id}
-                          onClick={clickHandler(lesson.lesson_id)}
+                          onClick={updateCurrentLesson(lesson.lesson_id)}
                           isSelected={lesson.isCurrentLesson}
                         >
-                          <p className="text-xl	text-[#6D8DFF]">{lesson.title}</p>
+                          <p className="text-xl	text-[#6D8DFF]">
+                            {lesson.title}
+                          </p>
                           <StatusIcon
                             status={lesson.lessonAttendance.status}
                             size="small"
@@ -205,51 +221,109 @@ const Index: NextPage = () => {
                 </ul>
                 <div className="mx-auto mt-5">
                   <h2 className="text-[25px] font-semibold md:text-[30px]">
-                    {lessonList.find(lesson => lesson?.isCurrentLesson === true)?.title}
+                    {
+                      lessons.find((lesson) => lesson.isCurrentLesson === true)
+                        ?.title
+                    }
                   </h2>
                 </div>
                 <div className="my-5 overflow-auto">
                   {(width as number) > 0 && (
                     <Movie
-                      videoId={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.url || ''}
+                      videoId={
+                        lessons.find(
+                          (lesson) => lesson.isCurrentLesson === true
+                        )?.url || ''
+                      }
                       height={(width as number) > 640 ? 405 : 180}
                       width={(width as number) > 640 ? 720 : 320}
                     />
                   )}
                 </div>
-                {(
+                {
                   <>
                     <div className="flex justify-start gap-10">
-                      <Button type="button" color={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lessonAttendance.status === LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE
-                          ? 'primary' : 'secondary'} 
-                          clickHandler={() => {updateLessonAttendanceStatus(lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lesson_id, LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE)}}>
+                      <Button
+                        type="button"
+                        color={
+                          lessons.find(
+                            (lesson) => lesson.isCurrentLesson === true
+                          )?.lessonAttendance.status ===
+                          LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE
+                            ? 'primary'
+                            : 'secondary'
+                        }
+                        clickHandler={() => {
+                          updateLessonAttendanceStatus(
+                            lessons.find(
+                              (lesson) => lesson.isCurrentLesson === true
+                            )?.lesson_id,
+                            LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE
+                          );
+                        }}
+                      >
                         Lesson未実施
                       </Button>
-                      <Button type="button" color={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lessonAttendance.status === LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE 
-                          ? 'primary' : 'secondary'} 
-                          clickHandler={() => {updateLessonAttendanceStatus(lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lesson_id, LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE)}}>
+                      <Button
+                        type="button"
+                        color={
+                          lessons.find(
+                            (lesson) => lesson.isCurrentLesson === true
+                          )?.lessonAttendance.status ===
+                          LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE
+                            ? 'primary'
+                            : 'secondary'
+                        }
+                        clickHandler={() => {
+                          updateLessonAttendanceStatus(
+                            lessons.find(
+                              (lesson) => lesson.isCurrentLesson === true
+                            )?.lesson_id,
+                            LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE
+                          );
+                        }}
+                      >
                         Lesson開始
                       </Button>
-                      <Button type="button" color={lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lessonAttendance.status === LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE 
-                          ? 'primary' : 'secondary'} 
-                          clickHandler={() => {updateLessonAttendanceStatus(lessonList.find(lesson => lesson?.isCurrentLesson === true)?.lesson_id, LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE)}}>
+                      <Button
+                        type="button"
+                        color={
+                          lessons.find(
+                            (lesson) => lesson.isCurrentLesson === true
+                          )?.lessonAttendance.status ===
+                          LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE
+                            ? 'primary'
+                            : 'secondary'
+                        }
+                        clickHandler={() => {
+                          updateLessonAttendanceStatus(
+                            lessons.find(
+                              (lesson) => lesson.isCurrentLesson === true
+                            )?.lesson_id,
+                            LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE
+                          );
+                        }}
+                      >
                         Lesson完了
                       </Button>
                     </div>
                   </>
-                )}
+                }
                 <div className="mt-5">
                   <p className="whitespace-pre-wrap">
-                    {lessonList.find(lesson => lesson?.isCurrentLesson === true)?.remarks}
+                    {
+                      lessons.find((lesson) => lesson.isCurrentLesson === true)
+                        ?.remarks
+                    }
                   </p>
                 </div>
               </div>
             </>
-        )}
+          )}
         </div>
-      </InstructorLayout>  
+      </InstructorLayout>
     </InstructorAuthWrapper>
   );
-}
+};
 
 export default Index;

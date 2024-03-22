@@ -1,5 +1,3 @@
-import { Lesson } from '@/features/lesson/types/Lesson';
-
 export type LessonAttendance = {
   lesson_attendance_id: number;
   status: LessonAttendanceStatus;
@@ -15,10 +13,3 @@ export type LessonAttendanceStatus =
   | typeof LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE
   | typeof LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE
   | typeof LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE;
-
-export type LessonList =  
-  | (Lesson & {
-      lessonAttendance: LessonAttendance;
-      isCurrentLesson: boolean;
-    })
-  | undefined;
