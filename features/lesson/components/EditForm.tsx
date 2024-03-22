@@ -87,20 +87,20 @@ export const EditForm: React.FC<Props> = ({
       <h2 className="text-center text-2xl">レッスン編集</h2>
       <div className="mx-auto w-4/5">
         <div className="flex items-center justify-end text-sm">
-        <Link
-          href={{
-            pathname: '/instructor/lesson/preview',
-            query: {
-              courseId: courseId,
-              chapterId: chapterId,
-              lessonId: lesson.lesson_id,
-            },
-          }}
-        >
-          <a target='_blank' rel='noopener noreferrer'>
-            <Button type="button">プレビュー</Button>
-          </a>
-        </Link>
+          <Link
+            href={{
+              pathname: '/instructor/lesson/preview',
+              query: {
+                courseId: courseId,
+                chapterId: chapterId,
+                lessonId: lesson.lesson_id,
+              },
+            }}
+          >
+            <a target="_blank" rel="noopener noreferrer">
+              <Button type="button">プレビュー</Button>
+            </a>
+          </Link>
         </div>
         <div className="mt-10">
           <label htmlFor="title">
