@@ -59,11 +59,6 @@ const Index: NextPage = () => {
     chapter;
 
   useEffect(() => {
-    // 既に現在のレッスンが設定されている場合は何もしない
-    if (currentLesson) {
-      return;
-    }
-
     // クエリパラメータのlesson_idがある場合は、そのレッスンを表示する
     if (chapter?.lessons.length) {
       const newLesson = chapter.lessons.find(
@@ -71,7 +66,7 @@ const Index: NextPage = () => {
       ) as Lesson;
       setCurrentLesson(newLesson);
     }
-  }, [chapter, currentLesson, lesson_id]);
+  }, [chapter, lesson_id]);
 
   return (
     <InstructorAuthWrapper>
