@@ -61,7 +61,8 @@ const getFetchUrl = (
   courseId: string | string[] | undefined,
   params: Params
 ) => {
-  const { per_page, page, sort_by, order, input_text, start_date, end_date} = params
+  const { per_page, page, sort_by, order, input_text, start_date, end_date } =
+    params;
   const searchParams = new URLSearchParams();
   searchParams.append('per_page', String(per_page));
   searchParams.append('page', String(page));
@@ -76,7 +77,7 @@ const getFetchUrl = (
   if (end_date) {
     searchParams.append('end_date', `${end_date} 23:59:59`); // YYYY-MM-DD HH:MM:SS形式
   }
-  
+
   return courseId
     ? `/api/v1/instructor/course/${courseId}/student/index?${searchParams}`
     : null;

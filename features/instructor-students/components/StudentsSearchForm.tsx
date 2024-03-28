@@ -27,8 +27,7 @@ type FormValues = {
 };
 
 export const StudentsSearchForm: React.FC<Props> = ({ updateParams }) => {
-  const { register, handleSubmit, control
-  } = useForm<FormValues>({
+  const { register, handleSubmit, control } = useForm<FormValues>({
     mode: 'onSubmit',
     defaultValues: {
       name: '',
@@ -47,17 +46,25 @@ export const StudentsSearchForm: React.FC<Props> = ({ updateParams }) => {
   };
 
   return (
-    <Form className="flex flex-col gap-3" onSubmit={handleSubmit(submitHandler)}>
+    <Form
+      className="flex flex-col gap-3"
+      onSubmit={handleSubmit(submitHandler)}
+    >
       <label>名前/メールアドレス</label>
-      <Input
-        type="text"
-        {...register('name')}
-      />
+      <Input type="text" {...register('name')} />
       <label>受講日</label>
       <div className="flex gap-2">
-        <FieldDateInput name="startDate" control={control} placeholderText="開始日"/>
+        <FieldDateInput
+          name="startDate"
+          control={control}
+          placeholderText="開始日"
+        />
         <span>~</span>
-        <FieldDateInput name="endDate" control={control} placeholderText="終了日"/>
+        <FieldDateInput
+          name="endDate"
+          control={control}
+          placeholderText="終了日"
+        />
       </div>
       <Button type="submit">検索</Button>
     </Form>
