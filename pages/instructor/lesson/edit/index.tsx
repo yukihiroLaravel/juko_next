@@ -46,17 +46,13 @@ const Index: NextPage = () => {
     },
   ];
 
-  const courseId = Number(course_id);
-  const chapterId = Number(chapter_id);
+  const courseId = typeof course_id === 'string' ? Number(course_id) : null;
+  const chapterId = typeof chapter_id === 'string' ? Number(chapter_id) : null;
+  const lessonId = typeof lesson_id === 'string' ? Number(lesson_id) : null;
 
   // コンテンツを表示するかどうか
   const isDisplay =
-    !isLoading &&
-    currentLesson &&
-    courseId &&
-    chapterId &&
-    lesson_id &&
-    chapter;
+    !isLoading && currentLesson && courseId && chapterId && lessonId && chapter;
 
   useEffect(() => {
     if (currentLesson) {
@@ -64,17 +60,14 @@ const Index: NextPage = () => {
         (lesson) => lesson.lesson_id === currentLesson.lesson_id
       ) as Lesson;
       setCurrentLesson(newCurrentLesson);
-      return
-    }
-
-    // クエリパラメータのlesson_idがある場合は、そのレッスンを表示する
-    if (chapter?.lessons.length) {
+    } else if (chapter?.lessons.length) {
+      // クエリパラメータのlesson_idがある場合は、そのレッスンを表示する
       const newLesson = chapter.lessons.find(
-        (lesson) => lesson.lesson_id === Number(lesson_id)
+        (lesson) => lesson.lesson_id === Number(lessonId)
       ) as Lesson;
       setCurrentLesson(newLesson);
     }
-  }, [chapter, lesson_id]);
+  }, [chapter, lessonId]);
 
   return (
     <InstructorAuthWrapper>
