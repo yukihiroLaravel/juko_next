@@ -59,6 +59,14 @@ const Index: NextPage = () => {
     chapter;
 
   useEffect(() => {
+    if (currentLesson) {
+      const newCurrentLesson = chapter?.lessons.find(
+        (lesson) => lesson.lesson_id === currentLesson.lesson_id
+      ) as Lesson;
+      setCurrentLesson(newCurrentLesson);
+      return
+    }
+
     // クエリパラメータのlesson_idがある場合は、そのレッスンを表示する
     if (chapter?.lessons.length) {
       const newLesson = chapter.lessons.find(
