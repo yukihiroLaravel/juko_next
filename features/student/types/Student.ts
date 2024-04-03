@@ -12,4 +12,6 @@ export type Student = {
   profile_image: string | null;
   last_login_at: string;
   attendanced_at: string;
+  created_at: string;
+  given_name_by_instructor : string
 };
