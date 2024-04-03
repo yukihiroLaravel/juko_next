@@ -37,7 +37,7 @@ export const EditForm: React.FC<Props> = ({
     await Axios.get('/sanctum/csrf-cookie').then(() => {
       Axios.put(
         `/api/v1/instructor/course/${courseId}/chapter/${chapterId}/lesson/${lesson.lesson_id}`,
-        data
+        data,
       )
         .then(() => {
           isSending.current = false;
@@ -59,7 +59,7 @@ export const EditForm: React.FC<Props> = ({
       isSending.current = true;
       Axios.get('/sanctum/csrf-cookie').then(() => {
         Axios.delete(
-          `/api/v1/instructor/course/${courseId}/chapter/${chapterId}/lesson/${lesson.lesson_id}`
+          `/api/v1/instructor/course/${courseId}/chapter/${chapterId}/lesson/${lesson.lesson_id}`,
         )
           .then(() => {
             isSending.current = false;

@@ -13,7 +13,7 @@ import { useState } from 'react';
 
 export default function Dashboard() {
   const [selectedCourse, setSelectedCourse] = useState<Course | undefined>(
-    undefined
+    undefined,
   );
   const updateSelectedCourse = (course: Course) => {
     setSelectedCourse(course);

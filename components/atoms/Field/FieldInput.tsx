@@ -9,7 +9,7 @@ type Props = ComponentPropsWithRef<'input'> & {
 const FieldInput = forwardRef<HTMLInputElement, Props>(
   (
     { defaultValue, type = 'text', ...props }: Props,
-    ref: ForwardedRef<HTMLInputElement>
+    ref: ForwardedRef<HTMLInputElement>,
   ) => {
     const clx = clsx(
       'p-1',
@@ -17,7 +17,7 @@ const FieldInput = forwardRef<HTMLInputElement, Props>(
       'border-b-2',
       'w-full',
       'focus:outline-none',
-      'focus:border-[#B0ABAB]'
+      'focus:border-[#B0ABAB]',
     );
 
     return (
@@ -29,7 +29,7 @@ const FieldInput = forwardRef<HTMLInputElement, Props>(
         {...props}
       />
     );
-  }
+  },
 );
 
 FieldInput.displayName = 'FieldInput';

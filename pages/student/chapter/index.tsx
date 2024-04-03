@@ -79,7 +79,7 @@ const Index: NextPage = () => {
     const completedLessonTotalCount = attendance.course.chapter.lessons.filter(
       (lesson) => {
         return lesson.lessonAttendance?.status === STATUS_COMPLETED_ATTENDANCE;
-      }
+      },
     ).length;
 
     return Math.floor((completedLessonTotalCount / lessonTotalCount) * 100);
@@ -90,7 +90,7 @@ const Index: NextPage = () => {
       setIsLoading(false);
       if (currentLesson !== null) {
         const newLesson = attendance.course.chapter.lessons.find(
-          (lesson) => lesson.lesson_id === currentLesson.lesson_id
+          (lesson) => lesson.lesson_id === currentLesson.lesson_id,
         );
         if (newLesson) {
           setCurrentLesson(newLesson);
@@ -122,7 +122,7 @@ const Index: NextPage = () => {
 
   const clickHandler = (lessonId: number) => () => {
     const newLesson = attendance?.course.chapter.lessons.find(
-      (lesson) => lesson.lesson_id === lessonId
+      (lesson) => lesson.lesson_id === lessonId,
     ) as Lesson & {
       lessonAttendance: LessonAttendance;
     };

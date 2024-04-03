@@ -33,7 +33,7 @@ export function FieldDateInput<T extends FieldValues>({
     'border-b-2',
     'w-full',
     'focus:outline-none',
-    'focus:border-[#B0ABAB]'
+    'focus:border-[#B0ABAB]',
   );
 
   return (

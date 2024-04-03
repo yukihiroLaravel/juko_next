@@ -130,7 +130,7 @@ const Index: NextPage = () => {
                         'status',
                         course.status === COURSE_STATUS.PUBLIC
                           ? COURSE_STATUS.PRIVATE
-                          : COURSE_STATUS.PUBLIC
+                          : COURSE_STATUS.PUBLIC,
                       );
                     }}
                   />

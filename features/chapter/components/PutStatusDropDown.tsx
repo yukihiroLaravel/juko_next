@@ -20,7 +20,7 @@ export const PutStatusDropDown: FC<Props> = ({ courseId, mutate }) => {
     'rounded-md',
     'bg-white',
     'shadow-lg',
-    'focus:outline-none'
+    'focus:outline-none',
   );
 
   const listClassName = clsx(
@@ -30,7 +30,7 @@ export const PutStatusDropDown: FC<Props> = ({ courseId, mutate }) => {
     'text-sm',
     'text-gray-700',
     'hover:bg-gray-100',
-    'cursor-pointer'
+    'cursor-pointer',
   );
 
   const buttonClassName = clsx(
@@ -42,7 +42,7 @@ export const PutStatusDropDown: FC<Props> = ({ courseId, mutate }) => {
     'px-3',
     'py-2',
     'shadow-sm',
-    'flex'
+    'flex',
   );
 
   const handlePutStatus = async (status: CHAPTER_STATUS) => {

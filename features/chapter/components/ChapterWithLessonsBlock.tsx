@@ -38,7 +38,7 @@ export const ChapterWithLessonsBlock: FC<Props> = ({
         `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}/lesson`,
         {
           title: data.title,
-        }
+        },
       )
         .then(() => {
           updateIsShowedAddLesson();

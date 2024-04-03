@@ -21,7 +21,7 @@ export const useFetchAttendanceStatus = ({ courseId }: Props) => {
     };
   }>(
     courseId ? `/api/v1/instructor/course/${courseId}/attendance/status` : null,
-    fetcher
+    fetcher,
   );
 
   return {

@@ -25,7 +25,7 @@ export const useFetchCourses = () => {
     text
       ? `/api/v1/attendance/index?search_word=${text}`
       : '/api/v1/attendance/index',
-    fetcher
+    fetcher,
   );
 
   return {

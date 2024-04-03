@@ -11,7 +11,7 @@ const Input = forwardRef<HTMLInputElement, Props>(({ type, ...rest }, ref) => {
     'rounded',
     'border-b-2',
     'focus:outline-none',
-    'focus:border-[#B0ABAB]'
+    'focus:border-[#B0ABAB]',
   );
   return <input type={type} className={inputClassName} ref={ref} {...rest} />;
 });

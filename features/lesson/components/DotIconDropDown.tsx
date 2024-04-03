@@ -26,7 +26,7 @@ export const DotIconDropDown: FC<Props> = ({
     'rounded-md',
     'bg-white',
     'shadow-lg',
-    'focus:outline-none'
+    'focus:outline-none',
   );
 
   const listClassName = clsx(
@@ -36,7 +36,7 @@ export const DotIconDropDown: FC<Props> = ({
     'text-sm',
     'text-gray-700',
     'hover:bg-gray-100',
-    'cursor-pointer'
+    'cursor-pointer',
   );
 
   const buttonClassName = clsx(
@@ -47,7 +47,7 @@ export const DotIconDropDown: FC<Props> = ({
     'px-3',
     'py-2',
     'shadow-sm',
-    'flex'
+    'flex',
   );
 
   return (

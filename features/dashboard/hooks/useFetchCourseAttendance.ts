@@ -9,7 +9,7 @@ interface Params {
 export const useFetchCourseAttendance = ({ courseId, type }: Params) => {
   const { data, error, isLoading } = useSWR<{ login_rate: number }>(
     `/api/v1/instructor/course/${courseId}/attendance/${type}`,
-    fetcher
+    fetcher,
   );
   return {
     loginRate: data?.login_rate,

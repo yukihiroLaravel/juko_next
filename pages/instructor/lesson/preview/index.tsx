@@ -63,7 +63,7 @@ const Index: NextPage = () => {
   >([]);
   const updateLessonAttendanceStatus = (
     lessonId: number | undefined,
-    status: LessonAttendanceStatus
+    status: LessonAttendanceStatus,
   ) => {
     setLessons((prevLessons) => {
       const newLessons = prevLessons.map((lesson) => {
@@ -232,7 +232,7 @@ const Index: NextPage = () => {
                     <Movie
                       videoId={
                         lessons.find(
-                          (lesson) => lesson.isCurrentLesson === true
+                          (lesson) => lesson.isCurrentLesson === true,
                         )?.url || ''
                       }
                       height={(width as number) > 640 ? 405 : 180}
@@ -247,7 +247,7 @@ const Index: NextPage = () => {
                         type="button"
                         color={
                           lessons.find(
-                            (lesson) => lesson.isCurrentLesson === true
+                            (lesson) => lesson.isCurrentLesson === true,
                           )?.lessonAttendance.status ===
                           LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE
                             ? 'primary'
@@ -256,9 +256,9 @@ const Index: NextPage = () => {
                         clickHandler={() => {
                           updateLessonAttendanceStatus(
                             lessons.find(
-                              (lesson) => lesson.isCurrentLesson === true
+                              (lesson) => lesson.isCurrentLesson === true,
                             )?.lesson_id,
-                            LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE
+                            LESSON_ATTENDANCE_STATUS.STATUS_BEFORE_ATTENDANCE,
                           );
                         }}
                       >
@@ -268,7 +268,7 @@ const Index: NextPage = () => {
                         type="button"
                         color={
                           lessons.find(
-                            (lesson) => lesson.isCurrentLesson === true
+                            (lesson) => lesson.isCurrentLesson === true,
                           )?.lessonAttendance.status ===
                           LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE
                             ? 'primary'
@@ -277,9 +277,9 @@ const Index: NextPage = () => {
                         clickHandler={() => {
                           updateLessonAttendanceStatus(
                             lessons.find(
-                              (lesson) => lesson.isCurrentLesson === true
+                              (lesson) => lesson.isCurrentLesson === true,
                             )?.lesson_id,
-                            LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE
+                            LESSON_ATTENDANCE_STATUS.STATUS_IN_ATTENDANCE,
                           );
                         }}
                       >
@@ -289,7 +289,7 @@ const Index: NextPage = () => {
                         type="button"
                         color={
                           lessons.find(
-                            (lesson) => lesson.isCurrentLesson === true
+                            (lesson) => lesson.isCurrentLesson === true,
                           )?.lessonAttendance.status ===
                           LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE
                             ? 'primary'
@@ -298,9 +298,9 @@ const Index: NextPage = () => {
                         clickHandler={() => {
                           updateLessonAttendanceStatus(
                             lessons.find(
-                              (lesson) => lesson.isCurrentLesson === true
+                              (lesson) => lesson.isCurrentLesson === true,
                             )?.lesson_id,
-                            LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE
+                            LESSON_ATTENDANCE_STATUS.STATUS_COMPLETED_ATTENDANCE,
                           );
                         }}
                       >

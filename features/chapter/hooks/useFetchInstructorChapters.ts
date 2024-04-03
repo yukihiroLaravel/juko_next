@@ -22,7 +22,7 @@ export const useFetchInstructorChapters = ({ courseId, chapterId }: Params) => {
     fetcher,
     {
       revalidateOnFocus: false,
-    }
+    },
   );
 
   return {

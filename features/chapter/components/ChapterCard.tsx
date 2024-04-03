@@ -26,7 +26,7 @@ export const ChapterCard: FC<Props> = ({
       'bg-gray-200': status === CHAPTER_STATUS.PRIVATE,
       'bg-[#89cada]': status !== CHAPTER_STATUS.PRIVATE,
     },
-    className
+    className,
   );
 
   useEffect(() => {
