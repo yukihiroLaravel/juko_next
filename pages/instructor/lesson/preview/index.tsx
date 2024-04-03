@@ -6,7 +6,7 @@ import { Loading } from '@/components/utils/Loading';
 import { SideBar } from '@/components/atoms/SideBar/SideBar';
 import { ToggleButton } from '@/components/atoms/Button/ToggleButton';
 import { ProgressBar } from '@/components/atoms/ProgressBar/ProgressBar';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { StatusIcon } from '@/features/lesson/components/StatusIcon';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useRouter } from 'next/router';
@@ -75,7 +75,8 @@ const Index: NextPage = () => {
       return newLessons;
     });
   };
-  const lessonId = query.lessonId ? Number(query.lessonId) : 0;
+  const lessonId =
+    typeof query.lessonId === 'string' ? Number(query.lessonId) : null;
   // 進捗は固定の値(0%)
   const calculateChapterProgeress = 0;
 
@@ -98,7 +99,7 @@ const Index: NextPage = () => {
         }
       }
     }
-  }, [chapter]);
+  }, [chapter, lessons, lessonId]);
 
   // パン屑のリンクリスト
   const links = [
@@ -136,7 +137,7 @@ const Index: NextPage = () => {
       <InstructorLayout>
         <div className="flex">
           {isLoading ? (
-            <div className="mx-auto my-10 min-h-[100vh] w-3/4">
+            <div className="mx-auto my-10 min-h-screen w-3/4">
               <Loading />
             </div>
           ) : (
@@ -183,7 +184,7 @@ const Index: NextPage = () => {
                   setIsShowedSideBar={setIsShowedSideBar}
                 />
               )}
-              <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
+              <div className="mx-auto mb-10 min-h-screen w-3/4">
                 <Breadcrumb links={links} />
                 <div className="mt-10 border-b border-black pb-5">
                   <h2 className="text-3xl font-semibold md:text-4xl">

@@ -67,7 +67,7 @@ const Index: NextPage = () => {
       ) as Lesson;
       setCurrentLesson(newLesson);
     }
-  }, [chapter, lessonId]);
+  }, [chapter, lessonId, currentLesson]);
 
   return (
     <InstructorAuthWrapper>
@@ -103,7 +103,7 @@ const Index: NextPage = () => {
                 setIsShowedSideBar={setIsShowedSideBar}
               />
             )}
-            <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
+            <div className="mx-auto mb-10 min-h-screen w-3/4">
               <Breadcrumb links={links} />
               <div className="my-10">
                 <h2 className="text-3xl font-semibold">{chapter.title}</h2>

@@ -97,7 +97,7 @@ const Index: NextPage = () => {
   return (
     <InstructorAuthWrapper>
       {isLoading && (
-        <div className="mx-auto my-10 min-h-[100vh] w-3/4">
+        <div className="mx-auto my-10 min-h-screen w-3/4">
           <Loading />
         </div>
       )}

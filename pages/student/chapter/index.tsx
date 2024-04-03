@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { Loading } from '@/components/utils/Loading';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lesson-attendance/types/LessonAttendance';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuthWrapper';
 import { StudentLayout } from '@/components/organisms/header/StudentLayout';
 
@@ -134,7 +134,7 @@ const Index: NextPage = () => {
       <StudentLayout>
         <div className="flex">
           {isLoading ? (
-            <div className="mx-auto my-10 min-h-[100vh] w-3/4">
+            <div className="mx-auto my-10 min-h-screen w-3/4">
               <Loading />
             </div>
           ) : (
@@ -182,7 +182,7 @@ const Index: NextPage = () => {
                 />
               )}
 
-              <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
+              <div className="mx-auto mb-10 min-h-screen w-3/4">
                 <Breadcrumb links={links} />
                 <div className="mt-10 border-b border-black pb-5">
                   <h2 className="text-3xl font-semibold md:text-4xl">
