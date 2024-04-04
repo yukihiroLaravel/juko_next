@@ -28,7 +28,7 @@ export const Button: FC<Props> = ({
     size === 'sm' && 'p-2 text-sm',
     size === 'md' && 'px-4 py-2 text-base',
     size === 'lg' && 'px-10 py-3 text-lg',
-    isDisabled && 'cursor-not-allowed opacity-50'
+    isDisabled && 'cursor-not-allowed opacity-50',
   );
 
   return (

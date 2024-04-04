@@ -66,7 +66,7 @@ export const DraggableCard: FC<Props> = ({
         `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}/status`,
         {
           status,
-        }
+        },
       )
         .then(() => {
           mutate();
@@ -82,7 +82,7 @@ export const DraggableCard: FC<Props> = ({
     if (!confirm('削除してもよろしいですか？')) return;
     await Axios.get('/sanctum/csrf-cookie').then(async () => {
       await Axios.delete(
-        `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}`
+        `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}`,
       )
         .then(() => {
           mutate();
@@ -100,7 +100,7 @@ export const DraggableCard: FC<Props> = ({
         `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}`,
         {
           title: data.title,
-        }
+        },
       )
         .then(() => {
           updateIsClickedEditTitle();
@@ -168,7 +168,7 @@ export const DraggableCard: FC<Props> = ({
             handleUpdateStatus(
               chapter.status === CHAPTER_STATUS.PUBLIC
                 ? CHAPTER_STATUS.PRIVATE
-                : CHAPTER_STATUS.PUBLIC
+                : CHAPTER_STATUS.PUBLIC,
             );
           }}
           deleteHandler={() => {

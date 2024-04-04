@@ -45,7 +45,7 @@ const Index: NextPage = () => {
         <div className="flex">
           {error && <Error />}
           {isLoading && (
-            <div className="mx-auto my-10 min-h-[100vh] w-3/4">
+            <div className="mx-auto my-10 min-h-screen w-3/4">
               <Loading />
             </div>
           )}
@@ -80,7 +80,7 @@ const Index: NextPage = () => {
                   setIsShowedSideBar={setIsShowedSideBar}
                 />
               )}
-              <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
+              <div className="mx-auto mb-10 min-h-screen w-3/4">
                 <Breadcrumb links={links} />
                 <div className="my-5 border-b border-black pb-10 md:hidden">
                   <Thumbnail
