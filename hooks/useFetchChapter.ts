@@ -38,7 +38,7 @@ export const useFetchChapter = ({
     attendanceId && courseId && chapterId
       ? `/api/v1/attendance/${attendanceId}/course/${courseId}/chapter/${chapterId}`
       : null,
-    fetcher
+    fetcher,
   );
 
   return [attendance?.data, mutate] as const;

@@ -36,7 +36,7 @@ export const DraggableCardList: FC<Props> = ({ courseId, chapter, mutate }) => {
         `/api/v1/instructor/course/${courseId}/chapter/${chapter.chapter_id}/lesson/sort`,
         {
           lessons: body,
-        }
+        },
       )
         .then(() => {
           mutate();

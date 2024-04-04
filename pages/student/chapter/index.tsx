@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { Loading } from '@/components/utils/Loading';
 import { Lesson } from '@/features/lesson/types/Lesson';
 import { LessonAttendance } from '@/features/lesson-attendance/types/LessonAttendance';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuthWrapper';
 import { StudentLayout } from '@/components/organisms/header/StudentLayout';
 
@@ -79,7 +79,7 @@ const Index: NextPage = () => {
     const completedLessonTotalCount = attendance.course.chapter.lessons.filter(
       (lesson) => {
         return lesson.lessonAttendance?.status === STATUS_COMPLETED_ATTENDANCE;
-      }
+      },
     ).length;
 
     return Math.floor((completedLessonTotalCount / lessonTotalCount) * 100);
@@ -90,7 +90,7 @@ const Index: NextPage = () => {
       setIsLoading(false);
       if (currentLesson !== null) {
         const newLesson = attendance.course.chapter.lessons.find(
-          (lesson) => lesson.lesson_id === currentLesson.lesson_id
+          (lesson) => lesson.lesson_id === currentLesson.lesson_id,
         );
         if (newLesson) {
           setCurrentLesson(newLesson);
@@ -122,7 +122,7 @@ const Index: NextPage = () => {
 
   const clickHandler = (lessonId: number) => () => {
     const newLesson = attendance?.course.chapter.lessons.find(
-      (lesson) => lesson.lesson_id === lessonId
+      (lesson) => lesson.lesson_id === lessonId,
     ) as Lesson & {
       lessonAttendance: LessonAttendance;
     };
@@ -134,7 +134,7 @@ const Index: NextPage = () => {
       <StudentLayout>
         <div className="flex">
           {isLoading ? (
-            <div className="mx-auto my-10 min-h-[100vh] w-3/4">
+            <div className="mx-auto my-10 min-h-screen w-3/4">
               <Loading />
             </div>
           ) : (
@@ -182,7 +182,7 @@ const Index: NextPage = () => {
                 />
               )}
 
-              <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
+              <div className="mx-auto mb-10 min-h-screen w-3/4">
                 <Breadcrumb links={links} />
                 <div className="mt-10 border-b border-black pb-5">
                   <h2 className="text-3xl font-semibold md:text-4xl">

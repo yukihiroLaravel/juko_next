@@ -59,7 +59,7 @@ export const useFetchInstructorStudents = ({ courseId }: Args) => {
 
 const getFetchUrl = (
   courseId: string | string[] | undefined,
-  params: Params
+  params: Params,
 ) => {
   const { per_page, page, sort_by, order, input_text, start_date, end_date } =
     params;

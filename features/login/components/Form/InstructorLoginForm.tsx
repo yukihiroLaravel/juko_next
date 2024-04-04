@@ -21,11 +21,11 @@ export const InstructorLoginForm: FC = () => {
     formState: { errors },
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(LoginFormSchema),
+    // resolver: yupResolver(LoginFormSchema),
     defaultValues,
   });
 
-  const submitHandler = (data: typeof defaultValues) => {
+  const submitHandler = async (data: typeof defaultValues) => {
     isSending.current = true;
     Axios.get('/sanctum/csrf-cookie').then(() => {
       Axios.post('/login/instructor', data)

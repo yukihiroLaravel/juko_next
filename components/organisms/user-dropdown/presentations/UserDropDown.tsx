@@ -24,7 +24,7 @@ export const UserDropDown: FC<Props> = ({
       <div
         className={clsx(
           isOpen ? 'block' : 'hidden',
-          'absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black'
+          'absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black',
         )}
       >
         <div className="py-1">

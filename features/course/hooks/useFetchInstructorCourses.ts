@@ -24,7 +24,7 @@ export const useFetchInstructorCourses = () => {
     text
       ? `/api/v1/instructor/course/index?text=${text}`
       : '/api/v1/instructor/course/index',
-    fetcher
+    fetcher,
   );
 
   return {

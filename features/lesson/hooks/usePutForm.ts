@@ -27,7 +27,7 @@ export const usePutForm = ({ lesson }: Params) => {
 
   const updateValue = (
     key: keyof PutLesson,
-    value: PutLesson[keyof PutLesson]
+    value: PutLesson[keyof PutLesson],
   ) => {
     setValue(key, value);
   };

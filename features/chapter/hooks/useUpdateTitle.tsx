@@ -31,7 +31,7 @@ export const useUpdateTitle = ({ title }: Props) => {
           .string()
           .required('チャプター名を入力してください')
           .max(50, '50文字以内で入力してください'),
-      })
+      }),
     ),
   });
 

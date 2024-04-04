@@ -26,7 +26,7 @@ type Props = {
       page: number;
       sort_by: 'nick_name' | 'email' | 'last_login_at' | 'attendanced_at';
       order: 'asc' | 'desc';
-    }>
+    }>,
   ) => void;
 };
 
