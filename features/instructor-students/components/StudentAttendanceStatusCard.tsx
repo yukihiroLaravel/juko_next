@@ -8,6 +8,7 @@ import {
     LabelList
   } from 'recharts';
   import { useFetchAttendanceStatus } from '@/features/attendance/hooks/useFetchAttendanceStatus';
+  import { Typography } from '@/components/atoms/Typography';
   
   interface Props {
     courseId: number | undefined;
@@ -47,8 +48,8 @@ import {
 
     return (
       <>
-        <h2 className="text-xl font-semibold md:text-2xl">学習状況</h2>
-        <div className="flex flex-col sm:items-start items-center mt-2 rounded bg-yellow-100">
+        <Typography variant="h3">学習状況</Typography>
+        <div className="flex flex-col sm:items-start items-center rounded bg-yellow-100">
             <div className='m-4 px-8 py-2 text-center text-xl bg-red-200 rounded-3xl'>
                 <strong>{studentAttendanceStatus.course_title}</strong>
             </div>

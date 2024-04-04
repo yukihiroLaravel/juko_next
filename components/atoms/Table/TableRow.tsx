@@ -1,6 +1,6 @@
 type Props = {
   children: React.ReactNode;
-  onClick?: React.MouseEventHandler<HTMLTableRowElement>;
+  onClick?: () => void;
 };
 
 export const TableRow: React.FC<Props> = ({ children, onClick }) => {

@@ -1,6 +1,7 @@
 import { useFetchInstructorStudent } from '../hooks/useFetchInstructorStudent';
 import Image from 'next/image';
 import { UserIcon } from '@/components/icons/UserIcon';
+import { Typography } from '@/components/atoms/Typography';
 
 type Props = {
   studentId: string | string[] | undefined;
@@ -15,9 +16,9 @@ export const StudentDetailCard: React.FC<Props> = ({
 
   return (
     <>
-      <h2 className="text-xl font-semibold md:text-2xl">基本情報</h2>
-      <div className="mt-2 rounded bg-yellow-100">
-        <div className="px-4 pt-4 flex gap-4">
+      <Typography variant="h3">基本情報</Typography>
+      <div className="rounded bg-yellow-100">
+        <div className="px-4 flex gap-4">
           <div>
           {Student?.profile_image ? (
                 <Image

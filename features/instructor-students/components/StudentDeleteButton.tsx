@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 type Props = {
   children: ReactNode;
-  courseId: string | string[] | undefined
+  courseId: number | undefined
 };
 
 //TODO api取得未実装

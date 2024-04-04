@@ -23,6 +23,7 @@ const Index: NextPage = () => {
   const { course, error, isLoading } = useFetchInstructorCourse({
     courseId
   });
+  const course_id_type_int = typeof courseId === 'string' ? parseInt(courseId) : undefined;
   
   return (
     <InstructorAuthWrapper>
@@ -83,24 +84,24 @@ const Index: NextPage = () => {
               )}
             </>
           )}
-          <div className="mx-auto mb-10 min-h-[100vh] w-3/4">
+          <div className="mx-auto min-h-[100vh] w-3/4 flex flex-col gap-5">
             <div className="flex w-full items-center justify-between p-2">
                 <Typography variant="h1">受講生詳細</Typography>
             </div>
-            <div className="mt-5">
+            <div>
               <StudentDetailCard
                 studentId={student_id}
               />
             </div>
-            <div className="mt-8">
+            <div>
               <StudentAttendanceStatusCard
-                courseId={courseId as number | undefined}
+                courseId={course_id_type_int}
                 studentId={student_id}
               />
             </div>
-            <div className='mt-5'>
+            <div>
               <StudentDeleteButton
-              courseId={courseId}
+              courseId={course_id_type_int}
               >
                 この受講生を講座から退会
               </StudentDeleteButton>
