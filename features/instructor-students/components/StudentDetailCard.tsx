@@ -16,15 +16,19 @@ export const StudentDetailCard: React.FC<Props> = ({ studentId }) => {
     <>
       <Typography variant="h3">基本情報</Typography>
       <div className="rounded bg-yellow-100">
-        <div className="px-4 flex gap-4">
+        <div className="flex gap-4 p-4">
           <div>
             {Student?.profile_image ? (
-              <Image
-                src={process.env.NEXT_PUBLIC_IMAGE_URL + Student?.profile_image}
-                alt={Student?.nick_name}
-                height={40}
-                width={40}
-              />
+              <div className="flex items-center justify-center">
+                <Image
+                  src={
+                    process.env.NEXT_PUBLIC_IMAGE_URL + Student?.profile_image
+                  }
+                  alt={Student?.nick_name}
+                  height={40}
+                  width={40}
+                />
+              </div>
             ) : (
               <div className="flex items-center justify-center">
                 <UserIcon size={40} />
