@@ -10,11 +10,13 @@ import Card from './Card';
 import { useFetchAttendanceStatus } from '@/features/attendance/hooks/useFetchAttendanceStatus';
 
 interface Props {
-  courseId: number | undefined;
+  courseId: number | null;
 }
 
 export default function AttendanceStatusCard({ courseId }: Props) {
-  const { attendanceStatus } = useFetchAttendanceStatus({ courseId });
+  const { attendanceStatus } = useFetchAttendanceStatus({
+    courseId,
+  });
 
   const data = attendanceStatus?.chapters.map((chapter) => ({
     label: chapter.title,

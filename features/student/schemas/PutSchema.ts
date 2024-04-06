@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { PutStudent } from '../types/PutStudent';
 
-export const PutSchema: yup.Schema<PutStudent> = yup.object().shape({
+export const PutSchema: yup.ObjectSchema<PutStudent> = yup.object().shape({
   nick_name: yup
     .string()
     .max(50, 'ニックネームは50文字以内で入力してください')

@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { UpdateCourse } from '../types/UpdateCourse';
 
-export const UpdateSchema: yup.Schema<UpdateCourse> = yup.object().shape({
+export const UpdateSchema: yup.ObjectSchema<UpdateCourse> = yup.object().shape({
   course_id: yup.number().required('講座IDを入力してください'),
   title: yup
     .string()

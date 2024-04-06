@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { PutLesson } from '../types/PutLesson';
 
-export const PutSchema: yup.Schema<PutLesson> = yup.object().shape({
+export const PutSchema: yup.ObjectSchema<PutLesson> = yup.object().shape({
   title: yup
     .string()
     .max(50, 'タイトルは50文字以内です')

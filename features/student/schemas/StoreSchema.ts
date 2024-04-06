@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { StoreStudent } from '../types/StoreStudent';
 
-export const StoreSchema: yup.Schema<StoreStudent> = yup.object().shape({
+export const StoreSchema: yup.ObjectSchema<StoreStudent> = yup.object().shape({
   nick_name: yup.string().required('ニックネームを入力してください。'),
   last_name: yup.string().required('姓を入力してください。'),
   first_name: yup.string().required('名を入力してください。'),

@@ -15,7 +15,8 @@ import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 const Index: NextPage = () => {
-  const { course_id } = useRouter().query;
+  const router = useRouter();
+  const { course_id } = router.query;
   const courseId = typeof course_id === 'string' ? parseInt(course_id) : null;
   const { course, isLoading, mutate } = useFetchInstructorCourse({
     courseId,
@@ -54,9 +55,9 @@ const Index: NextPage = () => {
         'Content-Type': 'multipart/form-data',
       },
     })
-      .then((res) => {
+      .then(() => {
         mutate();
-        setValue('image', undefined);
+        setValue('image', null);
         setUploadedFileName(null);
         alert('講座を更新しました。');
       })
@@ -68,7 +69,7 @@ const Index: NextPage = () => {
 
   // 画像アップロードのキャンセル処理
   const cancelHandler = () => {
-    setValue('image', undefined);
+    setValue('image', null);
     setUploadedFileName(null);
   };
 

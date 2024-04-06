@@ -80,8 +80,7 @@ const Index: NextPage = () => {
       return newLessons;
     });
   };
-  const lessonId =
-    typeof query.lessonId === 'string' ? Number(query.lessonId) : null;
+  const lessonId = typeof lesson_id === 'string' ? Number(lesson_id) : null;
   // 進捗は固定の値(0%)
   const calculateChapterProgeress = 0;
 
@@ -114,7 +113,7 @@ const Index: NextPage = () => {
     },
     {
       title: 'チャプター&レッスン一覧',
-      href: `/instructor/chapters?course_id=${query.courseId}`,
+      href: `/instructor/chapters?course_id=${courseId}`,
     },
     {
       title: chapter?.title ?? '',
