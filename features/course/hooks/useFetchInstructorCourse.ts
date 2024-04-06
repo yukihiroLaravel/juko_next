@@ -11,11 +11,11 @@ type Data = Course & {
 };
 
 type Args = {
-  courseId: string | string[] | undefined;
+  courseId: number | null;
 };
 
 export const useFetchInstructorCourse = ({ courseId }: Args) => {
-  const shouldFetch = courseId !== undefined;
+  const shouldFetch = courseId !== null;
   const fetchUrl = shouldFetch ? `/api/v1/instructor/course/${courseId}` : null;
   const {
     data: course,

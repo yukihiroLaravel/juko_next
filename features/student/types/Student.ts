@@ -13,5 +13,5 @@ export type Student = {
   last_login_at: string;
   attendanced_at: string;
   created_at: string;
-  given_name_by_instructor : string
+  given_name_by_instructor: string;
 };
