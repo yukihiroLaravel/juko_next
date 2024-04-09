@@ -4,28 +4,28 @@ import { ToggleButton } from '@/components/atoms/Button/ToggleButton';
 import { InstructorLayout } from '@/components/organisms/header/InstructorLayout';
 import { Error } from '@/components/utils/Error';
 import { Loading } from '@/components/utils/Loading';
-import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
-import { StudentsHeadingBox } from '@/features/instructor-students/components/StudentsHeadingBox';
+import { NotificationsHeadingBox } from '@/features/notification/components/NotificationsHeadingBox';
 import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { StudentsTableBox } from '@/features/instructor-students/components/StudentsTableBox';
+import { NotificationsTableBox } from '@/features/notification/components/NotificationsTableBox';
+import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 
 const Index: NextPage = () => {
   const router = useRouter();
   const { course_id: courseId } = router.query;
-  const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
 
   const { course, error, isLoading } = useFetchInstructorCourse({
     courseId,
   });
+  const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
 
   return (
     <InstructorAuthWrapper>
       <InstructorLayout>
-        {error && <Error />}
+      {error && <Error />}
         {isLoading && (
           <div className="mx-auto my-10 min-h-screen w-3/4">
             <Loading />
@@ -77,9 +77,9 @@ const Index: NextPage = () => {
             </>
           )}
           <div className="flex w-full flex-col items-center gap-2">
-            <StudentsHeadingBox>受講生一覧</StudentsHeadingBox>
+            <NotificationsHeadingBox>お知らせ一覧</NotificationsHeadingBox>
             <div className="flex w-11/12 flex-col gap-10">
-              <StudentsTableBox />
+              <NotificationsTableBox />
             </div>
           </div>
         </div>

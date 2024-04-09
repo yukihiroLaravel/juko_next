@@ -1,0 +1,57 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@/components/atoms/Table';
+import { Notification } from '../types/Notification';
+
+type Props = {
+  notifications: Notification[];
+};
+
+export const NotificationsTable: React.FC<Props> = ({
+  notifications,
+}) => {
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>
+            <div className="flex items-center justify-center">
+              タイトル
+            </div>
+          </TableCell>
+          <TableCell>
+            <div className="flex items-center justify-center">
+              講座名
+            </div>
+          </TableCell>
+          <TableCell>
+            <div className="flex items-center justify-center">
+              表示タイプ
+            </div>
+          </TableCell>
+          <TableCell>
+            <div className="flex items-center justify-center">
+              開始日時
+            </div>
+          </TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {notifications.map((notification) => (
+          <TableRow key={notification.notification_id}>
+            <TableCell>{notification.course_title}</TableCell>
+            <TableCell>{notification.title}</TableCell>
+            <TableCell>
+              {notification.type === 'one' ? '一度だけ表示' : notification.type === 'always' ? '常に表示' : ''}
+            </TableCell>
+            <TableCell>{notification.start_date}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
