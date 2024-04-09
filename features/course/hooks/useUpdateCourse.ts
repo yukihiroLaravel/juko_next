@@ -16,11 +16,6 @@ export const useUpdateCourse = ({ course }: Params) => {
     handleSubmit,
     formState: { errors },
   } = useForm<UpdateCourse>({
-    defaultValues: {
-      course_id: course?.course_id,
-      title: course?.title,
-      status: course?.status,
-    },
     resolver: yupResolver(UpdateSchema),
   });
 

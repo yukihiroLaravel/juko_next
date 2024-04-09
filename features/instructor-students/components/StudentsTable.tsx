@@ -133,7 +133,10 @@ export const StudentsTable: React.FC<Props> = ({
       </TableHead>
       <TableBody>
         {students.map((student) => (
-          <TableRow key={student.student_id} onClick={() => handleRowClick(student.student_id, course.course_id)}>
+          <TableRow
+            key={student.student_id}
+            onClick={() => handleRowClick(student.student_id, course.course_id)}
+          >
             <TableCell>
               {student.profile_image ? (
                 <Image

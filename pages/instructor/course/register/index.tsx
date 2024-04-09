@@ -21,11 +21,11 @@ const Index: NextPage = () => {
     formState: { errors },
   } = useForm<StoreCourse>({
     mode: 'onSubmit',
-    resolver: yupResolver(StoreSchema),
     defaultValues: {
       title: '',
-      image: undefined,
+      image: null,
     },
+    resolver: yupResolver(StoreSchema),
   });
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -89,7 +89,7 @@ const Index: NextPage = () => {
                         size="sm"
                         color="danger"
                         clickHandler={() => {
-                          setValue('image', undefined);
+                          setValue('image', null);
                           setUploadedFileName(null);
                         }}
                       >

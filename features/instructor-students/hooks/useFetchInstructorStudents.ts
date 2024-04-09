@@ -14,7 +14,7 @@ type Params = {
 };
 
 type Args = {
-  courseId: string | undefined;
+  courseId: number | null;
 };
 
 export const useFetchInstructorStudents = ({ courseId }: Args) => {
@@ -57,10 +57,7 @@ export const useFetchInstructorStudents = ({ courseId }: Args) => {
   };
 };
 
-const getFetchUrl = (
-  courseId: string | string[] | undefined,
-  params: Params,
-) => {
+const getFetchUrl = (courseId: number, params: Params) => {
   const { per_page, page, sort_by, order, input_text, start_date, end_date } =
     params;
   const searchParams = new URLSearchParams();

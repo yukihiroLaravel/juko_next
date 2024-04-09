@@ -1,21 +1,17 @@
 import { Axios } from '@/lib/api';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useRef } from 'react';
 import { Button } from '@/components/atoms/Button/Button';
-import { useRef } from 'react';
 import { useRouter } from 'next/router';
 
 type Props = {
   children: ReactNode;
-  courseId: number | undefined
+  courseId: number | null;
 };
 
 //TODO api取得未実装
-const attendance_id = 1
+const attendance_id = 1;
 
-export const StudentDeleteButton: FC<Props> = ({
-  children,
-  courseId,
-}) => {
+export const StudentDeleteButton: FC<Props> = ({ children, courseId }) => {
   const isSending = useRef<boolean>(false);
   const router = useRouter();
 
@@ -25,9 +21,7 @@ export const StudentDeleteButton: FC<Props> = ({
     if (confirm('本当に削除しますか？')) {
       isSending.current = true;
       Axios.get('/sanctum/csrf-cookie').then(() => {
-        Axios.delete(
-          `/api/v1/instructor/attendance/${attendance_id}`
-        )
+        Axios.delete(`/api/v1/instructor/attendance/${attendance_id}`)
           .then(() => {
             isSending.current = false;
             alert('削除しました');
@@ -44,7 +38,7 @@ export const StudentDeleteButton: FC<Props> = ({
 
   return (
     <Button type="button" color="danger" clickHandler={deleteHandler}>
-        {children}
+      {children}
     </Button>
   );
 };

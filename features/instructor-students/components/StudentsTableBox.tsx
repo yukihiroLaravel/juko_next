@@ -7,16 +7,16 @@ import { useFetchInstructorStudents } from '../hooks/useFetchInstructorStudents'
 import { useRouter } from 'next/router';
 
 export const StudentsTableBox: FC = () => {
-  const router = useRouter();
-  const { course_id: courseId } = router.query;
+  const { course_id } = useRouter().query;
 
+  const courseId = typeof course_id === 'string' ? parseInt(course_id) : null;
   const { course } = useFetchInstructorCourse({
     courseId,
   });
 
   const { students, pagination, params, updateParams } =
     useFetchInstructorStudents({
-      courseId: courseId as string | undefined,
+      courseId,
     });
 
   return (

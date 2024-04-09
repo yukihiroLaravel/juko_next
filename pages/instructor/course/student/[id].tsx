@@ -16,21 +16,22 @@ import { Typography } from '@/components/atoms/Typography';
 import { StudentAttendanceStatusCard } from '@/features/instructor-students/components/StudentAttendanceStatusCard';
 
 const Index: NextPage = () => {
-  const router = useRouter();
-  const { course_id: courseId, id: student_id} = router.query;
+  const { course_id, id: student_id } = useRouter().query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
 
+  const studentId =
+    typeof student_id === 'string' ? parseInt(student_id) : null;
+  const courseId = typeof course_id === 'string' ? parseInt(course_id) : null;
   const { course, error, isLoading } = useFetchInstructorCourse({
-    courseId
+    courseId,
   });
-  const course_id_type_int = typeof courseId === 'string' ? parseInt(courseId) : undefined;
-  
+
   return (
     <InstructorAuthWrapper>
       <InstructorLayout>
         {error && <Error />}
         {isLoading && (
-          <div className="mx-auto my-10 min-h-[100vh] w-3/4">
+          <div className="mx-auto my-10 min-h-screen w-3/4">
             <Loading />
           </div>
         )}
@@ -56,7 +57,9 @@ const Index: NextPage = () => {
                       </div>
                     </li>
                     <li className="mb-5">
-                      <Link href={`/instructor/course/students/?course_id=${courseId}`}>
+                      <Link
+                        href={`/instructor/course/students/?course_id=${courseId}`}
+                      >
                         <a className="underline">受講生一覧</a>
                       </Link>
                     </li>
@@ -84,25 +87,21 @@ const Index: NextPage = () => {
               )}
             </>
           )}
-          <div className="mx-auto min-h-[100vh] w-3/4 flex flex-col gap-5">
+          <div className="mx-auto flex min-h-screen w-3/4 flex-col gap-5">
             <div className="flex w-full items-center justify-between p-2">
-                <Typography variant="h1">受講生詳細</Typography>
+              <Typography variant="h1">受講生詳細</Typography>
             </div>
             <div>
-              <StudentDetailCard
-                studentId={student_id}
-              />
+              <StudentDetailCard studentId={student_id} />
             </div>
             <div>
               <StudentAttendanceStatusCard
-                courseId={course_id_type_int}
-                studentId={student_id}
+                courseId={courseId}
+                studentId={studentId}
               />
             </div>
             <div>
-              <StudentDeleteButton
-              courseId={course_id_type_int}
-              >
+              <StudentDeleteButton courseId={courseId}>
                 この受講生を講座から退会
               </StudentDeleteButton>
             </div>

@@ -30,7 +30,9 @@ export default function Dashboard() {
           <MainContainer>
             <div className="pt-5">
               <h2 className="text-xl font-bold">受講状況</h2>
-              <AttendanceStatusCard courseId={selectedCourse?.course_id} />
+              <AttendanceStatusCard
+                courseId={selectedCourse?.course_id ?? null}
+              />
             </div>
             <div className="pb-5">
               <h2 className="text-xl font-bold">受講生ログイン率</h2>

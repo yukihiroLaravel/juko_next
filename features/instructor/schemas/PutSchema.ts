@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { PutInstructor } from '../types/PutInstructor';
 
-export const PutSchema: yup.Schema<PutInstructor> = yup.object().shape({
+export const PutSchema: yup.ObjectSchema<PutInstructor> = yup.object().shape({
   nick_name: yup
     .string()
     .max(50, 'ニックネームは50文字以内で入力してください')

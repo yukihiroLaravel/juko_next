@@ -11,13 +11,13 @@ export const StudentSignupForm: React.FC = () => {
   const [isUniqueEmail, setIsUniqueEmail] = useState<boolean>(false);
 
   const defaultValues = {
-    nickName: '',
-    lastName: '',
-    firstName: '',
+    nick_name: '',
+    last_name: '',
+    first_name: '',
     email: '',
     occupation: '',
     purpose: '',
-    birthDate: '',
+    birth_date: '',
     sex: 'man',
     address: '',
   };
@@ -28,21 +28,21 @@ export const StudentSignupForm: React.FC = () => {
     formState: { errors },
   } = useForm({
     mode: 'onSubmit',
-    resolver: yupResolver(StoreSchema),
     defaultValues,
+    resolver: yupResolver(StoreSchema),
   });
 
   const submitHandler = (data: typeof defaultValues) => {
     isSending.current = true;
 
     const bodyData = {
-      nick_name: data.nickName,
-      last_name: data.lastName,
-      first_name: data.firstName,
+      nick_name: data.nick_name,
+      last_name: data.last_name,
+      first_name: data.first_name,
       email: data.email,
       occupation: data.occupation,
       purpose: data.purpose,
-      birth_date: data.birthDate,
+      birth_date: data.birth_date,
       sex: data.sex,
       address: data.address,
     };
@@ -76,9 +76,9 @@ export const StudentSignupForm: React.FC = () => {
             <input
               id="nickName"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
-              {...register('nickName')}
+              {...register('nick_name')}
             />
-            <span className="text-red-600">{errors?.nickName?.message}</span>
+            <span className="text-red-600">{errors?.nick_name?.message}</span>
           </label>
         </div>
         <div className="my-3">
@@ -87,9 +87,9 @@ export const StudentSignupForm: React.FC = () => {
             <input
               id="lastName"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
-              {...register('lastName')}
+              {...register('last_name')}
             />
-            <span className="text-red-600">{errors?.lastName?.message}</span>
+            <span className="text-red-600">{errors?.last_name?.message}</span>
           </label>
         </div>
         <div className="my-3">
@@ -98,9 +98,9 @@ export const StudentSignupForm: React.FC = () => {
             <input
               id="firstName"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
-              {...register('firstName')}
+              {...register('first_name')}
             />
-            <span className="text-red-600">{errors?.firstName?.message}</span>
+            <span className="text-red-600">{errors?.first_name?.message}</span>
           </label>
         </div>
         <div className="my-3">
@@ -148,9 +148,9 @@ export const StudentSignupForm: React.FC = () => {
               id="birthDate"
               type="date"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
-              {...register('birthDate')}
+              {...register('birth_date')}
             />
-            <span className="text-red-600">{errors?.birthDate?.message}</span>
+            <span className="text-red-600">{errors?.birth_date?.message}</span>
           </label>
         </div>
         <div className="my-3">

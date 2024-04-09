@@ -23,12 +23,12 @@ import { useAddChapter } from '@/features/chapter/hooks/useAddChapter';
 import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 
 const Index: NextPage = () => {
-  const router = useRouter();
-  const { course_id: courseId } = router.query;
+  const { course_id } = useRouter().query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
   const { updateIsShowedAddChapter, handleSubmit, renderAddChapter, reset } =
     useAddChapter();
 
+  const courseId = typeof course_id === 'string' ? parseInt(course_id) : null;
   const { course, isLoading, error, mutate } = useFetchInstructorCourse({
     courseId,
   });
