@@ -9,6 +9,7 @@ import {
   } from 'recharts';
   import { useFetchAttendanceStatus } from '@/features/attendance/hooks/useFetchAttendanceStatus';
   import { Typography } from '@/components/atoms/Typography';
+  import { renderCustomizedLabel } from '../components/CustomizedLabel'
   
   interface Props {
     courseId: number | undefined;
@@ -35,16 +36,6 @@ import {
         label: chapter.title,
         value: chapter.chapter_progress,
     }));
-
-    const chartWidth = 400;
-    const renderCustomizedLabel = (props:any) => {
-        const { y, value } = props;
-        return (
-          <text x={chartWidth - 30} y={y + 15} fill="#666" textAnchor="end">
-            {`${value}％`}
-          </text>
-        );
-      };
 
     return (
       <>

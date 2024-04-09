@@ -18,7 +18,7 @@ export const StudentDetailCard: React.FC<Props> = ({
     <>
       <Typography variant="h3">基本情報</Typography>
       <div className="rounded bg-yellow-100">
-        <div className="px-4 flex gap-4">
+        <div className="px-4 pt-2 flex gap-4">
           <div>
           {Student?.profile_image ? (
                 <Image
@@ -39,40 +39,39 @@ export const StudentDetailCard: React.FC<Props> = ({
            {Student?.nick_name}
           </div>
         </div>
-        <div className="p-4">
-          <div className="mb-4">
-            <strong>ユーザー名（仮）:</strong> {Student?.given_name_by_instructor}
-          </div>
-          <div className="mb-4">
-            <strong>メールアドレス:</strong> {Student?.email}
-          </div>
-          <div className="mb-4">
-            <strong>姓:</strong> {Student?.first_name}
-          </div>
-          <div className="mb-4">
-            <strong>名:</strong> {Student?.last_name}
-          </div>
-          <div className="mb-4">
-            <strong>職業:</strong> {Student?.occupation}
-          </div>
-          <div className="mb-4">
-            <strong>目的:</strong> {Student?.purpose}
-          </div>
-          <div className="mb-4">
-            <strong>性別:</strong> {Student?.sex}
-          </div>
-          <div className="mb-4">
-            <strong>住所:</strong> {Student?.address}
-          </div>
-          <div className="mb-4">
-            <strong>誕生日:</strong> {Student?.birth_date}
-          </div>
-          <div className="mb-4">
-            <strong>登録日:</strong> {Student?.created_at}
-          </div>
-          <div>
-            <strong>最終ログイン日:</strong> {Student?.last_login_at}
-          </div>
+        <div className="grid grid-cols-2 gap-4 p-4">
+          <p className="font-semibold">ユーザー名（仮）:</p>
+          <p>{Student?.given_name_by_instructor}</p>
+
+          <p className="font-semibold">メールアドレス:</p>
+          <p>{Student?.email}</p>
+
+          <p className="font-semibold">姓:</p>
+          <p>{Student?.first_name}</p>
+
+          <p className="font-semibold">名:</p>
+          <p>{Student?.last_name}</p>
+
+          <p className="font-semibold">職業:</p>
+          <p>{Student?.occupation}</p>
+
+          <p className="font-semibold">目的:</p>
+          <p>{Student?.purpose}</p>
+
+          <p className="font-semibold">性別:</p>
+          <p>{Student?.sex}</p>
+
+          <p className="font-semibold">住所:</p>
+          <p>{Student?.address}</p>
+
+          <p className="font-semibold">誕生日:</p>
+          <p>{Student?.birth_date}</p>
+
+          <p className="font-semibold">登録日:</p>
+          <p>{Student?.created_at}</p>
+
+          <p className="font-semibold">最終ログイン日:</p>
+          <p>{Student?.last_login_at}</p>
         </div>
       </div>
     </>
