@@ -4,6 +4,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TableHeaderCell,
 } from '@/components/atoms/Table';
 import { Notification } from '../types/Notification';
 
@@ -18,26 +19,10 @@ export const NotificationsTable: React.FC<Props> = ({
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>
-            <div className="flex items-center justify-center">
-              タイトル
-            </div>
-          </TableCell>
-          <TableCell>
-            <div className="flex items-center justify-center">
-              講座名
-            </div>
-          </TableCell>
-          <TableCell>
-            <div className="flex items-center justify-center">
-              表示タイプ
-            </div>
-          </TableCell>
-          <TableCell>
-            <div className="flex items-center justify-center">
-              開始日時
-            </div>
-          </TableCell>
+          <TableHeaderCell>タイトル</TableHeaderCell>
+          <TableHeaderCell>講座名</TableHeaderCell>
+          <TableHeaderCell>表示タイプ</TableHeaderCell>
+          <TableHeaderCell>開始日時</TableHeaderCell>
         </TableRow>
       </TableHead>
       <TableBody>
