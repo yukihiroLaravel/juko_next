@@ -100,7 +100,7 @@ const Index: NextPage = () => {
                 studentId={studentId}
               />
             </div>
-            <div>
+            <div className="pb-3">
               <StudentDeleteButton courseId={courseId}>
                 この受講生を講座から退会
               </StudentDeleteButton>

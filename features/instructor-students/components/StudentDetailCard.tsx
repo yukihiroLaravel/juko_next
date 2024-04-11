@@ -16,7 +16,7 @@ export const StudentDetailCard: React.FC<Props> = ({ studentId }) => {
     <>
       <Typography variant="h3">基本情報</Typography>
       <div className="rounded bg-yellow-100">
-        <div className="flex gap-4 p-4 pt-4">
+        <div className="flex gap-4 p-4">
           <div>
             {Student?.profile_image ? (
               <div className="flex items-center justify-center">
@@ -35,9 +35,9 @@ export const StudentDetailCard: React.FC<Props> = ({ studentId }) => {
               </div>
             )}
           </div>
-          <div className="text-3xl">{Student?.nick_name}</div>
+          <div className="text-lg sm:text-3xl">{Student?.nick_name}</div>
         </div>
-        <div className="grid grid-cols-2 gap-4 px-4 pb-4">
+        <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-3 p-3">
           <p className="font-semibold">ユーザー名（仮）:</p>
           <p>{Student?.given_name_by_instructor}</p>
 
