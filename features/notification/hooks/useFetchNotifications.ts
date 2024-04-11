@@ -27,9 +27,13 @@ export const useFetchNotifications = () => {
         total: number;
       };
     };
-  }>(`/api/v1/instructor/notification/index?page=${params.page}&per_page=${params.per_page}`, fetcher, {
-    revalidateOnFocus: false,
-  });
+  }>(
+    `/api/v1/instructor/notification/index?page=${params.page}&per_page=${params.per_page}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    },
+  );
 
   return {
     notifications: data?.data.notifications,

@@ -58,7 +58,9 @@ const Index: NextPage = () => {
                       </Link>
                     </li>
                     <li className="mb-5">
-                      <Link href={`/instructor/notifications/?course_id=${courseId}`}>
+                      <Link
+                        href={`/instructor/notifications/?course_id=${courseId}`}
+                      >
                         <a className="underline">お知らせ一覧</a>
                       </Link>
                     </li>

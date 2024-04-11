@@ -12,9 +12,7 @@ type Props = {
   notifications: Notification[];
 };
 
-export const NotificationsTable: React.FC<Props> = ({
-  notifications,
-}) => {
+export const NotificationsTable: React.FC<Props> = ({ notifications }) => {
   return (
     <Table>
       <TableHead>
@@ -31,7 +29,11 @@ export const NotificationsTable: React.FC<Props> = ({
             <TableCell>{notification.course_title}</TableCell>
             <TableCell>{notification.title}</TableCell>
             <TableCell>
-              {notification.type === 'one' ? '一度だけ表示' : notification.type === 'always' ? '常に表示' : ''}
+              {notification.type === 'one'
+                ? '一度だけ表示'
+                : notification.type === 'always'
+                  ? '常に表示'
+                  : ''}
             </TableCell>
             <TableCell>{notification.start_date}</TableCell>
           </TableRow>

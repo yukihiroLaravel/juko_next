@@ -10,9 +10,7 @@ export const NotificationsTableBox: FC = () => {
 
   return (
     <>
-      {notifications && (
-        <NotificationsTable notifications={notifications}/>
-      )}
+      {notifications && <NotificationsTable notifications={notifications} />}
       <Pagination
         total={pagination?.total ?? 0}
         currentPage={pagination?.page ?? 0}
