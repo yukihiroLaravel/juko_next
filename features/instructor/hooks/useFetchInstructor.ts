@@ -5,7 +5,7 @@ import { Instructor } from '../types/Instructor';
 export const useFetchInstructor = () => {
   const { data, isLoading, error, mutate } = useSWR<{
     data: Instructor;
-  }>('/api/v1/instructor/edit', fetcher, {
+  }>('/api/v1/instructor', fetcher, {
     revalidateOnFocus: false,
   });
 

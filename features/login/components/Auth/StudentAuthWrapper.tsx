@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const StudentAuthWrapper: FC<Props> = ({ children }) => {
-  const { isValidating, error } = useSWR('/api/user', fetcher, {
+  const { isValidating, error } = useSWR('/api/v1/student', fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
@@ -22,7 +22,7 @@ export const StudentAuthWrapper: FC<Props> = ({ children }) => {
 
   if (isValidating)
     return (
-      <div className="mx-auto my-10 min-h-[100vh] w-3/4">
+      <div className="mx-auto my-10 min-h-screen w-3/4">
         <Loading />
       </div>
     );
