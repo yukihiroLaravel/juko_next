@@ -24,7 +24,7 @@ const Index: NextPage = () => {
     resolver: yupResolver(StoreSchema),
     defaultValues: {
       title: '',
-      image: undefined,
+      image: null,
     },
   });
 
@@ -89,7 +89,7 @@ const Index: NextPage = () => {
                         size="sm"
                         color="danger"
                         clickHandler={() => {
-                          setValue('image', undefined);
+                          setValue('image', null);
                           setUploadedFileName(null);
                         }}
                       >

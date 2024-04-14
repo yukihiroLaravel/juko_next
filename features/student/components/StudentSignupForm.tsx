@@ -11,13 +11,13 @@ export const StudentSignupForm: React.FC = () => {
   const [isUniqueEmail, setIsUniqueEmail] = useState<boolean>(false);
 
   const defaultValues = {
-    nickName: '',
-    lastName: '',
-    firstName: '',
+    nick_name: '',
+    last_name: '',
+    first_name: '',
     email: '',
     occupation: '',
     purpose: '',
-    birthDate: '',
+    birth_date: '',
     gender: 'man',
     address: '',
   };
@@ -26,23 +26,33 @@ export const StudentSignupForm: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<{
+    nick_name: string;
+    last_name: string;
+    first_name: string;
+    email: string;
+    occupation: string;
+    purpose: string;
+    birth_date: string;
+    gender: string;
+    address: string;
+  }>({
     mode: 'onSubmit',
-    resolver: yupResolver(StoreSchema),
     defaultValues,
+    resolver: yupResolver(StoreSchema),
   });
 
   const submitHandler = (data: typeof defaultValues) => {
     isSending.current = true;
 
     const bodyData = {
-      nick_name: data.nickName,
-      last_name: data.lastName,
-      first_name: data.firstName,
+      nick_name: data.nick_name,
+      last_name: data.last_name,
+      first_name: data.first_name,
       email: data.email,
       occupation: data.occupation,
       purpose: data.purpose,
-      birth_date: data.birthDate,
+      birth_date: data.birth_date,
       gender: data.gender,
       address: data.address,
     };
@@ -71,36 +81,36 @@ export const StudentSignupForm: React.FC = () => {
       <h2 className="text-center text-2xl">新規登録画面</h2>
       <div className="mx-auto w-4/5">
         <div className="mt-10">
-          <label htmlFor="nickName">
+          <label htmlFor="nick_name">
             <p>ユーザー名</p>
             <input
-              id="nickName"
+              id="nick_name"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
-              {...register('nickName')}
+              {...register('nick_name')}
             />
-            <span className="text-red-600">{errors?.nickName?.message}</span>
+            <span className="text-red-600">{errors?.nick_name?.message}</span>
           </label>
         </div>
         <div className="my-3">
-          <label htmlFor="lastName">
+          <label htmlFor="last_name">
             <p>姓</p>
             <input
-              id="lastName"
+              id="last_name"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
-              {...register('lastName')}
+              {...register('last_name')}
             />
-            <span className="text-red-600">{errors?.lastName?.message}</span>
+            <span className="text-red-600">{errors?.last_name?.message}</span>
           </label>
         </div>
         <div className="my-3">
-          <label htmlFor="firstName">
+          <label htmlFor="first_name">
             <p>名</p>
             <input
-              id="firstName"
+              id="first_name"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
-              {...register('firstName')}
+              {...register('first_name')}
             />
-            <span className="text-red-600">{errors?.firstName?.message}</span>
+            <span className="text-red-600">{errors?.first_name?.message}</span>
           </label>
         </div>
         <div className="my-3">
@@ -142,15 +152,15 @@ export const StudentSignupForm: React.FC = () => {
           </label>
         </div>
         <div className="my-3">
-          <label htmlFor="birthDate">
+          <label htmlFor="birth_date">
             <p>誕生日</p>
             <input
-              id="birthDate"
+              id="birth_date"
               type="date"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
-              {...register('birthDate')}
+              {...register('birth_date')}
             />
-            <span className="text-red-600">{errors?.birthDate?.message}</span>
+            <span className="text-red-600">{errors?.birth_date?.message}</span>
           </label>
         </div>
         <div className="my-3">
