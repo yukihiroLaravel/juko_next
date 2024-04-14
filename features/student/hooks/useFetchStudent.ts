@@ -5,7 +5,7 @@ import { Student } from '../types/Student';
 export const useFetchStudent = () => {
   const { data, isLoading, error, mutate } = useSWR<{
     data: Student;
-  }>('/api/v1/student/edit', fetcher, {
+  }>('/api/v1/student', fetcher, {
     revalidateOnFocus: false,
   });
 

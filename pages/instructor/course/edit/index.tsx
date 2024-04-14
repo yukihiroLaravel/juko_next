@@ -57,7 +57,7 @@ const Index: NextPage = () => {
     })
       .then((res) => {
         mutate();
-        setValue('image', undefined);
+        setValue('image', null);
         setUploadedFileName(null);
         alert('講座を更新しました。');
       })
@@ -69,7 +69,7 @@ const Index: NextPage = () => {
 
   // 画像アップロードのキャンセル処理
   const cancelHandler = () => {
-    setValue('image', undefined);
+    setValue('image', null);
     setUploadedFileName(null);
   };
 

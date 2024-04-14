@@ -10,7 +10,7 @@ export type PutStudent = Pick<
   | 'purpose'
   | 'address'
 > & {
-  sex: string;
+  gender: string;
   birth_date: Date;
   image: File | null;
 };

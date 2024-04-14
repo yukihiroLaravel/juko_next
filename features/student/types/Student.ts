@@ -7,7 +7,7 @@ export type Student = {
   occupation: string;
   purpose: string;
   birth_date: string;
-  sex: 'man' | 'woman';
+  gender: 'man' | 'woman';
   address: string;
   profile_image: string | null;
   last_login_at: string;

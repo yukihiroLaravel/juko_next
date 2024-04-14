@@ -51,7 +51,7 @@ export const StudentEditForm: React.FC = () => {
     formData.append('purpose', data.purpose);
     formData.append('address', data.address);
     formData.append('birth_date', birthDate);
-    formData.append('sex', data.sex);
+    formData.append('gender', data.gender);
     if (data.image) {
       formData.append('profile_image', data.image);
     }
@@ -81,7 +81,7 @@ export const StudentEditForm: React.FC = () => {
   return (
     <>
       {isLoading && (
-        <div className="mx-auto my-10 min-h-[100vh] w-3/4">
+        <div className="mx-auto my-10 min-h-screen w-3/4">
           <Loading />
         </div>
       )}
@@ -191,10 +191,10 @@ export const StudentEditForm: React.FC = () => {
               </label>
             </div>
             <div className="my-3">
-              <label htmlFor="sex">
+              <label htmlFor="gender">
                 <p className="mb-1 font-bold">性別</p>
                 <div className="mt-2">
-                  <GenderRadioField name="sex" control={control} />
+                  <GenderRadioField name="gender" control={control} />
                 </div>
               </label>
             </div>
