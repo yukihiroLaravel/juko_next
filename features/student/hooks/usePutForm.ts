@@ -35,7 +35,7 @@ export const usePutForm = ({ student }: Params) => {
     setValue('occupation', student?.occupation);
     setValue('purpose', student?.purpose);
     setValue('birth_date', birthDate);
-    setValue('sex', student?.sex);
+    setValue('gender', student?.gender);
     setValue('address', student?.address);
     setValue('image', null);
     setIsDefaultValues(true);

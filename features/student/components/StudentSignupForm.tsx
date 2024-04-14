@@ -18,7 +18,7 @@ export const StudentSignupForm: React.FC = () => {
     occupation: '',
     purpose: '',
     birthDate: '',
-    sex: 'man',
+    gender: 'man',
     address: '',
   };
 
@@ -43,7 +43,7 @@ export const StudentSignupForm: React.FC = () => {
       occupation: data.occupation,
       purpose: data.purpose,
       birth_date: data.birthDate,
-      sex: data.sex,
+      gender: data.gender,
       address: data.address,
     };
     Axios.get('/sanctum/csrf-cookie').then(() => {
@@ -154,13 +154,13 @@ export const StudentSignupForm: React.FC = () => {
           </label>
         </div>
         <div className="my-3">
-          <label htmlFor="sex">
+          <label htmlFor="gender">
             <p>性別</p>
             <div className="mt-2">
               <label className="inline-flex items-center">
                 <input
                   type="radio"
-                  {...register('sex', { required: true })}
+                  {...register('gender', { required: true })}
                   value="man"
                 />
                 <span className="ml-2">男性</span>
@@ -168,13 +168,13 @@ export const StudentSignupForm: React.FC = () => {
               <label className="ml-6 inline-flex items-center">
                 <input
                   type="radio"
-                  {...register('sex', { required: true })}
+                  {...register('gender', { required: true })}
                   value="woman"
                 />
                 <span className="ml-2">女性</span>
               </label>
             </div>
-            <span className="text-red-600">{errors?.sex?.message}</span>
+            <span className="text-red-600">{errors?.gender?.message}</span>
           </label>
         </div>
         <div className="my-3">

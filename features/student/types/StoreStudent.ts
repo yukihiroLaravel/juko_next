@@ -11,5 +11,5 @@ export type StoreStudent = Pick<
   | 'birth_date'
   | 'address'
 > & {
-  sex: string;
+  gender: string;
 };
