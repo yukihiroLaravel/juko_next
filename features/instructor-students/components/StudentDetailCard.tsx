@@ -15,8 +15,8 @@ export const StudentDetailCard: React.FC<Props> = ({ studentId }) => {
   return (
     <>
       <Typography variant="h3">基本情報</Typography>
-      <div className="rounded bg-yellow-100">
-        <div className="flex gap-4 p-4">
+      <div className="rounded-lg  border border-gray-200 bg-[#FFFDE9] shadow-md">
+        <div className="flex gap-4 pl-4 pt-4">
           <div>
             {Student?.profile_image ? (
               <div className="flex items-center justify-center">
@@ -37,7 +37,7 @@ export const StudentDetailCard: React.FC<Props> = ({ studentId }) => {
           </div>
           <div className="text-lg sm:text-3xl">{Student?.nick_name}</div>
         </div>
-        <div className="grid grid-cols-[auto,1fr] gap-x-4 gap-y-3 p-3">
+        <div className="grid grid-cols-[auto,1fr] gap-x-16 gap-y-2 p-3 md:pl-20">
           <p className="font-semibold">ユーザー名（仮）:</p>
           <p>{Student?.given_name_by_instructor}</p>
 
@@ -57,7 +57,7 @@ export const StudentDetailCard: React.FC<Props> = ({ studentId }) => {
           <p>{Student?.purpose}</p>
 
           <p className="font-semibold">性別:</p>
-          <p>{Student?.sex}</p>
+          <p>{Student?.gender === 'man' ? '男性' : Student?.gender === 'woman' ? '女性' : '性別未設定'}</p>
 
           <p className="font-semibold">住所:</p>
           <p>{Student?.address}</p>

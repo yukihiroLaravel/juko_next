@@ -88,7 +88,7 @@ const Index: NextPage = () => {
             </>
           )}
           <div className="mx-auto flex min-h-screen w-3/4 flex-col gap-5">
-            <div className="flex w-full items-center justify-between p-2">
+            <div className="flex w-full items-center justify-between">
               <Typography variant="h1">受講生詳細</Typography>
             </div>
             <div>

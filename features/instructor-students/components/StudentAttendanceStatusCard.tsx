@@ -21,8 +21,10 @@ const studentAttendanceStatus = {
   course_title: 'PHPコース',
   course_progress: 50,
   chapters: [
-    { title: 'aaaa', chapter_progress: 30 },
-    { title: 'bbbb', chapter_progress: 100 },
+    { title: 'PHPPHPチャプター①', chapter_progress: 30 },
+    { title: 'PHPチャプター②', chapter_progress: 100 },
+    { title: 'PHPチャプター③', chapter_progress: 100 },
+    
   ],
 };
 
@@ -37,7 +39,7 @@ export const StudentAttendanceStatusCard: React.FC<Props> = ({ courseId }) => {
   return (
     <>
       <Typography variant="h3">学習状況</Typography>
-      <div className="flex flex-col items-center rounded bg-yellow-100 sm:items-start">
+      <div className="flex flex-col items-center rounded-lg  border border-gray-200 bg-[#FFFDE9] shadow-md sm:items-start">
         <div className="m-4 rounded-3xl bg-red-200 px-8 py-2 text-center text-xl">
           <strong>{studentAttendanceStatus.course_title}</strong>
         </div>
@@ -54,11 +56,11 @@ export const StudentAttendanceStatusCard: React.FC<Props> = ({ courseId }) => {
           <div className="ml-2 min-w-0 shrink grow pt-2">
             <p className="text-lg">チャプター進捗</p>
             <div className="mt-4">
-              <ResponsiveContainer width="90%" height={200}>
+              <ResponsiveContainer width="90%" height={300}>
                 <BarChart
                   layout="vertical"
                   data={data}
-                  margin={{ top: 0, right: 60, left: 30, bottom: 35 }}
+                  margin={{ top: 0, right: 10, left: 60, bottom:10 }}
                 >
                   <XAxis type="number" domain={[0, 100]} hide />
                   <YAxis
@@ -68,11 +70,11 @@ export const StudentAttendanceStatusCard: React.FC<Props> = ({ courseId }) => {
                     type="category"
                     tickFormatter={(value) => {
                       // ラベルが長い場合は省略
-                      if (value.length > 6) return `${value.slice(0, 6)}...`;
+                      if (value.length > 9) return `${value.slice(0, 9)}...`;
                       return value;
                     }}
                     tick={{
-                      fontSize: '0.8rem',
+                      fontSize: '0.9rem',
                     }}
                   />
                   <Tooltip
