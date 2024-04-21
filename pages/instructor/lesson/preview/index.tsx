@@ -23,9 +23,9 @@ import {
 import { Lesson } from '@/features/lesson/types/Lesson';
 
 type Query = {
-  courseId?: string;
-  chapterId?: string;
-  lessonId?: number;
+  course_id?: string;
+  chapter_id?: string;
+  lesson_id?: string;
 };
 
 const StyleSideBarList = styled('li')<{ isSelected: boolean }>`
@@ -45,14 +45,19 @@ const StyleSideBarList = styled('li')<{ isSelected: boolean }>`
 const Index: NextPage = () => {
   const [isShowedSideBar, setIsShowedSideBar] = useState(true);
   const [width] = useWindowSize();
-  const router = useRouter();
-  const query: Query = router.query;
+  const { course_id, chapter_id, lesson_id }: Query = useRouter().query;
+
+  const courseId = typeof course_id === 'string' ? parseInt(course_id) : null;
+  const chapterId =
+    typeof chapter_id === 'string' ? parseInt(chapter_id) : null;
+
   const { course } = useFetchInstructorCourse({
-    courseId: query.courseId,
+    courseId,
   });
+
   const { chapter } = useFetchInstructorChapters({
-    courseId: query.courseId,
-    chapterId: query.chapterId,
+    courseId,
+    chapterId,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [lessons, setLessons] = useState<
@@ -75,8 +80,7 @@ const Index: NextPage = () => {
       return newLessons;
     });
   };
-  const lessonId =
-    typeof query.lessonId === 'string' ? Number(query.lessonId) : null;
+  const lessonId = typeof lesson_id === 'string' ? Number(lesson_id) : null;
   // 進捗は固定の値(0%)
   const calculateChapterProgeress = 0;
 
@@ -109,7 +113,7 @@ const Index: NextPage = () => {
     },
     {
       title: 'チャプター&レッスン一覧',
-      href: `/instructor/chapters?course_id=${query.courseId}`,
+      href: `/instructor/chapters?course_id=${courseId}`,
     },
     {
       title: chapter?.title ?? '',

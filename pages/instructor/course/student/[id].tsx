@@ -4,25 +4,27 @@ import { ToggleButton } from '@/components/atoms/Button/ToggleButton';
 import { InstructorLayout } from '@/components/organisms/header/InstructorLayout';
 import { Error } from '@/components/utils/Error';
 import { Loading } from '@/components/utils/Loading';
-import { NotificationsHeadingBox } from '@/features/notification/components/NotificationsHeadingBox';
+import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
 import { InstructorAuthWrapper } from '@/features/login/components/Auth/InstructorAuthWrapper';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { NotificationsTableBox } from '@/features/notification/components/NotificationsTableBox';
-import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstructorCourse';
+import { StudentDetailCard } from '@/features/instructor-students/components/StudentDetailCard';
+import { StudentDeleteButton } from '@/features/instructor-students/components/StudentDeleteButton';
+import { Typography } from '@/components/atoms/Typography';
+import { StudentAttendanceStatusCard } from '@/features/instructor-students/components/StudentAttendanceStatusCard';
 
 const Index: NextPage = () => {
-  const router = useRouter();
-  const { course_id } = router.query;
+  const { course_id, id: student_id } = useRouter().query;
+  const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
 
-  const courseId = typeof course_id === 'string' ? Number(course_id) : null;
-
+  const studentId =
+    typeof student_id === 'string' ? parseInt(student_id) : null;
+  const courseId = typeof course_id === 'string' ? parseInt(course_id) : null;
   const { course, error, isLoading } = useFetchInstructorCourse({
     courseId,
   });
-  const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
 
   return (
     <InstructorAuthWrapper>
@@ -55,14 +57,19 @@ const Index: NextPage = () => {
                       </div>
                     </li>
                     <li className="mb-5">
+                      <Link
+                        href={`/instructor/course/students/?course_id=${courseId}`}
+                      >
+                        <a className="underline">受講生一覧</a>
+                      </Link>
+                    </li>
+                    <li className="mb-5">
                       <Link href={`/instructor/chapters?course_id=${courseId}`}>
                         <a className="underline">チャプター一覧</a>
                       </Link>
                     </li>
                     <li className="mb-5">
-                      <Link
-                        href={`/instructor/notifications/?course_id=${courseId}`}
-                      >
+                      <Link href="#">
                         <a className="underline">お知らせ一覧</a>
                       </Link>
                     </li>
@@ -80,10 +87,23 @@ const Index: NextPage = () => {
               )}
             </>
           )}
-          <div className="flex w-full flex-col items-center gap-2">
-            <NotificationsHeadingBox>お知らせ一覧</NotificationsHeadingBox>
-            <div className="flex w-11/12 flex-col gap-10">
-              <NotificationsTableBox />
+          <div className="mx-auto flex min-h-screen w-3/4 flex-col gap-5">
+            <div className="flex w-full items-center justify-between">
+              <Typography variant="h1">受講生詳細</Typography>
+            </div>
+            <div>
+              <StudentDetailCard studentId={student_id} />
+            </div>
+            <div>
+              <StudentAttendanceStatusCard
+                courseId={courseId}
+                studentId={studentId}
+              />
+            </div>
+            <div className="pb-3">
+              <StudentDeleteButton courseId={courseId}>
+                この受講生を講座から退会
+              </StudentDeleteButton>
             </div>
           </div>
         </div>

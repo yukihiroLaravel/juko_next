@@ -19,9 +19,13 @@ const Index: NextPage = () => {
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
 
   const { course_id, chapter_id, lesson_id } = router.query;
+  const courseId = typeof course_id === 'string' ? Number(course_id) : null;
+  const chapterId = typeof chapter_id === 'string' ? Number(chapter_id) : null;
+  const lessonId = typeof lesson_id === 'string' ? Number(lesson_id) : null;
+
   const { chapter, isLoading, error, mutate } = useFetchInstructorChapters({
-    courseId: course_id,
-    chapterId: chapter_id,
+    courseId,
+    chapterId,
   });
 
   const clickHandler = (lessonId: number) => () => {
@@ -45,10 +49,6 @@ const Index: NextPage = () => {
       href: '#',
     },
   ];
-
-  const courseId = typeof course_id === 'string' ? Number(course_id) : null;
-  const chapterId = typeof chapter_id === 'string' ? Number(chapter_id) : null;
-  const lessonId = typeof lesson_id === 'string' ? Number(lesson_id) : null;
 
   // コンテンツを表示するかどうか
   const isDisplay =

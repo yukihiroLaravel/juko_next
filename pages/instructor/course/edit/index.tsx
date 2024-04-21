@@ -17,9 +17,9 @@ import { useDropzone } from 'react-dropzone';
 const Index: NextPage = () => {
   const router = useRouter();
   const { course_id } = router.query;
-
+  const courseId = typeof course_id === 'string' ? parseInt(course_id) : null;
   const { course, isLoading, mutate } = useFetchInstructorCourse({
-    courseId: course_id,
+    courseId,
   });
 
   const { register, setValue, errors, handleSubmit } = useUpdateCourse({
@@ -55,7 +55,7 @@ const Index: NextPage = () => {
         'Content-Type': 'multipart/form-data',
       },
     })
-      .then((res) => {
+      .then(() => {
         mutate();
         setValue('image', null);
         setUploadedFileName(null);

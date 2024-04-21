@@ -14,9 +14,10 @@ import { useState } from 'react';
 import { StudentsTableBox } from '@/features/instructor-students/components/StudentsTableBox';
 
 const Index: NextPage = () => {
-  const router = useRouter();
-  const { course_id: courseId } = router.query;
+  const { course_id } = useRouter().query;
   const [isShowedSideBar, setIsShowedSideBar] = useState<boolean>(true);
+
+  const courseId = typeof course_id === 'string' ? parseInt(course_id) : null;
 
   const { course, error, isLoading } = useFetchInstructorCourse({
     courseId,

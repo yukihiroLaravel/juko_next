@@ -11,6 +11,7 @@ import { SortIcon } from './SortIcon';
 import { dateToHumanReadable } from '@/lib/DateLogic';
 import Image from 'next/image';
 import { UserIcon } from '@/components/icons/UserIcon';
+import Router from 'next/router';
 
 type Props = {
   students: Student[];
@@ -27,6 +28,13 @@ type Props = {
       order: 'asc' | 'desc';
     }>,
   ) => void;
+};
+
+const handleRowClick = (student_id: number, courseId: number) => {
+  Router.push({
+    pathname: `/instructor/course/student/${student_id}`,
+    query: { course_id: courseId },
+  });
 };
 
 export const StudentsTable: React.FC<Props> = ({
@@ -125,7 +133,10 @@ export const StudentsTable: React.FC<Props> = ({
       </TableHead>
       <TableBody>
         {students.map((student) => (
-          <TableRow key={student.student_id}>
+          <TableRow
+            key={student.student_id}
+            onClick={() => handleRowClick(student.student_id, course.course_id)}
+          >
             <TableCell>
               {student.profile_image ? (
                 <Image

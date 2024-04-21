@@ -21,11 +21,11 @@ const Index: NextPage = () => {
     formState: { errors },
   } = useForm<StoreCourse>({
     mode: 'onSubmit',
-    resolver: yupResolver(StoreSchema),
     defaultValues: {
       title: '',
       image: null,
     },
+    resolver: yupResolver(StoreSchema),
   });
 
   const { getRootProps, getInputProps } = useDropzone({

@@ -2,7 +2,7 @@ import { fetcher } from '@/lib/Fetcher';
 import useSWR from 'swr';
 
 interface Props {
-  courseId: number | undefined;
+  courseId: number | null;
 }
 
 export const useFetchAttendanceStatus = ({ courseId }: Props) => {

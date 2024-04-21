@@ -4,12 +4,12 @@ import useSWR from 'swr';
 import { Lesson } from '@/features/lesson/types/Lesson';
 
 type Params = {
-  courseId: string | string[] | undefined;
-  chapterId: string | string[] | undefined;
+  courseId: number | null;
+  chapterId: number | null;
 };
 
 export const useFetchInstructorChapters = ({ courseId, chapterId }: Params) => {
-  const shouldFetch = courseId !== undefined && chapterId !== undefined;
+  const shouldFetch = courseId !== null && chapterId !== null;
 
   const { data, error, isLoading, mutate } = useSWR<{
     data: Chapter & {
