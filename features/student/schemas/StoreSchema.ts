@@ -12,9 +12,9 @@ export const StoreSchema: yup.ObjectSchema<StoreStudent> = yup.object().shape({
   occupation: yup.string().required('職業を入力してください。'),
   purpose: yup.string().required('目的を入力してください。'),
   birth_date: yup.string().required('生年月日を入力してください。'),
-  sex: yup
+  gender: yup
     .string()
-    .test('sex', '性別を選択してください。', (value) => {
+    .test('gender', '性別を選択してください。', (value) => {
       if (value !== 'man' && value !== 'woman') {
         return false;
       }

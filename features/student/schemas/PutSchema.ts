@@ -27,9 +27,9 @@ export const PutSchema: yup.ObjectSchema<PutStudent> = yup.object().shape({
     .max(50, '目的は50文字以内で入力してください')
     .required('目的を入力してください'),
   birth_date: yup.date().required('生年月日を入力してください'),
-  sex: yup
+  gender: yup
     .string()
-    .test('sex', '性別を選択してください', (value) => {
+    .test('gender', '性別を選択してください', (value) => {
       if (value !== 'man' && value !== 'woman') {
         return false;
       }

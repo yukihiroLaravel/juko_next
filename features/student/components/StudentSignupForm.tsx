@@ -18,7 +18,7 @@ export const StudentSignupForm: React.FC = () => {
     occupation: '',
     purpose: '',
     birth_date: '',
-    sex: 'man',
+    gender: 'man',
     address: '',
   };
 
@@ -26,7 +26,17 @@ export const StudentSignupForm: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<{
+    nick_name: string;
+    last_name: string;
+    first_name: string;
+    email: string;
+    occupation: string;
+    purpose: string;
+    birth_date: string;
+    gender: string;
+    address: string;
+  }>({
     mode: 'onSubmit',
     defaultValues,
     resolver: yupResolver(StoreSchema),
@@ -43,7 +53,7 @@ export const StudentSignupForm: React.FC = () => {
       occupation: data.occupation,
       purpose: data.purpose,
       birth_date: data.birth_date,
-      sex: data.sex,
+      gender: data.gender,
       address: data.address,
     };
     Axios.get('/sanctum/csrf-cookie').then(() => {
@@ -71,10 +81,10 @@ export const StudentSignupForm: React.FC = () => {
       <h2 className="text-center text-2xl">新規登録画面</h2>
       <div className="mx-auto w-4/5">
         <div className="mt-10">
-          <label htmlFor="nickName">
+          <label htmlFor="nick_name">
             <p>ユーザー名</p>
             <input
-              id="nickName"
+              id="nick_name"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('nick_name')}
             />
@@ -82,10 +92,10 @@ export const StudentSignupForm: React.FC = () => {
           </label>
         </div>
         <div className="my-3">
-          <label htmlFor="lastName">
+          <label htmlFor="last_name">
             <p>姓</p>
             <input
-              id="lastName"
+              id="last_name"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('last_name')}
             />
@@ -93,10 +103,10 @@ export const StudentSignupForm: React.FC = () => {
           </label>
         </div>
         <div className="my-3">
-          <label htmlFor="firstName">
+          <label htmlFor="first_name">
             <p>名</p>
             <input
-              id="firstName"
+              id="first_name"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('first_name')}
             />
@@ -142,10 +152,10 @@ export const StudentSignupForm: React.FC = () => {
           </label>
         </div>
         <div className="my-3">
-          <label htmlFor="birthDate">
+          <label htmlFor="birth_date">
             <p>誕生日</p>
             <input
-              id="birthDate"
+              id="birth_date"
               type="date"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('birth_date')}
@@ -154,13 +164,13 @@ export const StudentSignupForm: React.FC = () => {
           </label>
         </div>
         <div className="my-3">
-          <label htmlFor="sex">
+          <label htmlFor="gender">
             <p>性別</p>
             <div className="mt-2">
               <label className="inline-flex items-center">
                 <input
                   type="radio"
-                  {...register('sex', { required: true })}
+                  {...register('gender', { required: true })}
                   value="man"
                 />
                 <span className="ml-2">男性</span>
@@ -168,13 +178,13 @@ export const StudentSignupForm: React.FC = () => {
               <label className="ml-6 inline-flex items-center">
                 <input
                   type="radio"
-                  {...register('sex', { required: true })}
+                  {...register('gender', { required: true })}
                   value="woman"
                 />
                 <span className="ml-2">女性</span>
               </label>
             </div>
-            <span className="text-red-600">{errors?.sex?.message}</span>
+            <span className="text-red-600">{errors?.gender?.message}</span>
           </label>
         </div>
         <div className="my-3">
