@@ -15,7 +15,9 @@ import { useFetchInstructorCourse } from '@/features/course/hooks/useFetchInstru
 
 const Index: NextPage = () => {
   const router = useRouter();
-  const { course_id: courseId } = router.query;
+  const { course_id } = router.query;
+
+  const courseId = typeof course_id === 'string' ? Number(course_id) : null;
 
   const { course, error, isLoading } = useFetchInstructorCourse({
     courseId,
