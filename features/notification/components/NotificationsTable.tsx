@@ -9,7 +9,7 @@ import {
 import { Notification } from '../types/Notification';
 
 type Props = {
-  notifications: Notification[];
+  notifications: Notification[]
 };
 
 export const NotificationsTable: React.FC<Props> = ({ notifications }) => {
@@ -29,7 +29,7 @@ export const NotificationsTable: React.FC<Props> = ({ notifications }) => {
             <TableCell>{notification.course_title}</TableCell>
             <TableCell>{notification.title}</TableCell>
             <TableCell>
-              {notification.type === 'one'
+              {notification.type === 'once'
                 ? '一度だけ表示'
                 : notification.type === 'always'
                   ? '常に表示'
