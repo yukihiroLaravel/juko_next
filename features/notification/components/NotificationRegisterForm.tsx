@@ -50,7 +50,10 @@ export const NotificationRegisterForm: React.FC = () => {
     };
 
     Axios.get('/sanctum/csrf-cookie').then(() => {
-      Axios.post(`/api/v1/instructor/course/${data.course_id}/notification`, bodyData,)
+      Axios.post(
+        `/api/v1/instructor/course/${data.course_id}/notification`,
+        bodyData,
+      )
         .then((res) => {
           isSending.current = false;
           if (res.data.result === true) {
@@ -76,8 +79,10 @@ export const NotificationRegisterForm: React.FC = () => {
           <label htmlFor="courseName">
             <p className="mb-1 font-bold">講座名</p>
           </label>
-          <select id="courseName" className="block mt-1 w-full rounded border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-          {...register('course_id')}
+          <select
+            id="courseName"
+            className="block mt-1 w-full rounded border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            {...register('course_id')}
           >
             {courses?.map((course, index) => (
               <option key={index} value={course.course_id}>
@@ -95,7 +100,6 @@ export const NotificationRegisterForm: React.FC = () => {
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('title')}
             />
-            
           </label>
           <span className="text-red-600">{errors?.title?.message}</span>
         </div>

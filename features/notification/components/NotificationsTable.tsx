@@ -9,7 +9,7 @@ import {
 import { Notification } from '../types/Notification';
 
 type Props = {
-  notifications: Notification[]
+  notifications: Notification[];
 };
 
 export const NotificationsTable: React.FC<Props> = ({ notifications }) => {

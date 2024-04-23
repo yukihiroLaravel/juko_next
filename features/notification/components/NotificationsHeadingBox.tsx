@@ -13,10 +13,10 @@ export const NotificationsHeadingBox: React.FC<Props> = ({ children }) => {
       <Typography variant="h1">{children}</Typography>
       <div className="mr-5">
         <Link
-            href={{
-              pathname: '/instructor/notification/register'
-            }}
-          >
+          href={{
+            pathname: '/instructor/notification/register',
+          }}
+        >
           <a>
             <Button>
               <div className="flex items-center gap-1">
@@ -26,7 +26,6 @@ export const NotificationsHeadingBox: React.FC<Props> = ({ children }) => {
             </Button>
           </a>
         </Link>
-        
       </div>
     </div>
   );
