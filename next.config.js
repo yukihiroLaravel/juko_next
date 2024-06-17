@@ -3,7 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['laravel_app'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'laravel_app',
+      },
+    ],
   },
 };
 
