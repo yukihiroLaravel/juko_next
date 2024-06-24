@@ -9,7 +9,7 @@ import {
 } from 'recharts';
 import { useFetchAttendanceStatus } from '@/features/attendance/hooks/useFetchAttendanceStatus';
 import { Typography } from '@/components/atoms/Typography';
-import { renderCustomizedLabel } from '../components/CustomizedLabel'
+import { renderCustomizedLabel } from '../components/CustomizedLabel';
 
 interface Props {
   courseId: number | null;
@@ -24,7 +24,6 @@ const studentAttendanceStatus = {
     { title: 'PHPPHPチャプター①', chapter_progress: 30 },
     { title: 'PHPチャプター②', chapter_progress: 100 },
     { title: 'PHPチャプター③', chapter_progress: 100 },
-    
   ],
 };
 
@@ -60,7 +59,7 @@ export const StudentAttendanceStatusCard: React.FC<Props> = ({ courseId }) => {
                 <BarChart
                   layout="vertical"
                   data={data}
-                  margin={{ top: 0, right: 10, left: 60, bottom:10 }}
+                  margin={{ top: 0, right: 10, left: 60, bottom: 10 }}
                 >
                   <XAxis type="number" domain={[0, 100]} hide />
                   <YAxis

@@ -10,7 +10,7 @@ export const InstructorHeader: FC<Props> = ({ isLogin = true }) => {
   return (
     <Header
       isLogin={isLogin}
-      homeUrl='/instructor/courses'
+      homeUrl="/instructor/courses"
       renderUserDropDown={() => <InstructorUserDropDown />}
     />
   );
