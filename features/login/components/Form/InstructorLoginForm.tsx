@@ -22,7 +22,7 @@ export const InstructorLoginForm: FC = () => {
     formState: { errors },
   } = useForm({
     mode: 'onSubmit',
-    // resolver: yupResolver(LoginFormSchema),
+    resolver: yupResolver(LoginFormSchema),
     defaultValues,
   });
 

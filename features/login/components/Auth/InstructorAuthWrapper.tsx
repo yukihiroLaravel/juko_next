@@ -1,6 +1,4 @@
 import { FC, ReactNode, useEffect } from 'react';
-import useSWR from 'swr';
-import { fetcher } from '@/lib/Fetcher';
 import { Loading } from '@/components/utils/Loading';
 import Router from 'next/router';
 import { useFetchInstructor } from '@/features/instructor/hooks/useFetchInstructor';
