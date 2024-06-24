@@ -1,19 +1,24 @@
 import { FC, ReactNode, useEffect } from 'react';
-import useSWR from 'swr';
-import { fetcher } from '@/lib/Fetcher';
 import { Loading } from '@/components/utils/Loading';
 import Router from 'next/router';
+import { useFetchInstructor } from '@/features/instructor/hooks/useFetchInstructor';
 
 type Props = {
   children: ReactNode;
 };
 
 export const InstructorAuthWrapper: FC<Props> = ({ children }) => {
-  const { isValidating, error } = useSWR('/api/v1/instructor', fetcher);
+  const { instructor, isLoading, isValidating, error } = useFetchInstructor();
 
   useEffect(() => {
-    if (!isValidating && error) {
+    if (!isValidating && error && Router.pathname !== '/instructor/login') {
       Router.push('/instructor/login');
+    } else if (
+      Router.pathname === '/instructor/login' &&
+      instructor &&
+      !isLoading
+    ) {
+      Router.push('/instructor/courses');
     }
   }, [isValidating, error]);
 

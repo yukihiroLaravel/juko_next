@@ -57,7 +57,13 @@ export const StudentDetailCard: React.FC<Props> = ({ studentId }) => {
           <p>{Student?.purpose}</p>
 
           <p className="font-semibold">性別:</p>
-          <p>{Student?.gender === 'man' ? '男性' : Student?.gender === 'woman' ? '女性' : '性別未設定'}</p>
+          <p>
+            {Student?.gender === 'man'
+              ? '男性'
+              : Student?.gender === 'woman'
+                ? '女性'
+                : '性別未設定'}
+          </p>
 
           <p className="font-semibold">住所:</p>
           <p>{Student?.address}</p>

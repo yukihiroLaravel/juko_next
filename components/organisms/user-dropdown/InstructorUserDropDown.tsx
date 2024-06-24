@@ -9,7 +9,7 @@ export const InstructorUserDropDown: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const clickHandler = async () => {
-    await mutate(null, false);
+    await mutate('/api/v1/instructor', null, false);
     await Axios.post('/logout/instructor').then((res) => {
       if (res.status === 200) {
         Router.push('/instructor/login');
