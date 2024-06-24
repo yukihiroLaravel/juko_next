@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Axios } from '@/lib/api';
 import Router from 'next/router';
 import { LoginForm } from './presentations/LoginForm';
+import { mutate } from 'swr';
 
 export const InstructorLoginForm: FC = () => {
   const [isUnauthorized, setIsUnauthorized] = useState<boolean>(false);
@@ -33,6 +34,7 @@ export const InstructorLoginForm: FC = () => {
           isSending.current = false;
           setValue('password', '');
           if (res.data.result === true) {
+            mutate('/api/v1/instructor');
             Router.push('/instructor/courses');
           }
         })
