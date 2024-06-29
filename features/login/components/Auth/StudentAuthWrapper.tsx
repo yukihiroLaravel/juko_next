@@ -1,22 +1,20 @@
 import { FC, ReactNode, useEffect } from 'react';
-import useSWR from 'swr';
-import { fetcher } from '@/lib/Fetcher';
 import { Loading } from '@/components/utils/Loading';
 import Router from 'next/router';
+import { useFetchStudent } from '@/features/student/hooks/useFetchStudent';
 
 type Props = {
   children: ReactNode;
 };
 
 export const StudentAuthWrapper: FC<Props> = ({ children }) => {
-  const { isValidating, error } = useSWR('/api/v1/student', fetcher, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  const { student, isLoading, isValidating, error } = useFetchStudent();
 
   useEffect(() => {
-    if (!isValidating && error) {
+    if (!isValidating && error && Router.pathname !== '/login') {
       Router.push('/login');
+    } else if (Router.pathname === '/login' && student && !isLoading) {
+      Router.push('/student/courses');
     }
   }, [isValidating, error]);
 
