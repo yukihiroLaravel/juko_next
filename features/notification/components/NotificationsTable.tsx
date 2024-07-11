@@ -7,6 +7,7 @@ import {
   TableHeaderCell,
 } from '@/components/atoms/Table';
 import { Notification } from '../types/Notification';
+import { NOTIFICATION_TYPE } from '@/features/notification/types/Notification';
 
 type Props = {
   notifications: Notification[];
@@ -29,9 +30,9 @@ export const NotificationsTable: React.FC<Props> = ({ notifications }) => {
             <TableCell>{notification.course_title}</TableCell>
             <TableCell>{notification.title}</TableCell>
             <TableCell>
-              {notification.type === 'once'
+              {notification.type === NOTIFICATION_TYPE.TYPE_ONCE
                 ? '一度だけ表示'
-                : notification.type === 'always'
+                : notification.type === NOTIFICATION_TYPE.TYPE_ALWAYS
                   ? '常に表示'
                   : ''}
             </TableCell>

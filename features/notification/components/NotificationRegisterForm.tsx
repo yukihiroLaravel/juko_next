@@ -1,20 +1,23 @@
 import { Button } from '@/components/atoms/Button/Button';
 import { Axios } from '@/lib/api';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { StoreSchema } from '../schemas/StoreSchema';
+import { NOTIFICATION_TYPE } from '@/features/notification/types/Notification';
 import Router from 'next/router';
 import { useFetchInstructorCourses } from '@/features/course/hooks/useFetchInstructorCourses';
+import { FieldDateInput } from '@/components/atoms/Field/FieldDateInput';
+import { format } from 'date-fns';
+import { StoreNotification } from '@/features/notification/types/StoreNotification';
+import { SelectBox } from '@/components/atoms/SelectBox/SelectBox';
 
 export const NotificationRegisterForm: React.FC = () => {
-  const isSending = useRef<boolean>(false);
   const { courses } = useFetchInstructorCourses();
 
   const defaultValues = {
-    course_id: -1,
+    course_id: null,
     title: '',
-    type: 'once',
+    type: NOTIFICATION_TYPE.TYPE_ONCE as string,
     start_date: '',
     end_date: '',
     content: '',
@@ -23,9 +26,10 @@ export const NotificationRegisterForm: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    control,
+    formState: { errors, isSubmitting },
   } = useForm<{
-    course_id: number;
+    course_id: number | null;
     title: string;
     type: string;
     start_date: string;
@@ -37,35 +41,36 @@ export const NotificationRegisterForm: React.FC = () => {
     resolver: yupResolver(StoreSchema),
   });
 
-  const submitHandler = (data: typeof defaultValues) => {
-    isSending.current = true;
-
+  const submitHandler = (data: StoreNotification) => {
     const bodyData = {
       course_id: data.course_id,
       title: data.title,
       type: data.type,
-      start_date: data.start_date,
-      end_date: data.end_date,
+      start_date: formatDateTime(data.start_date),
+      end_date: formatDateTime(data.end_date),
       content: data.content,
     };
-
+    1;
     Axios.get('/sanctum/csrf-cookie').then(() => {
       Axios.post(
         `/api/v1/instructor/course/${data.course_id}/notification`,
         bodyData,
       )
         .then((res) => {
-          isSending.current = false;
           if (res.data.result === true) {
             Router.push('/instructor/notifications');
           }
           alert('登録しました');
         })
         .catch((error) => {
-          isSending.current = false;
           alert('登録に失敗しました');
         });
     });
+  };
+
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return format(date, 'yyyy-MM-dd HH:mm:ss');
   };
 
   return (
@@ -79,17 +84,14 @@ export const NotificationRegisterForm: React.FC = () => {
           <label htmlFor="courseName">
             <p className="mb-1 font-bold">講座名</p>
           </label>
-          <select
-            id="courseName"
-            className="block mt-1 w-full rounded border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            {...register('course_id')}
-          >
-            {courses?.map((course, index) => (
-              <option key={index} value={course.course_id}>
-                {course.title}
-              </option>
-            ))}
-          </select>
+          <SelectBox
+            options={courses?.map((course) => ({
+              value: course.course_id,
+              label: course.title,
+            }))}
+            register={register}
+            name="course_id"
+          />
           <span className="text-red-600">{errors?.course_id?.message}</span>
         </div>
         <div className="my-3">
@@ -110,16 +112,16 @@ export const NotificationRegisterForm: React.FC = () => {
               <label className="inline-flex items-center">
                 <input
                   type="radio"
-                  {...register('type', { required: true })}
-                  value="once"
+                  {...register('type')}
+                  value={NOTIFICATION_TYPE.TYPE_ALWAYS}
                 />
                 <span className="ml-2">常に表示</span>
               </label>
               <label className="ml-6 inline-flex items-center">
                 <input
                   type="radio"
-                  {...register('type', { required: true })}
-                  value="always"
+                  {...register('type')}
+                  value={NOTIFICATION_TYPE.TYPE_ONCE}
                 />
                 <span className="ml-2">１度だけ表示</span>
               </label>
@@ -130,10 +132,9 @@ export const NotificationRegisterForm: React.FC = () => {
         <div className="my-3">
           <label htmlFor="start_date">
             <p className="mb-1 font-bold">開始日時</p>
-            <input
-              id="start_date"
-              type="date"
-              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
+            <FieldDateInput
+              control={control}
+              placeholderText=" 年 / 月 / 日"
               {...register('start_date')}
             />
             <span className="text-red-600">{errors?.start_date?.message}</span>
@@ -142,10 +143,9 @@ export const NotificationRegisterForm: React.FC = () => {
         <div className="my-3">
           <label htmlFor="end_date">
             <p className="mb-1 font-bold">終了日時</p>
-            <input
-              id="end_date"
-              type="date"
-              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
+            <FieldDateInput
+              control={control}
+              placeholderText=" 年 / 月 / 日"
               {...register('end_date')}
             />
             <span className="text-red-600">{errors?.end_date?.message}</span>
@@ -163,7 +163,7 @@ export const NotificationRegisterForm: React.FC = () => {
           </label>
         </div>
         <div className="my-10 text-center">
-          {isSending.current ? (
+          {isSubmitting ? (
             <Button type="button" size="lg" isDisabled={true}>
               登録中...
             </Button>
