@@ -85,12 +85,12 @@ export const NotificationRegisterForm: React.FC = () => {
             <p className="mb-1 font-bold">講座名</p>
           </label>
           <SelectBox
+            id="course_name"
             options={courses?.map((course) => ({
-              value: course.course_id,
+              value: String(course.course_id),
               label: course.title,
             }))}
-            register={register}
-            name="course_id"
+            register={register('course_id')}
           />
           <span className="text-red-600">{errors?.course_id?.message}</span>
         </div>

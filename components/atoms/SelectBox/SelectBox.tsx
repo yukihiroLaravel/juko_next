@@ -1,21 +1,18 @@
-import { UseFormRegister } from 'react-hook-form';
+import { FC } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
-type SelectBoxProps<T extends string | number> = {
-  options: Array<{ value: T; label: string }> | undefined;
-  register?: UseFormRegister<any>;
-  name?: string;
+type Props = {
+  id: string;
+  options: Array<{ value: string; label: string }> | undefined;
+  register?: UseFormRegisterReturn;
 };
 
-export const SelectBox = <T extends string | number>({
-  options,
-  register,
-  name,
-}: SelectBoxProps<T>) => {
+export const SelectBox: FC<Props> = ({ id, options, register }) => {
   return (
     <select
-      id="courseName"
-      className="block mt-1 w-full rounded border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-      {...(register && name ? register(name) : {})}
+      id={id}
+      className="block w-full rounded border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity/50"
+      {...(register ? register : {})}
     >
       {options?.map((option, index) => (
         <option key={index} value={option.value}>
