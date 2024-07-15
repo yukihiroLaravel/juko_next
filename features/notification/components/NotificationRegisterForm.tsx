@@ -77,79 +77,71 @@ export const NotificationRegisterForm: React.FC = () => {
       <h2 className="text-center text-2xl">お知らせ登録</h2>
       <div className="flex w-4/5 flex-col items-center gap-y-4">
         <div className="mt-10 w-full space-y-2">
-          <label htmlFor="courseName">
-            <p className="font-bold">講座名</p>
+          <label htmlFor="course_name" className="font-bold">
+            講座名
           </label>
           <CourseSelectBox id="course_name" register={register('course_id')} />
           <span className="text-red-600">{errors?.course_id?.message}</span>
         </div>
         <div className="w-full">
-          <label htmlFor="title">
-            <p className="font-bold">タイトル</p>
-            <input
-              id="title"
-              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
-              {...register('title')}
-            />
+          <label htmlFor="title" className="font-bold">
+            タイトル
           </label>
+          <input
+            id="title"
+            className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
+            {...register('title')}
+          />
           <span className="text-red-600">{errors?.title?.message}</span>
         </div>
-        <div className=" w-full">
-          <label htmlFor="type" className="space-y-2">
-            <p className="font-bold">表示タイプ</p>
-            <div className="flex">
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  {...register('type')}
-                  value={NOTIFICATION_TYPE.TYPE_ALWAYS}
-                />
-                <span className="ml-2">常に表示</span>
-              </label>
-              <label className="ml-6 inline-flex items-center">
-                <input
-                  type="radio"
-                  {...register('type')}
-                  value={NOTIFICATION_TYPE.TYPE_ONCE}
-                />
-                <span className="ml-2">１度だけ表示</span>
-              </label>
-            </div>
-            <span className="text-red-600">{errors?.type?.message}</span>
-          </label>
+        <div className="w-full space-y-2">
+          <p className="font-bold">表示タイプ</p>
+          <div className="flex">
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                {...register('type')}
+                value={NOTIFICATION_TYPE.TYPE_ALWAYS}
+              />
+              <span className="ml-2">常に表示</span>
+            </label>
+            <label className="ml-6 inline-flex items-center">
+              <input
+                type="radio"
+                {...register('type')}
+                value={NOTIFICATION_TYPE.TYPE_ONCE}
+              />
+              <span className="ml-2">１度だけ表示</span>
+            </label>
+          </div>
+          <span className="text-red-600">{errors?.type?.message}</span>
         </div>
-        <div className=" w-full">
-          <label htmlFor="start_date">
-            <p className="font-bold">開始日時</p>
-            <FieldDateInput
-              control={control}
-              placeholderText=" 年 / 月 / 日"
-              {...register('start_date')}
-            />
-            <span className="text-red-600">{errors?.start_date?.message}</span>
-          </label>
+        <div className="flex w-full flex-col">
+          <label className="font-bold">開始日時</label>
+          <FieldDateInput
+            control={control}
+            placeholderText=" 年 / 月 / 日"
+            {...register('start_date')}
+          />
         </div>
-        <div className=" w-full">
-          <label htmlFor="end_date">
-            <p className="font-bold">終了日時</p>
-            <FieldDateInput
-              control={control}
-              placeholderText=" 年 / 月 / 日"
-              {...register('end_date')}
-            />
-            <span className="text-red-600">{errors?.end_date?.message}</span>
-          </label>
+        <div className="flex w-full flex-col">
+          <label className="font-bold">終了日時</label>
+          <FieldDateInput
+            control={control}
+            placeholderText=" 年 / 月 / 日"
+            {...register('end_date')}
+          />
         </div>
-        <div className=" w-full">
-          <label htmlFor="content">
-            <p className="font-bold">お知らせ内容</p>
-            <textarea
-              id="content"
-              className="h-48 w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
-              {...register('content')}
-            />
-            <span className="text-red-600">{errors?.content?.message}</span>
+        <div className="w-full">
+          <label htmlFor="content" className="font-bold">
+            お知らせ内容
           </label>
+          <textarea
+            id="content"
+            className="h-48 w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
+            {...register('content')}
+          />
+          <span className="text-red-600">{errors?.content?.message}</span>
         </div>
         <div className="my-10 text-center">
           {isSubmitting ? (
