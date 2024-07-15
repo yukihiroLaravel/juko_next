@@ -5,17 +5,14 @@ import { useForm } from 'react-hook-form';
 import { StoreSchema } from '../schemas/StoreSchema';
 import { NOTIFICATION_TYPE } from '@/features/notification/types/Notification';
 import Router from 'next/router';
-import { useFetchInstructorCourses } from '@/features/course/hooks/useFetchInstructorCourses';
 import { FieldDateInput } from '@/components/atoms/Field/FieldDateInput';
 import { format } from 'date-fns';
 import { StoreNotification } from '@/features/notification/types/StoreNotification';
-import { SelectBox } from '@/components/atoms/SelectBox/SelectBox';
+import { CourseSelectBox } from '@/features/course/components/CourseSelectBox';
 
 export const NotificationRegisterForm: React.FC = () => {
-  const { courses } = useFetchInstructorCourses();
-
   const defaultValues = {
-    course_id: null,
+    course_id: '',
     title: '',
     type: NOTIFICATION_TYPE.TYPE_ONCE as string,
     start_date: '',
@@ -29,7 +26,7 @@ export const NotificationRegisterForm: React.FC = () => {
     control,
     formState: { errors, isSubmitting },
   } = useForm<{
-    course_id: number | null;
+    course_id: string;
     title: string;
     type: string;
     start_date: string;
@@ -50,7 +47,6 @@ export const NotificationRegisterForm: React.FC = () => {
       end_date: formatDateTime(data.end_date),
       content: data.content,
     };
-    1;
     Axios.get('/sanctum/csrf-cookie').then(() => {
       Axios.post(
         `/api/v1/instructor/course/${data.course_id}/notification`,
@@ -75,28 +71,21 @@ export const NotificationRegisterForm: React.FC = () => {
 
   return (
     <form
-      className="mx-auto my-10 min-h-full bg-white py-10 md:w-1/3 md:border"
+      className="mx-auto my-10 flex min-h-full flex-col items-center bg-white py-10 md:w-1/3 md:border  "
       onSubmit={handleSubmit(submitHandler)}
     >
       <h2 className="text-center text-2xl">お知らせ登録</h2>
-      <div className="mx-auto w-4/5">
-        <div className="mt-10">
+      <div className="flex w-4/5 flex-col items-center gap-y-4">
+        <div className="mt-10 w-full space-y-2">
           <label htmlFor="courseName">
-            <p className="mb-1 font-bold">講座名</p>
+            <p className="font-bold">講座名</p>
           </label>
-          <SelectBox
-            id="course_name"
-            options={courses?.map((course) => ({
-              value: String(course.course_id),
-              label: course.title,
-            }))}
-            register={register('course_id')}
-          />
+          <CourseSelectBox id="course_name" register={register('course_id')} />
           <span className="text-red-600">{errors?.course_id?.message}</span>
         </div>
-        <div className="my-3">
+        <div className="w-full">
           <label htmlFor="title">
-            <p className="mb-1 font-bold">タイトル</p>
+            <p className="font-bold">タイトル</p>
             <input
               id="title"
               className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
@@ -105,10 +94,10 @@ export const NotificationRegisterForm: React.FC = () => {
           </label>
           <span className="text-red-600">{errors?.title?.message}</span>
         </div>
-        <div className="my-3">
-          <label htmlFor="type">
-            <p className="mb-1 font-bold">表示タイプ</p>
-            <div className="mt-2">
+        <div className=" w-full">
+          <label htmlFor="type" className="space-y-2">
+            <p className="font-bold">表示タイプ</p>
+            <div className="flex">
               <label className="inline-flex items-center">
                 <input
                   type="radio"
@@ -129,9 +118,9 @@ export const NotificationRegisterForm: React.FC = () => {
             <span className="text-red-600">{errors?.type?.message}</span>
           </label>
         </div>
-        <div className="my-3">
+        <div className=" w-full">
           <label htmlFor="start_date">
-            <p className="mb-1 font-bold">開始日時</p>
+            <p className="font-bold">開始日時</p>
             <FieldDateInput
               control={control}
               placeholderText=" 年 / 月 / 日"
@@ -140,9 +129,9 @@ export const NotificationRegisterForm: React.FC = () => {
             <span className="text-red-600">{errors?.start_date?.message}</span>
           </label>
         </div>
-        <div className="my-3">
+        <div className=" w-full">
           <label htmlFor="end_date">
-            <p className="mb-1 font-bold">終了日時</p>
+            <p className="font-bold">終了日時</p>
             <FieldDateInput
               control={control}
               placeholderText=" 年 / 月 / 日"
@@ -151,12 +140,12 @@ export const NotificationRegisterForm: React.FC = () => {
             <span className="text-red-600">{errors?.end_date?.message}</span>
           </label>
         </div>
-        <div className="my-3">
+        <div className=" w-full">
           <label htmlFor="content">
-            <p className="mb-1 font-bold">お知らせ内容</p>
+            <p className="font-bold">お知らせ内容</p>
             <textarea
               id="content"
-              className="w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none h-48"
+              className="h-48 w-full rounded border-b-2 p-1 focus:border-[#B0ABAB] focus:outline-none"
               {...register('content')}
             />
             <span className="text-red-600">{errors?.content?.message}</span>

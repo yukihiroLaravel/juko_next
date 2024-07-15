@@ -4,6 +4,6 @@ export type StoreNotification = Pick<
   Notification,
   'title' | 'start_date' | 'end_date' | 'content'
 > & {
-  course_id: number | null;
+  course_id: string;
   type: string;
 };

@@ -8,7 +8,7 @@ import {
 export const StoreSchema: yup.ObjectSchema<StoreNotification> = yup
   .object()
   .shape({
-    course_id: yup.number().required('講座名を選択してください。'),
+    course_id: yup.string().required('講座名を選択してください。'),
     title: yup.string().required('タイトルを入力してください。'),
     type: yup
       .string()
