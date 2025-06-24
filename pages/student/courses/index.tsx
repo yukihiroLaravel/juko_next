@@ -43,8 +43,8 @@ const Index: NextPage = () => {
                       <div className="ml-[13px]  mt-[16px] h-auto">
                         <CourseTitle course={attendance.course} />
                         <p className="mb-[16px] text-[16px] font-semibold">
-                          講師 : {attendance.course.instructor.last_name}{' '}
-                          {attendance.course.instructor.first_name}
+                          講師 : {attendance.course.instructor?.last_name ?? '未設定'}{' '}
+                          {attendance.course.instructor?.first_name ?? ''}
                         </p>
                         <p className="mb-[16px] text-[16px] font-semibold">
                           進捗 {attendance.progress}%
