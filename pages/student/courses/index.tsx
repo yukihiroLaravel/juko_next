@@ -9,16 +9,21 @@ import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuth
 import { Loading } from '@/components/utils/Loading';
 import { Error } from '@/components/utils/Error';
 import { StudentLayout } from '@/components/organisms/header/StudentLayout';
+import { useNotificationModal } from '@/features/notification/hooks/useNotificationModal';
+import { NotificationModal } from '@/features/notification/components/NotificationModal';
 
 const Index: NextPage = () => {
   const { attendances, isLoading, error, updateText } = useFetchCourses();
+  const { isModalOpen, currentNotification, handleClose } = useNotificationModal();
 
   return (
+    <>
     <StudentAuthWrapper>
       <StudentLayout>
         <CourseHeader updateText={updateText} />
         {isLoading && <Loading />}
         {error && <Error />}
+
         <div className="container mx-auto mb-10">
           <div className="grid grid-cols-1 gap-[30px] lg:grid-cols-3">
             {attendances?.map((attendance) => {
@@ -59,6 +64,13 @@ const Index: NextPage = () => {
         </div>
       </StudentLayout>
     </StudentAuthWrapper>
+    {isModalOpen && currentNotification && (
+        <NotificationModal
+          notification={currentNotification}
+          onClose={handleClose}
+        />
+      )}
+  </>
   );
 };
 
