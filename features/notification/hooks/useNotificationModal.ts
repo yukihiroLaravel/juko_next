@@ -17,7 +17,6 @@ export const useNotificationModal = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('取得した通知データ:', data);
     }
   }, [data]);
 
