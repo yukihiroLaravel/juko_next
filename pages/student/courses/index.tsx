@@ -9,12 +9,12 @@ import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuth
 import { Loading } from '@/components/utils/Loading';
 import { Error } from '@/components/utils/Error';
 import { StudentLayout } from '@/components/organisms/header/StudentLayout';
-import { useNotificationModal } from '@/features/notification/hooks/useNotificationModal';
+import { useUnreadNotificationHook } from '@/features/notification/hooks/useunreadNotificationHook';
 import { NotificationModal } from '@/features/notification/components/NotificationModal';
 
 const Index: NextPage = () => {
   const { attendances, isLoading, error, updateText } = useFetchCourses();
-  const { isModalOpen, currentNotification, handleClose } = useNotificationModal();
+  const { isModalOpen, currentNotification, handleClose } = useUnreadNotificationHook();
 
   return (
     <>
