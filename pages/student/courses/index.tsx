@@ -9,16 +9,21 @@ import { StudentAuthWrapper } from '@/features/login/components/Auth/StudentAuth
 import { Loading } from '@/components/utils/Loading';
 import { Error } from '@/components/utils/Error';
 import { StudentLayout } from '@/components/organisms/header/StudentLayout';
+import { useUnreadNotificationHook } from '@/features/notification/hooks/useunreadNotificationHook';
+import { NotificationModal } from '@/features/notification/components/NotificationModal';
 
 const Index: NextPage = () => {
   const { attendances, isLoading, error, updateText } = useFetchCourses();
+  const { isModalOpen, currentNotification, handleClose } = useUnreadNotificationHook();
 
   return (
+    <>
     <StudentAuthWrapper>
       <StudentLayout>
         <CourseHeader updateText={updateText} />
         {isLoading && <Loading />}
         {error && <Error />}
+
         <div className="container mx-auto mb-10">
           <div className="grid grid-cols-1 gap-[30px] lg:grid-cols-3">
             {attendances?.map((attendance) => {
@@ -43,8 +48,8 @@ const Index: NextPage = () => {
                       <div className="ml-[13px]  mt-[16px] h-auto">
                         <CourseTitle course={attendance.course} />
                         <p className="mb-[16px] text-[16px] font-semibold">
-                          講師 : {attendance.course.instructor.last_name}{' '}
-                          {attendance.course.instructor.first_name}
+                          講師 : {attendance.course.instructor?.last_name ?? '未設定'}{' '}
+                          {attendance.course.instructor?.first_name ?? ''}
                         </p>
                         <p className="mb-[16px] text-[16px] font-semibold">
                           進捗 {attendance.progress}%
@@ -59,6 +64,13 @@ const Index: NextPage = () => {
         </div>
       </StudentLayout>
     </StudentAuthWrapper>
+    {isModalOpen && currentNotification && (
+        <NotificationModal
+          notification={currentNotification}
+          onClose={handleClose}
+        />
+      )}
+  </>
   );
 };
 
