@@ -1,0 +1,9 @@
+export function HeaderUI() {
+  return (
+    <header className="border-b bg-primary">
+      <div className="container mx-auto flex h-16 items-center px-4">
+        <h1 className="text-xl font-bold">受講管理アプリ</h1>
+      </div>
+    </header>
+  );
+}
