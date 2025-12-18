@@ -1,10 +1,10 @@
 # Juko Next
 
-Next.js 15 + TypeScript + Tailwind CSS プロジェクト
+Next.js 16 + TypeScript + Tailwind CSS プロジェクト
 
 ## 技術スタック
 
-- Next.js 15 (App Router)
+- Next.js 16 (App Router)
 - TypeScript
 - Tailwind CSS
 - pnpm (パッケージマネージャー)
