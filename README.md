@@ -138,6 +138,7 @@ docker compose run --rm front pnpm install
 ### next: not found エラー
 
 **症状:**
+
 ```
 sh: 1: next: not found
 ELIFECYCLE Command failed.
@@ -147,6 +148,7 @@ ELIFECYCLE Command failed.
 `node_modules`がコンテナ内に存在しない。匿名ボリュームを使用している場合、`docker compose run`と`docker compose up`で別々のボリュームが作成されることがある。
 
 **解決策:**
+
 1. 名前付きボリュームを使用する（`compose.yml`で設定済み）
 2. 依存関係を再インストールしてから起動する
 
@@ -160,6 +162,7 @@ docker compose up front
 ### create-next-app実行時の競合エラー
 
 **症状:**
+
 ```
 The directory juko_next contains files that could conflict:
   node_modules/
@@ -184,6 +187,7 @@ volumes:
 ### Device or resource busy エラー
 
 **症状:**
+
 ```
 rm: cannot remove 'node_modules': Device or resource busy
 ```
@@ -203,6 +207,7 @@ docker compose down -v
 ### pnpm Unknown system error -116
 
 **症状:**
+
 ```
 ERR_PNPM Unknown system error -116
 Unknown system error -116, copyfile '...' -> '...'

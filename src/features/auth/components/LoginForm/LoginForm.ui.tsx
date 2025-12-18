@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { UseFormReturn } from "react-hook-form";
-import { Button } from "@/components/atoms/Button";
-import { Input } from "@/components/atoms/Input";
-import { Label } from "@/components/atoms/Label";
+import { UseFormReturn } from 'react-hook-form';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { Label } from '@/components/atoms/Label';
 import {
   Card,
   CardHeader,
@@ -11,8 +11,8 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@/components/atoms/Card";
-import { LoginFormValues } from "./LoginForm";
+} from '@/components/atoms/Card';
+import { LoginFormValues } from './LoginForm';
 
 type LoginFormUIProps = {
   form: UseFormReturn<LoginFormValues>;
@@ -41,7 +41,7 @@ export function LoginFormUI({ form, onSubmit }: LoginFormUIProps) {
               id="email"
               type="email"
               placeholder="example@example.com"
-              {...register("email")}
+              {...register('email')}
               aria-invalid={!!errors.email}
             />
             {errors.email && (
@@ -53,7 +53,7 @@ export function LoginFormUI({ form, onSubmit }: LoginFormUIProps) {
             <Input
               id="password"
               type="password"
-              {...register("password")}
+              {...register('password')}
               aria-invalid={!!errors.password}
             />
             {errors.password && (
@@ -64,8 +64,12 @@ export function LoginFormUI({ form, onSubmit }: LoginFormUIProps) {
           </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? "ログイン中..." : "ログイン"}
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? 'ログイン中...' : 'ログイン'}
           </Button>
         </CardFooter>
       </form>

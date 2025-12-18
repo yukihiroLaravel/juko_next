@@ -6,4 +6,4 @@ export {
   CardAction,
   CardDescription,
   CardContent,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
