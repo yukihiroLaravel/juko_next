@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { LoginFormUI } from './LoginForm.ui';
+import { Axios } from '@/lib/api';
 
 const loginSchema = z.object({
   email: z
@@ -17,11 +18,7 @@ const loginSchema = z.object({
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
-type LoginFormProps = {
-  onLogin?: (values: LoginFormValues) => Promise<void>;
-};
-
-export function LoginForm({ onLogin }: LoginFormProps) {
+export function LoginForm() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -30,13 +27,14 @@ export function LoginForm({ onLogin }: LoginFormProps) {
     },
   });
 
-  const handleSubmit = form.handleSubmit(async (values: LoginFormValues) => {
-    if (onLogin) {
-      await onLogin(values);
-    } else {
-      // デモ用: 実際のAPI呼び出しに置き換える
-      console.log('Login attempt:', values);
-    }
+  const handleSubmit = form.handleSubmit(async (data: LoginFormValues) => {
+    Axios.get('/sanctum/csrf-cookie').then(() => {
+      Axios.post('/login', data)
+        .then(() => {})
+        .catch((error: Error) => {
+          console.error('Login error:', error);
+        });
+    });
   });
 
   return <LoginFormUI form={form} onSubmit={handleSubmit} />;
