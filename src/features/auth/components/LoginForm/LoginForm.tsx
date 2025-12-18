@@ -31,7 +31,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
     },
   });
 
-  const handleSubmit = form.handleSubmit(async (values) => {
+  const handleSubmit = form.handleSubmit(async (values: LoginFormValues) => {
     if (onLogin) {
       await onLogin(values);
     } else {
@@ -44,7 +44,6 @@ export function LoginForm({ onLogin }: LoginFormProps) {
     <LoginFormUI
       form={form}
       onSubmit={handleSubmit}
-      isSubmitting={form.formState.isSubmitting}
     />
   );
 }

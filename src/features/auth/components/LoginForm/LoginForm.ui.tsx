@@ -17,10 +17,9 @@ import { LoginFormValues } from "./LoginForm";
 type LoginFormUIProps = {
   form: UseFormReturn<LoginFormValues>;
   onSubmit: (e: React.FormEvent) => void;
-  isSubmitting: boolean;
 };
 
-export function LoginFormUI({ form, onSubmit, isSubmitting }: LoginFormUIProps) {
+export function LoginFormUI({ form, onSubmit }: LoginFormUIProps) {
   const {
     register,
     formState: { errors },
@@ -35,7 +34,7 @@ export function LoginFormUI({ form, onSubmit, isSubmitting }: LoginFormUIProps) 
         </CardDescription>
       </CardHeader>
       <form onSubmit={onSubmit}>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pb-4">
           <div className="space-y-2">
             <Label htmlFor="email">メールアドレス</Label>
             <Input
@@ -65,8 +64,8 @@ export function LoginFormUI({ form, onSubmit, isSubmitting }: LoginFormUIProps) 
           </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "ログイン中..." : "ログイン"}
+          <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "ログイン中..." : "ログイン"}
           </Button>
         </CardFooter>
       </form>
