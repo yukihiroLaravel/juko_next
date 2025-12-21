@@ -1,6 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { LoginFormUI } from './LoginForm.ui';
@@ -19,6 +20,7 @@ const loginSchema = z.object({
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -28,14 +30,27 @@ export function LoginForm() {
   });
 
   const handleSubmit = form.handleSubmit(async (data: LoginFormValues) => {
-    Axios.get('/sanctum/csrf-cookie').then(() => {
-      Axios.post('/login', data)
+    return Axios.get('/sanctum/csrf-cookie').then(() => {
+      return Axios.post('/login', data)
         .then(() => {})
         .catch((error: Error) => {
-          console.error('Login error:', error);
+          console.log('Login error:', error);
+          form.resetField('password');
+          form.setError('password', {
+            type: 'server',
+            message: 'メールアドレスまたはパスワードが正しくありません',
+          });
+          return;
         });
     });
   });
 
-  return <LoginFormUI form={form} onSubmit={handleSubmit} />;
+  return (
+    <LoginFormUI
+      form={form}
+      onSubmit={handleSubmit}
+      showPassword={showPassword}
+      onTogglePassword={() => setShowPassword((prev) => !prev)}
+    />
+  );
 }
