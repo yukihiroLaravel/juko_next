@@ -9,9 +9,7 @@ import { Axios } from '@/lib/api';
 import axios from 'axios';
 
 const loginSchema = z.object({
-  email: z
-    .email('有効なメールアドレスを入力してください')
-    .min(1, 'メールアドレスを入力してください'),
+  email: z.email('有効なメールアドレスを入力してください'),
   password: z
     .string()
     .min(1, 'パスワードを入力してください')
@@ -43,7 +41,7 @@ export function LoginForm() {
                 message: 'メールアドレスまたはパスワードが正しくありません',
               });
             }
-          }  
+          }
           return;
         });
     });
