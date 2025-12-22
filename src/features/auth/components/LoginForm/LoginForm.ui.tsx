@@ -23,12 +23,11 @@ type LoginFormUIProps = {
 };
 
 export function LoginFormUI({
-    form,
-    onSubmit,
-    showPassword,
-    onTogglePassword,
-  }: LoginFormUIProps) 
-{
+  form,
+  onSubmit,
+  showPassword,
+  onTogglePassword,
+}: LoginFormUIProps) {
   const { register } = form;
   const { errors } = useFormState({ control: form.control });
 
