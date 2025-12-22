@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { LoginFormUI } from './LoginForm.ui';
 import { Axios } from '@/lib/api';
+import axios from 'axios';
 
 const loginSchema = z.object({
   email: z
@@ -33,13 +34,16 @@ export function LoginForm() {
     return Axios.get('/sanctum/csrf-cookie').then(() => {
       return Axios.post('/login', data)
         .then(() => {})
-        .catch((error: Error) => {
-          console.log('Login error:', error);
-          form.resetField('password');
-          form.setError('password', {
-            type: 'server',
-            message: 'メールアドレスまたはパスワードが正しくありません',
-          });
+        .catch((error: unknown) => {
+          if (axios.isAxiosError(error)) {
+            if (error.response?.status === 401) {
+              form.resetField('password');
+              form.setError('password', {
+                type: 'server',
+                message: 'メールアドレスまたはパスワードが正しくありません',
+              });
+            }
+          }  
           return;
         });
     });

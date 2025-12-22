@@ -13,6 +13,7 @@ import {
   CardFooter,
 } from '@/components/atoms/Card';
 import { LoginFormValues } from './LoginForm';
+import { Eye, EyeOff } from 'lucide-react';
 
 type LoginFormUIProps = {
   form: UseFormReturn<LoginFormValues>;
@@ -64,14 +65,24 @@ export function LoginFormUI({
                 aria-invalid={!!errors.password}
                 className="pr-10"
               />
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon"
                 onClick={onTogglePassword}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm"
-                aria-label={showPassword ? 'パスワードを非表示にする' : 'パスワードを表示する'}
+                aria-label={
+                  showPassword
+                    ? 'パスワードを非表示にする'
+                    : 'パスワードを表示する'
+                }
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-0 bg-transparent hover:bg-transparent focus:ring-0"
               >
-                {showPassword ? '🚫👁️' : '👁️'}
-              </button>
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </Button>
             </div>
             {errors.password && (
               <p className="text-sm text-destructive">
