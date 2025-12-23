@@ -1,4 +1,4 @@
-# Juko Next
+# 受講管理システム フロントエンド
 
 Next.js 16 + TypeScript + Tailwind CSS プロジェクト
 
