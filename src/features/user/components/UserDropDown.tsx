@@ -1,13 +1,6 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu"
+import { UserDropDownUI } from "./UserDropDown.ui"
 
 export function UserDropDown() {
   const handleLogout = () => {
@@ -15,25 +8,9 @@ export function UserDropDown() {
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost">
-          山田 花子
-        </Button>
-      </DropdownMenuTrigger>
-
-      {/* ドロップダウンの中身 */}
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem asChild>
-          <Link href="#">
-            ユーザー情報編集
-          </Link>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem onClick={handleLogout}>
-          ログアウト
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <UserDropDownUI
+      userName="山田 花子"
+      onLogout={handleLogout}
+    />
   )
 }
