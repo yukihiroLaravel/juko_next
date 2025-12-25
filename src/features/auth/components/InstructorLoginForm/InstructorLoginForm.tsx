@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { InstructorLoginFormUI } from './InstructorLoginForm.ui';
+import { LoginFormUI } from '@/features/auth/components/LoginForm/LoginForm.ui';
 import { Axios } from '@/lib/api';
 import axios from 'axios';
 
@@ -48,7 +48,7 @@ export function InstructorLoginForm() {
   });
 
   return (
-    <InstructorLoginFormUI
+    <LoginFormUI
       form={form}
       onSubmit={handleSubmit}
       showPassword={showPassword}
