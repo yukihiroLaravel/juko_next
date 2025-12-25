@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/atoms/Button"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/atoms/DropdownMenu"
 
 type UserDropDownUIProps = {
   userName: string
