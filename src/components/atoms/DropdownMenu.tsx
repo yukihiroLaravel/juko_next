@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 export {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';

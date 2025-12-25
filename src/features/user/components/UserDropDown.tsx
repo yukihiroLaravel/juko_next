@@ -1,16 +1,11 @@
-"use client";
+'use client';
 
-import { UserDropDownUI } from "./UserDropDown.ui"
+import { UserDropDownUI } from './UserDropDown.ui';
 
 export function UserDropDown() {
   const handleLogout = () => {
-    console.log("logout")
-  }
+    console.log('logout');
+  };
 
-  return (
-    <UserDropDownUI
-      userName="山田 花子"
-      onLogout={handleLogout}
-    />
-  )
+  return <UserDropDownUI userName="山田 花子" onLogout={handleLogout} />;
 }
