@@ -28,24 +28,26 @@ export function InstructorLoginForm() {
     },
   });
 
-  const handleSubmit = form.handleSubmit(async (data: InstructorLoginFormValues) => {
-    return Axios.get('/sanctum/csrf-cookie').then(() => {
-      return Axios.post('/login', data)
-        .then(() => {})
-        .catch((error: unknown) => {
-          if (axios.isAxiosError(error)) {
-            if (error.response?.status === 401) {
-              form.resetField('password');
-              form.setError('password', {
-                type: 'server',
-                message: 'メールアドレスまたはパスワードが正しくありません',
-              });
+  const handleSubmit = form.handleSubmit(
+    async (data: InstructorLoginFormValues) => {
+      return Axios.get('/sanctum/csrf-cookie').then(() => {
+        return Axios.post('/login', data)
+          .then(() => {})
+          .catch((error: unknown) => {
+            if (axios.isAxiosError(error)) {
+              if (error.response?.status === 401) {
+                form.resetField('password');
+                form.setError('password', {
+                  type: 'server',
+                  message: 'メールアドレスまたはパスワードが正しくありません',
+                });
+              }
             }
-          }
-          return;
-        });
-    });
-  });
+            return;
+          });
+      });
+    },
+  );
 
   return (
     <LoginFormUI
