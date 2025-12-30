@@ -15,7 +15,10 @@ type InstructorHeaderUIProps = {
   onLogout: () => void;
 };
 
-export function InstructorHeaderUI({ userName, onLogout }: InstructorHeaderUIProps) {
+export function InstructorHeaderUI({
+  userName,
+  onLogout,
+}: InstructorHeaderUIProps) {
   return (
     <HeaderUI>
       <DropdownMenu>
@@ -24,6 +27,7 @@ export function InstructorHeaderUI({ userName, onLogout }: InstructorHeaderUIPro
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
+            {/* TODO: 講師用ユーザー情報編集URL */}
             <Link href="#">ユーザー情報編集</Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>
