@@ -1,1 +1,3 @@
-export { Header } from './Header';
+export { GuestHeader } from './GuestHeader';
+export { InstructorHeader } from './InstructorHeader';
+export { StudentHeader } from './StudentHeader';
