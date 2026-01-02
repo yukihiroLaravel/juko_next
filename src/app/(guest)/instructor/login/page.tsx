@@ -1,9 +1,18 @@
+import Link from 'next/link';
 import { InstructorLoginForm } from '@/features/auth/components/InstructorLoginForm/InstructorLoginForm';
+import { Button } from '@/components/atoms/Button';
 
 export default function InstructorLoginPage() {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-4">
-      <InstructorLoginForm />
+      <div className="w-full max-w-md space-y-4">
+        <InstructorLoginForm />
+        <div className="text-center">
+          <Button asChild variant="link">
+            <Link href="/">TOPページへ戻る</Link>
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
