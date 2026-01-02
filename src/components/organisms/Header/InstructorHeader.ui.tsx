@@ -27,6 +27,7 @@ export function InstructorHeaderUI({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
+            {/* TODO: 講師用ユーザー情報編集URL */}
             <Link href="#">ユーザー情報編集</Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>

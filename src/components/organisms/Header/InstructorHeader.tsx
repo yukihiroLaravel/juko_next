@@ -4,7 +4,7 @@ import { InstructorHeaderUI } from './InstructorHeader.ui';
 
 export function InstructorHeader() {
   const handleLogout = () => {
-    // 講師用ログアウト処理
+    // TODO: 講師用ログアウトエンドポイントを設定
     console.log('instructor logout');
   };
 
