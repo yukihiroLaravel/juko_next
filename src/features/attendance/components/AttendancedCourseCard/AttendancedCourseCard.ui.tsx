@@ -19,9 +19,7 @@ export function AttendancedCourseCardUI({
     <Card className="w-[440px] overflow-hidden rounded-lg border bg-transparent p-0">
       {/* サムネイル */}
       <div className="aspect-[4/3] w-full bg-indigo-400 flex items-center justify-center">
-        <span className="text-sm font-semibold text-black">
-          サムネイル
-        </span>
+        <span className="text-sm font-semibold text-black">サムネイル</span>
       </div>
       {/* 下段 */}
       <div className="bg-white p-4 space-y-2">
@@ -45,9 +43,7 @@ export function AttendancedCourseCardUI({
           <span>{instructorName}</span>
         </div>
         {/* 進捗 */}
-        <p className="text-xs text-muted-foreground">
-          進捗 {progress}%
-        </p>
+        <p className="text-xs text-muted-foreground">進捗 {progress}%</p>
       </div>
     </Card>
   );
