@@ -1,4 +1,4 @@
-import { AttendancedCourseCard } from '@/features/attendance/AttendancedCourseCard';
+import { AttendancedCourseCard } from '@/features/attendance/components/AttendancedCourseCard/AttendancedCourseCard';
 
 export default function AttendancePage() {
   return (
