@@ -1,7 +1,14 @@
+"use client";
+
+import { useState } from "react";
+import { Switch } from "@/components/atoms/Switch";
+import { Button } from "@/components/atoms/Button";
 import { CourseSearchBox } from "@/features/attendance/components/CourseSearchBox/CourseSearchBox";
 import { CourseList } from "@/features/attendance/components/CourseList/CourseList";
 
 export default function AttendancePage() {
+  const [isGrouped, setIsGrouped] = useState(false);
+
   return (
     <div className="px-6 py-4">
       {/* ページ内ヘッダー（カード幅に合わせる） */}
@@ -14,6 +21,23 @@ export default function AttendancePage() {
         <div className="h-px w-full bg-border" />
       </div>
 
+      {/* 操作エリア */}
+      <div className="mx-auto mt-6 flex max-w-[1100px] items-center justify-between">
+        <label className="flex cursor-pointer items-center gap-3">
+          <Switch
+            checked={isGrouped}
+            onCheckedChange={setIsGrouped}
+          />
+          <span className="text-sm text-muted-foreground">
+            分類表示
+          </span>
+        </label>
+
+        <Button size="sm" onClick={() => console.log("全講座完了")}>
+          全講座完了
+        </Button>
+      </div>
+
       {/* CourseList も同じ幅 */}
       <div className="mt-8">
         <CourseList />
@@ -21,4 +45,3 @@ export default function AttendancePage() {
     </div>
   );
 }
-

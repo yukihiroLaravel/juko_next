@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { CourseListUI } from "./CourseList.ui";
 
 export function CourseList() {
-  const [isGrouped, setIsGrouped] = useState(false);
-
   const courses = [
     {
       id: "1",
@@ -37,14 +34,5 @@ export function CourseList() {
     },
   ];
 
-  return (
-    <CourseListUI
-      courses={courses}
-      isGrouped={isGrouped}
-      onToggleGrouped={setIsGrouped}
-      onCompleteAll={() => {
-        console.log("全講座完了");
-      }}
-    />
-  );
+  return <CourseListUI courses={courses} />;
 }
