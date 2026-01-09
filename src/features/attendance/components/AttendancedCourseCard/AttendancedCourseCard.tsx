@@ -1,12 +1,24 @@
 import { AttendancedCourseCardUI } from './AttendancedCourseCard.ui';
 
-export function AttendancedCourseCard() {
+type AttendancedCourseCardProps = {
+  title: string;
+  isExpired: boolean;
+  instructorName: string;
+  progress: number;
+};
+
+export function AttendancedCourseCard({
+  title,
+  isExpired,
+  instructorName,
+  progress,
+}: AttendancedCourseCardProps) {
   return (
     <AttendancedCourseCardUI
-      title="コースタイトル"
-      isExpired
-      instructorName="講師名"
-      progress={77}
+      title={title}
+      isExpired={isExpired}
+      instructorName={instructorName}
+      progress={progress}
     />
   );
 }

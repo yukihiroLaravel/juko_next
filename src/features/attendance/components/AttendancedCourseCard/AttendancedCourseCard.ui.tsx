@@ -16,13 +16,13 @@ export function AttendancedCourseCardUI({
   progress,
 }: AttendancedCourseCardUIProps) {
   return (
-    <Card className="w-[440px] overflow-hidden rounded-lg border bg-transparent p-0">
+    <Card className="w-full max-w-[350px] overflow-hidden rounded-md border bg-transparent p-0">
       {/* サムネイル */}
-      <div className="aspect-[4/3] w-full bg-indigo-400 flex items-center justify-center">
+      <div className="aspect-[16/9] w-full bg-indigo-400 flex items-center justify-center">
         <span className="text-sm font-semibold text-black">サムネイル</span>
       </div>
       {/* 下段 */}
-      <div className="bg-white p-4 space-y-2">
+      <div className="bg-white p-3 space-y-1.5">
         {/* タイトル + 受講期限切れ */}
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold">{title}</p>
