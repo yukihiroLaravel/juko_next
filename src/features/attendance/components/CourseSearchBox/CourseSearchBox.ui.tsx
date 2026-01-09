@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Search } from "lucide-react";
-import { Input } from "@/components/atoms/Input";
+import { Search } from 'lucide-react';
+import { Input } from '@/components/atoms/Input';
 
 type CourseSearchBoxUIProps = {
   value: string;
@@ -12,7 +12,7 @@ type CourseSearchBoxUIProps = {
 export function CourseSearchBoxUI({
   value,
   onChange,
-  placeholder = "講座検索",
+  placeholder = '講座検索',
 }: CourseSearchBoxUIProps) {
   return (
     <div className="relative w-64">

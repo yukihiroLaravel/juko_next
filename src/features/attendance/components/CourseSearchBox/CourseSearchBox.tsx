@@ -1,19 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { CourseSearchBoxUI } from "./CourseSearchBox.ui";
+import { useState } from 'react';
+import { CourseSearchBoxUI } from './CourseSearchBox.ui';
 
 export function CourseSearchBox() {
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState('');
 
   const handleChange = (value: string) => {
     setKeyword(value);
   };
 
-  return (
-    <CourseSearchBoxUI
-      value={keyword}
-      onChange={handleChange}
-    />
-  );
+  return <CourseSearchBoxUI value={keyword} onChange={handleChange} />;
 }

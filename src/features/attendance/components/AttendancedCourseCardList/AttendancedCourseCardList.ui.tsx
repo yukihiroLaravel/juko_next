@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { AttendancedCourseCard } from "../AttendancedCourseCard/AttendancedCourseCard";
+import { AttendancedCourseCard } from '../AttendancedCourseCard/AttendancedCourseCard';
 
 type Course = {
   id: string;
@@ -10,13 +10,15 @@ type Course = {
   isExpired: boolean;
 };
 
-type CourseListUIProps = {
+type AttendancedCourseCardListUIProps = {
   courses: Course[];
 };
 
-export function CourseListUI({ courses }: CourseListUIProps) {
+export function AttendancedCourseCardListUI({
+  courses,
+}: AttendancedCourseCardListUIProps) {
   return (
-    <div className="mx-auto grid max-w-[1100px] gap-16 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="mx-auto grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {courses.map((course) => (
         <AttendancedCourseCard
           key={course.id}
