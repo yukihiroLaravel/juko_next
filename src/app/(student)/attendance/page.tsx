@@ -24,7 +24,7 @@ export default function AttendancePage() {
       <div className="mx-auto flex items-center justify-between py-2">
         <label className="flex cursor-pointer items-center gap-3">
           <Switch checked={isGrouped} onCheckedChange={setIsGrouped} />
-          <span className="text-sm text-muted-foreground">分類表示</span>
+          <span className="text-muted-foreground text-sm">分類表示</span>
         </label>
         <Button size="sm" onClick={() => console.log('全講座完了')}>
           全講座完了

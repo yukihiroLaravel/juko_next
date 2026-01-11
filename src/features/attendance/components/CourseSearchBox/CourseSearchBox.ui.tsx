@@ -17,17 +17,7 @@ export function CourseSearchBoxUI({
   return (
     <div className="relative w-64">
       {/* 虫眼鏡アイコン */}
-      <Search
-        className="
-          absolute
-          left-3
-          top-1/2
-          -translate-y-1/2
-          h-4
-          w-4
-          text-gray-400
-        "
-      />
+      <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
       {/* 検索 input */}
       <Input
         value={value}

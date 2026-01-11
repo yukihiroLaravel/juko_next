@@ -51,7 +51,7 @@ export function LoginFormUI({
               aria-invalid={!!errors.email}
             />
             {errors.email && (
-              <p className="text-sm text-destructive">{errors.email.message}</p>
+              <p className="text-destructive text-sm">{errors.email.message}</p>
             )}
           </div>
           <div className="space-y-2">
@@ -74,7 +74,7 @@ export function LoginFormUI({
                     ? 'パスワードを非表示にする'
                     : 'パスワードを表示する'
                 }
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-0 bg-transparent hover:bg-transparent focus:ring-0"
+                className="absolute top-1/2 right-2 -translate-y-1/2 bg-transparent p-0 hover:bg-transparent focus:ring-0"
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -84,7 +84,7 @@ export function LoginFormUI({
               </Button>
             </div>
             {errors.password && (
-              <p className="text-sm text-destructive">
+              <p className="text-destructive text-sm">
                 {errors.password.message}
               </p>
             )}

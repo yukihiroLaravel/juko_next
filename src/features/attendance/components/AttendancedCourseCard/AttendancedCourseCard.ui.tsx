@@ -18,11 +18,11 @@ export function AttendancedCourseCardUI({
   return (
     <Card className="w-full max-w-[350px] overflow-hidden rounded-md border bg-transparent p-0">
       {/* サムネイル */}
-      <div className="aspect-[16/9] w-full bg-indigo-400 flex items-center justify-center">
+      <div className="flex aspect-[16/9] w-full items-center justify-center bg-indigo-400">
         <span className="text-sm font-semibold text-black">サムネイル</span>
       </div>
       {/* 下段 */}
-      <div className="bg-white p-3 space-y-1.5">
+      <div className="space-y-1.5 bg-white p-3">
         {/* タイトル + 受講期限切れ */}
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold">{title}</p>
@@ -33,7 +33,7 @@ export function AttendancedCourseCardUI({
           )}
         </div>
         {/* 講師名 */}
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <div className="text-muted-foreground flex items-center gap-2 text-xs">
           <Badge
             variant="secondary"
             className="flex h-5 w-5 items-center justify-center rounded-full p-0"
@@ -43,7 +43,7 @@ export function AttendancedCourseCardUI({
           <span>{instructorName}</span>
         </div>
         {/* 進捗 */}
-        <p className="text-xs text-muted-foreground">進捗 {progress}%</p>
+        <p className="text-muted-foreground text-xs">進捗 {progress}%</p>
       </div>
     </Card>
   );
