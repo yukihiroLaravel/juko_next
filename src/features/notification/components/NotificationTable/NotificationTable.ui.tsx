@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Table,
@@ -7,9 +7,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/atoms/Table";
-import { Button } from "@/components/atoms/Button";
-import { ChevronUp, ChevronDown } from "lucide-react";
+} from '@/components/atoms/Table';
+import { Button } from '@/components/atoms/Button';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 
 export type Notification = {
   id: string;
@@ -21,7 +21,7 @@ export type Notification = {
 
 type Props = {
   notifications: Notification[];
-  sortOrder: "asc" | "desc";
+  sortOrder: 'asc' | 'desc';
   onSortChange: () => void;
 };
 
@@ -44,7 +44,7 @@ export function NotificationTableUI({
                 aria-label="タイトルで並び替え"
                 className="text-muted-foreground"
               >
-                {sortOrder === "asc" ? <ChevronUp /> : <ChevronDown />}
+                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
               </Button>
             </span>
           </TableHead>
@@ -59,7 +59,7 @@ export function NotificationTableUI({
                 aria-label="講座名で並び替え"
                 className="text-muted-foreground"
               >
-                {sortOrder === "asc" ? <ChevronUp /> : <ChevronDown />}
+                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
               </Button>
             </span>
           </TableHead>
@@ -74,7 +74,7 @@ export function NotificationTableUI({
                 aria-label="講座受講期限で並び替え"
                 className="text-muted-foreground"
               >
-                {sortOrder === "asc" ? <ChevronUp /> : <ChevronDown />}
+                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
               </Button>
             </span>
           </TableHead>
@@ -89,7 +89,7 @@ export function NotificationTableUI({
                 aria-label="開始日付で並び替え"
                 className="text-muted-foreground"
               >
-                {sortOrder === "asc" ? <ChevronUp /> : <ChevronDown />}
+                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
               </Button>
             </span>
           </TableHead>
@@ -99,13 +99,9 @@ export function NotificationTableUI({
       <TableBody>
         {notifications.map((notification) => (
           <TableRow key={notification.id}>
-            <TableCell className="font-medium">
-              {notification.title}
-            </TableCell>
+            <TableCell className="font-medium">{notification.title}</TableCell>
             <TableCell>{notification.courseName}</TableCell>
-            <TableCell>
-              {notification.courseDeadline ?? "—"}
-            </TableCell>
+            <TableCell>{notification.courseDeadline ?? '—'}</TableCell>
             <TableCell>{notification.startDate}</TableCell>
           </TableRow>
         ))}

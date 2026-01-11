@@ -17,7 +17,7 @@ export default function AttendancePage() {
           <h1 className="text-lg font-semibold">講座一覧</h1>
           <CourseSearchBox />
         </div>
-        <div className="h-px w-full bg-border" />
+        <hr className="border-border" />
       </div>
 
       {/* 操作エリア */}

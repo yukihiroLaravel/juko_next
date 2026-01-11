@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { NotificationTable } from "../NotificationTable/NotificationTable";
-import { Notification } from "../NotificationTable/NotificationTable.ui";
-import { Button } from "@/components/atoms/Button";
+import { NotificationTable } from '../NotificationTable/NotificationTable';
+import { Notification } from '../NotificationTable/NotificationTable.ui';
+import { Button } from '@/components/atoms/Button';
 
 type Props = {
   notifications: Notification[];
-  sortOrder: "asc" | "desc";
+  sortOrder: 'asc' | 'desc';
   onSortChange: () => void;
 
   currentPage: number;
@@ -50,7 +50,7 @@ export function NotificationListUI({
           return (
             <Button
               key={page}
-              variant={isActive ? "default" : "outline"}
+              variant={isActive ? 'default' : 'outline'}
               size="sm"
               onClick={() => onPageChange(page)}
             >

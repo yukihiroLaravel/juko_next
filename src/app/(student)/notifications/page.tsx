@@ -1,4 +1,4 @@
-import { NotificationList } from "@/features/notification/components/NotificationList/NotificationList";
+import { NotificationList } from '@/features/notification/components/NotificationList/NotificationList';
 
 export default function NotificationsPage() {
   return (
@@ -8,7 +8,7 @@ export default function NotificationsPage() {
         <h1 className="text-lg font-semibold">お知らせ一覧</h1>
 
         {/* グレーの区切り線 */}
-        <div className="h-px w-full bg-border" />
+        <hr className="border-border" />
       </div>
 
       {/* お知らせ一覧 */}
@@ -16,4 +16,3 @@ export default function NotificationsPage() {
     </div>
   );
 }
-

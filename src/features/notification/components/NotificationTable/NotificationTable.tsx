@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { NotificationTableUI, Notification } from "./NotificationTable.ui";
+import { NotificationTableUI, Notification } from './NotificationTable.ui';
 
 type Props = {
   notifications: Notification[];
-  sortOrder: "asc" | "desc";
+  sortOrder: 'asc' | 'desc';
   onSortChange: () => void;
 };
 
