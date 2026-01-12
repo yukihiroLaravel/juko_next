@@ -1,0 +1,57 @@
+"use client";
+
+type CourseSidebarUIProps = {
+  thumbnailUrl: string;
+  categoryName: string;
+  courseName: string;
+  progressPercent: number;
+};
+
+export function CourseSidebarUI({
+  thumbnailUrl,
+  categoryName,
+  courseName,
+  progressPercent,
+}: CourseSidebarUIProps) {
+  return (
+    <aside className="w-64 border-r p-4">
+      {/* サムネイル */}
+      <div className="mb-4">
+        <img
+          src={thumbnailUrl}
+          alt={courseName}
+          className="w-full rounded"
+        />
+      </div>
+
+      {/* 講座情報 */}
+      <div className="mb-4">
+        <p className="text-sm text-gray-500">{categoryName}</p>
+        <h2 className="text-base font-semibold">{courseName}</h2>
+      </div>
+
+      {/* 進捗 */}
+      <div className="mb-6">
+        <p className="text-sm">
+          進捗率：<span className="font-bold">{progressPercent}%</span>
+        </p>
+      </div>
+
+      {/* ナビゲーション */}
+      <nav className="space-y-2">
+        <a
+          href="#"
+          className="block text-sm text-blue-600 hover:underline"
+        >
+          受講生一覧
+        </a>
+        <a
+          href="/notifications"
+          className="block text-sm text-blue-600 hover:underline"
+        >
+          お知らせ一覧
+        </a>
+      </nav>
+    </aside>
+  );
+}
