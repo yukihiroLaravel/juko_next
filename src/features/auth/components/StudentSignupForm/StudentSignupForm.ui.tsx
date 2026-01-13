@@ -1,6 +1,7 @@
 "use client";
 
-import { UseFormReturn } from "react-hook-form";
+import { StudentSignupSchema } from "@/features/auth/validation/Student/StudentSignupSchema";
+import { UseFormReturn, FieldErrors } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import { useFormState } from "react-hook-form";
 import { Input } from "@/components/atoms/Input";
@@ -15,12 +16,12 @@ import {
 import {
   RadioGroup,
   RadioGroupItem,
-} from "@/components/atoms/Radio-group";
+} from "@/components/atoms/RadioGroup";
 
 type Props = {
-  form: UseFormReturn<any>;
-  onSubmit: (data: any) => void;
-  onError: (errors: any) => void;
+  form: UseFormReturn<StudentSignupSchema>;
+  onSubmit: (data: StudentSignupSchema) => void;
+  onError: (errors: FieldErrors<StudentSignupSchema>) => void;
 };
 
 export function StudentSignupFormUI({ form, onSubmit, onError }: Props) {
