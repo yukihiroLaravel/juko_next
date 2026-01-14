@@ -20,6 +20,7 @@ type LoginFormUIProps = {
   onSubmit: (e: React.FormEvent) => void;
   showPassword: boolean;
   onTogglePassword: () => void;
+  isSubmitting?: boolean;
 };
 
 export function LoginFormUI({
@@ -27,6 +28,7 @@ export function LoginFormUI({
   onSubmit,
   showPassword,
   onTogglePassword,
+  isSubmitting,
 }: LoginFormUIProps) {
   const { register } = form;
   const { errors } = useFormState({ control: form.control });
@@ -94,9 +96,11 @@ export function LoginFormUI({
           <Button
             type="submit"
             className="w-full"
-            disabled={form.formState.isSubmitting}
+            disabled={isSubmitting ?? form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? 'ログイン中...' : 'ログイン'}
+            {(isSubmitting ?? form.formState.isSubmitting)
+              ? 'ログイン中...'
+              : 'ログイン'}
           </Button>
         </CardFooter>
       </form>

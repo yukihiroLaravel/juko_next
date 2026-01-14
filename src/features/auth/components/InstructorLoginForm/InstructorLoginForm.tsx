@@ -5,8 +5,7 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { LoginFormUI } from '@/features/auth/components/LoginForm/LoginForm.ui';
-import { Axios } from '@/lib/api';
-import axios from 'axios';
+import { useLogin } from '@/features/auth/hooks/useLogin';
 
 const loginSchema = z.object({
   email: z.email('有効なメールアドレスを入力してください'),
@@ -20,6 +19,8 @@ export type InstructorLoginFormValues = z.infer<typeof loginSchema>;
 
 export function InstructorLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const { login, isSubmitting } = useLogin();
+
   const form = useForm<InstructorLoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -30,22 +31,15 @@ export function InstructorLoginForm() {
 
   const handleSubmit = form.handleSubmit(
     async (data: InstructorLoginFormValues) => {
-      return Axios.get('/sanctum/csrf-cookie').then(() => {
-        return Axios.post('/login', data)
-          .then(() => {})
-          .catch((error: unknown) => {
-            if (axios.isAxiosError(error)) {
-              if (error.response?.status === 401) {
-                form.resetField('password');
-                form.setError('password', {
-                  type: 'server',
-                  message: 'メールアドレスまたはパスワードが正しくありません',
-                });
-              }
-            }
-            return;
-          });
-      });
+      const result = await login(data);
+
+      if (!result.success && result.error) {
+        form.resetField('password');
+        form.setError('password', {
+          type: 'server',
+          message: result.error,
+        });
+      }
     },
   );
 
@@ -55,6 +49,7 @@ export function InstructorLoginForm() {
       onSubmit={handleSubmit}
       showPassword={showPassword}
       onTogglePassword={() => setShowPassword((prev) => !prev)}
+      isSubmitting={isSubmitting}
     />
   );
 }
