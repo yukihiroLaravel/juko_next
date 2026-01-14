@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const studentSignupSchema = z.object({
+export const signupSchema = z.object({
   userName: z.string().min(1, 'ユーザー名は必須です'),
   lastName: z.string().min(1, '姓は必須です'),
   firstName: z.string().min(1, '名は必須です'),
@@ -29,4 +29,4 @@ export const studentSignupSchema = z.object({
   address: z.string().min(1, '住所は必須です'),
 });
 
-export type StudentSignupSchema = z.infer<typeof studentSignupSchema>;
+export type SignupSchema = z.infer<typeof signupSchema>;

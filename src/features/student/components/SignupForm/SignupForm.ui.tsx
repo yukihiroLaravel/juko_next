@@ -1,6 +1,5 @@
 'use client';
 
-import { StudentSignupSchema } from '@/features/auth/validation/Student/StudentSignupSchema';
 import { UseFormReturn, FieldErrors } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { useFormState } from 'react-hook-form';
@@ -14,14 +13,15 @@ import {
   PopoverContent,
 } from '@/components/atoms/Popover';
 import { RadioGroup, RadioGroupItem } from '@/components/atoms/RadioGroup';
+import { SignupSchema } from '../../validation/SignupSchema';
 
 type Props = {
-  form: UseFormReturn<StudentSignupSchema>;
-  onSubmit: (data: StudentSignupSchema) => void;
-  onError: (errors: FieldErrors<StudentSignupSchema>) => void;
+  form: UseFormReturn<SignupSchema>;
+  onSubmit: (data: SignupSchema) => void;
+  onError: (errors: FieldErrors<SignupSchema>) => void;
 };
 
-export function StudentSignupFormUI({ form, onSubmit, onError }: Props) {
+export function SignupFormUI({ form, onSubmit, onError }: Props) {
   const { register, handleSubmit, control } = form;
 
   const { errors } = useFormState({

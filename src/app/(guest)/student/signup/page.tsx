@@ -1,5 +1,5 @@
-import { StudentSignupForm } from '@/features/auth/components/StudentSignupForm/StudentSignupForm';
+import { SignupForm } from '@/features/student/components/SignupForm/SignupForm';
 
 export default function StudentSignupPage() {
-  return <StudentSignupForm />;
+  return <SignupForm />;
 }
