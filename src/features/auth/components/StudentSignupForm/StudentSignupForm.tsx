@@ -1,41 +1,37 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { StudentSignupFormUI } from "./StudentSignupForm.ui";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from 'react-hook-form';
+import { StudentSignupFormUI } from './StudentSignupForm.ui';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   studentSignupSchema,
   StudentSignupSchema,
-} from "@/features/auth/validation/Student/StudentSignupSchema";
+} from '@/features/auth/validation/Student/StudentSignupSchema';
 
 export function StudentSignupForm() {
   const form = useForm<StudentSignupSchema>({
     resolver: zodResolver(studentSignupSchema),
     defaultValues: {
-      userName: "",
-      lastName: "",
-      firstName: "",
-      email: "",
-      occupation: "",
-      purpose: "",
-      birthday: "",
+      userName: '',
+      lastName: '',
+      firstName: '',
+      email: '',
+      occupation: '',
+      purpose: '',
+      birthday: '',
       gender: undefined,
-      address: "",
+      address: '',
     },
   });
 
   const onSubmit = (data: StudentSignupSchema) => {
-    console.log("submit data:", data);
+    console.log('submit data:', data);
   };
   const onError = (errors: any) => {
-    console.log("submit errors:", errors);
+    console.log('submit errors:', errors);
   };
 
   return (
-    <StudentSignupFormUI
-      form={form}
-      onSubmit={onSubmit}
-      onError={onError}
-    />
+    <StudentSignupFormUI form={form} onSubmit={onSubmit} onError={onError} />
   );
 }
