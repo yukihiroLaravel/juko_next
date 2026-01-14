@@ -7,7 +7,7 @@ type HeaderUIProps = {
 
 export function HeaderUI({ children }: HeaderUIProps) {
   return (
-    <header className="border-b bg-primary">
+    <header className="bg-primary border-b">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="text-xl font-bold text-[#FBF459]">
           受講管理アプリ
