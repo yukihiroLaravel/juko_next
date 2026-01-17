@@ -1,5 +1,7 @@
 "use client";
 
+import Link from 'next/link';
+
 type CourseSidebarUIProps = {
   thumbnailUrl: string;
   categoryName: string;
@@ -45,12 +47,9 @@ export function CourseSidebarUI({
         >
           受講生一覧
         </a>
-        <a
-          href="/notifications"
-          className="block text-sm text-blue-600 hover:underline"
-        >
+        <Link href="/notifications" className="block text-sm text-blue-600 hover:underline">
           お知らせ一覧
-        </a>
+        </Link>
       </nav>
     </aside>
   );
