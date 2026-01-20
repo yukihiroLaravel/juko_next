@@ -16,9 +16,9 @@ export function CourseSidebarUI({
   progressPercent,
 }: CourseSidebarUIProps) {
   return (
-    <aside className="w-64 border-r p-4">
+    <aside className="w-64 border-r p-4 space-y-4">
       {/* サムネイル */}
-      <div className="mb-4">
+      <div>
         <img
           src={thumbnailUrl}
           alt={courseName}
@@ -27,13 +27,13 @@ export function CourseSidebarUI({
       </div>
 
       {/* 講座情報 */}
-      <div className="mb-4">
+      <div>
         <p className="text-sm text-gray-500">{categoryName}</p>
         <h2 className="text-base font-semibold">{courseName}</h2>
       </div>
 
       {/* 進捗 */}
-      <div className="mb-6">
+      <div>
         <p className="text-sm">
           進捗率：<span className="font-bold">{progressPercent}%</span>
         </p>
