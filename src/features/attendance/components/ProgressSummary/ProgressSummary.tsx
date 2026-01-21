@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { ProgressSummaryUI } from "./ProgressSummary.ui";
+import { ProgressSummaryUI } from './ProgressSummary.ui';
 
 export function ProgressSummary() {
   const completedChapters = 2;
@@ -9,13 +9,11 @@ export function ProgressSummary() {
   const completedLessons = 5;
   const totalLessons = 30;
 
-  const progressRate = Math.round(
-    (completedChapters / totalChapters) * 100
-  );
+  const progressRate = Math.round((completedChapters / totalChapters) * 100);
 
   const handleContinue = () => {
     // TODO: 最後に未完了のレッスンへ遷移
-    console.log("continue from last lesson");
+    console.log('continue from last lesson');
   };
 
   return (

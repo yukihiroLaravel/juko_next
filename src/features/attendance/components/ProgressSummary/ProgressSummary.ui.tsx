@@ -1,6 +1,12 @@
-"use client";
-
-import { Button } from "@/components/atoms/Button";
+import { Button } from '@/components/atoms/Button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/atoms/Card';
 
 type ProgressSummaryUIProps = {
   progressRate: number;
@@ -20,23 +26,24 @@ export function ProgressSummaryUI({
   onContinue,
 }: ProgressSummaryUIProps) {
   return (
-    <section className="rounded-md border bg-white p-4 space-y-4">
-      <div className="text-sm text-gray-600">
-        {progressRate}% 完了
-      </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>学習の進捗</CardTitle>
+        <CardDescription>{progressRate}% 完了</CardDescription>
+      </CardHeader>
 
-      <div className="space-y-1 text-sm">
+      <CardContent className="space-y-1 text-sm">
         <div>
           完了チャプター数：{completedChapters} / {totalChapters}
         </div>
         <div>
           完了レッスン数：{completedLessons} / {totalLessons}
         </div>
-      </div>
+      </CardContent>
 
-      <Button onClick={onContinue}>
-        続きからはじめる
-      </Button>
-    </section>
+      <CardFooter>
+        <Button onClick={onContinue}>続きからはじめる</Button>
+      </CardFooter>
+    </Card>
   );
 }
