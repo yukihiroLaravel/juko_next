@@ -1,5 +1,19 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { BellIcon, UsersIcon } from 'lucide-react';
+
+import { Badge } from '@/components/atoms/Badge';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/components/atoms/Sidebar';
 
 type CourseSidebarUIProps = {
   thumbnailUrl: string;
@@ -15,43 +29,59 @@ export function CourseSidebarUI({
   progressPercent,
 }: CourseSidebarUIProps) {
   return (
-    <aside className="w-64 space-y-4 border-r p-4">
-      {/* サムネイル */}
-      <div>
+    <Sidebar collapsible="offcanvas">
+      {/* サムネイル・講座情報 */}
+      <SidebarHeader className="gap-0 p-0">
         <Image
           src={thumbnailUrl}
           alt={courseName}
           width={256}
           height={144}
-          className="w-full rounded"
+          className="w-full object-cover"
         />
-      </div>
+        <div className="p-4">
+          <p className="text-muted-foreground text-sm">{categoryName}</p>
+          <h2 className="text-base font-semibold">{courseName}</h2>
+        </div>
+      </SidebarHeader>
 
-      {/* 講座情報 */}
-      <div>
-        <p className="text-sm text-gray-500">{categoryName}</p>
-        <h2 className="text-base font-semibold">{courseName}</h2>
-      </div>
+      <SidebarContent>
+        {/* 進捗 */}
+        <SidebarGroup>
+          <SidebarGroupLabel>進捗状況</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <div className="flex items-center gap-2 px-2">
+              <span className="text-sm">進捗率</span>
+              <Badge variant="secondary">{progressPercent}%</Badge>
+            </div>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-      {/* 進捗 */}
-      <div>
-        <p className="text-sm">
-          進捗率：<span className="font-bold">{progressPercent}%</span>
-        </p>
-      </div>
-
-      {/* ナビゲーション */}
-      <nav className="space-y-2">
-        <Link href="#" className="block text-sm text-blue-600 hover:underline">
-          受講生一覧
-        </Link>
-        <Link
-          href="/notifications"
-          className="block text-sm text-blue-600 hover:underline"
-        >
-          お知らせ一覧
-        </Link>
-      </nav>
-    </aside>
+        {/* ナビゲーション */}
+        <SidebarGroup>
+          <SidebarGroupLabel>メニュー</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="受講生一覧">
+                  <Link href="#">
+                    <UsersIcon />
+                    <span>受講生一覧</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="お知らせ一覧">
+                  <Link href="/notifications">
+                    <BellIcon />
+                    <span>お知らせ一覧</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   );
 }
