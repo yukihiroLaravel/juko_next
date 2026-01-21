@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 type CourseSidebarUIProps = {
   thumbnailUrl: string;
@@ -19,10 +20,12 @@ export function CourseSidebarUI({
     <aside className="w-64 border-r p-4 space-y-4">
       {/* サムネイル */}
       <div>
-        <img
-          src={thumbnailUrl}
-          alt={courseName}
-          className="w-full rounded"
+        <Image                                                
+          src={thumbnailUrl}                                  
+          alt={courseName}                                    
+          width={256}                                         
+          height={144}                                        
+          className="w-full rounded"                          
         />
       </div>
 
@@ -41,12 +44,10 @@ export function CourseSidebarUI({
 
       {/* ナビゲーション */}
       <nav className="space-y-2">
-        <a
-          href="#"
-          className="block text-sm text-blue-600 hover:underline"
-        >
+        <Link href="#"
+          className="block text-sm text-blue-600 hover:underline">
           受講生一覧
-        </a>
+        </Link>
         <Link href="/notifications" className="block text-sm text-blue-600 hover:underline">
           お知らせ一覧
         </Link>
