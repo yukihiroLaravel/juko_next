@@ -1,12 +1,18 @@
 'use client';
 
 import { StudentHeaderUI } from './StudentHeader.ui';
+import { useUser } from '@/hooks/useUser';
+import { useLogout } from '@/features/auth/hooks/useLogout';
 
 export function StudentHeader() {
-  const handleLogout = () => {
-    // 生徒用ログアウト処理
-    console.log('student logout');
-  };
+  const { user, isLoading } = useUser();
+  const { logout } = useLogout();
 
-  return <StudentHeaderUI userName="山田 花子" onLogout={handleLogout} />;
+  if (isLoading) {
+    return <StudentHeaderUI userName="読み込み中..." onLogout={() => {}} />;
+  }
+
+  return (
+    <StudentHeaderUI userName={user?.name ?? 'ゲスト'} onLogout={logout} />
+  );
 }

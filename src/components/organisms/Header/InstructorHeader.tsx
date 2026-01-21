@@ -1,12 +1,18 @@
 'use client';
 
 import { InstructorHeaderUI } from './InstructorHeader.ui';
+import { useUser } from '@/hooks/useUser';
+import { useLogout } from '@/features/auth/hooks/useLogout';
 
 export function InstructorHeader() {
-  const handleLogout = () => {
-    // TODO: 講師用ログアウトエンドポイントを設定
-    console.log('instructor logout');
-  };
+  const { user, isLoading } = useUser();
+  const { logout } = useLogout();
 
-  return <InstructorHeaderUI userName="山田 花子" onLogout={handleLogout} />;
+  if (isLoading) {
+    return <InstructorHeaderUI userName="読み込み中..." onLogout={() => {}} />;
+  }
+
+  return (
+    <InstructorHeaderUI userName={user?.name ?? 'ゲスト'} onLogout={logout} />
+  );
 }
