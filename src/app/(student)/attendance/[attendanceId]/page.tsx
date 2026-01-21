@@ -1,4 +1,4 @@
-import { CourseSidebar } from "@/features/attendance/components/CourseSidebar/CourseSidebar";
+import { CourseSidebar } from '@/features/attendance/components/CourseSidebar/CourseSidebar';
 
 export default function Page() {
   return (

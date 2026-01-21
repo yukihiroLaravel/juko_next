@@ -1,5 +1,3 @@
-"use client";
-
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -17,15 +15,15 @@ export function CourseSidebarUI({
   progressPercent,
 }: CourseSidebarUIProps) {
   return (
-    <aside className="w-64 border-r p-4 space-y-4">
+    <aside className="w-64 space-y-4 border-r p-4">
       {/* サムネイル */}
       <div>
-        <Image                                                
-          src={thumbnailUrl}                                  
-          alt={courseName}                                    
-          width={256}                                         
-          height={144}                                        
-          className="w-full rounded"                          
+        <Image
+          src={thumbnailUrl}
+          alt={courseName}
+          width={256}
+          height={144}
+          className="w-full rounded"
         />
       </div>
 
@@ -44,11 +42,13 @@ export function CourseSidebarUI({
 
       {/* ナビゲーション */}
       <nav className="space-y-2">
-        <Link href="#"
-          className="block text-sm text-blue-600 hover:underline">
+        <Link href="#" className="block text-sm text-blue-600 hover:underline">
           受講生一覧
         </Link>
-        <Link href="/notifications" className="block text-sm text-blue-600 hover:underline">
+        <Link
+          href="/notifications"
+          className="block text-sm text-blue-600 hover:underline"
+        >
           お知らせ一覧
         </Link>
       </nav>
