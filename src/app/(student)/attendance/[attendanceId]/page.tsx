@@ -1,7 +1,21 @@
 'use client';
 
+import {
+  useState,
+  useCallback
+} from 'react';
 import { CourseSidebar } from '@/features/attendance/components/CourseSidebar/CourseSidebar';
 import { ChapterAccordion } from '@/features/attendance/components/ChapterAccordion/ChapterAccordion';
+import { 
+  DndContext,
+  closestCenter,
+} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import { 
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import {
   SidebarInset,
   SidebarProvider,
@@ -9,7 +23,23 @@ import {
 } from '@/components/atoms/Sidebar';
 
 export default function Page() {
-  const chapters = [
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setChapters((prevChapters) => {
+      const oldIndex = prevChapters.findIndex(
+        (chapter) => chapter.id === active.id
+      );
+      const newIndex = prevChapters.findIndex(
+        (chapter) => chapter.id === over.id
+      );
+
+      return arrayMove(prevChapters, oldIndex, newIndex);
+    });
+  }, []);
+
+  const [chapters, setChapters] = useState([
     {
       id: 'chapter-1',
       title: '第1章 はじめに',
@@ -25,7 +55,7 @@ export default function Page() {
         { id: 'lesson-3', title: 'レッスン3', isCompleted: false },
       ],
     },
-  ];
+  ]);
   return (
     <SidebarProvider>
       <CourseSidebar />
@@ -55,12 +85,22 @@ export default function Page() {
           </div>
 
           {/* カリキュラム一覧 */}
-          {chapters.map((chapter) => (
-            <ChapterAccordion
-              key={chapter.id}
-              chapter={chapter}
-            />
-          ))}
+          <DndContext
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext 
+              items={chapters.map(ch => ch.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {chapters.map((chapter) => (
+                <ChapterAccordion
+                  key={chapter.id}
+                  chapter={chapter}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
         </main>
       </SidebarInset>
     </SidebarProvider>
