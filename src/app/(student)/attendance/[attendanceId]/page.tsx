@@ -1,4 +1,4 @@
-'use client';
+import { ProgressSummary } from '@/features/attendance/components/ProgressSummary/ProgressSummary';
 
 import { CourseSidebar } from '@/features/attendance/components/CourseSidebar/CourseSidebar';
 import {
@@ -12,11 +12,13 @@ export default function Page() {
     <SidebarProvider>
       <CourseSidebar />
       <SidebarInset>
-        <header className="flex h-12 items-center gap-2 border-b px-4">
-          <SidebarTrigger />
-          <span className="text-sm font-medium">講座詳細</span>
-        </header>
-        <main className="flex-1 p-4">{/* メインコンテンツ */}</main>
+        <main className="flex-1 p-4">
+          <div className="flex space-x-2 items-center py-4">
+            <SidebarTrigger />
+            <h2 className="font-bold">講座詳細</h2>
+          </div>
+          <ProgressSummary />
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );
