@@ -13,7 +13,7 @@ export default function Page() {
       <CourseSidebar />
       <SidebarInset>
         <main className="flex-1 p-4">
-          <div className="flex space-x-2 items-center py-4">
+          <div className="flex items-center space-x-2 py-4">
             <SidebarTrigger />
             <h2 className="font-bold">講座詳細</h2>
           </div>
