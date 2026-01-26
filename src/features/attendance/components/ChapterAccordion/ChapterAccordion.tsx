@@ -1,19 +1,7 @@
-// ChapterAccordion.tsx
-import { useState } from "react"
-import { ChapterAccordionUI } from "./ChapterAccordion.ui"
-import { LessonItem } from "../LessonItem/LessonItem"
-
-type Lesson = {
-  id: string
-  title: string
-  isCompleted: boolean
-}
-
-type Chapter = {
-  id: string
-  title: string
-  lessons: Lesson[]
-}
+import { useState } from "react";
+import { ChapterAccordionUI } from "./ChapterAccordion.ui";
+import { LessonItem } from "../LessonItem/LessonItem";
+import type { Chapter } from '@/features/attendance/types';
 
 type ChapterAccordionProps = {
   chapter: Chapter

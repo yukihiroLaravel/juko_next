@@ -2,6 +2,7 @@
 
 import { CourseSidebar } from '@/features/attendance/components/CourseSidebar/CourseSidebar';
 import { ChapterAccordion } from '@/features/attendance/components/ChapterAccordion/ChapterAccordion';
+import { Button } from '@/components/atoms/Button';
 import {
   SidebarInset,
   SidebarProvider,
@@ -37,21 +38,19 @@ export default function Page() {
         <main className="flex-1 p-4 space-y-2">
           {/* 操作ボタン */}
           <div className="flex gap-2">
-            <button
+            <Button
               type="button"
               onClick={() => console.log('all chapters completed')}
-              className="px-3 py-1 border rounded text-sm"
             >
               全Chapter完了
-            </button>
+            </Button>
 
-            <button
+            <Button
               type="button"
               onClick={() => console.log('all lessons completed')}
-              className="px-3 py-1 border rounded text-sm"
             >
               全Lesson完了
-            </button>
+            </Button>
           </div>
 
           {/* カリキュラム一覧 */}

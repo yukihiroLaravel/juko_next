@@ -1,10 +1,5 @@
-import { LessonItemUI } from "./LessonItem.ui"
-
-type Lesson = {
-  id: string
-  title: string
-  isCompleted: boolean
-}
+import { LessonItemUI } from "./LessonItem.ui";
+import type { Lesson } from '@/features/attendance/types';
 
 type LessonItemProps = {
   lesson: Lesson

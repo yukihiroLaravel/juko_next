@@ -1,3 +1,6 @@
+import { Button } from '@/components/atoms/Button';
+import { cn } from "@/lib/utils";
+
 type ChapterAccordionUIProps = {
   title: string
   isOpen: boolean
@@ -18,16 +21,21 @@ export function ChapterAccordionUI({
   return (
     <div className="border rounded mb-2">
       {/* Header */}
-      <button
+      <Button
         type="button"
         onClick={onToggle}
-        className="w-full flex justify-between items-center px-4 py-2 bg-gray-100"
+        className={cn(
+          "w-full flex justify-between items-center px-4 py-2 transition-colors",
+          isOpen
+            ? "bg-primary text-white hover:bg-primary hover:text-white"
+            : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+        )}
       >
         <span className="font-medium">{title}</span>
         <span className="text-sm text-gray-500">
           {completedLessonCount} / {totalLessonCount} 完了
         </span>
-      </button>
+      </Button>
 
       {/* Body */}
       {isOpen && (
