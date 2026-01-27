@@ -1,4 +1,6 @@
 import { LessonItemUI } from './LessonItem.ui';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import type { Lesson } from '@/features/attendance/types';
 
 type LessonItemProps = {
@@ -6,5 +8,21 @@ type LessonItemProps = {
 };
 
 export function LessonItem({ lesson }: LessonItemProps) {
-  return <LessonItemUI title={lesson.title} isCompleted={lesson.isCompleted} />;
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: lesson.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      <LessonItemUI
+        title={lesson.title}
+        isCompleted={lesson.isCompleted}
+        dragHandleProps={{ ...attributes, ...listeners }}
+      />
+    </div>
+  );
 }

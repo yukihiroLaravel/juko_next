@@ -1,5 +1,6 @@
 import { Button } from '@/components/atoms/Button';
 import { cn } from '@/lib/utils';
+import { GripVertical } from 'lucide-react';
 
 type ChapterAccordionUIProps = {
   title: string;
@@ -8,6 +9,7 @@ type ChapterAccordionUIProps = {
   totalLessonCount: number;
   onToggle: () => void;
   children: React.ReactNode;
+  dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 };
 
 export function ChapterAccordionUI({
@@ -17,9 +19,10 @@ export function ChapterAccordionUI({
   totalLessonCount,
   onToggle,
   children,
+  dragHandleProps,
 }: ChapterAccordionUIProps) {
   return (
-    <div className="mb-2 rounded border">
+    <div className="rounded border">
       {/* Header */}
       <Button
         type="button"
@@ -31,6 +34,15 @@ export function ChapterAccordionUI({
             : 'bg-gray-100 text-gray-900 hover:bg-gray-200',
         )}
       >
+        {/* ★ ドラッグハンドル */}
+        <div
+          {...dragHandleProps}
+          className="cursor-grab text-gray-400"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <GripVertical className="h-4 w-4" />
+        </div>
+
         <span className="font-medium">{title}</span>
         <span
           className={cn('text-sm', isOpen ? 'text-gray-200' : 'text-gray-500')}
