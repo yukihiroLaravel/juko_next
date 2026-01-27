@@ -28,11 +28,11 @@ type Chapter = {
 }
 
 type ChapterAccordionProps = {
-  chapter: Chapter
-}
+  chapter: Chapter;
+};
 
 export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {
     setIsOpen(prev => !prev)
@@ -52,7 +52,7 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
   };
 
   const [
-    lessons, 
+    lessons,
     setLessons,
   ] = useState(chapter.lessons);
 

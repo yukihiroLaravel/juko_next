@@ -1,3 +1,6 @@
+import { Button } from '@/components/atoms/Button';
+import { cn } from '@/lib/utils';
+
 type ChapterAccordionUIProps = {
   title: string
   isOpen: boolean
@@ -18,12 +21,17 @@ export function ChapterAccordionUI({
   dragHandleProps,
 }: ChapterAccordionUIProps) {
   return (
-    <div className="border rounded mb-2">
+    <div className="mb-2 rounded border">
       {/* Header */}
-      <button
+      <Button
         type="button"
         onClick={onToggle}
-        className="w-full flex justify-between items-center px-4 py-2 bg-gray-100"
+        className={cn(
+          'flex w-full items-center justify-between px-4 py-2 transition-colors',
+          isOpen
+            ? 'bg-primary hover:bg-primary text-white hover:text-white'
+            : 'bg-gray-100 text-gray-900 hover:bg-gray-200',
+        )}
       >
         {/* ★ ドラッグハンドル */}
         <div
@@ -33,19 +41,17 @@ export function ChapterAccordionUI({
         >
           ☰
         </div>
-        
+
         <span className="font-medium">{title}</span>
-        <span className="text-sm text-gray-500">
+        <span
+          className={cn('text-sm', isOpen ? 'text-gray-200' : 'text-gray-500')}
+        >
           {completedLessonCount} / {totalLessonCount} 完了
         </span>
-      </button>
+      </Button>
 
       {/* Body */}
-      {isOpen && (
-        <div className="pl-4">
-          {children}
-        </div>
-      )}
+      {isOpen && <div className="pl-4">{children}</div>}
     </div>
-  )
+  );
 }

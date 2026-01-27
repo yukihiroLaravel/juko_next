@@ -19,7 +19,7 @@ export function LessonItemUI({
       >
         ☰
       </div>
-      
+
       <span>
         {isCompleted ? "✅" : "◻️"}
       </span>
@@ -29,5 +29,5 @@ export function LessonItemUI({
         {title}
       </span>
     </div>
-  )
+  );
 }

@@ -9,8 +9,8 @@ type Lesson = {
 }
 
 type LessonItemProps = {
-  lesson: Lesson
-}
+  lesson: Lesson;
+};
 
 export function LessonItem({ lesson }: LessonItemProps) {
   const {
