@@ -1,25 +1,15 @@
-import { LessonItemUI } from "./LessonItem.ui";
+import { LessonItemUI } from './LessonItem.ui';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-
-type Lesson = {
-  id: string
-  title: string
-  isCompleted: boolean
-}
+import type { Lesson } from '@/features/attendance/types';
 
 type LessonItemProps = {
   lesson: Lesson;
 };
 
 export function LessonItem({ lesson }: LessonItemProps) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id: lesson.id });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: lesson.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),

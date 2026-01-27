@@ -1,14 +1,7 @@
 'use client';
 
-import {
-  useState,
-  useCallback
-} from 'react';
-import {
-  DndContext,
-  closestCenter,
-  DragEndEvent
-} from '@dnd-kit/core';
+import { useState, useCallback } from 'react';
+import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
 import {
   SortableContext,
   arrayMove,
@@ -25,22 +18,6 @@ import {
 } from '@/components/atoms/Sidebar';
 
 export default function Page() {
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    setChapters((prevChapters) => {
-      const oldIndex = prevChapters.findIndex(
-        (chapter) => chapter.id === active.id
-      );
-      const newIndex = prevChapters.findIndex(
-        (chapter) => chapter.id === over.id
-      );
-
-      return arrayMove(prevChapters, oldIndex, newIndex);
-    });
-  }, []);
-
   const [chapters, setChapters] = useState([
     {
       id: 'chapter-1',
@@ -56,6 +33,23 @@ export default function Page() {
       lessons: [{ id: 'lesson-3', title: 'レッスン3', isCompleted: false }],
     },
   ]);
+
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setChapters((prevChapters) => {
+      const oldIndex = prevChapters.findIndex(
+        (chapter) => chapter.id === active.id,
+      );
+      const newIndex = prevChapters.findIndex(
+        (chapter) => chapter.id === over.id,
+      );
+
+      return arrayMove(prevChapters, oldIndex, newIndex);
+    });
+  }, []);
+
   return (
     <SidebarProvider>
       <CourseSidebar />
@@ -88,20 +82,14 @@ export default function Page() {
             onDragEnd={handleDragEnd}
           >
             <SortableContext
-              items={chapters.map(ch => ch.id)}
+              items={chapters.map((ch) => ch.id)}
               strategy={verticalListSortingStrategy}
             >
               {chapters.map((chapter) => (
-                <ChapterAccordion
-                  key={chapter.id}
-                  chapter={chapter}
-                />
+                <ChapterAccordion key={chapter.id} chapter={chapter} />
               ))}
             </SortableContext>
           </DndContext>
-          {chapters.map((chapter) => (
-            <ChapterAccordion key={chapter.id} chapter={chapter} />
-          ))}
         </main>
       </SidebarInset>
     </SidebarProvider>
