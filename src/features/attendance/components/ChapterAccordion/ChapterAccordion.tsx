@@ -1,24 +1,24 @@
-import { useState } from "react";
-import { ChapterAccordionUI } from "./ChapterAccordion.ui";
-import { LessonItem } from "../LessonItem/LessonItem";
+import { useState } from 'react';
+import { ChapterAccordionUI } from './ChapterAccordion.ui';
+import { LessonItem } from '../LessonItem/LessonItem';
 import type { Chapter } from '@/features/attendance/types';
 
 type ChapterAccordionProps = {
-  chapter: Chapter
-}
+  chapter: Chapter;
+};
 
 export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {
-    setIsOpen(prev => !prev)
-  }
+    setIsOpen((prev) => !prev);
+  };
 
   const completedLessonCount = chapter.lessons.filter(
-    lesson => lesson.isCompleted
-  ).length
+    (lesson) => lesson.isCompleted,
+  ).length;
 
-  const totalLessonCount = chapter.lessons.length
+  const totalLessonCount = chapter.lessons.length;
 
   return (
     <ChapterAccordionUI
@@ -28,9 +28,9 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
       totalLessonCount={totalLessonCount}
       onToggle={handleToggle}
     >
-      {chapter.lessons.map(lesson => (
+      {chapter.lessons.map((lesson) => (
         <LessonItem key={lesson.id} lesson={lesson} />
       ))}
     </ChapterAccordionUI>
-  )
+  );
 }

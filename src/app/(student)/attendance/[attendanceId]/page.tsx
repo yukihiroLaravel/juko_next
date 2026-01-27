@@ -22,9 +22,7 @@ export default function Page() {
     {
       id: 'chapter-2',
       title: '第2章 応用',
-      lessons: [
-        { id: 'lesson-3', title: 'レッスン3', isCompleted: false },
-      ],
+      lessons: [{ id: 'lesson-3', title: 'レッスン3', isCompleted: false }],
     },
   ];
   return (
@@ -35,7 +33,7 @@ export default function Page() {
           <SidebarTrigger />
           <span className="text-sm font-medium">講座詳細</span>
         </header>
-        <main className="flex-1 p-4 space-y-2">
+        <main className="flex-1 space-y-2 p-4">
           {/* 操作ボタン */}
           <div className="flex gap-2">
             <Button
@@ -55,10 +53,7 @@ export default function Page() {
 
           {/* カリキュラム一覧 */}
           {chapters.map((chapter) => (
-            <ChapterAccordion
-              key={chapter.id}
-              chapter={chapter}
-            />
+            <ChapterAccordion key={chapter.id} chapter={chapter} />
           ))}
         </main>
       </SidebarInset>
