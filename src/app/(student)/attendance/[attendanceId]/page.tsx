@@ -1,5 +1,6 @@
 'use client';
 
+import { ProgressSummary } from '@/features/attendance/components/ProgressSummary/ProgressSummary';
 import { CourseSidebar } from '@/features/attendance/components/CourseSidebar/CourseSidebar';
 import { ChapterAccordion } from '@/features/attendance/components/ChapterAccordion/ChapterAccordion';
 import { Button } from '@/components/atoms/Button';
@@ -34,7 +35,7 @@ export default function Page() {
           <span className="text-sm font-medium">講座詳細</span>
         </header>
         <main className="flex-1 space-y-2 p-4">
-          {/* 操作ボタン */}
+          <ProgressSummary />
           <div className="flex gap-2">
             <Button
               type="button"
