@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Switch } from '@/components/atoms/Switch';
 import { Button } from '@/components/atoms/Button';
 import { CourseSearchBox } from '@/features/attendance/components/CourseSearchBox/CourseSearchBox';
 import { AttendancedCourseCardList } from '@/features/attendance/components/AttendancedCourseCardList/AttendancedCourseCardList';
+import { AttendancedCourseCardListSkeleton } from '@/features/attendance/components/AttendancedCourseCardList/AttendancedCourseCardList.skeleton';
+
 
 export default function AttendancePage() {
   const [isGrouped, setIsGrouped] = useState(false);
@@ -30,7 +33,13 @@ export default function AttendancePage() {
           全講座完了
         </Button>
       </div>
-      <AttendancedCourseCardList />
+
+      {/* 出席講座一覧 */}
+      <ErrorBoundary fallback={<div>エラーが発生しました</div>}>
+        <Suspense fallback={<AttendancedCourseCardListSkeleton />}>
+          <AttendancedCourseCardList />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }
