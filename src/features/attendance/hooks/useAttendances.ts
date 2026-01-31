@@ -3,7 +3,7 @@ import { fetcher } from '@/utils/fetcher';
 import type { AttendancesResponse } from '../types/attendance';
 
 export function useAttendances() {
-  const { data, error, isLoading } = useSWR<AttendancesResponse>(
+  const { data, error } = useSWR<AttendancesResponse>(
     '/api/v1/attendance/index',
     fetcher,
     { suspense: true },
@@ -14,6 +14,5 @@ export function useAttendances() {
     meta: data?.meta,
     links: data?.links,
     error,
-    isLoading,
   };
 }
