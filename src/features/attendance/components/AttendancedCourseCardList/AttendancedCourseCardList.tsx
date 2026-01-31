@@ -9,9 +9,8 @@ export function AttendancedCourseCardList() {
   const courses = attendances.map((attendance) => ({
     id: attendance.attendance_id,
     title: attendance.course.title,
-    instructorName: '講師名',
     progress: 77,
-    isExpired: attendance.expired === '1',
+    isExpired: attendance.expired,
   }));
 
   return <AttendancedCourseCardListUI courses={courses} />;

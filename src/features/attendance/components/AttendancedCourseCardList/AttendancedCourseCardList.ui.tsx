@@ -5,7 +5,6 @@ import { AttendancedCourseCard } from '../AttendancedCourseCard/AttendancedCours
 type Course = {
   id: string;
   title: string;
-  instructorName: string;
   progress: number;
   isExpired: boolean;
 };
@@ -23,7 +22,6 @@ export function AttendancedCourseCardListUI({
         <AttendancedCourseCard
           key={course.id}
           title={course.title}
-          instructorName={course.instructorName}
           progress={course.progress}
           isExpired={course.isExpired}
         />

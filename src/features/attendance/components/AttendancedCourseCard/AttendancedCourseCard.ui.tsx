@@ -1,18 +1,14 @@
 import { Card } from '@/components/atoms/Card';
-import { Badge } from '@/components/atoms/Badge';
-import { User } from 'lucide-react';
 
 type AttendancedCourseCardUIProps = {
   title: string;
   isExpired: boolean;
-  instructorName: string;
   progress: number;
 };
 
 export function AttendancedCourseCardUI({
   title,
   isExpired,
-  instructorName,
   progress,
 }: AttendancedCourseCardUIProps) {
   return (
@@ -31,16 +27,6 @@ export function AttendancedCourseCardUI({
               受講期限切れ
             </span>
           )}
-        </div>
-        {/* 講師名 */}
-        <div className="text-muted-foreground flex items-center gap-2 text-xs">
-          <Badge
-            variant="secondary"
-            className="flex h-5 w-5 items-center justify-center rounded-full p-0"
-          >
-            <User className="h-3 w-3" />
-          </Badge>
-          <span>{instructorName}</span>
         </div>
         {/* 進捗 */}
         <p className="text-muted-foreground text-xs">進捗 {progress}%</p>

@@ -15,7 +15,7 @@ export type Course = {
 export type Attendance = {
   attendance_id: string;
   deadline_date: string;
-  expired: string;
+  expired: boolean;
   course: Course;
 };
 
