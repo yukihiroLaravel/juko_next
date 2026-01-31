@@ -1,12 +1,12 @@
-import useSWR from "swr";
-import { fetcher } from "@/utils/fetcher";
-import type { AttendancesResponse } from "../types/attendance";
+import useSWR from 'swr';
+import { fetcher } from '@/utils/fetcher';
+import type { AttendancesResponse } from '../types/attendance';
 
 export function useAttendances() {
   const { data, error, isLoading } = useSWR<AttendancesResponse>(
-    "/api/v1/attendance/index",
+    '/api/v1/attendance/index',
     fetcher,
-    { suspense: true }
+    { suspense: true },
   );
 
   return {
