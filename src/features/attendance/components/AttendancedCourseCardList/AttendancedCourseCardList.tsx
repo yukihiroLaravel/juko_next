@@ -1,38 +1,18 @@
 'use client';
 
+import { useAttendances } from '../../hooks/useAttendances';
 import { AttendancedCourseCardListUI } from './AttendancedCourseCardList.ui';
 
 export function AttendancedCourseCardList() {
-  const courses = [
-    {
-      id: '1',
-      title: 'コースタイトル',
-      instructorName: '講師名',
-      progress: 77,
-      isExpired: false,
-    },
-    {
-      id: '2',
-      title: 'コースタイトル',
-      instructorName: '講師名',
-      progress: 77,
-      isExpired: true, // ← 期限切れ
-    },
-    {
-      id: '3',
-      title: 'コースタイトル',
-      instructorName: '講師名',
-      progress: 77,
-      isExpired: false,
-    },
-    {
-      id: '4',
-      title: 'コースタイトル',
-      instructorName: '講師名',
-      progress: 77,
-      isExpired: false,
-    },
-  ];
+  const { attendances } = useAttendances();
+
+  const courses = attendances.map((attendance) => ({
+    id: attendance.attendance_id,
+    title: attendance.course.title,
+    instructorName: '講師名',
+    progress: 77,
+    isExpired: attendance.expired === '1',
+  }));
 
   return <AttendancedCourseCardListUI courses={courses} />;
 }
