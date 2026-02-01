@@ -1,6 +1,7 @@
 'use client';
 
 import { UseFormReturn, FieldErrors } from 'react-hook-form';
+import type { FieldError } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { useFormState } from 'react-hook-form';
 import { Input } from '@/components/atoms/Input';
@@ -15,13 +16,23 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/atoms/RadioGroup';
 import { SignupSchema } from '../../validation/SignupSchema';
 
+function errorMessage(error?: FieldError) {
+  return typeof error?.message === 'string' ? error.message : undefined;
+}
+
 type Props = {
   form: UseFormReturn<SignupSchema>;
   onSubmit: (data: SignupSchema) => void;
   onError: (errors: FieldErrors<SignupSchema>) => void;
+  isSubmitting: boolean;
 };
 
-export function SignupFormUI({ form, onSubmit, onError }: Props) {
+export function SignupFormUI({
+  form,
+  onSubmit,
+  onError,
+  isSubmitting,
+}: Props) {
   const { register, handleSubmit, control } = form;
 
   const { errors } = useFormState({
@@ -41,9 +52,9 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
         <div>
           <label className="block text-sm">ユーザー名</label>
           <Input {...register('userName')} />
-          {errors.userName && (
+          {errorMessage(errors.userName) && (
             <p className="text-sm text-red-500">
-              {errors.userName.message as string}
+              {errorMessage(errors.userName)}
             </p>
           )}
         </div>
@@ -52,9 +63,9 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
         <div>
           <label className="block text-sm">姓</label>
           <Input {...register('lastName')} />
-          {errors.lastName && (
+          {errorMessage(errors.lastName) && (
             <p className="text-sm text-red-500">
-              {errors.lastName.message as string}
+              {errorMessage(errors.lastName)}
             </p>
           )}
         </div>
@@ -63,9 +74,9 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
         <div>
           <label className="block text-sm">名</label>
           <Input {...register('firstName')} />
-          {errors.firstName && (
+          {errorMessage(errors.firstName) && (
             <p className="text-sm text-red-500">
-              {errors.firstName.message as string}
+              {errorMessage(errors.firstName)}
             </p>
           )}
         </div>
@@ -74,9 +85,9 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
         <div>
           <label className="block text-sm">メールアドレス</label>
           <Input type="email" {...register('email')} />
-          {errors.email && (
+          {errorMessage(errors.email) && (
             <p className="text-sm text-red-500">
-              {errors.email.message as string}
+              {errorMessage(errors.email)}
             </p>
           )}
         </div>
@@ -128,10 +139,9 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
               </Popover>
             )}
           />
-
-          {errors.birthday && (
+          {errorMessage(errors.birthday) && (
             <p className="text-sm text-red-500">
-              {errors.birthday.message as string}
+              {errorMessage(errors.birthday)}
             </p>
           )}
         </div>
@@ -140,7 +150,7 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
         <div>
           <label className="block text-sm">性別</label>
           <Controller
-            control={form.control}
+            control={control}
             name="gender"
             render={({ field }) => (
               <RadioGroup
@@ -159,9 +169,9 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
               </RadioGroup>
             )}
           />
-          {errors.gender && (
+          {errorMessage(errors.gender) && (
             <p className="text-sm text-red-500">
-              {errors.gender.message as string}
+              {errorMessage(errors.gender)}
             </p>
           )}
         </div>
@@ -170,16 +180,16 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
         <div>
           <label className="block text-sm">住所</label>
           <Input {...register('address')} />
-          {errors.address && (
+          {errorMessage(errors.address) && (
             <p className="text-sm text-red-500">
-              {errors.address.message as string}
+              {errorMessage(errors.address)}
             </p>
           )}
         </div>
 
         {/* 登録ボタン */}
-        <Button type="submit" className="w-full">
-          登録
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? '登録中...' : '登録'}
         </Button>
       </form>
     </div>
