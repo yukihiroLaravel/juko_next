@@ -8,7 +8,6 @@ import { CourseSearchBox } from '@/features/attendance/components/CourseSearchBo
 import { AttendancedCourseCardList } from '@/features/attendance/components/AttendancedCourseCardList/AttendancedCourseCardList';
 import { AttendancedCourseCardListSkeleton } from '@/features/attendance/components/AttendancedCourseCardList/AttendancedCourseCardList.skeleton';
 
-
 export default function AttendancePage() {
   const [isGrouped, setIsGrouped] = useState(false);
 
