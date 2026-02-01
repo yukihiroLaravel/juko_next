@@ -1,9 +1,10 @@
-export async function fetcher<T>(url: string): Promise<T> {
-  const res = await fetch(url);
+import { Axios } from '@/lib/api';
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
-  }
-
-  return res.json() as Promise<T>;
-}
+/**
+ * SWR 用の共通 fetcher
+ * Axios を利用して GET リクエストを行い、response.data を返す
+ */
+export const fetcher = async <T>(url: string): Promise<T> => {
+  const res = await Axios.get<T>(url);
+  return res.data;
+};
