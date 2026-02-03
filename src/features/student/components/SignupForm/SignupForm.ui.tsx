@@ -22,18 +22,16 @@ function errorMessage(error?: FieldError) {
 
 type Props = {
   form: UseFormReturn<SignupSchema>;
-  onSubmit: (data: SignupSchema) => void;
-  onError: (errors: FieldErrors<SignupSchema>) => void;
+  onSubmit: () => void;
   isSubmitting: boolean;
 };
 
 export function SignupFormUI({
   form,
   onSubmit,
-  onError,
   isSubmitting,
 }: Props) {
-  const { register, handleSubmit, control } = form;
+  const { register, control } = form;
 
   const { errors } = useFormState({
     control,
@@ -42,7 +40,7 @@ export function SignupFormUI({
   return (
     <div className="flex min-h-screen items-start justify-center bg-gray-100 pt-10">
       <form
-        onSubmit={handleSubmit(onSubmit, onError)}
+        onSubmit={onSubmit}
         noValidate
         className="w-1/2 space-y-4 rounded-md bg-white p-6 shadow"
       >
