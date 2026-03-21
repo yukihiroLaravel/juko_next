@@ -1,6 +1,6 @@
 'use client';
 
-import { UseFormReturn, FieldErrors } from 'react-hook-form';
+import { UseFormReturn } from 'react-hook-form';
 import type { FieldError } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { useFormState } from 'react-hook-form';
@@ -45,6 +45,12 @@ export function SignupFormUI({
         className="w-1/2 space-y-4 rounded-md bg-white p-6 shadow"
       >
         <h1 className="text-center text-lg font-bold">新規登録画面</h1>
+
+        {errors.root?.message && (
+          <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-500">
+            {errors.root.message}
+          </p>
+        )}
 
         {/* ユーザー名 */}
         <div>

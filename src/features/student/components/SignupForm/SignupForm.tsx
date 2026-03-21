@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { AxiosError } from 'axios';
+import axios from 'axios';
 import type { FieldErrors } from 'react-hook-form';
 import { SignupFormUI } from './SignupForm.ui';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +9,7 @@ import {
   signupSchema,
   SignupSchema,
 } from '@/features/student/validation/SignupSchema';
-import { useStudentSignup } from '@/features/student/hooks/useStudentSignup';
+import { signupStudent } from '@/features/student/api/signupStudent';
 
 type ApiErrorResponse = {
   message: string;
@@ -36,18 +36,18 @@ export function SignupForm() {
   const {
     formState: { isSubmitting },
   } = form;
-  const { signup } = useStudentSignup();
 
   const onSubmit = form.handleSubmit(
     async (data: SignupSchema) => {
+      form.clearErrors();
+
       try {
-        await signup(data);
+        await signupStudent(data);
         console.log('signup success');
         // TODO: 完了画面遷移 or toast
       } catch (error) {
-        if (error instanceof AxiosError) {
-          const response = error.response?.data as ApiErrorResponse | undefined;
-
+        if (axios.isAxiosError<ApiErrorResponse>(error)) {
+          const response = error.response?.data;
           if (response?.errors) {
             Object.entries(response.errors).forEach(([field, messages]) => {
               setError(field as keyof SignupSchema, {
@@ -57,7 +57,21 @@ export function SignupForm() {
             });
             return;
           }
+
+          setError('root', {
+            type: 'server',
+            message:
+              response?.message ??
+              '登録に失敗しました。時間をおいて再度お試しください。',
+          });
+          return;
         }
+
+        setError('root', {
+          type: 'server',
+          message: '予期しないエラーが発生しました。',
+        });
+
         console.error('signup error:', error);
       }
     },
