@@ -5,11 +5,21 @@ export type Tag = {
   content: string;
 };
 
+export type Instructor = {
+  instructor_id: string;
+  first_name: string;
+  last_name: string;
+  nick_name: string;
+  email: string;
+  profile_image: string;
+};
+
 export type Course = {
   course_id: string;
   title: string;
   image: string;
   tags: Tag[];
+  instructor: Instructor;
 };
 
 export type Attendance = {

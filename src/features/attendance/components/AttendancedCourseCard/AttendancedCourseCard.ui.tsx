@@ -1,13 +1,16 @@
 import { Card } from '@/components/atoms/Card';
+import { CircleUserRound } from 'lucide-react';
 
 type AttendancedCourseCardUIProps = {
   title: string;
+  instructorName: string;
   isExpired: boolean;
   progress: number;
 };
 
 export function AttendancedCourseCardUI({
   title,
+  instructorName,
   isExpired,
   progress,
 }: AttendancedCourseCardUIProps) {
@@ -27,6 +30,12 @@ export function AttendancedCourseCardUI({
               受講期限切れ
             </span>
           )}
+        </div>
+
+         {/* 講師名 */}
+        <div className="flex items-center gap-1 text-xs text-gray-700">
+          <CircleUserRound className="h-4 w-4" />
+          <span>{instructorName}</span>
         </div>
         {/* 進捗 */}
         <p className="text-muted-foreground text-xs">進捗 {progress}%</p>
