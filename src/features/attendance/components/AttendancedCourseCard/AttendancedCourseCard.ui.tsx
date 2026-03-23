@@ -32,7 +32,6 @@ export function AttendancedCourseCardUI({
           )}
         </div>
 
-         {/* 講師名 */}
         <div className="flex items-center gap-1 text-xs text-gray-700">
           <CircleUserRound className="h-4 w-4" />
           <span>{instructorName}</span>
