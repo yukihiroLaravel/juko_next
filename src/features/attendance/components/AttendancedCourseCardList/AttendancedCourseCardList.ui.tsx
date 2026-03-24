@@ -3,7 +3,7 @@
 import { AttendancedCourseCard } from '../AttendancedCourseCard/AttendancedCourseCard';
 
 type Course = {
-  id: string;
+  attendanceId: number | string;
   title: string;
   instructorName: string;
   progress: number;
@@ -21,7 +21,8 @@ export function AttendancedCourseCardListUI({
     <div className="mx-auto grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {courses.map((course) => (
         <AttendancedCourseCard
-          key={course.id}
+          key={course.attendanceId}
+          attendanceId={course.attendanceId}
           title={course.title}
           instructorName={course.instructorName}
           progress={course.progress}
