@@ -10,11 +10,7 @@ import {
   SignupSchema,
 } from '@/features/student/validation/SignupSchema';
 import { signupStudent } from '@/features/student/api/signupStudent';
-
-type ApiErrorResponse = {
-  message: string;
-  errors?: Record<string, string[]>;
-};
+import type { ApiErrorResponse } from '@/types/api';
 
 export function SignupForm() {
   const form = useForm<SignupSchema>({

@@ -1,7 +1,6 @@
 'use client';
 
-import { UseFormReturn } from 'react-hook-form';
-import type { FieldError } from 'react-hook-form';
+import type { UseFormReturn } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { useFormState } from 'react-hook-form';
 import { Input } from '@/components/atoms/Input';
@@ -15,10 +14,7 @@ import {
 } from '@/components/atoms/Popover';
 import { RadioGroup, RadioGroupItem } from '@/components/atoms/RadioGroup';
 import { SignupSchema } from '../../validation/SignupSchema';
-
-function errorMessage(error?: FieldError) {
-  return typeof error?.message === 'string' ? error.message : undefined;
-}
+import { errorMessage } from '@/utils/errorMessage';
 
 type Props = {
   form: UseFormReturn<SignupSchema>;
