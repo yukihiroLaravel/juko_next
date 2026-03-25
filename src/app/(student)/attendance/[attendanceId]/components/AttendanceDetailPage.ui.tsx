@@ -15,18 +15,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/atoms/Sidebar';
-
-type Lesson = {
-  id: string;
-  title: string;
-  isCompleted: boolean;
-};
-
-type Chapter = {
-  id: string;
-  title: string;
-  lessons: Lesson[];
-};
+import type { Chapter } from '@/features/attendance/types/attendanceDetail';
 
 type Props = {
   chapters: Chapter[];
@@ -49,6 +38,7 @@ export function AttendanceDetailPageUI({ chapters, onDragEnd }: Props) {
           <div className="flex gap-2">
             <Button
               type="button"
+              // TODO: 全Chapter完了機能実装時に処理追加
               onClick={() => console.log('all chapters completed')}
             >
               全Chapter完了
@@ -56,6 +46,7 @@ export function AttendanceDetailPageUI({ chapters, onDragEnd }: Props) {
 
             <Button
               type="button"
+              // TODO: 全Lesson完了機能実装時に処理追加
               onClick={() => console.log('all lessons completed')}
             >
               全Lesson完了
@@ -64,11 +55,11 @@ export function AttendanceDetailPageUI({ chapters, onDragEnd }: Props) {
 
           <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
             <SortableContext
-              items={chapters.map((chapter) => chapter.id)}
+              items={chapters.map((chapter) => chapter.chapter_id)}
               strategy={verticalListSortingStrategy}
             >
               {chapters.map((chapter) => (
-                <ChapterAccordion key={chapter.id} chapter={chapter} />
+                <ChapterAccordion key={chapter.chapter_id} chapter={chapter} />
               ))}
             </SortableContext>
           </DndContext>

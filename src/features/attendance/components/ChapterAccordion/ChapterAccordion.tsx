@@ -2,14 +2,15 @@ import { useState } from 'react';
 import { ChapterAccordionUI } from './ChapterAccordion.ui';
 import { LessonItem } from '../LessonItem/LessonItem';
 import { CSS } from '@dnd-kit/utilities';
-import { DndContext, closestCenter, DragEndEvent } from '@dnd-kit/core';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
 import {
   useSortable,
   SortableContext,
   arrayMove,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import type { Chapter } from '@/features/attendance/types';
+import type { Chapter } from '@/features/attendance/types/attendanceDetail';
 
 type ChapterAccordionProps = {
   chapter: Chapter;
@@ -23,7 +24,7 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
   };
 
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: chapter.id });
+    useSortable({ id: chapter.chapter_id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -33,7 +34,7 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
   const [lessons, setLessons] = useState(chapter.lessons);
 
   const completedLessonCount = lessons.filter(
-    (lesson) => lesson.isCompleted,
+    (lesson) => lesson.is_completed,
   ).length;
 
   const totalLessonCount = lessons.length;
@@ -43,8 +44,12 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
     if (!over || active.id === over.id) return;
 
     setLessons((prev) => {
-      const oldIndex = prev.findIndex((l) => l.id === active.id);
-      const newIndex = prev.findIndex((l) => l.id === over.id);
+      const oldIndex = prev.findIndex(
+        (lesson) => lesson.lesson_id === active.id,
+      );
+      const newIndex = prev.findIndex(
+        (lesson) => lesson.lesson_id === over.id,
+      );
       return arrayMove(prev, oldIndex, newIndex);
     });
   };
@@ -65,11 +70,11 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
             onDragEnd={handleLessonDragEnd}
           >
             <SortableContext
-              items={lessons.map((l) => l.id)}
+              items={lessons.map((lesson) => lesson.lesson_id)}
               strategy={verticalListSortingStrategy}
             >
               {lessons.map((lesson) => (
-                <LessonItem key={lesson.id} lesson={lesson} />
+                <LessonItem key={lesson.lesson_id} lesson={lesson} />
               ))}
             </SortableContext>
           </DndContext>
