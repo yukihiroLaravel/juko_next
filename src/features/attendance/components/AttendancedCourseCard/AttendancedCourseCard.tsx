@@ -1,7 +1,8 @@
+import Link from 'next/link';
 import { AttendancedCourseCardUI } from './AttendancedCourseCard.ui';
 
 type AttendancedCourseCardProps = {
-  attendanceId: number | string;
+  attendanceId: string;
   title: string;
   instructorName: string;
   isExpired: boolean;
@@ -18,12 +19,14 @@ export function AttendancedCourseCard({
   const href = `/attendance/${attendanceId}`;
 
   return (
-    <AttendancedCourseCardUI
-      href={href}
-      title={title}
-      instructorName={instructorName}
-      isExpired={isExpired}
-      progress={progress}
-    />
+    <Link href={href} className="block w-full max-w-[350px]">
+      <AttendancedCourseCardUI
+        href={href}
+        title={title}
+        instructorName={instructorName}
+        isExpired={isExpired}
+        progress={progress}
+      />
+    </Link>
   );
 }

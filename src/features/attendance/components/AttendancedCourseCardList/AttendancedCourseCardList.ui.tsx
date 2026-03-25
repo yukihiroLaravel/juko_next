@@ -3,7 +3,7 @@
 import { AttendancedCourseCard } from '../AttendancedCourseCard/AttendancedCourseCard';
 
 type Course = {
-  attendanceId: number | string;
+  attendanceId: string;
   title: string;
   instructorName: string;
   progress: number;
