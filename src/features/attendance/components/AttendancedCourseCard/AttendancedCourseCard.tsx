@@ -21,7 +21,6 @@ export function AttendancedCourseCard({
   return (
     <Link href={href} className="block w-full max-w-[350px]">
       <AttendancedCourseCardUI
-        href={href}
         title={title}
         instructorName={instructorName}
         isExpired={isExpired}
