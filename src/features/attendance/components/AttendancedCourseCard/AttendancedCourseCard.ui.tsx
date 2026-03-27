@@ -15,7 +15,7 @@ export function AttendancedCourseCardUI({
   progress,
 }: AttendancedCourseCardUIProps) {
   return (
-    <Card className="w-full max-w-[350px] overflow-hidden rounded-md border bg-transparent p-0">
+    <Card className="overflow-hidden rounded-md border bg-transparent p-0 hover:opacity-80">
       {/* サムネイル */}
       <div className="flex aspect-[16/9] w-full items-center justify-center bg-indigo-400">
         <span className="text-sm font-semibold text-black">サムネイル</span>

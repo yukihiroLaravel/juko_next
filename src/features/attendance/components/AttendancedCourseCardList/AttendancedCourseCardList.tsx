@@ -7,7 +7,7 @@ export function AttendancedCourseCardList() {
   const { attendances } = useAttendances();
 
   const courses = attendances.map((attendance) => ({
-    id: attendance.attendance_id,
+    attendanceId: attendance.attendance_id,
     title: attendance.course.title,
     instructorName: `${attendance.course.instructor.last_name} ${attendance.course.instructor.first_name}`,
     progress: 77,
