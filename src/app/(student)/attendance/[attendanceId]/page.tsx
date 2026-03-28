@@ -16,8 +16,12 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/atoms/Sidebar';
+import { useParams } from 'next/navigation';
 
 export default function Page() {
+  const params = useParams();
+  const attendanceId = params.attendanceId as string;
+
   const [chapters, setChapters] = useState([
     {
       id: 'chapter-1',
@@ -52,7 +56,7 @@ export default function Page() {
 
   return (
     <SidebarProvider>
-      <CourseSidebar />
+      <CourseSidebar attendanceId={attendanceId} />
       <SidebarInset>
         <header className="flex h-12 items-center gap-2 border-b px-4">
           <SidebarTrigger />
