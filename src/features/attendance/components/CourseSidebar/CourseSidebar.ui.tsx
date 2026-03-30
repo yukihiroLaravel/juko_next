@@ -34,9 +34,7 @@ export function CourseSidebarUI({
         <img
           src={thumbnailUrl}
           alt={courseName}
-          width={256}
-          height={144}
-          className="w-full object-cover"
+          className="block h-36 w-full object-cover"
         />
         <div className="p-4">
           <p className="text-muted-foreground text-sm">{categoryName}</p>
