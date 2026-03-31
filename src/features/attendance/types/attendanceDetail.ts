@@ -12,6 +12,6 @@ export type AttendanceDetailCourse = {
 
 export type AttendanceDetail = {
   attendance_id: string;
-    progress_percent?: number;
+  progress_percent?: number;
   course: AttendanceDetailCourse;
 };

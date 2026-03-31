@@ -4,15 +4,8 @@ import type { AttendanceDetail } from '@/features/attendance/types/attendanceDet
 const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL ?? '';
 
 export function mapAttendanceDetailToCourseSidebar(
-  attendanceDetail: AttendanceDetail
+  attendanceDetail: AttendanceDetail,
 ): CourseSidebarUIProps {
-  console.log('course.title:', attendanceDetail.course.title);
-  console.log('course.image:', attendanceDetail.course.image);
-  console.log(
-    'thumbnailUrl:',
-    `${storageUrl}/${attendanceDetail.course.image}`
-  );
-
   return {
     thumbnailUrl: `${storageUrl}/${attendanceDetail.course.image}`,
     categoryName: attendanceDetail.course.tags[0]?.name ?? '',
