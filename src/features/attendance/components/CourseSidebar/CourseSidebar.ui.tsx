@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { BellIcon, UsersIcon } from 'lucide-react';
 
 import { Badge } from '@/components/atoms/Badge';
@@ -15,7 +14,7 @@ import {
   SidebarMenuItem,
 } from '@/components/atoms/Sidebar';
 
-type CourseSidebarUIProps = {
+export type CourseSidebarUIProps = {
   thumbnailUrl: string;
   categoryName: string;
   courseName: string;
@@ -32,12 +31,10 @@ export function CourseSidebarUI({
     <Sidebar collapsible="offcanvas">
       {/* サムネイル・講座情報 */}
       <SidebarHeader className="gap-0 p-0">
-        <Image
+        <img
           src={thumbnailUrl}
           alt={courseName}
-          width={256}
-          height={144}
-          className="w-full object-cover"
+          className="block h-36 w-full object-cover"
         />
         <div className="p-4">
           <p className="text-muted-foreground text-sm">{categoryName}</p>
