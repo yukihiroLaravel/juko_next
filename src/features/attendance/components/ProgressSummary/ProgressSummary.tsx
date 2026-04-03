@@ -1,28 +1,35 @@
 'use client';
 
 import { ProgressSummaryUI } from './ProgressSummary.ui';
+import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
+import { mapAttendanceDetailToProgressSummary } from '@/features/attendance/utils/mapAttendanceDetailToProgressSummary';
 
-export function ProgressSummary() {
-  const completedChapters = 2;
-  const totalChapters = 10;
+type ProgressSummaryProps = {
+  attendanceId: string;
+};
 
-  const completedLessons = 5;
-  const totalLessons = 30;
+export function ProgressSummary({ attendanceId }: ProgressSummaryProps) {
+  const { attendanceDetail, error, isLoading } =
+    useAttendanceDetail(attendanceId);
 
-  const progressRate = Math.round((completedChapters / totalChapters) * 100);
+  if (error) {
+    return <div>データ取得失敗</div>;
+  }
+
+  if (isLoading || !attendanceDetail) {
+    return <div>読み込み中...</div>;
+  }
+
+  const progressSummary =
+    mapAttendanceDetailToProgressSummary(attendanceDetail);
 
   const handleContinue = () => {
     // TODO: 最後に未完了のレッスンへ遷移
-    console.log('continue from last lesson');
   };
 
   return (
     <ProgressSummaryUI
-      progressRate={progressRate}
-      completedChapters={completedChapters}
-      totalChapters={totalChapters}
-      completedLessons={completedLessons}
-      totalLessons={totalLessons}
+      {...progressSummary}
       onContinue={handleContinue}
     />
   );

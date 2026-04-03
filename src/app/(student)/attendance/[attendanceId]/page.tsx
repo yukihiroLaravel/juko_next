@@ -63,7 +63,7 @@ export default function Page() {
           <span className="text-sm font-medium">講座詳細</span>
         </header>
         <main className="flex-1 space-y-2 p-4">
-          <ProgressSummary />
+          <ProgressSummary attendanceId={attendanceId} />
           <div className="flex gap-2">
             <Button
               type="button"
