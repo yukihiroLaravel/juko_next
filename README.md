@@ -4,92 +4,81 @@ Next.js 16 + TypeScript + Tailwind CSS プロジェクト
 
 ## 技術スタック
 
-- Next.js 16 (App Router)
-- TypeScript
-- Tailwind CSS
+- Next.js 16 (App Router, Turbopack)
+- React 19
+- TypeScript 5
+- Tailwind CSS 4
 - pnpm (パッケージマネージャー)
-- Docker
 
 ## 環境構築
 
 ### 前提条件
 
-- Docker Desktop がインストールされていること
+- Node.js / pnpm のバージョンはリポジトリルートの `mise.toml` で管理しています。
+- [mise](https://mise.jdx.dev/) を使うと `mise install` 一発で揃います。
+- 詳細はリポジトリルートの `Readme.md` を参照してください。
 
 ### 初回セットアップ
 
 ```bash
-# Dockerイメージをビルド
-docker compose build front
+# リポジトリルートで一度だけ
+mise install
 
-# コンテナに入って依存関係をインストール
-docker compose run --rm front pnpm install
+# このディレクトリに移動して
+cd frontend/juko_next
+
+# 環境変数ファイルを作成
+cp .env.example .env.local
+
+# 依存関係をインストール
+pnpm install
 ```
 
 ### 開発サーバー起動
 
 ```bash
-# フォアグラウンドで起動（ログが表示される）
-docker compose up front
-
-# バックグラウンドで起動
-docker compose up -d front
+pnpm dev
 ```
 
-起動後、ブラウザで http://localhost:3000 にアクセス
+起動後、ブラウザで http://localhost:3000 にアクセス。
 
-## コンテナ操作
+> バックエンド (Laravel) は別途 `docker compose up -d` で起動しておく必要があります。
 
-### 基本操作
+## よく使うコマンド
 
 ```bash
-# コンテナ起動
-docker compose up front
+# 開発サーバー
+pnpm dev
 
-# コンテナ停止
-docker compose down
+# 本番ビルド
+pnpm build
+pnpm start
 
-# コンテナ再起動
-docker compose restart front
+# Lint
+pnpm lint
 
-# ログ確認
-docker compose logs -f front
+# 型チェック
+pnpm type-check
+
+# Prettier整形
+pnpm format
+pnpm format:check
 ```
 
-### コンテナ内でコマンド実行
-
-```bash
-# コンテナ内でbashシェルに入る
-docker compose run --rm front bash
-
-# 単発コマンド実行
-docker compose run --rm front pnpm <command>
-```
-
-### パッケージ管理
+## パッケージ管理
 
 ```bash
 # パッケージ追加
-docker compose run --rm front pnpm add <package-name>
+pnpm add <package-name>
 
 # 開発用パッケージ追加
-docker compose run --rm front pnpm add -D <package-name>
+pnpm add -D <package-name>
 
 # パッケージ削除
-docker compose run --rm front pnpm remove <package-name>
+pnpm remove <package-name>
 
 # 依存関係の再インストール
-docker compose run --rm front pnpm install
-```
-
-### ビルド・その他
-
-```bash
-# 本番ビルド
-docker compose run --rm front pnpm build
-
-# Lint実行
-docker compose run --rm front pnpm lint
+pnpm install
 ```
 
 ## ディレクトリ構成
@@ -104,149 +93,40 @@ juko_next/
 ├── package.json
 ├── pnpm-lock.yaml
 ├── next.config.ts
-├── tsconfig.json
-└── tailwind.config.ts
+└── tsconfig.json
 ```
 
 ## トラブルシューティング
 
-### ホットリロードが効かない場合
+### `pnpm: command not found`
 
-`compose.yml`で以下の環境変数が設定されていることを確認:
-
-```yaml
-environment:
-  - WATCHPACK_POLLING=true
-  - CHOKIDAR_USEPOLLING=true
-```
-
-### node_modules関連のエラー
+mise を入れた直後に既存のターミナルで実行している可能性があります。新しいターミナルを開くか、設定を再読み込みしてください。
 
 ```bash
-# コンテナを停止してボリュームを削除
-docker compose down -v
-
-# 再ビルド
-docker compose build front
-
-# 依存関係を再インストール
-docker compose run --rm front pnpm install
+source ~/.zshrc   # または ~/.bashrc
 ```
 
----
+`which pnpm` で `~/.local/share/mise/...` 配下が表示されれば mise 経由で解決できています。
 
-### next: not found エラー
+### Node / pnpm のバージョンが違う
 
-**症状:**
+リポジトリ内で `mise current` を実行すると、`mise.toml` で定義したバージョンが表示されます。違うバージョンが使われている場合は `mise install` を再実行してください。
 
-```
-sh: 1: next: not found
-ELIFECYCLE Command failed.
-```
+### ポート 3000 が使用中
 
-**原因:**
-`node_modules`がコンテナ内に存在しない。匿名ボリュームを使用している場合、`docker compose run`と`docker compose up`で別々のボリュームが作成されることがある。
-
-**解決策:**
-
-1. 名前付きボリュームを使用する（`compose.yml`で設定済み）
-2. 依存関係を再インストールしてから起動する
+別プロセスが 3000 番を占有していると起動できません。
 
 ```bash
-docker compose run --rm front pnpm install
-docker compose up front
+# 3000番を使っているプロセスを確認
+lsof -i :3000
+
+# 別ポートで起動する場合
+pnpm dev -- -p 3001
 ```
 
----
-
-### create-next-app実行時の競合エラー
-
-**症状:**
-
-```
-The directory juko_next contains files that could conflict:
-  node_modules/
-```
-
-**原因:**
-Dockerボリュームによって`node_modules`ディレクトリが作成されている。
-
-**解決策:**
-`compose.yml`の`node_modules`ボリューム設定を一時的にコメントアウトしてからプロジェクトを初期化する。
-
-```yaml
-volumes:
-  - ./frontend:/www/html
-  # - front_node_modules:/www/html/juko_next/node_modules  # 一時的にコメントアウト
-```
-
-初期化完了後、コメントを解除して`pnpm install`を実行。
-
----
-
-### Device or resource busy エラー
-
-**症状:**
-
-```
-rm: cannot remove 'node_modules': Device or resource busy
-```
-
-**原因:**
-`node_modules`がDockerボリュームとしてマウントされているため、コンテナ内から削除できない。
-
-**解決策:**
-コンテナを停止してボリュームごと削除する。
+### 依存関係を完全リセットしたい
 
 ```bash
-docker compose down -v
-```
-
----
-
-### pnpm Unknown system error -116
-
-**症状:**
-
-```
-ERR_PNPM Unknown system error -116
-Unknown system error -116, copyfile '...' -> '...'
-```
-
-**原因:**
-Dockerボリュームマウント（特にmacOS）でpnpmのハードリンク機能が動作しない。
-
-**解決策:**
-`Dockerfile`でpnpmのパッケージインポート方法を`copy`に設定する。
-
-```dockerfile
-RUN pnpm config set package-import-method copy --global && \
-    pnpm config set node-linker hoisted --global
-```
-
-または、コンテナ内で一時的に設定:
-
-```bash
-echo "package-import-method=copy" > ~/.npmrc
-echo "node-linker=hoisted" >> ~/.npmrc
-```
-
----
-
-### ボリューム完全リセット
-
-すべてのトラブルを解決するための完全リセット手順:
-
-```bash
-# 1. コンテナとボリュームを削除
-docker compose down -v
-
-# 2. Dockerイメージを再ビルド
-docker compose build --no-cache front
-
-# 3. 依存関係をインストール
-docker compose run --rm front pnpm install
-
-# 4. 開発サーバー起動
-docker compose up front
+rm -rf node_modules .next
+pnpm install
 ```
