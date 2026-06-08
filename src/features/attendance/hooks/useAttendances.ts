@@ -4,7 +4,7 @@ import type { AttendancesResponse } from '../types/attendance';
 
 export function useAttendances() {
   const { data, error } = useSWR<AttendancesResponse>(
-    '/api/v1/attendance/index',
+    '/api/v1/attendances/index',
     fetcher,
     { suspense: true },
   );
