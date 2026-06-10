@@ -24,7 +24,7 @@ export function StudentHeaderUI({ userName, onLogout }: StudentHeaderUIProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
-            <Link href="#">ユーザー情報編集</Link>
+            <Link href="/profile">ユーザー情報編集</Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={onLogout}>ログアウト</DropdownMenuItem>
         </DropdownMenuContent>

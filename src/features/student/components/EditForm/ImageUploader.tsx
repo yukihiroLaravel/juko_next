@@ -1,0 +1,108 @@
+'use client';
+
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Upload } from 'lucide-react';
+
+type Props = {
+  value?: File;
+  onChange: (file: File | undefined) => void;
+};
+
+export function ImageUploader({ value, onChange }: Props) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // value(File) からプレビュー用のURLを派生
+  const previewUrl = useMemo(
+    () => (value ? URL.createObjectURL(value) : null),
+    [value],
+  );
+
+  // 生成したURLは変更・破棄時に解放
+  useEffect(() => {
+    if (!previewUrl) return;
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [previewUrl]);
+
+  const handleFiles = (files: FileList | null) => {
+    const file = files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      onChange(file);
+    }
+  };
+
+  // ドラッグ＆ドロップ領域
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    handleFiles(e.dataTransfer.files);
+  };
+
+  // ドラッグオーバー時
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  // ドラッグリーブ時
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  return (
+    <div className="space-y-3">
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          handleFiles(e.target.files);
+          e.target.value = '';
+        }}
+      />
+
+      {/* クリックして選択 */}
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded px-3 py-1.5 text-sm"
+      >
+        クリックしてファイルを選択
+      </button>
+
+      {/* プレビュー枠 */}
+      <div className="flex h-30 items-center justify-center rounded-md border border-gray-300">
+        {previewUrl ? (
+          <img
+            src={previewUrl}
+            alt="プロフィール画像プレビュー"
+            className="h-full w-full rounded-md object-contain"
+          />
+        ) : (
+          <span>プロフィール画像</span>
+        )}
+      </div>
+
+      {/* ドラッグ＆ドロップ領域 */}
+      <div
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        className={`flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed py-6 text-center transition-colors ${
+          isDragging
+            ? 'border-primary bg-primary/10'
+            : 'border-gray-300 bg-white'
+        }`}
+      >
+        <Upload className="h-5 w-5 text-gray-700" />
+        <p className="text-xs text-gray-600">
+          または
+          <br />
+          ファイルをここにドラッグアンドドロップ
+        </p>
+      </div>
+    </div>
+  );
+}
