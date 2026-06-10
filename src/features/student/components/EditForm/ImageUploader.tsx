@@ -73,7 +73,7 @@ export function ImageUploader({ value, onChange }: Props) {
       </button>
 
       {/* プレビュー枠 */}
-      <div className="flex h-30 items-center justify-center rounded-md border border-gray-300">
+      <div className="border-input flex h-30 items-center justify-center rounded-md border shadow-xs">
         {previewUrl ? (
           <img
             src={previewUrl}
@@ -93,11 +93,11 @@ export function ImageUploader({ value, onChange }: Props) {
         className={`flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed py-6 text-center transition-colors ${
           isDragging
             ? 'border-primary bg-primary/10'
-            : 'border-gray-300 bg-white'
+            : 'border-input bg-white'
         }`}
       >
-        <Upload className="h-5 w-5 text-gray-700" />
-        <p className="text-xs text-gray-600">
+        <Upload className="h-5 w-5" />
+        <p className="text-xs">
           または
           <br />
           ファイルをここにドラッグアンドドロップ
