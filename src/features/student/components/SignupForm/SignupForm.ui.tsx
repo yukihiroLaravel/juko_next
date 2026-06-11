@@ -1,8 +1,11 @@
 'use client';
 
-import { UseFormReturn, FieldErrors } from 'react-hook-form';
-import { Controller } from 'react-hook-form';
-import { useFormState } from 'react-hook-form';
+import {
+  UseFormReturn,
+  FieldErrors,
+  Controller,
+  useFormState,
+} from 'react-hook-form';
 import { Input } from '@/components/atoms/Input';
 import { Button } from '@/components/atoms/Button';
 import { CalendarIcon } from 'lucide-react';
@@ -14,6 +17,7 @@ import {
 } from '@/components/atoms/Popover';
 import { RadioGroup, RadioGroupItem } from '@/components/atoms/RadioGroup';
 import { SignupSchema } from '../../validation/SignupSchema';
+import { format } from 'date-fns';
 
 type Props = {
   form: UseFormReturn<SignupSchema>;
@@ -118,9 +122,7 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
                     mode="single"
                     selected={field.value ? new Date(field.value) : undefined}
                     onSelect={(date) =>
-                      field.onChange(
-                        date ? date.toISOString().split('T')[0] : '',
-                      )
+                      field.onChange(date ? format(date, 'yyyy-MM-dd') : '')
                     }
                     captionLayout="dropdown"
                   />

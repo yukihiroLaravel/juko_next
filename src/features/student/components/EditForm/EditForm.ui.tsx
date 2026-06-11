@@ -1,8 +1,11 @@
 'use client';
 
-import { UseFormReturn, FieldErrors } from 'react-hook-form';
-import { Controller } from 'react-hook-form';
-import { useFormState } from 'react-hook-form';
+import {
+  UseFormReturn,
+  FieldErrors,
+  Controller,
+  useFormState,
+} from 'react-hook-form';
 import { Input } from '@/components/atoms/Input';
 import { Button } from '@/components/atoms/Button';
 import { CalendarIcon } from 'lucide-react';
@@ -15,6 +18,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/atoms/RadioGroup';
 import { EditSchema } from '../../validation/EditSchema';
 import { ImageUploader } from './ImageUploader';
+import { format } from 'date-fns';
 
 type Props = {
   form: UseFormReturn<EditSchema>;
@@ -119,9 +123,7 @@ export function EditFormUI({ form, onSubmit, onError }: Props) {
                     mode="single"
                     selected={field.value ? new Date(field.value) : undefined}
                     onSelect={(date) =>
-                      field.onChange(
-                        date ? date.toISOString().split('T')[0] : '',
-                      )
+                      field.onChange(date ? format(date, 'yyyy-MM-dd') : '')
                     }
                     captionLayout="dropdown"
                   />
@@ -141,7 +143,7 @@ export function EditFormUI({ form, onSubmit, onError }: Props) {
         <div>
           <label className="block text-sm">性別</label>
           <Controller
-            control={form.control}
+            control={control}
             name="gender"
             render={({ field }) => (
               <RadioGroup

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Upload } from 'lucide-react';
 
 type Props = {
@@ -9,26 +9,34 @@ type Props = {
 };
 
 export function ImageUploader({ value, onChange }: Props) {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // value(File) からプレビュー用のURLを派生
-  const previewUrl = useMemo(
-    () => (value ? URL.createObjectURL(value) : null),
-    [value],
-  );
-
-  // 生成したURLは変更・破棄時に解放
+  // value(File) からプレビュー用のURLを派生、生成したURLは変更・破棄時に解放
   useEffect(() => {
-    if (!previewUrl) return;
-    return () => URL.revokeObjectURL(previewUrl);
-  }, [previewUrl]);
+    if (!value) {
+      setPreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(value);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [value]);
 
+  // ファイル選択時、画像ファイルでない場合はエラーを表示
   const handleFiles = (files: FileList | null) => {
     const file = files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      onChange(file);
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setError('画像ファイルを選択してください');
+      return;
     }
+
+    setError(null);
+    onChange(file);
   };
 
   // ドラッグ＆ドロップ領域
@@ -73,7 +81,7 @@ export function ImageUploader({ value, onChange }: Props) {
       </button>
 
       {/* プレビュー枠 */}
-      <div className="border-input flex h-30 items-center justify-center rounded-md border shadow-xs">
+      <div className="border-input flex h-28 items-center justify-center rounded-md border shadow-xs">
         {previewUrl ? (
           <img
             src={previewUrl}
@@ -91,9 +99,7 @@ export function ImageUploader({ value, onChange }: Props) {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={`flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed py-6 text-center transition-colors ${
-          isDragging
-            ? 'border-primary bg-primary/10'
-            : 'border-input bg-white'
+          isDragging ? 'border-primary bg-primary/10' : 'border-input bg-white'
         }`}
       >
         <Upload className="h-5 w-5" />
@@ -103,6 +109,9 @@ export function ImageUploader({ value, onChange }: Props) {
           ファイルをここにドラッグアンドドロップ
         </p>
       </div>
+
+      {/* 画像以外を選択・ドロップしたときのフィードバック */}
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
 }
