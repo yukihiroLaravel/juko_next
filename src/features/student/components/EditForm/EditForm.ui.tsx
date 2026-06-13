@@ -16,16 +16,17 @@ import {
   PopoverContent,
 } from '@/components/atoms/Popover';
 import { RadioGroup, RadioGroupItem } from '@/components/atoms/RadioGroup';
-import { SignupSchema } from '../../validation/SignupSchema';
+import { EditSchema } from '../../validation/EditSchema';
+import { ImageUploader } from './ImageUploader';
 import { format } from 'date-fns';
 
 type Props = {
-  form: UseFormReturn<SignupSchema>;
-  onSubmit: (data: SignupSchema) => void;
-  onError: (errors: FieldErrors<SignupSchema>) => void;
+  form: UseFormReturn<EditSchema>;
+  onSubmit: (data: EditSchema) => void;
+  onError: (errors: FieldErrors<EditSchema>) => void;
 };
 
-export function SignupFormUI({ form, onSubmit, onError }: Props) {
+export function EditFormUI({ form, onSubmit, onError }: Props) {
   const { register, handleSubmit, control } = form;
 
   const { errors } = useFormState({
@@ -39,7 +40,7 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
         noValidate
         className="w-1/2 space-y-4 rounded-md bg-white p-6 shadow"
       >
-        <h1 className="text-center text-lg font-bold">新規登録画面</h1>
+        <h1 className="text-center text-lg font-bold">ユーザー情報編集</h1>
 
         {/* ユーザー名 */}
         <div>
@@ -142,7 +143,7 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
         <div>
           <label className="block text-sm">性別</label>
           <Controller
-            control={form.control}
+            control={control}
             name="gender"
             render={({ field }) => (
               <RadioGroup
@@ -179,9 +180,21 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
           )}
         </div>
 
-        {/* 登録ボタン */}
+        {/* プロフィール画像 */}
+        <div>
+          <label className="block text-sm">プロフィール画像</label>
+          <Controller
+            control={control}
+            name="profileImage"
+            render={({ field }) => (
+              <ImageUploader value={field.value} onChange={field.onChange} />
+            )}
+          />
+        </div>
+
+        {/* 更新ボタン */}
         <Button type="submit" className="w-full">
-          登録
+          更新
         </Button>
       </form>
     </div>
