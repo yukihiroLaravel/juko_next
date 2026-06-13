@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useForm, type FieldErrors } from 'react-hook-form';
 import { SignupFormUI } from './SignupForm.ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -27,7 +27,7 @@ export function SignupForm() {
   const onSubmit = (data: SignupSchema) => {
     console.log('submit data:', data);
   };
-  const onError = (errors: any) => {
+  const onError = (errors: FieldErrors<SignupSchema>) => {
     console.log('submit errors:', errors);
   };
 

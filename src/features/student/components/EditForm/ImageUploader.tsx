@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Upload } from 'lucide-react';
 
 type Props = {
@@ -9,21 +9,21 @@ type Props = {
 };
 
 export function ImageUploader({ value, onChange }: Props) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // value(File) からプレビュー用のURLを派生、生成したURLは変更・破棄時に解放
+  // value(File) からプレビュー用のURLを派生
+  const previewUrl = useMemo(
+    () => (value ? URL.createObjectURL(value) : null),
+    [value],
+  );
+
+  // 生成したURLは変更・破棄時に解放
   useEffect(() => {
-    if (!value) {
-      setPreviewUrl(null);
-      return;
-    }
-    const url = URL.createObjectURL(value);
-    setPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [value]);
+    if (!previewUrl) return;
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [previewUrl]);
 
   // ファイル選択時、画像ファイルでない場合はエラーを表示
   const handleFiles = (files: FileList | null) => {
