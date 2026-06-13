@@ -16,15 +16,15 @@
 
 ### 主なライブラリ
 
-| 用途 | ライブラリ |
-| --- | --- |
-| データフェッチング | SWR + axios |
-| フォーム / バリデーション | React Hook Form + zod (`@hookform/resolvers`) |
-| UIコンポーネント | shadcn/ui (Radix UI) + lucide-react (アイコン) |
-| 非同期 / エラーハンドリング | Suspense + react-error-boundary |
-| ドラッグ&ドロップ | dnd-kit |
-| 日付 | date-fns + react-day-picker |
-| Lint / フォーマット | ESLint 9 + Prettier |
+| 用途                        | ライブラリ                                     |
+| --------------------------- | ---------------------------------------------- |
+| データフェッチング          | SWR + axios                                    |
+| フォーム / バリデーション   | React Hook Form + zod (`@hookform/resolvers`)  |
+| UIコンポーネント            | shadcn/ui (Radix UI) + lucide-react (アイコン) |
+| 非同期 / エラーハンドリング | Suspense + react-error-boundary                |
+| ドラッグ&ドロップ           | dnd-kit                                        |
+| 日付                        | date-fns + react-day-picker                    |
+| Lint / フォーマット         | ESLint 9 + Prettier                            |
 
 ## 環境構築
 
@@ -55,8 +55,8 @@ pnpm install
 
 `.env.example` をコピーして `.env.local` を作成し、必要に応じて編集します。
 
-| 変数 | 説明 | 例 |
-| --- | --- | --- |
+| 変数                      | 説明                                                      | 例                              |
+| ------------------------- | --------------------------------------------------------- | ------------------------------- |
 | `NEXT_PUBLIC_STORAGE_URL` | Laravelバックエンドの Storage URL（クライアント側で参照） | `http://localhost:8080/storage` |
 
 ### 開発サーバー起動
