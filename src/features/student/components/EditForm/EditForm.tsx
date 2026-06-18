@@ -45,29 +45,24 @@ export function EditForm() {
     },
   });
 
-  const handleSubmit = form.handleSubmit(
-    async (data: EditSchema) => {
-      setSuccessMessage(null);
-      form.clearErrors('root');
+  const handleSubmit = form.handleSubmit(async (data: EditSchema) => {
+    setSuccessMessage(null);
+    form.clearErrors('root');
 
-      const result = await updateStudent(data);
+    const result = await updateStudent(data);
 
-      if (result.success) {
-        setSuccessMessage('ユーザー情報を更新しました');
-        return;
-      }
+    if (result.success) {
+      setSuccessMessage('ユーザー情報を更新しました');
+      return;
+    }
 
-      if (result.error) {
-        form.setError('root', {
-          type: 'server',
-          message: result.error,
-        });
-      }
-    },
-    (errors) => {
-      console.log('submit errors:', errors);
-    },
-  );
+    if (result.error) {
+      form.setError('root', {
+        type: 'server',
+        message: result.error,
+      });
+    }
+  });
 
   return (
     <EditFormUI
