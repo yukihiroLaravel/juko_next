@@ -46,6 +46,9 @@ export function EditForm() {
 
     if (result.success) {
       setSuccessMessage('ユーザー情報を更新しました');
+      // 送信値を新しい初期値として確定し、dirty 状態と選択済み画像をクリアする
+      // （同じ画像の再アップロードや、未変更フィールドの再送信を防ぐ）
+      form.reset({ ...data, profileImage: undefined });
       return;
     }
 
