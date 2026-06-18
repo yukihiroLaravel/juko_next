@@ -151,11 +151,11 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
                 onValueChange={field.onChange}
               >
                 <div className="flex items-center gap-2">
-                  <RadioGroupItem value="male" />
+                  <RadioGroupItem value="man" />
                   <span className="text-sm">男性</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <RadioGroupItem value="female" />
+                  <RadioGroupItem value="woman" />
                   <span className="text-sm">女性</span>
                 </div>
               </RadioGroup>

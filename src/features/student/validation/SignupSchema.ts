@@ -22,7 +22,7 @@ export const signupSchema = z.object({
       return selected <= today;
     }, '誕生日に未来の日付は指定できません'),
 
-  gender: z.enum(['male', 'female'], {
+  gender: z.enum(['man', 'woman'], {
     message: '性別を選択してください',
   }),
 

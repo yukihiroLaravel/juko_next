@@ -2,7 +2,6 @@
 
 import {
   UseFormReturn,
-  FieldErrors,
   Controller,
   useFormState,
 } from 'react-hook-form';
@@ -22,12 +21,20 @@ import { format } from 'date-fns';
 
 type Props = {
   form: UseFormReturn<EditSchema>;
-  onSubmit: (data: EditSchema) => void;
-  onError: (errors: FieldErrors<EditSchema>) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  isSubmitting?: boolean;
+  defaultProfileImageUrl?: string;
+  successMessage?: string | null;
 };
 
-export function EditFormUI({ form, onSubmit, onError }: Props) {
-  const { register, handleSubmit, control } = form;
+export function EditFormUI({
+  form,
+  onSubmit,
+  isSubmitting,
+  defaultProfileImageUrl,
+  successMessage,
+}: Props) {
+  const { register, control } = form;
 
   const { errors } = useFormState({
     control,
@@ -36,11 +43,23 @@ export function EditFormUI({ form, onSubmit, onError }: Props) {
   return (
     <div className="flex min-h-screen items-start justify-center bg-gray-100 pt-10">
       <form
-        onSubmit={handleSubmit(onSubmit, onError)}
+        onSubmit={onSubmit}
         noValidate
         className="w-1/2 space-y-4 rounded-md bg-white p-6 shadow"
       >
         <h1 className="text-center text-lg font-bold">ユーザー情報編集</h1>
+
+        {/* 成功・失敗メッセージ */}
+        {successMessage && (
+          <p className="rounded-md bg-green-50 p-3 text-sm text-green-700">
+            {successMessage}
+          </p>
+        )}
+        {errors.root && (
+          <p className="rounded-md bg-red-50 p-3 text-sm text-red-600">
+            {errors.root.message as string}
+          </p>
+        )}
 
         {/* ユーザー名 */}
         <div>
@@ -152,11 +171,11 @@ export function EditFormUI({ form, onSubmit, onError }: Props) {
                 onValueChange={field.onChange}
               >
                 <div className="flex items-center gap-2">
-                  <RadioGroupItem value="male" />
+                  <RadioGroupItem value="man" />
                   <span className="text-sm">男性</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <RadioGroupItem value="female" />
+                  <RadioGroupItem value="woman" />
                   <span className="text-sm">女性</span>
                 </div>
               </RadioGroup>
@@ -187,14 +206,18 @@ export function EditFormUI({ form, onSubmit, onError }: Props) {
             control={control}
             name="profileImage"
             render={({ field }) => (
-              <ImageUploader value={field.value} onChange={field.onChange} />
+              <ImageUploader
+                value={field.value}
+                onChange={field.onChange}
+                defaultImageUrl={defaultProfileImageUrl}
+              />
             )}
           />
         </div>
 
         {/* 更新ボタン */}
-        <Button type="submit" className="w-full">
-          更新
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? '更新中...' : '更新'}
         </Button>
       </form>
     </div>

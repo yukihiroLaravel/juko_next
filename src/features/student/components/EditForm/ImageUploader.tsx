@@ -6,9 +6,10 @@ import { Upload } from 'lucide-react';
 type Props = {
   value?: File;
   onChange: (file: File | undefined) => void;
+  defaultImageUrl?: string;
 };
 
-export function ImageUploader({ value, onChange }: Props) {
+export function ImageUploader({ value, onChange, defaultImageUrl }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -18,6 +19,9 @@ export function ImageUploader({ value, onChange }: Props) {
     () => (value ? URL.createObjectURL(value) : null),
     [value],
   );
+
+  // ファイル未選択時はAPIから取得した既存画像URLを表示
+  const displayUrl = previewUrl ?? defaultImageUrl ?? null;
 
   // 生成したURLは変更・破棄時に解放
   useEffect(() => {
@@ -82,9 +86,9 @@ export function ImageUploader({ value, onChange }: Props) {
 
       {/* プレビュー枠 */}
       <div className="border-input flex h-28 items-center justify-center rounded-md border shadow-xs">
-        {previewUrl ? (
+        {displayUrl ? (
           <img
-            src={previewUrl}
+            src={displayUrl}
             alt="プロフィール画像プレビュー"
             className="h-full w-full rounded-md object-contain"
           />
