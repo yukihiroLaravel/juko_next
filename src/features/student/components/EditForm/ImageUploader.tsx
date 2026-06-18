@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Upload } from 'lucide-react';
 
 type Props = {
@@ -14,20 +14,18 @@ export function ImageUploader({ value, onChange, defaultImageUrl }: Props) {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  // value(File) からプレビュー用のURLを派生する（render 中に派生し setState はしない）
+  const previewUrl = useMemo(
+    () => (value ? URL.createObjectURL(value) : null),
+    [value],
+  );
 
-  // value(File) からプレビュー用のURLを生成し、変更・アンマウント時に解放する。
-  // useMemo（render内）で生成すると Strict Mode の二重実行などで解放漏れが
-  // 起きるため、生成と解放が 1:1 で対応する useEffect 内で行う。
+  // 生成したURLは value 変更時・アンマウント時に解放する。
+  // previewUrl が変わると直前の effect の cleanup が走り、前の URL が revoke される。
   useEffect(() => {
-    if (!value) {
-      setPreviewUrl(null);
-      return;
-    }
-    const url = URL.createObjectURL(value);
-    setPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [value]);
+    if (!previewUrl) return;
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [previewUrl]);
 
   // ファイル未選択時はAPIから取得した既存画像URLを表示
   const displayUrl = previewUrl ?? defaultImageUrl ?? null;
