@@ -68,7 +68,8 @@ export function useUpdateStudent() {
                 : undefined;
               return {
                 success: false,
-                error: firstError ?? data?.message ?? '入力内容に誤りがあります',
+                error:
+                  firstError ?? data?.message ?? '入力内容に誤りがあります',
               };
             }
             default:
