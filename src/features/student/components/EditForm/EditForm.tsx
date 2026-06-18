@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { format } from 'date-fns';
 import { EditFormUI } from './EditForm.ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -11,13 +10,7 @@ import {
 } from '@/features/student/validation/EditSchema';
 import { useStudent } from '@/features/student/hooks/useStudent';
 import { useUpdateStudent } from '@/features/student/hooks/useUpdateStudent';
-
-// 日付をyyyy-MM-dd形式に変換
-function toInputDate(value?: string): string {
-  if (!value) return '';
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? '' : format(date, 'yyyy-MM-dd');
-}
+import { toInputDate } from '@/utils/date';
 
 // APIのgender文字列をフォームのenumに変換（想定外の値はundefinedにする）
 function toGender(value?: string): EditSchema['gender'] | undefined {

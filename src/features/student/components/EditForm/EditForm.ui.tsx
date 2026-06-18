@@ -17,7 +17,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/atoms/RadioGroup';
 import { EditSchema } from '../../validation/EditSchema';
 import { ImageUploader } from './ImageUploader';
-import { format } from 'date-fns';
+import { parseInputDate, formatInputDate } from '@/utils/date';
 
 type Props = {
   form: UseFormReturn<EditSchema>;
@@ -150,9 +150,9 @@ export function EditFormUI({
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
-                    selected={field.value ? new Date(field.value) : undefined}
+                    selected={parseInputDate(field.value)}
                     onSelect={(date) =>
-                      field.onChange(date ? format(date, 'yyyy-MM-dd') : '')
+                      field.onChange(date ? formatInputDate(date) : '')
                     }
                     captionLayout="dropdown"
                   />

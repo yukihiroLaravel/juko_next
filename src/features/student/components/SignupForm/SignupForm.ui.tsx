@@ -17,7 +17,7 @@ import {
 } from '@/components/atoms/Popover';
 import { RadioGroup, RadioGroupItem } from '@/components/atoms/RadioGroup';
 import { SignupSchema } from '../../validation/SignupSchema';
-import { format } from 'date-fns';
+import { parseInputDate, formatInputDate } from '@/utils/date';
 
 type Props = {
   form: UseFormReturn<SignupSchema>;
@@ -130,9 +130,9 @@ export function SignupFormUI({ form, onSubmit, onError }: Props) {
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
-                    selected={field.value ? new Date(field.value) : undefined}
+                    selected={parseInputDate(field.value)}
                     onSelect={(date) =>
-                      field.onChange(date ? format(date, 'yyyy-MM-dd') : '')
+                      field.onChange(date ? formatInputDate(date) : '')
                     }
                     captionLayout="dropdown"
                   />
