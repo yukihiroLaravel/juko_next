@@ -19,6 +19,11 @@ function toInputDate(value?: string): string {
   return Number.isNaN(date.getTime()) ? '' : format(date, 'yyyy-MM-dd');
 }
 
+// APIのgender文字列をフォームのenumに変換（想定外の値はundefinedにする）
+function toGender(value?: string): EditSchema['gender'] | undefined {
+  return value === 'man' || value === 'woman' ? value : undefined;
+}
+
 export function EditForm() {
   const { student } = useStudent();
   const { updateStudent, isSubmitting } = useUpdateStudent();
@@ -34,7 +39,7 @@ export function EditForm() {
       occupation: student?.occupation ?? '',
       purpose: student?.purpose ?? '',
       birthday: toInputDate(student?.birth_date),
-      gender: student?.gender as EditSchema['gender'] | undefined,
+      gender: toGender(student?.gender),
       address: student?.address ?? '',
       profileImage: undefined,
     },
