@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { parseInputDate } from '@/utils/date';
 
 export const signupSchema = z.object({
   userName: z.string().min(1, 'ユーザー名は必須です'),
@@ -9,20 +10,21 @@ export const signupSchema = z.object({
     .min(1, 'メールアドレスは必須です')
     .email('メールアドレスの形式が正しくありません'),
 
-  occupation: z.string().optional(),
-  purpose: z.string().optional(),
+  occupation: z.string().min(1, '職業は必須です'),
+  purpose: z.string().min(1, '目的は必須です'),
 
   birthday: z
     .string()
     .min(1, '誕生日は必須です')
     .refine((value) => {
-      const selected = new Date(value);
+      const selected = parseInputDate(value);
+      if (!selected) return false;
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       return selected <= today;
     }, '誕生日に未来の日付は指定できません'),
 
-  gender: z.enum(['male', 'female'], {
+  gender: z.enum(['man', 'woman'], {
     message: '性別を選択してください',
   }),
 

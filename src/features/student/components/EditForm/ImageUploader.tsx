@@ -6,24 +6,29 @@ import { Upload } from 'lucide-react';
 type Props = {
   value?: File;
   onChange: (file: File | undefined) => void;
+  defaultImageUrl?: string;
 };
 
-export function ImageUploader({ value, onChange }: Props) {
+export function ImageUploader({ value, onChange, defaultImageUrl }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // value(File) からプレビュー用のURLを派生
+  // value(File) からプレビュー用のURLを派生する（render 中に派生し setState はしない）
   const previewUrl = useMemo(
     () => (value ? URL.createObjectURL(value) : null),
     [value],
   );
 
-  // 生成したURLは変更・破棄時に解放
+  // 生成したURLは value 変更時・アンマウント時に解放する。
+  // previewUrl が変わると直前の effect の cleanup が走り、前の URL が revoke される。
   useEffect(() => {
     if (!previewUrl) return;
     return () => URL.revokeObjectURL(previewUrl);
   }, [previewUrl]);
+
+  // ファイル未選択時はAPIから取得した既存画像URLを表示
+  const displayUrl = previewUrl ?? defaultImageUrl ?? null;
 
   // ファイル選択時、画像ファイルでない場合はエラーを表示
   const handleFiles = (files: FileList | null) => {
@@ -82,9 +87,9 @@ export function ImageUploader({ value, onChange }: Props) {
 
       {/* プレビュー枠 */}
       <div className="border-input flex h-28 items-center justify-center rounded-md border shadow-xs">
-        {previewUrl ? (
+        {displayUrl ? (
           <img
-            src={previewUrl}
+            src={displayUrl}
             alt="プロフィール画像プレビュー"
             className="h-full w-full rounded-md object-contain"
           />

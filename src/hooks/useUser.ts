@@ -1,8 +1,6 @@
 import useSWR from 'swr';
-import { Axios } from '@/lib/api';
+import { fetcher } from '@/utils/fetcher';
 import type { User } from '@/features/auth/types';
-
-const fetcher = (url: string) => Axios.get<User>(url).then((res) => res.data);
 
 export function useUser() {
   const { data, error, isLoading, mutate } = useSWR<User>(
