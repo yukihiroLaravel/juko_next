@@ -109,12 +109,22 @@ export function EditFormUI({
         <div>
           <label className="block text-sm">職業</label>
           <Input {...register('occupation')} />
+          {errors.occupation && (
+            <p className="text-sm text-red-500">
+              {errors.occupation.message as string}
+            </p>
+          )}
         </div>
 
         {/* 目的 */}
         <div>
           <label className="block text-sm">目的</label>
           <Input {...register('purpose')} />
+          {errors.purpose && (
+            <p className="text-sm text-red-500">
+              {errors.purpose.message as string}
+            </p>
+          )}
         </div>
 
         {/* 誕生日 */}

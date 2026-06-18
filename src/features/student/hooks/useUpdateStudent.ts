@@ -23,11 +23,11 @@ export function useUpdateStudent() {
         formData.append('last_name', data.lastName);
         formData.append('first_name', data.firstName);
         formData.append('email', data.email);
-        formData.append('occupation', data.occupation ?? '');
-        formData.append('purpose', data.purpose ?? '');
+        formData.append('occupation', data.occupation);
+        formData.append('purpose', data.purpose);
         formData.append('birth_date', data.birthday);
         formData.append('gender', data.gender);
-        formData.append('address', data.address);        
+        formData.append('address', data.address);
         if (data.profileImage) {
           formData.append('profile_image', data.profileImage);
         }

@@ -9,8 +9,8 @@ export const signupSchema = z.object({
     .min(1, 'メールアドレスは必須です')
     .email('メールアドレスの形式が正しくありません'),
 
-  occupation: z.string().optional(),
-  purpose: z.string().optional(),
+  occupation: z.string().min(1, '職業は必須です'),
+  purpose: z.string().min(1, '目的は必須です'),
 
   birthday: z
     .string()
