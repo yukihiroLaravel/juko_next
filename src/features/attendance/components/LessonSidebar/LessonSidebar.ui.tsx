@@ -35,9 +35,9 @@ export function LessonSidebarUI({
           <p className="text-xs font-medium">チャプター進捗</p>
           <Badge variant="secondary">{progressPercent}%</Badge>
         </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+        <div className="bg-muted h-2 w-full overflow-hidden rounded-full">
           <div
-            className="h-full rounded-full bg-primary transition-all"
+            className="bg-primary h-full rounded-full transition-all"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -56,7 +56,7 @@ export function LessonSidebarUI({
                   <li key={lesson.id} className="border-b">
                     <Link
                       href={`/attendance/${attendanceId}/lessons/${lesson.id}`}
-                      className="flex items-center justify-between px-3 py-3 hover:bg-accent"
+                      className="hover:bg-accent flex items-center justify-between px-3 py-3"
                     >
                       <span
                         className={cn(
@@ -64,10 +64,8 @@ export function LessonSidebarUI({
                           isCompleted && 'text-orange-500',
                           !isCompleted &&
                             isActive &&
-                            'font-medium text-primary',
-                          !isCompleted &&
-                            !isActive &&
-                            'text-muted-foreground',
+                            'text-primary font-medium',
+                          !isCompleted && !isActive && 'text-muted-foreground',
                         )}
                       >
                         {lesson.title}

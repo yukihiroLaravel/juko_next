@@ -41,7 +41,10 @@ export function LessonUI({
   return (
     <div className="space-y-4">
       {/* パンくず */}
-      <nav aria-label="パンくずリスト" className="text-muted-foreground text-xs">
+      <nav
+        aria-label="パンくずリスト"
+        className="text-muted-foreground text-xs"
+      >
         <ol className="flex flex-wrap items-center gap-1">
           {breadcrumbs.map((item, breadcrumbIndex) => {
             const isLast = breadcrumbIndex === breadcrumbs.length - 1;
@@ -80,10 +83,8 @@ export function LessonUI({
           className="aspect-video w-full rounded bg-black"
         />
       ) : (
-        <div className="flex aspect-video w-full items-center justify-center rounded bg-muted">
-          <span>
-            レッスン動画
-          </span>
+        <div className="bg-muted flex aspect-video w-full items-center justify-center rounded">
+          <span>レッスン動画</span>
         </div>
       )}
 

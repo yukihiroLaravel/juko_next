@@ -3,11 +3,7 @@
 import { useState } from 'react';
 
 import { LessonStatus } from '@/features/attendance/types/lessonStatus';
-import {
-  LessonUI,
-  LessonBreadcrumbItem,
-  LessonIndexItem,
-} from './Lesson.ui';
+import { LessonUI, LessonBreadcrumbItem, LessonIndexItem } from './Lesson.ui';
 
 // チャプタータイトル（値はダミー）
 const chapterTitle = 'チャプタータイトル';
