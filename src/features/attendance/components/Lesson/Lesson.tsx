@@ -34,7 +34,9 @@ export function Lesson({ attendanceId, lessonId }: LessonProps) {
   // 受講講座のチャプターを取得
   const chapters = attendanceDetail?.course.chapters ?? [];
   const chapter = chapters.find((chapter) =>
-    chapter.lessons.some((chapterLesson) => String(chapterLesson.lesson_id) === lessonId),
+    chapter.lessons.some(
+      (chapterLesson) => String(chapterLesson.lesson_id) === lessonId,
+    ),
   );
 
   // チャプターに紐づく対象レッスンを取得
