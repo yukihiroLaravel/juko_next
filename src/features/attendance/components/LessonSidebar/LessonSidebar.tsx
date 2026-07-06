@@ -1,18 +1,11 @@
 'use client';
 
 import type { LessonListItem } from '@/features/attendance/types/lessonListItem';
+import { useLesson } from '@/features/attendance/hooks/useLesson';
 import { LessonSidebarUI } from './LessonSidebar.ui';
 
 /** チャプター進捗率（値はダミー） */
 const chapterProgressPercent = 33;
-
-/** レッスン一覧（値はダミー） */
-const lessons: LessonListItem[] = [
-  { id: '1', title: 'Lesson 1', status: 'in_attendance' },
-  { id: '2', title: 'Lesson 2', status: 'before_attendance' },
-  { id: '3', title: 'Lesson 3', status: 'before_attendance' },
-  { id: '4', title: 'Lesson 4', status: 'completed_attendance' },
-];
 
 type LessonSidebarProps = {
   attendanceId: string;
@@ -23,6 +16,25 @@ export function LessonSidebar({
   attendanceId,
   activeLessonId,
 }: LessonSidebarProps) {
+  const { attendanceDetail } = useLesson(attendanceId);
+
+  // 受講講座のチャプターを取得
+  const chapters = attendanceDetail?.course.chapters ?? [];
+  const activeChapter = chapters.find((chapter) =>
+    chapter.lessons.some(
+      (lesson) => String(lesson.lesson_id) === activeLessonId,
+    ),
+  );
+
+  // チャプターに紐づく全レッスンを取得
+  const lessons: LessonListItem[] = (activeChapter?.lessons ?? []).map(
+    (lesson) => ({
+      id: String(lesson.lesson_id),
+      title: lesson.title,
+      status: lesson.lesson_attendance?.status ?? 'before_attendance',
+    }),
+  );
+
   return (
     <LessonSidebarUI
       attendanceId={attendanceId}

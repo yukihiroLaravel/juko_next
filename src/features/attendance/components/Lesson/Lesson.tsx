@@ -3,18 +3,8 @@
 import { useState } from 'react';
 
 import { LessonStatus } from '@/features/attendance/types/lessonStatus';
+import { useLesson } from '@/features/attendance/hooks/useLesson';
 import { LessonUI, LessonBreadcrumbItem, LessonIndexItem } from './Lesson.ui';
-
-// チャプタータイトル（値はダミー）
-const chapterTitle = 'チャプタータイトル';
-
-// レッスン一覧（値はダミー）
-const lessons = [
-  { id: '1', title: 'Lesson 1' },
-  { id: '2', title: 'Lesson 2' },
-  { id: '3', title: 'Lesson 3' },
-  { id: '4', title: 'Lesson 4' },
-];
 
 // パンくずリスト（URLは未実装）
 const breadcrumbs: LessonBreadcrumbItem[] = [
@@ -23,9 +13,6 @@ const breadcrumbs: LessonBreadcrumbItem[] = [
   { label: 'チャプター&レッスン一覧', href: '#' },
   { label: 'レッスン' },
 ];
-
-// 動画URL（値はダミー）
-const videoUrl = '';
 
 // 目次（値はダミー）
 const index: LessonIndexItem[] = [
@@ -37,14 +24,30 @@ const index: LessonIndexItem[] = [
 ];
 
 type LessonProps = {
+  attendanceId: string;
   lessonId: string;
 };
 
-export function Lesson({ lessonId }: LessonProps) {
-  const lessonTitle =
-    lessons.find((lesson) => lesson.id === lessonId)?.title ?? 'レッスン';
+export function Lesson({ attendanceId, lessonId }: LessonProps) {
+  const { attendanceDetail } = useLesson(attendanceId);
 
-  const [status, setStatus] = useState<LessonStatus>('before_attendance');
+  // 受講講座のチャプターを取得
+  const chapters = attendanceDetail?.course.chapters ?? [];
+  const chapter = chapters.find((chapter) =>
+    chapter.lessons.some((chapterLesson) => String(chapterLesson.lesson_id) === lessonId),
+  );
+
+  // チャプターに紐づく対象レッスンを取得
+  const lesson = chapter?.lessons.find(
+    (lesson) => String(lesson.lesson_id) === lessonId,
+  );
+
+  const chapterTitle = chapter?.title;
+  const lessonTitle = lesson?.title;
+  const videoUrl = lesson?.url ?? '';
+  const [status, setStatus] = useState<LessonStatus>(
+    lesson?.lesson_attendance?.status ?? 'before_attendance',
+  );
 
   // 現状はstateボタン切り替え＋ログ出力
   const handleStatusChange = (next: LessonStatus) => {
