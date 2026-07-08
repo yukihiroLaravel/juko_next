@@ -3,7 +3,8 @@
 import { useState } from 'react';
 
 import { LessonStatus } from '@/features/attendance/types/lessonStatus';
-import { useLesson } from '@/features/attendance/hooks/useLesson';
+import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
+import { mapAttendanceDetailToLesson } from '@/features/attendance/utils/mapAttendanceDetailToLesson';
 import { LessonUI, LessonBreadcrumbItem, LessonIndexItem } from './Lesson.ui';
 
 // パンくずリスト（URLは未実装）
@@ -29,40 +30,39 @@ type LessonProps = {
 };
 
 export function Lesson({ attendanceId, lessonId }: LessonProps) {
-  const { attendanceDetail } = useLesson(attendanceId);
-
-  // 受講講座のチャプターを取得
-  const chapters = attendanceDetail?.course.chapters ?? [];
-  const chapter = chapters.find((chapter) =>
-    chapter.lessons.some(
-      (chapterLesson) => String(chapterLesson.lesson_id) === lessonId,
-    ),
-  );
-
-  // チャプターに紐づく対象レッスンを取得
-  const lesson = chapter?.lessons.find(
-    (lesson) => String(lesson.lesson_id) === lessonId,
-  );
-
-  const chapterTitle = chapter?.title;
-  const lessonTitle = lesson?.title;
-  const videoUrl = lesson?.url ?? '';
-  const [status, setStatus] = useState<LessonStatus>(
-    lesson?.lesson_attendance?.status ?? 'before_attendance',
-  );
+  const { attendanceDetail, error, isLoading } =
+    useAttendanceDetail(attendanceId);
 
   // 現状はstateボタン切り替え＋ログ出力
+  const [status, setStatus] = useState<LessonStatus>('before_attendance');
+
   const handleStatusChange = (next: LessonStatus) => {
     setStatus(next);
     console.log('lesson status changed:', next);
   };
 
+  if (error) {
+    return <p className="text-sm text-red-500">データの取得に失敗しました。</p>;
+  }
+
+  if (isLoading || !attendanceDetail) {
+    return <p className="text-muted-foreground text-sm">読み込み中...</p>;
+  }
+
+  const lessonView = mapAttendanceDetailToLesson(attendanceDetail, lessonId);
+
+  if (!lessonView) {
+    return (
+      <p className="text-muted-foreground text-sm">レッスンが見つかりません</p>
+    );
+  }
+
   return (
     <LessonUI
       breadcrumbs={breadcrumbs}
-      chapterTitle={chapterTitle}
-      lessonTitle={lessonTitle}
-      videoUrl={videoUrl}
+      chapterTitle={lessonView.chapterTitle}
+      lessonTitle={lessonView.lessonTitle}
+      videoUrl={lessonView.videoUrl}
       index={index}
       status={status}
       onStatusChange={handleStatusChange}

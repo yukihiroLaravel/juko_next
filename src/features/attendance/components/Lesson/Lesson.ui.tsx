@@ -21,8 +21,8 @@ const STATUS_BUTTONS: { status: LessonStatus; label: string }[] = [
 
 type LessonUIProps = {
   breadcrumbs: LessonBreadcrumbItem[];
-  chapterTitle?: string;
-  lessonTitle?: string;
+  chapterTitle: string;
+  lessonTitle: string;
   videoUrl?: string;
   index: LessonIndexItem[];
   status: LessonStatus;

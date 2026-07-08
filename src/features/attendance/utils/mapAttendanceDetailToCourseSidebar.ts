@@ -8,7 +8,7 @@ export function mapAttendanceDetailToCourseSidebar(
 ): CourseSidebarUIProps {
   return {
     thumbnailUrl: `${storageUrl}/${attendanceDetail.course.image}`,
-    categoryName: attendanceDetail.course.tags[0]?.name ?? '',
+    categoryName: attendanceDetail.course.tags[0]?.content ?? '',
     courseName: attendanceDetail.course.title,
     // progress_percent がAPIレスポンスに含まれていないため暫定値
     progressPercent: 20,

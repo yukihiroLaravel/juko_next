@@ -1,7 +1,8 @@
 'use client';
 
-import type { LessonListItem } from '@/features/attendance/types/lessonListItem';
-import { useLesson } from '@/features/attendance/hooks/useLesson';
+import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
+import { mapAttendanceDetailToLessonSidebar } from '@/features/attendance/utils/mapAttendanceDetailToLessonSidebar';
+import { Sidebar, SidebarHeader } from '@/components/atoms/Sidebar';
 import { LessonSidebarUI } from './LessonSidebar.ui';
 
 /** チャプター進捗率（値はダミー） */
@@ -16,23 +17,32 @@ export function LessonSidebar({
   attendanceId,
   activeLessonId,
 }: LessonSidebarProps) {
-  const { attendanceDetail } = useLesson(attendanceId);
+  const { attendanceDetail, error, isLoading } =
+    useAttendanceDetail(attendanceId);
 
-  // 受講講座のチャプターを取得
-  const chapters = attendanceDetail?.course.chapters ?? [];
-  const activeChapter = chapters.find((chapter) =>
-    chapter.lessons.some(
-      (lesson) => String(lesson.lesson_id) === activeLessonId,
-    ),
-  );
+  if (error) {
+    return (
+      <Sidebar collapsible="offcanvas">
+        <SidebarHeader className="p-4">
+          <p className="text-sm text-red-500">データの取得に失敗しました。</p>
+        </SidebarHeader>
+      </Sidebar>
+    );
+  }
 
-  // チャプターに紐づく全レッスンを取得
-  const lessons: LessonListItem[] = (activeChapter?.lessons ?? []).map(
-    (lesson) => ({
-      id: String(lesson.lesson_id),
-      title: lesson.title,
-      status: lesson.lesson_attendance?.status ?? 'before_attendance',
-    }),
+  if (isLoading || !attendanceDetail) {
+    return (
+      <Sidebar collapsible="offcanvas">
+        <SidebarHeader className="p-4">
+          <p className="text-muted-foreground text-sm">読み込み中...</p>
+        </SidebarHeader>
+      </Sidebar>
+    );
+  }
+
+  const lessons = mapAttendanceDetailToLessonSidebar(
+    attendanceDetail,
+    activeLessonId,
   );
 
   return (
