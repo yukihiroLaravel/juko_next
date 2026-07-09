@@ -1,12 +1,10 @@
 'use client';
 
 import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
+import { useAttendanceProgress } from '@/features/attendance/hooks/useAttendanceProgress';
 import { mapAttendanceDetailToLessonSidebar } from '@/features/attendance/utils/mapAttendanceDetailToLessonSidebar';
 import { Sidebar, SidebarHeader } from '@/components/atoms/Sidebar';
 import { LessonSidebarUI } from './LessonSidebar.ui';
-
-/** チャプター進捗率（値はダミー） */
-const chapterProgressPercent = 33;
 
 type LessonSidebarProps = {
   attendanceId: string;
@@ -19,8 +17,13 @@ export function LessonSidebar({
 }: LessonSidebarProps) {
   const { attendanceDetail, error, isLoading } =
     useAttendanceDetail(attendanceId);
+  const {
+    attendanceProgress,
+    error: progressError,
+    isLoading: isProgressLoading,
+  } = useAttendanceProgress(attendanceId);
 
-  if (error) {
+  if (error || progressError) {
     return (
       <Sidebar collapsible="offcanvas">
         <SidebarHeader className="p-4">
@@ -30,7 +33,12 @@ export function LessonSidebar({
     );
   }
 
-  if (isLoading || !attendanceDetail) {
+  if (
+    isLoading ||
+    isProgressLoading ||
+    !attendanceDetail ||
+    !attendanceProgress
+  ) {
     return (
       <Sidebar collapsible="offcanvas">
         <SidebarHeader className="p-4">
@@ -45,10 +53,18 @@ export function LessonSidebar({
     activeLessonId,
   );
 
+  const totalLessons = attendanceProgress.number_of_total_lessons;
+  const progressPercent =
+    totalLessons > 0
+      ? Math.floor(
+          (attendanceProgress.number_of_completed_lessons / totalLessons) * 100,
+        )
+      : 0;
+
   return (
     <LessonSidebarUI
       attendanceId={attendanceId}
-      progressPercent={chapterProgressPercent}
+      progressPercent={progressPercent}
       lessons={lessons}
       activeLessonId={activeLessonId}
     />
