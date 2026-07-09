@@ -3,18 +3,9 @@
 import { useState } from 'react';
 
 import { LessonStatus } from '@/features/attendance/types/lessonStatus';
+import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
+import { mapAttendanceDetailToLesson } from '@/features/attendance/utils/mapAttendanceDetailToLesson';
 import { LessonUI, LessonBreadcrumbItem, LessonIndexItem } from './Lesson.ui';
-
-// チャプタータイトル（値はダミー）
-const chapterTitle = 'チャプタータイトル';
-
-// レッスン一覧（値はダミー）
-const lessons = [
-  { id: '1', title: 'Lesson 1' },
-  { id: '2', title: 'Lesson 2' },
-  { id: '3', title: 'Lesson 3' },
-  { id: '4', title: 'Lesson 4' },
-];
 
 // パンくずリスト（URLは未実装）
 const breadcrumbs: LessonBreadcrumbItem[] = [
@@ -23,9 +14,6 @@ const breadcrumbs: LessonBreadcrumbItem[] = [
   { label: 'チャプター&レッスン一覧', href: '#' },
   { label: 'レッスン' },
 ];
-
-// 動画URL（値はダミー）
-const videoUrl = '';
 
 // 目次（値はダミー）
 const index: LessonIndexItem[] = [
@@ -37,27 +25,44 @@ const index: LessonIndexItem[] = [
 ];
 
 type LessonProps = {
+  attendanceId: string;
   lessonId: string;
 };
 
-export function Lesson({ lessonId }: LessonProps) {
-  const lessonTitle =
-    lessons.find((lesson) => lesson.id === lessonId)?.title ?? 'レッスン';
-
-  const [status, setStatus] = useState<LessonStatus>('before_attendance');
+export function Lesson({ attendanceId, lessonId }: LessonProps) {
+  const { attendanceDetail, error, isLoading } =
+    useAttendanceDetail(attendanceId);
 
   // 現状はstateボタン切り替え＋ログ出力
+  const [status, setStatus] = useState<LessonStatus>('before_attendance');
+
   const handleStatusChange = (next: LessonStatus) => {
     setStatus(next);
     console.log('lesson status changed:', next);
   };
 
+  if (error) {
+    return <p className="text-sm text-red-500">データの取得に失敗しました。</p>;
+  }
+
+  if (isLoading || !attendanceDetail) {
+    return <p className="text-muted-foreground text-sm">読み込み中...</p>;
+  }
+
+  const lessonView = mapAttendanceDetailToLesson(attendanceDetail, lessonId);
+
+  if (!lessonView) {
+    return (
+      <p className="text-muted-foreground text-sm">レッスンが見つかりません</p>
+    );
+  }
+
   return (
     <LessonUI
       breadcrumbs={breadcrumbs}
-      chapterTitle={chapterTitle}
-      lessonTitle={lessonTitle}
-      videoUrl={videoUrl}
+      chapterTitle={lessonView.chapterTitle}
+      lessonTitle={lessonView.lessonTitle}
+      videoUrl={lessonView.videoUrl}
       index={index}
       status={status}
       onStatusChange={handleStatusChange}

@@ -24,7 +24,11 @@ export default function LessonPage() {
           <span className="text-sm font-medium">レッスン</span>
         </header>
         <main className="flex-1 space-y-2 p-4">
-          <Lesson key={lessonId} lessonId={lessonId} />
+          <Lesson
+            key={`${attendanceId}-${lessonId}`}
+            attendanceId={attendanceId}
+            lessonId={lessonId}
+          />
         </main>
       </SidebarInset>
     </SidebarProvider>
