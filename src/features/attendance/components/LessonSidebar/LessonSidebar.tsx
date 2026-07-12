@@ -3,6 +3,7 @@
 import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
 import { useAttendanceProgress } from '@/features/attendance/hooks/useAttendanceProgress';
 import { mapAttendanceDetailToLessonSidebar } from '@/features/attendance/utils/mapAttendanceDetailToLessonSidebar';
+import { calculateProgressPercent } from '@/features/attendance/utils/calculateProgressPercent';
 import { Sidebar, SidebarHeader } from '@/components/atoms/Sidebar';
 import { LessonSidebarUI } from './LessonSidebar.ui';
 
@@ -53,13 +54,10 @@ export function LessonSidebar({
     activeLessonId,
   );
 
-  const totalLessons = attendanceProgress.number_of_total_lessons;
-  const progressPercent =
-    totalLessons > 0
-      ? Math.floor(
-          (attendanceProgress.number_of_completed_lessons / totalLessons) * 100,
-        )
-      : 0;
+  const progressPercent = calculateProgressPercent(
+    attendanceProgress.number_of_completed_lessons,
+    attendanceProgress.number_of_total_lessons,
+  );
 
   return (
     <LessonSidebarUI

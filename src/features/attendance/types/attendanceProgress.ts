@@ -1,14 +1,3 @@
-export type Attendance = {
-  attendance_id: number;
-  course: Course;
-};
-
-export type Course = {
-  course_id: number;
-  title: string;
-  image: string;
-};
-
 export type ContinueFrom = {
   chapter_id: number;
   chapter_title: string;
@@ -17,7 +6,14 @@ export type ContinueFrom = {
 };
 
 export type AttendanceProgress = {
-  attendance: Attendance;
+  attendance: {
+    attendance_id: number;
+    course: {
+      course_id: number;
+      title: string;
+      image: string;
+    };
+  };
   number_of_completed_chapters: number;
   number_of_total_chapters: number;
   number_of_completed_lessons: number;
