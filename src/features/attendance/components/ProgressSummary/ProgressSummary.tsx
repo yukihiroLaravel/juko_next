@@ -1,5 +1,6 @@
 'use client';
 
+import { calculateProgressPercent } from '@/features/attendance/utils/calculateProgressPercent';
 import { ProgressSummaryUI } from './ProgressSummary.ui';
 
 export function ProgressSummary() {
@@ -9,7 +10,10 @@ export function ProgressSummary() {
   const completedLessons = 5;
   const totalLessons = 30;
 
-  const progressRate = Math.round((completedChapters / totalChapters) * 100);
+  const progressRate = calculateProgressPercent(
+    completedChapters,
+    totalChapters,
+  );
 
   const handleContinue = () => {
     // TODO: 最後に未完了のレッスンへ遷移
