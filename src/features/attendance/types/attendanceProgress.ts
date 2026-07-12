@@ -18,7 +18,8 @@ export type AttendanceProgress = {
   number_of_total_chapters: number;
   number_of_completed_lessons: number;
   number_of_total_lessons: number;
-  continue_from: ContinueFrom;
+  /** 全レッスン完了時は null が返る */
+  continue_from: ContinueFrom | null;
 };
 
 export type AttendanceProgressResponse = {
