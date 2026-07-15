@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { Button } from '@/components/atoms/Button';
-import { LessonStatus } from '@/features/attendance/types/lessonStatus';
+import type { LessonStatus } from '@/features/attendance/types/lessonStatus';
 
 export type LessonBreadcrumbItem = {
   label: string;
@@ -27,6 +27,9 @@ type LessonUIProps = {
   index: LessonIndexItem[];
   status: LessonStatus;
   onStatusChange: (status: LessonStatus) => void;
+  canUpdate?: boolean;
+  isSubmitting?: boolean;
+  errorMessage?: string | null;
 };
 
 export function LessonUI({
@@ -37,6 +40,9 @@ export function LessonUI({
   index,
   status,
   onStatusChange,
+  canUpdate = true,
+  isSubmitting = false,
+  errorMessage = null,
 }: LessonUIProps) {
   return (
     <div className="space-y-4">
@@ -99,6 +105,7 @@ export function LessonUI({
               type="button"
               variant={isActive ? 'default' : 'outline'}
               aria-pressed={isActive}
+              disabled={!canUpdate || isSubmitting}
               onClick={() => onStatusChange(button.status)}
             >
               {button.label}
@@ -106,6 +113,8 @@ export function LessonUI({
           );
         })}
       </div>
+
+      {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
 
       {/* インデックス（目次） */}
       <div className="space-y-1 text-sm">
