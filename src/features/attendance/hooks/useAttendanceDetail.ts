@@ -1,5 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from '@/utils/fetcher';
+import { attendanceDetailKey } from '../utils/swrKeys';
 import type { AttendanceDetail } from '../types/attendanceDetail';
 
 type AttendanceDetailResponse = {
@@ -7,8 +8,8 @@ type AttendanceDetailResponse = {
 };
 
 export function useAttendanceDetail(attendanceId: string) {
-  const { data, error, isLoading, mutate } = useSWR<AttendanceDetailResponse>(
-    attendanceId ? `/api/v1/attendances/${attendanceId}` : null,
+  const { data, error, isLoading } = useSWR<AttendanceDetailResponse>(
+    attendanceDetailKey(attendanceId),
     fetcher,
   );
 
@@ -16,6 +17,5 @@ export function useAttendanceDetail(attendanceId: string) {
     attendanceDetail: data?.data,
     error,
     isLoading,
-    mutate,
   };
 }

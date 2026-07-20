@@ -1,10 +1,11 @@
 import useSWR from 'swr';
 import { fetcher } from '@/utils/fetcher';
+import { attendanceProgressKey } from '../utils/swrKeys';
 import type { AttendanceProgressResponse } from '../types/attendanceProgress';
 
 export function useAttendanceProgress(attendanceId: string) {
-  const { data, error, isLoading, mutate } = useSWR<AttendanceProgressResponse>(
-    attendanceId ? `/api/v1/attendances/${attendanceId}/progress` : null,
+  const { data, error, isLoading } = useSWR<AttendanceProgressResponse>(
+    attendanceProgressKey(attendanceId),
     fetcher,
   );
 
@@ -12,6 +13,5 @@ export function useAttendanceProgress(attendanceId: string) {
     attendanceProgress: data?.data,
     error,
     isLoading,
-    mutate,
   };
 }

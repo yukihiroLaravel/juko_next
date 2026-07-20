@@ -112,6 +112,12 @@ export function LessonUI({
         })}
       </div>
 
+      {!canUpdate && (
+        <p className="text-muted-foreground text-sm">
+          このレッスンの状態は変更できません
+        </p>
+      )}
+
       {/* インデックス（目次） */}
       <div className="space-y-1 text-sm">
         <p className="font-semibold">Index</p>
