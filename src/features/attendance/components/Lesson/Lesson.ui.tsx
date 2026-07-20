@@ -29,7 +29,6 @@ type LessonUIProps = {
   onStatusChange: (status: LessonStatus) => void;
   canUpdate?: boolean;
   isSubmitting?: boolean;
-  errorMessage?: string | null;
 };
 
 export function LessonUI({
@@ -42,7 +41,6 @@ export function LessonUI({
   onStatusChange,
   canUpdate = true,
   isSubmitting = false,
-  errorMessage = null,
 }: LessonUIProps) {
   return (
     <div className="space-y-4">
@@ -113,8 +111,6 @@ export function LessonUI({
           );
         })}
       </div>
-
-      {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
 
       {/* インデックス（目次） */}
       <div className="space-y-1 text-sm">

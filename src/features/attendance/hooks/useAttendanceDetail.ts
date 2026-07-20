@@ -7,7 +7,7 @@ type AttendanceDetailResponse = {
 };
 
 export function useAttendanceDetail(attendanceId: string) {
-  const { data, error, isLoading } = useSWR<AttendanceDetailResponse>(
+  const { data, error, isLoading, mutate } = useSWR<AttendanceDetailResponse>(
     attendanceId ? `/api/v1/attendances/${attendanceId}` : null,
     fetcher,
   );
@@ -16,5 +16,6 @@ export function useAttendanceDetail(attendanceId: string) {
     attendanceDetail: data?.data,
     error,
     isLoading,
+    mutate,
   };
 }

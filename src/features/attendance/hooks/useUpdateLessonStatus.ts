@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
 import axios from 'axios';
-import { useSWRConfig } from 'swr';
 import { Axios } from '@/lib/api';
 import type { LessonStatus } from '@/features/attendance/types/lessonStatus';
 import { mapLessonStatusToApi } from '@/features/attendance/utils/mapLessonStatusToApi';
+import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
+import { useAttendanceProgress } from '@/features/attendance/hooks/useAttendanceProgress';
 
 type UpdateLessonStatusResult = {
   success: boolean;
@@ -11,7 +12,9 @@ type UpdateLessonStatusResult = {
 };
 
 export function useUpdateLessonStatus(attendanceId: string) {
-  const { mutate } = useSWRConfig();
+  const { mutate: mutateAttendanceDetail } = useAttendanceDetail(attendanceId);
+  const { mutate: mutateAttendanceProgress } =
+    useAttendanceProgress(attendanceId);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const updateLessonStatus = useCallback(
@@ -28,8 +31,8 @@ export function useUpdateLessonStatus(attendanceId: string) {
 
         // レッスン一覧と進捗のキャッシュを再検証
         await Promise.all([
-          mutate(`/api/v1/attendances/${attendanceId}`),
-          mutate(`/api/v1/attendances/${attendanceId}/progress`),
+          mutateAttendanceDetail(),
+          mutateAttendanceProgress(),
         ]);
 
         return { success: true };
@@ -77,7 +80,7 @@ export function useUpdateLessonStatus(attendanceId: string) {
         setIsSubmitting(false);
       }
     },
-    [attendanceId, mutate],
+    [mutateAttendanceDetail, mutateAttendanceProgress],
   );
 
   return { updateLessonStatus, isSubmitting };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { toast } from 'sonner';
 
 import type { LessonStatus } from '@/features/attendance/types/lessonStatus';
 import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
@@ -35,7 +35,6 @@ export function Lesson({ attendanceId, lessonId }: LessonProps) {
     useAttendanceDetail(attendanceId);
   const { updateLessonStatus, isSubmitting } =
     useUpdateLessonStatus(attendanceId);
-  const [updateError, setUpdateError] = useState<string | null>(null);
 
   if (error) {
     return <p className="text-sm text-red-500">データの取得に失敗しました。</p>;
@@ -56,20 +55,16 @@ export function Lesson({ attendanceId, lessonId }: LessonProps) {
   const lessonAttendanceId = lessonView.lessonAttendanceId;
 
   const handleStatusChange = async (next: LessonStatus) => {
-    if (next === lessonView.status) {
+    if (next === lessonView.status || lessonAttendanceId === null) {
       return;
     }
 
-    if (lessonAttendanceId === null) {
-      setUpdateError('このレッスンの状態は変更できません');
-      return;
-    }
-
-    setUpdateError(null);
     const result = await updateLessonStatus(lessonAttendanceId, next);
-    
-    if (!result.success) {
-      setUpdateError(result.error ?? 'レッスンの状態更新に失敗しました');
+
+    if (result.success) {
+      toast.success('レッスンの状態を更新しました');
+    } else {
+      toast.error(result.error ?? 'レッスンの状態更新に失敗しました');
     }
   };
 
@@ -84,7 +79,6 @@ export function Lesson({ attendanceId, lessonId }: LessonProps) {
       onStatusChange={handleStatusChange}
       canUpdate={lessonAttendanceId !== null}
       isSubmitting={isSubmitting}
-      errorMessage={updateError}
     />
   );
 }
