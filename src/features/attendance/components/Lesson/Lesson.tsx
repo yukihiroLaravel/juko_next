@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { toast } from 'sonner';
 
-import { LessonStatus } from '@/features/attendance/types/lessonStatus';
+import type { LessonStatus } from '@/features/attendance/types/lessonStatus';
 import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
+import { useUpdateLessonStatus } from '@/features/attendance/hooks/useUpdateLessonStatus';
 import { mapAttendanceDetailToLesson } from '@/features/attendance/utils/mapAttendanceDetailToLesson';
 import { LessonUI, LessonBreadcrumbItem, LessonIndexItem } from './Lesson.ui';
 
@@ -32,14 +33,8 @@ type LessonProps = {
 export function Lesson({ attendanceId, lessonId }: LessonProps) {
   const { attendanceDetail, error, isLoading } =
     useAttendanceDetail(attendanceId);
-
-  // 現状はstateボタン切り替え＋ログ出力
-  const [status, setStatus] = useState<LessonStatus>('before_attendance');
-
-  const handleStatusChange = (next: LessonStatus) => {
-    setStatus(next);
-    console.log('lesson status changed:', next);
-  };
+  const { updateLessonStatus, isSubmitting } =
+    useUpdateLessonStatus(attendanceId);
 
   if (error) {
     return <p className="text-sm text-red-500">データの取得に失敗しました。</p>;
@@ -57,6 +52,22 @@ export function Lesson({ attendanceId, lessonId }: LessonProps) {
     );
   }
 
+  const lessonAttendanceId = lessonView.lessonAttendanceId;
+
+  const handleStatusChange = async (next: LessonStatus) => {
+    if (next === lessonView.status || lessonAttendanceId === null) {
+      return;
+    }
+
+    const result = await updateLessonStatus(lessonAttendanceId, next);
+
+    if (result.success) {
+      toast.success('レッスンの状態を更新しました');
+    } else {
+      toast.error(result.error ?? 'レッスンの状態更新に失敗しました');
+    }
+  };
+
   return (
     <LessonUI
       breadcrumbs={breadcrumbs}
@@ -64,8 +75,10 @@ export function Lesson({ attendanceId, lessonId }: LessonProps) {
       lessonTitle={lessonView.lessonTitle}
       videoUrl={lessonView.videoUrl}
       index={index}
-      status={status}
+      status={lessonView.status}
       onStatusChange={handleStatusChange}
+      canUpdate={lessonAttendanceId !== null}
+      isSubmitting={isSubmitting}
     />
   );
 }

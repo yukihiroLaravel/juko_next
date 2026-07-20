@@ -6,6 +6,7 @@ export type LessonView = {
   lessonTitle: string;
   videoUrl: string;
   status: LessonStatus;
+  lessonAttendanceId: number | null;
 };
 
 export function mapAttendanceDetailToLesson(
@@ -28,5 +29,6 @@ export function mapAttendanceDetailToLesson(
     lessonTitle: lesson.title,
     videoUrl: lesson.url,
     status: lesson.lessonAttendance?.status ?? 'before_attendance',
+    lessonAttendanceId: lesson.lessonAttendance?.lesson_attendance_id ?? null,
   };
 }
