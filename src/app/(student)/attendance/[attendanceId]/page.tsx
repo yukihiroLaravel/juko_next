@@ -17,27 +17,28 @@ import {
   SidebarTrigger,
 } from '@/components/atoms/Sidebar';
 import { useParams } from 'next/navigation';
+import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
+import { mapAttendanceDetailToChapters } from '@/features/attendance/utils/mapAttendanceDetailToChapters';
+import type { Chapter } from '@/features/attendance/types';
+import type { AttendanceDetail } from '@/features/attendance/types/attendanceDetail';
 
 export default function Page() {
   const params = useParams();
   const attendanceId = params.attendanceId as string;
+  const { attendanceDetail, error, isLoading } =
+    useAttendanceDetail(attendanceId);
 
-  const [chapters, setChapters] = useState([
-    {
-      id: 'chapter-1',
-      title: '第1章 はじめに',
-      lessons: [
-        { id: 'lesson-1', title: 'レッスン1', isCompleted: true },
-        { id: 'lesson-2', title: 'レッスン2', isCompleted: false },
-      ],
-    },
-    {
-      id: 'chapter-2',
-      title: '第2章 応用',
-      lessons: [{ id: 'lesson-3', title: 'レッスン3', isCompleted: false }],
-    },
-  ]);
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [prevAttendanceDetail, setPrevAttendanceDetail] = useState<
+    AttendanceDetail | undefined
+  >(attendanceDetail);
 
+  if (attendanceDetail !== prevAttendanceDetail) {
+    setPrevAttendanceDetail(attendanceDetail);
+    setChapters(
+      attendanceDetail ? mapAttendanceDetailToChapters(attendanceDetail) : [],
+    );
+  }
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -53,6 +54,31 @@ export default function Page() {
       return arrayMove(prevChapters, oldIndex, newIndex);
     });
   }, []);
+
+  const getChapterList = () => {
+    if (error) {
+      return (
+        <p className="text-sm text-red-500">データの取得に失敗しました。</p>
+      );
+    }
+
+    if (isLoading || !attendanceDetail) {
+      return <p className="text-muted-foreground text-sm">読み込み中...</p>;
+    }
+
+    return (
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext
+          items={chapters.map((ch) => ch.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {chapters.map((chapter) => (
+            <ChapterAccordion key={chapter.id} chapter={chapter} />
+          ))}
+        </SortableContext>
+      </DndContext>
+    );
+  };
 
   return (
     <SidebarProvider>
@@ -81,19 +107,7 @@ export default function Page() {
           </div>
 
           {/* カリキュラム一覧 */}
-          <DndContext
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={chapters.map((ch) => ch.id)}
-              strategy={verticalListSortingStrategy}
-            >
-              {chapters.map((chapter) => (
-                <ChapterAccordion key={chapter.id} chapter={chapter} />
-              ))}
-            </SortableContext>
-          </DndContext>
+          {getChapterList()}
         </main>
       </SidebarInset>
     </SidebarProvider>
