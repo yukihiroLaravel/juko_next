@@ -23,6 +23,9 @@ export function ChapterList({ attendanceId }: ChapterListProps) {
   }
 
   return (
-    <ChapterListUI chapters={mapAttendanceDetailToChapters(attendanceDetail)} />
+    <ChapterListUI
+      key={attendanceId}
+      chapters={mapAttendanceDetailToChapters(attendanceDetail)}
+    />
   );
 }
