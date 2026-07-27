@@ -2,6 +2,8 @@
 
 import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
 import { mapAttendanceDetailToChapters } from '@/features/attendance/utils/mapAttendanceDetailToChapters';
+import { LoadingMessage } from '@/components/StatusMessage/LoadingMessage';
+import { FetchErrorMessage } from '@/components/StatusMessage/FetchErrorMessage';
 import { ChapterListUI } from './ChapterList.ui';
 
 type ChapterListProps = {
@@ -13,11 +15,11 @@ export function ChapterList({ attendanceId }: ChapterListProps) {
     useAttendanceDetail(attendanceId);
 
   if (error) {
-    return <p className="text-sm text-red-500">データの取得に失敗しました。</p>;
+    return <FetchErrorMessage />;
   }
 
   if (isLoading || !attendanceDetail) {
-    return <p className="text-muted-foreground text-sm">読み込み中...</p>;
+    return <LoadingMessage />;
   }
 
   return (
