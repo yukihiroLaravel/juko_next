@@ -2,7 +2,9 @@
 
 import { CourseSidebarUI } from './CourseSidebar.ui';
 import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
+import { useAttendanceProgress } from '@/features/attendance/hooks/useAttendanceProgress';
 import { mapAttendanceDetailToCourseSidebar } from '@/features/attendance/utils/mapAttendanceDetailToCourseSidebar';
+import { calculateProgressPercent } from '@/features/attendance/utils/calculateProgressPercent';
 import { Sidebar, SidebarHeader } from '@/components/atoms/Sidebar';
 
 export type CourseSidebarProps = {
@@ -12,8 +14,13 @@ export type CourseSidebarProps = {
 export function CourseSidebar({ attendanceId }: CourseSidebarProps) {
   const { attendanceDetail, error, isLoading } =
     useAttendanceDetail(attendanceId);
+  const {
+    attendanceProgress,
+    error: progressError,
+    isLoading: isProgressLoading,
+  } = useAttendanceProgress(attendanceId);
 
-  if (error) {
+  if (error || progressError) {
     return (
       <Sidebar collapsible="offcanvas">
         <SidebarHeader className="p-4">
@@ -23,7 +30,12 @@ export function CourseSidebar({ attendanceId }: CourseSidebarProps) {
     );
   }
 
-  if (isLoading || !attendanceDetail) {
+  if (
+    isLoading ||
+    isProgressLoading ||
+    !attendanceDetail ||
+    !attendanceProgress
+  ) {
     return (
       <Sidebar collapsible="offcanvas">
         <SidebarHeader className="p-4">
@@ -35,5 +47,12 @@ export function CourseSidebar({ attendanceId }: CourseSidebarProps) {
 
   const courseSidebar = mapAttendanceDetailToCourseSidebar(attendanceDetail);
 
-  return <CourseSidebarUI {...courseSidebar} />;
+  const progressPercent = calculateProgressPercent(
+    attendanceProgress.number_of_completed_lessons,
+    attendanceProgress.number_of_total_lessons,
+  );
+
+  return (
+    <CourseSidebarUI {...courseSidebar} progressPercent={progressPercent} />
+  );
 }
