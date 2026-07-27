@@ -6,6 +6,8 @@ import type { LessonStatus } from '@/features/attendance/types/lessonStatus';
 import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
 import { useUpdateLessonStatus } from '@/features/attendance/hooks/useUpdateLessonStatus';
 import { mapAttendanceDetailToLesson } from '@/features/attendance/utils/mapAttendanceDetailToLesson';
+import { LoadingMessage } from '@/components/StatusMessage/LoadingMessage';
+import { FetchErrorMessage } from '@/components/StatusMessage/FetchErrorMessage';
 import { LessonUI, LessonBreadcrumbItem, LessonIndexItem } from './Lesson.ui';
 
 // パンくずリスト（URLは未実装）
@@ -37,11 +39,11 @@ export function Lesson({ attendanceId, lessonId }: LessonProps) {
     useUpdateLessonStatus(attendanceId);
 
   if (error) {
-    return <p className="text-sm text-red-500">データの取得に失敗しました。</p>;
+    return <FetchErrorMessage />;
   }
 
   if (isLoading || !attendanceDetail) {
-    return <p className="text-muted-foreground text-sm">読み込み中...</p>;
+    return <LoadingMessage />;
   }
 
   const lessonView = mapAttendanceDetailToLesson(attendanceDetail, lessonId);
