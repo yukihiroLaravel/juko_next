@@ -1,5 +1,7 @@
 'use client';
 
+import { LoadingMessage } from '@/components/StatusMessage/LoadingMessage';
+import { FetchErrorMessage } from '@/components/StatusMessage/FetchErrorMessage';
 import { useAttendanceProgress } from '@/features/attendance/hooks/useAttendanceProgress';
 import { calculateProgressPercent } from '@/features/attendance/utils/calculateProgressPercent';
 import { ProgressSummaryUI } from './ProgressSummary.ui';
@@ -15,11 +17,11 @@ export function ProgressSummary({ attendanceId }: ProgressSummaryProps) {
     useAttendanceProgress(attendanceId);
 
   if (error) {
-    return <p className="text-sm text-red-500">データの取得に失敗しました。</p>;
+    return <FetchErrorMessage />;
   }
 
   if (isLoading || !attendanceProgress) {
-    return <p className="text-muted-foreground text-sm">読み込み中...</p>;
+    return <LoadingMessage />;
   }
 
   const progressRate = calculateProgressPercent(
@@ -30,7 +32,7 @@ export function ProgressSummary({ attendanceId }: ProgressSummaryProps) {
   const handleContinue = () => {
     if (attendanceProgress.continue_from) {
       router.push(
-        `/attendance/${attendanceId}/lesson/${attendanceProgress.continue_from.lesson_id}`,
+        `/attendance/${attendanceId}/lessons/${attendanceProgress.continue_from.lesson_id}`,
       );
     }
   };
@@ -42,7 +44,7 @@ export function ProgressSummary({ attendanceId }: ProgressSummaryProps) {
       totalChapters={attendanceProgress.number_of_total_chapters}
       completedLessons={attendanceProgress.number_of_completed_lessons}
       totalLessons={attendanceProgress.number_of_total_lessons}
-      canContinue={attendanceProgress.continue_from !== null}
+      canContinue={Boolean(attendanceProgress.continue_from)}
       onContinue={handleContinue}
     />
   );

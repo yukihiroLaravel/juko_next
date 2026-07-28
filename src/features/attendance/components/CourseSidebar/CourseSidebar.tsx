@@ -22,7 +22,7 @@ export function CourseSidebar({ attendanceId }: CourseSidebarProps) {
     isLoading: isProgressLoading,
   } = useAttendanceProgress(attendanceId);
 
-  if (error || progressError) {
+  if (error) {
     return (
       <Sidebar collapsible="offcanvas">
         <SidebarHeader className="p-4">
@@ -32,12 +32,7 @@ export function CourseSidebar({ attendanceId }: CourseSidebarProps) {
     );
   }
 
-  if (
-    isLoading ||
-    isProgressLoading ||
-    !attendanceDetail ||
-    !attendanceProgress
-  ) {
+  if (isLoading || !attendanceDetail) {
     return (
       <Sidebar collapsible="offcanvas">
         <SidebarHeader className="p-4">
@@ -49,12 +44,19 @@ export function CourseSidebar({ attendanceId }: CourseSidebarProps) {
 
   const courseSidebar = mapAttendanceDetailToCourseSidebar(attendanceDetail);
 
-  const progressPercent = calculateProgressPercent(
-    attendanceProgress.number_of_completed_lessons,
-    attendanceProgress.number_of_total_lessons,
-  );
+  const progressPercent =
+    !progressError && attendanceProgress
+      ? calculateProgressPercent(
+          attendanceProgress.number_of_completed_lessons,
+          attendanceProgress.number_of_total_lessons,
+        )
+      : null;
 
   return (
-    <CourseSidebarUI {...courseSidebar} progressPercent={progressPercent} />
+    <CourseSidebarUI
+      {...courseSidebar}
+      progressPercent={progressPercent}
+      isProgressLoading={isProgressLoading}
+    />
   );
 }
