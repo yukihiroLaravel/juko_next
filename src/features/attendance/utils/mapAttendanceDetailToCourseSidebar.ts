@@ -3,14 +3,17 @@ import type { AttendanceDetail } from '@/features/attendance/types/attendanceDet
 
 const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL ?? '';
 
+export type CourseSidebarMappedProps = Omit<
+  CourseSidebarUIProps,
+  'progressPercent' | 'isProgressLoading'
+>;
+
 export function mapAttendanceDetailToCourseSidebar(
   attendanceDetail: AttendanceDetail,
-): CourseSidebarUIProps {
+): CourseSidebarMappedProps {
   return {
     thumbnailUrl: `${storageUrl}/${attendanceDetail.course.image}`,
     categoryName: attendanceDetail.course.tags[0]?.content ?? '',
     courseName: attendanceDetail.course.title,
-    // progress_percent がAPIレスポンスに含まれていないため暫定値
-    progressPercent: 20,
   };
 }

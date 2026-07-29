@@ -18,7 +18,8 @@ export type CourseSidebarUIProps = {
   thumbnailUrl: string;
   categoryName: string;
   courseName: string;
-  progressPercent: number;
+  progressPercent: number | null;
+  isProgressLoading: boolean;
 };
 
 export function CourseSidebarUI({
@@ -26,6 +27,7 @@ export function CourseSidebarUI({
   categoryName,
   courseName,
   progressPercent,
+  isProgressLoading,
 }: CourseSidebarUIProps) {
   return (
     <Sidebar collapsible="offcanvas">
@@ -47,10 +49,20 @@ export function CourseSidebarUI({
         <SidebarGroup>
           <SidebarGroupLabel>進捗状況</SidebarGroupLabel>
           <SidebarGroupContent>
-            <div className="flex items-center gap-2 px-2">
-              <span className="text-sm">進捗率</span>
-              <Badge variant="secondary">{progressPercent}%</Badge>
-            </div>
+            {isProgressLoading ? (
+              <p className="text-muted-foreground px-2 text-sm">
+                読み込み中...
+              </p>
+            ) : progressPercent === null ? (
+              <p className="px-2 text-sm text-red-500">
+                データの取得に失敗しました。
+              </p>
+            ) : (
+              <div className="flex items-center gap-2 px-2">
+                <span className="text-sm">進捗率</span>
+                <Badge variant="secondary">{progressPercent}%</Badge>
+              </div>
+            )}
           </SidebarGroupContent>
         </SidebarGroup>
 

@@ -14,6 +14,7 @@ type ProgressSummaryUIProps = {
   totalChapters: number;
   completedLessons: number;
   totalLessons: number;
+  canContinue: boolean;
   onContinue: () => void;
 };
 
@@ -23,6 +24,7 @@ export function ProgressSummaryUI({
   totalChapters,
   completedLessons,
   totalLessons,
+  canContinue,
   onContinue,
 }: ProgressSummaryUIProps) {
   return (
@@ -42,7 +44,9 @@ export function ProgressSummaryUI({
       </CardContent>
 
       <CardFooter>
-        <Button onClick={onContinue}>続きからはじめる</Button>
+        <Button disabled={!canContinue} onClick={onContinue}>
+          続きからはじめる
+        </Button>
       </CardFooter>
     </Card>
   );
