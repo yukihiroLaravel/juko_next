@@ -8,6 +8,8 @@ type ChapterAccordionUIProps = {
   completedLessonCount: number;
   totalLessonCount: number;
   onToggle: () => void;
+  onCompleteAllLessons: () => void;
+  isCompletingAllLessons: boolean;
   children: React.ReactNode;
   dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 };
@@ -18,6 +20,8 @@ export function ChapterAccordionUI({
   completedLessonCount,
   totalLessonCount,
   onToggle,
+  onCompleteAllLessons,
+  isCompletingAllLessons,
   children,
   dragHandleProps,
 }: ChapterAccordionUIProps) {
@@ -52,7 +56,22 @@ export function ChapterAccordionUI({
       </Button>
 
       {/* Body */}
-      {isOpen && <div className="pl-4">{children}</div>}
+      {isOpen && (
+        <div className="space-y-2 p-2 pl-4">
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={onCompleteAllLessons}
+              disabled={isCompletingAllLessons}
+            >
+              このチャプターの全レッスンを完了
+            </Button>
+          </div>
+          {children}
+        </div>
+      )}
     </div>
   );
 }

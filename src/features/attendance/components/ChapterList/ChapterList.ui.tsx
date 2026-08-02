@@ -11,10 +11,11 @@ import { ChapterAccordion } from '@/features/attendance/components/ChapterAccord
 import type { Chapter } from '@/features/attendance/types';
 
 type ChapterListUIProps = {
+  attendanceId: string;
   chapters: Chapter[];
 };
 
-export function ChapterListUI({ chapters }: ChapterListUIProps) {
+export function ChapterListUI({ attendanceId, chapters }: ChapterListUIProps) {
   const [order, setOrder] = useState<string[]>([]);
 
   const orderedChapters = useMemo(() => {
@@ -45,7 +46,11 @@ export function ChapterListUI({ chapters }: ChapterListUIProps) {
         strategy={verticalListSortingStrategy}
       >
         {orderedChapters.map((chapter) => (
-          <ChapterAccordion key={chapter.id} chapter={chapter} />
+          <ChapterAccordion
+            key={chapter.id}
+            attendanceId={attendanceId}
+            chapter={chapter}
+          />
         ))}
       </SortableContext>
     </DndContext>

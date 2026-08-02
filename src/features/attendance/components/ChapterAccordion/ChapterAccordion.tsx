@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { ChapterAccordionUI } from './ChapterAccordion.ui';
 import { LessonItem } from '../LessonItem/LessonItem';
 import { CSS } from '@dnd-kit/utilities';
@@ -10,13 +11,20 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import type { Chapter } from '@/features/attendance/types';
+import { useCompleteChapterLessons } from '@/features/attendance/hooks/useCompleteChapterLessons';
 
 type ChapterAccordionProps = {
+  attendanceId: string;
   chapter: Chapter;
 };
 
-export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
+export function ChapterAccordion({
+  attendanceId,
+  chapter,
+}: ChapterAccordionProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const { completeChapterLessons, isSubmitting } =
+    useCompleteChapterLessons(attendanceId);
 
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
@@ -49,6 +57,24 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
     });
   };
 
+  const handleCompleteAllLessons = async () => {
+    if (
+      !window.confirm(
+        `「${chapter.title}」のすべてのレッスンを完了状態にします。よろしいですか？`,
+      )
+    ) {
+      return;
+    }
+
+    const result = await completeChapterLessons(chapter.id);
+
+    if (result.success) {
+      toast.success('チャプターの全レッスンを完了しました');
+    } else {
+      toast.error(result.error ?? 'チャプターの全レッスン完了に失敗しました');
+    }
+  };
+
   return (
     <div ref={setNodeRef} style={style}>
       <ChapterAccordionUI
@@ -57,6 +83,8 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
         completedLessonCount={completedLessonCount}
         totalLessonCount={totalLessonCount}
         onToggle={handleToggle}
+        onCompleteAllLessons={handleCompleteAllLessons}
+        isCompletingAllLessons={isSubmitting}
         dragHandleProps={{ ...attributes, ...listeners }}
       >
         {isOpen && (

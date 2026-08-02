@@ -1,5 +1,6 @@
 'use client';
 
+import { toast } from 'sonner';
 import { ProgressSummary } from '@/features/attendance/components/ProgressSummary/ProgressSummary';
 import { CourseSidebar } from '@/features/attendance/components/CourseSidebar/CourseSidebar';
 import { ChapterList } from '@/features/attendance/components/ChapterList/ChapterList';
@@ -9,11 +10,30 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/atoms/Sidebar';
+import { useCompleteAttendance } from '@/features/attendance/hooks/useCompleteAttendance';
 import { useParams } from 'next/navigation';
 
 export default function Page() {
   const params = useParams();
   const attendanceId = params.attendanceId as string;
+  const { completeAttendance, isSubmitting } =
+    useCompleteAttendance(attendanceId);
+
+  const handleCompleteAllChapters = async () => {
+    if (
+      !window.confirm('すべてのチャプターを完了状態にします。よろしいですか？')
+    ) {
+      return;
+    }
+
+    const result = await completeAttendance();
+
+    if (result.success) {
+      toast.success('すべてのチャプターを完了しました');
+    } else {
+      toast.error(result.error ?? '全チャプターの完了に失敗しました');
+    }
+  };
 
   return (
     <SidebarProvider>
@@ -28,16 +48,10 @@ export default function Page() {
           <div className="flex gap-2">
             <Button
               type="button"
-              onClick={() => console.log('all chapters completed')}
+              onClick={handleCompleteAllChapters}
+              disabled={isSubmitting}
             >
               全Chapter完了
-            </Button>
-
-            <Button
-              type="button"
-              onClick={() => console.log('all lessons completed')}
-            >
-              全Lesson完了
             </Button>
           </div>
 
