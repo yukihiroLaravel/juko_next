@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { ChapterAccordionUI } from './ChapterAccordion.ui';
 import { LessonItem } from '../LessonItem/LessonItem';
@@ -39,6 +39,10 @@ export function ChapterAccordion({
   };
 
   const [lessons, setLessons] = useState(chapter.lessons);
+
+  useEffect(() => {
+    setLessons(chapter.lessons);
+  }, [chapter.lessons]);
 
   const completedLessonCount = lessons.filter(
     (lesson) => lesson.isCompleted,
