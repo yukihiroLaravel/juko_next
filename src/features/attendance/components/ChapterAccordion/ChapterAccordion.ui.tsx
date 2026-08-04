@@ -66,7 +66,9 @@ export function ChapterAccordionUI({
               onClick={onCompleteAllLessons}
               disabled={isCompletingAllLessons}
             >
-              このチャプターの全レッスンを完了
+              {isCompletingAllLessons
+                ? '完了処理中…'
+                : 'このチャプターの全レッスンを完了'}
             </Button>
           </div>
           {children}

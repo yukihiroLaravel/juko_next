@@ -11,13 +11,17 @@ import {
   SidebarTrigger,
 } from '@/components/atoms/Sidebar';
 import { useCompleteAttendance } from '@/features/attendance/hooks/useCompleteAttendance';
+import { useCompleteChapterLessons } from '@/features/attendance/hooks/useCompleteChapterLessons';
 import { useParams } from 'next/navigation';
 
 export default function Page() {
   const params = useParams();
   const attendanceId = params.attendanceId as string;
-  const { completeAttendance, isSubmitting } =
+  const { completeAttendance, isSubmitting: isCompletingAttendance } =
     useCompleteAttendance(attendanceId);
+  const { completeChapterLessons, isSubmitting: isCompletingChapterLessons } =
+    useCompleteChapterLessons(attendanceId);
+  const isCompleting = isCompletingAttendance || isCompletingChapterLessons;
 
   const handleCompleteAllChapters = async () => {
     if (
@@ -31,7 +35,7 @@ export default function Page() {
     if (result.success) {
       toast.success('すべてのチャプターを完了しました');
     } else {
-      toast.error(result.error ?? '全チャプターの完了に失敗しました');
+      toast.error(result.error);
     }
   };
 
@@ -49,14 +53,18 @@ export default function Page() {
             <Button
               type="button"
               onClick={handleCompleteAllChapters}
-              disabled={isSubmitting}
+              disabled={isCompleting}
             >
-              全Chapter完了
+              {isCompleting ? '完了処理中…' : '全Chapter完了'}
             </Button>
           </div>
 
           {/* カリキュラム一覧 */}
-          <ChapterList attendanceId={attendanceId} />
+          <ChapterList
+            attendanceId={attendanceId}
+            isCompleting={isCompleting}
+            completeChapterLessons={completeChapterLessons}
+          />
         </main>
       </SidebarInset>
     </SidebarProvider>

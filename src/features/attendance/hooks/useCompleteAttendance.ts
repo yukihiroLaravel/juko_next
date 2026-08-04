@@ -7,10 +7,9 @@ import {
   attendanceProgressKey,
 } from '@/features/attendance/utils/swrKeys';
 
-type CompleteAttendanceResult = {
-  success: boolean;
-  error?: string;
-};
+type CompleteAttendanceResult =
+  | { success: true }
+  | { success: false; error: string };
 
 export function useCompleteAttendance(attendanceId: string) {
   const { mutate } = useSWRConfig();
@@ -21,7 +20,9 @@ export function useCompleteAttendance(attendanceId: string) {
       setIsSubmitting(true);
 
       try {
-        await Axios.put(`/api/v1/attendances/${attendanceId}/complete`);
+        await Axios.put(
+          `/api/v1/attendances/${encodeURIComponent(attendanceId)}/complete`,
+        );
 
         await Promise.all([
           mutate(attendanceDetailKey(attendanceId)),

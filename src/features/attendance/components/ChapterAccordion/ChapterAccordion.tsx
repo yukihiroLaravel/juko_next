@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { ChapterAccordionUI } from './ChapterAccordion.ui';
 import { LessonItem } from '../LessonItem/LessonItem';
@@ -10,21 +12,21 @@ import {
   arrayMove,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import type { CompleteChapterLessons } from '@/features/attendance/hooks/useCompleteChapterLessons';
 import type { Chapter } from '@/features/attendance/types';
-import { useCompleteChapterLessons } from '@/features/attendance/hooks/useCompleteChapterLessons';
 
 type ChapterAccordionProps = {
-  attendanceId: string;
   chapter: Chapter;
+  isCompleting: boolean;
+  completeChapterLessons: CompleteChapterLessons;
 };
 
 export function ChapterAccordion({
-  attendanceId,
   chapter,
+  isCompleting,
+  completeChapterLessons,
 }: ChapterAccordionProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { completeChapterLessons, isSubmitting } =
-    useCompleteChapterLessons(attendanceId);
 
   const handleToggle = () => {
     setIsOpen((prev) => !prev);
@@ -38,11 +40,14 @@ export function ChapterAccordion({
     transition,
   };
 
-  const [lessons, setLessons] = useState(chapter.lessons);
+  const [lessonOrder, setLessonOrder] = useState<string[]>([]);
 
-  useEffect(() => {
-    setLessons(chapter.lessons);
-  }, [chapter.lessons]);
+  const lessons = useMemo(() => {
+    const index = new Map(lessonOrder.map((id, i) => [id, i]));
+    return [...chapter.lessons].sort(
+      (a, b) => (index.get(a.id) ?? Infinity) - (index.get(b.id) ?? Infinity),
+    );
+  }, [chapter.lessons, lessonOrder]);
 
   const completedLessonCount = lessons.filter(
     (lesson) => lesson.isCompleted,
@@ -54,11 +59,14 @@ export function ChapterAccordion({
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    setLessons((prev) => {
-      const oldIndex = prev.findIndex((l) => l.id === active.id);
-      const newIndex = prev.findIndex((l) => l.id === over.id);
-      return arrayMove(prev, oldIndex, newIndex);
-    });
+    const ids = lessons.map((lesson) => lesson.id);
+    setLessonOrder(
+      arrayMove(
+        ids,
+        ids.indexOf(String(active.id)),
+        ids.indexOf(String(over.id)),
+      ),
+    );
   };
 
   const handleCompleteAllLessons = async () => {
@@ -75,7 +83,7 @@ export function ChapterAccordion({
     if (result.success) {
       toast.success('チャプターの全レッスンを完了しました');
     } else {
-      toast.error(result.error ?? 'チャプターの全レッスン完了に失敗しました');
+      toast.error(result.error);
     }
   };
 
@@ -88,7 +96,7 @@ export function ChapterAccordion({
         totalLessonCount={totalLessonCount}
         onToggle={handleToggle}
         onCompleteAllLessons={handleCompleteAllLessons}
-        isCompletingAllLessons={isSubmitting}
+        isCompletingAllLessons={isCompleting}
         dragHandleProps={{ ...attributes, ...listeners }}
       >
         {isOpen && (

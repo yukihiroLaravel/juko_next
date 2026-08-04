@@ -9,10 +9,9 @@ import {
   attendanceProgressKey,
 } from '@/features/attendance/utils/swrKeys';
 
-type UpdateLessonStatusResult = {
-  success: boolean;
-  error?: string;
-};
+type UpdateLessonStatusResult =
+  | { success: true }
+  | { success: false; error: string };
 
 export function useUpdateLessonStatus(attendanceId: string) {
   const { mutate } = useSWRConfig();
@@ -26,9 +25,12 @@ export function useUpdateLessonStatus(attendanceId: string) {
       setIsSubmitting(true);
 
       try {
-        await Axios.patch(`/api/v1/lesson-attendances/${lessonAttendanceId}`, {
-          status: mapLessonStatusToApi(status),
-        });
+        await Axios.patch(
+          `/api/v1/lesson-attendances/${encodeURIComponent(lessonAttendanceId)}`,
+          {
+            status: mapLessonStatusToApi(status),
+          },
+        );
 
         // レッスン一覧と進捗のキャッシュを再検証
         await Promise.all([

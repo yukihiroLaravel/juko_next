@@ -8,14 +8,20 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { ChapterAccordion } from '@/features/attendance/components/ChapterAccordion/ChapterAccordion';
+import type { CompleteChapterLessons } from '@/features/attendance/hooks/useCompleteChapterLessons';
 import type { Chapter } from '@/features/attendance/types';
 
 type ChapterListUIProps = {
-  attendanceId: string;
   chapters: Chapter[];
+  isCompleting: boolean;
+  completeChapterLessons: CompleteChapterLessons;
 };
 
-export function ChapterListUI({ attendanceId, chapters }: ChapterListUIProps) {
+export function ChapterListUI({
+  chapters,
+  isCompleting,
+  completeChapterLessons,
+}: ChapterListUIProps) {
   const [order, setOrder] = useState<string[]>([]);
 
   const orderedChapters = useMemo(() => {
@@ -48,8 +54,9 @@ export function ChapterListUI({ attendanceId, chapters }: ChapterListUIProps) {
         {orderedChapters.map((chapter) => (
           <ChapterAccordion
             key={chapter.id}
-            attendanceId={attendanceId}
             chapter={chapter}
+            isCompleting={isCompleting}
+            completeChapterLessons={completeChapterLessons}
           />
         ))}
       </SortableContext>

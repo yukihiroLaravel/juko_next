@@ -4,13 +4,20 @@ import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDe
 import { mapAttendanceDetailToChapters } from '@/features/attendance/utils/mapAttendanceDetailToChapters';
 import { LoadingMessage } from '@/components/StatusMessage/LoadingMessage';
 import { FetchErrorMessage } from '@/components/StatusMessage/FetchErrorMessage';
+import type { CompleteChapterLessons } from '@/features/attendance/hooks/useCompleteChapterLessons';
 import { ChapterListUI } from './ChapterList.ui';
 
 type ChapterListProps = {
   attendanceId: string;
+  isCompleting: boolean;
+  completeChapterLessons: CompleteChapterLessons;
 };
 
-export function ChapterList({ attendanceId }: ChapterListProps) {
+export function ChapterList({
+  attendanceId,
+  isCompleting,
+  completeChapterLessons,
+}: ChapterListProps) {
   const { attendanceDetail, error, isLoading } =
     useAttendanceDetail(attendanceId);
 
@@ -25,8 +32,9 @@ export function ChapterList({ attendanceId }: ChapterListProps) {
   return (
     <ChapterListUI
       key={attendanceId}
-      attendanceId={attendanceId}
       chapters={mapAttendanceDetailToChapters(attendanceDetail)}
+      isCompleting={isCompleting}
+      completeChapterLessons={completeChapterLessons}
     />
   );
 }

@@ -66,7 +66,7 @@ export function Lesson({ attendanceId, lessonId }: LessonProps) {
     if (result.success) {
       toast.success('レッスンの状態を更新しました');
     } else {
-      toast.error(result.error ?? 'レッスンの状態更新に失敗しました');
+      toast.error(result.error);
     }
   };
 

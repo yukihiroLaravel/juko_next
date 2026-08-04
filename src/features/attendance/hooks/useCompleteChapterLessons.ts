@@ -7,10 +7,13 @@ import {
   attendanceProgressKey,
 } from '@/features/attendance/utils/swrKeys';
 
-type CompleteChapterLessonsResult = {
-  success: boolean;
-  error?: string;
-};
+export type CompleteChapterLessonsResult =
+  | { success: true }
+  | { success: false; error: string };
+
+export type CompleteChapterLessons = (
+  chapterId: string,
+) => Promise<CompleteChapterLessonsResult>;
 
 export function useCompleteChapterLessons(attendanceId: string) {
   const { mutate } = useSWRConfig();
@@ -22,7 +25,7 @@ export function useCompleteChapterLessons(attendanceId: string) {
 
       try {
         await Axios.put(
-          `/api/v1/attendances/${attendanceId}/chapters/${chapterId}/complete`,
+          `/api/v1/attendances/${encodeURIComponent(attendanceId)}/chapters/${encodeURIComponent(chapterId)}/complete`,
         );
 
         await Promise.all([
