@@ -2,37 +2,28 @@ import { useCallback, useState } from 'react';
 import axios from 'axios';
 import { useSWRConfig } from 'swr';
 import { Axios } from '@/lib/api';
-import type { LessonStatus } from '@/features/attendance/types/lessonStatus';
-import { mapLessonStatusToApi } from '@/features/attendance/utils/mapLessonStatusToApi';
 import {
   attendanceDetailKey,
   attendanceProgressKey,
 } from '@/features/attendance/utils/swrKeys';
 
-type UpdateLessonStatusResult =
+type CompleteAttendanceResult =
   | { success: true }
   | { success: false; error: string };
 
-export function useUpdateLessonStatus(attendanceId: string) {
+export function useCompleteAttendance(attendanceId: string) {
   const { mutate } = useSWRConfig();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const updateLessonStatus = useCallback(
-    async (
-      lessonAttendanceId: number,
-      status: LessonStatus,
-    ): Promise<UpdateLessonStatusResult> => {
+  const completeAttendance =
+    useCallback(async (): Promise<CompleteAttendanceResult> => {
       setIsSubmitting(true);
 
       try {
-        await Axios.patch(
-          `/api/v1/lesson-attendances/${encodeURIComponent(lessonAttendanceId)}`,
-          {
-            status: mapLessonStatusToApi(status),
-          },
+        await Axios.put(
+          `/api/v1/attendances/${encodeURIComponent(attendanceId)}/complete`,
         );
 
-        // レッスン一覧と進捗のキャッシュを再検証
         await Promise.all([
           mutate(attendanceDetailKey(attendanceId)),
           mutate(attendanceProgressKey(attendanceId)),
@@ -71,7 +62,7 @@ export function useUpdateLessonStatus(attendanceId: string) {
             default:
               return {
                 success: false,
-                error: data?.message ?? 'レッスンの状態更新に失敗しました',
+                error: data?.message ?? '全チャプターの完了に失敗しました',
               };
           }
         }
@@ -82,9 +73,7 @@ export function useUpdateLessonStatus(attendanceId: string) {
       } finally {
         setIsSubmitting(false);
       }
-    },
-    [attendanceId, mutate],
-  );
+    }, [attendanceId, mutate]);
 
-  return { updateLessonStatus, isSubmitting };
+  return { completeAttendance, isSubmitting };
 }

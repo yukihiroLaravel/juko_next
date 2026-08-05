@@ -1,4 +1,7 @@
-import { useState } from 'react';
+'use client';
+
+import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import { ChapterAccordionUI } from './ChapterAccordion.ui';
 import { LessonItem } from '../LessonItem/LessonItem';
 import { CSS } from '@dnd-kit/utilities';
@@ -9,13 +12,20 @@ import {
   arrayMove,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import type { CompleteChapterLessons } from '@/features/attendance/hooks/useCompleteChapterLessons';
 import type { Chapter } from '@/features/attendance/types';
 
 type ChapterAccordionProps = {
   chapter: Chapter;
+  isCompleting: boolean;
+  completeChapterLessons: CompleteChapterLessons;
 };
 
-export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
+export function ChapterAccordion({
+  chapter,
+  isCompleting,
+  completeChapterLessons,
+}: ChapterAccordionProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {
@@ -30,7 +40,14 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
     transition,
   };
 
-  const [lessons, setLessons] = useState(chapter.lessons);
+  const [lessonOrder, setLessonOrder] = useState<string[]>([]);
+
+  const lessons = useMemo(() => {
+    const index = new Map(lessonOrder.map((id, i) => [id, i]));
+    return [...chapter.lessons].sort(
+      (a, b) => (index.get(a.id) ?? Infinity) - (index.get(b.id) ?? Infinity),
+    );
+  }, [chapter.lessons, lessonOrder]);
 
   const completedLessonCount = lessons.filter(
     (lesson) => lesson.isCompleted,
@@ -42,11 +59,41 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    setLessons((prev) => {
-      const oldIndex = prev.findIndex((l) => l.id === active.id);
-      const newIndex = prev.findIndex((l) => l.id === over.id);
-      return arrayMove(prev, oldIndex, newIndex);
-    });
+    const ids = lessons.map((lesson) => lesson.id);
+    setLessonOrder(
+      arrayMove(
+        ids,
+        ids.indexOf(String(active.id)),
+        ids.indexOf(String(over.id)),
+      ),
+    );
+  };
+
+  // 非活性は完了処理全体で共有するが、ラベルの切り替えは実行中のチャプターのみに限定する
+  const [isCompletingThisChapter, setIsCompletingThisChapter] = useState(false);
+
+  const handleCompleteAllLessons = async () => {
+    if (
+      !window.confirm(
+        `「${chapter.title}」のすべてのレッスンを完了状態にします。よろしいですか？`,
+      )
+    ) {
+      return;
+    }
+
+    setIsCompletingThisChapter(true);
+
+    try {
+      const result = await completeChapterLessons(chapter.id);
+
+      if (result.success) {
+        toast.success('チャプターの全レッスンを完了しました');
+      } else {
+        toast.error(result.error);
+      }
+    } finally {
+      setIsCompletingThisChapter(false);
+    }
   };
 
   return (
@@ -57,6 +104,9 @@ export function ChapterAccordion({ chapter }: ChapterAccordionProps) {
         completedLessonCount={completedLessonCount}
         totalLessonCount={totalLessonCount}
         onToggle={handleToggle}
+        onCompleteAllLessons={handleCompleteAllLessons}
+        isCompletingAllLessons={isCompletingThisChapter}
+        isCompleteAllLessonsDisabled={isCompleting}
         dragHandleProps={{ ...attributes, ...listeners }}
       >
         {isOpen && (

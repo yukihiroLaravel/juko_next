@@ -2,37 +2,32 @@ import { useCallback, useState } from 'react';
 import axios from 'axios';
 import { useSWRConfig } from 'swr';
 import { Axios } from '@/lib/api';
-import type { LessonStatus } from '@/features/attendance/types/lessonStatus';
-import { mapLessonStatusToApi } from '@/features/attendance/utils/mapLessonStatusToApi';
 import {
   attendanceDetailKey,
   attendanceProgressKey,
 } from '@/features/attendance/utils/swrKeys';
 
-type UpdateLessonStatusResult =
+export type CompleteChapterLessonsResult =
   | { success: true }
   | { success: false; error: string };
 
-export function useUpdateLessonStatus(attendanceId: string) {
+export type CompleteChapterLessons = (
+  chapterId: string,
+) => Promise<CompleteChapterLessonsResult>;
+
+export function useCompleteChapterLessons(attendanceId: string) {
   const { mutate } = useSWRConfig();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const updateLessonStatus = useCallback(
-    async (
-      lessonAttendanceId: number,
-      status: LessonStatus,
-    ): Promise<UpdateLessonStatusResult> => {
+  const completeChapterLessons = useCallback(
+    async (chapterId: string): Promise<CompleteChapterLessonsResult> => {
       setIsSubmitting(true);
 
       try {
-        await Axios.patch(
-          `/api/v1/lesson-attendances/${encodeURIComponent(lessonAttendanceId)}`,
-          {
-            status: mapLessonStatusToApi(status),
-          },
+        await Axios.put(
+          `/api/v1/attendances/${encodeURIComponent(attendanceId)}/chapters/${encodeURIComponent(chapterId)}/complete`,
         );
 
-        // レッスン一覧と進捗のキャッシュを再検証
         await Promise.all([
           mutate(attendanceDetailKey(attendanceId)),
           mutate(attendanceProgressKey(attendanceId)),
@@ -55,6 +50,11 @@ export function useUpdateLessonStatus(attendanceId: string) {
                 success: false,
                 error: 'この操作を行う権限がありません',
               };
+            case 404:
+              return {
+                success: false,
+                error: 'チャプターが見つかりません',
+              };
             case 422: {
               const validationErrors = data?.errors as
                 | Record<string, string[]>
@@ -71,7 +71,8 @@ export function useUpdateLessonStatus(attendanceId: string) {
             default:
               return {
                 success: false,
-                error: data?.message ?? 'レッスンの状態更新に失敗しました',
+                error:
+                  data?.message ?? 'チャプターの全レッスン完了に失敗しました',
               };
           }
         }
@@ -86,5 +87,5 @@ export function useUpdateLessonStatus(attendanceId: string) {
     [attendanceId, mutate],
   );
 
-  return { updateLessonStatus, isSubmitting };
+  return { completeChapterLessons, isSubmitting };
 }
