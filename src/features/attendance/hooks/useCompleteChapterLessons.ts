@@ -50,6 +50,11 @@ export function useCompleteChapterLessons(attendanceId: string) {
                 success: false,
                 error: 'この操作を行う権限がありません',
               };
+            case 404:
+              return {
+                success: false,
+                error: 'チャプターが見つかりません',
+              };
             case 422: {
               const validationErrors = data?.errors as
                 | Record<string, string[]>
