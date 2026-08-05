@@ -69,6 +69,9 @@ export function ChapterAccordion({
     );
   };
 
+  // 非活性は完了処理全体で共有するが、ラベルの切り替えは実行中のチャプターのみに限定する
+  const [isCompletingThisChapter, setIsCompletingThisChapter] = useState(false);
+
   const handleCompleteAllLessons = async () => {
     if (
       !window.confirm(
@@ -78,12 +81,18 @@ export function ChapterAccordion({
       return;
     }
 
-    const result = await completeChapterLessons(chapter.id);
+    setIsCompletingThisChapter(true);
 
-    if (result.success) {
-      toast.success('チャプターの全レッスンを完了しました');
-    } else {
-      toast.error(result.error);
+    try {
+      const result = await completeChapterLessons(chapter.id);
+
+      if (result.success) {
+        toast.success('チャプターの全レッスンを完了しました');
+      } else {
+        toast.error(result.error);
+      }
+    } finally {
+      setIsCompletingThisChapter(false);
     }
   };
 
@@ -96,7 +105,8 @@ export function ChapterAccordion({
         totalLessonCount={totalLessonCount}
         onToggle={handleToggle}
         onCompleteAllLessons={handleCompleteAllLessons}
-        isCompletingAllLessons={isCompleting}
+        isCompletingAllLessons={isCompletingThisChapter}
+        isCompleteAllLessonsDisabled={isCompleting}
         dragHandleProps={{ ...attributes, ...listeners }}
       >
         {isOpen && (

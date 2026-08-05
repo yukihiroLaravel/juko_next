@@ -9,7 +9,10 @@ type ChapterAccordionUIProps = {
   totalLessonCount: number;
   onToggle: () => void;
   onCompleteAllLessons: () => void;
+  /** このチャプターの全レッスン完了が実行中か（ラベル切り替え用） */
   isCompletingAllLessons: boolean;
+  /** 他の完了処理も含めて実行中か（非活性制御用） */
+  isCompleteAllLessonsDisabled: boolean;
   children: React.ReactNode;
   dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 };
@@ -22,6 +25,7 @@ export function ChapterAccordionUI({
   onToggle,
   onCompleteAllLessons,
   isCompletingAllLessons,
+  isCompleteAllLessonsDisabled,
   children,
   dragHandleProps,
 }: ChapterAccordionUIProps) {
@@ -64,7 +68,7 @@ export function ChapterAccordionUI({
               size="sm"
               variant="outline"
               onClick={onCompleteAllLessons}
-              disabled={isCompletingAllLessons}
+              disabled={isCompleteAllLessonsDisabled}
             >
               {isCompletingAllLessons
                 ? '完了処理中…'

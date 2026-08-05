@@ -21,6 +21,7 @@ export default function Page() {
     useCompleteAttendance(attendanceId);
   const { completeChapterLessons, isSubmitting: isCompletingChapterLessons } =
     useCompleteChapterLessons(attendanceId);
+  // 完了処理の並走を防ぐため、いずれかが実行中は全ての完了ボタンを非活性にする
   const isCompleting = isCompletingAttendance || isCompletingChapterLessons;
 
   const handleCompleteAllChapters = async () => {
@@ -55,7 +56,7 @@ export default function Page() {
               onClick={handleCompleteAllChapters}
               disabled={isCompleting}
             >
-              {isCompleting ? '完了処理中…' : '全Chapter完了'}
+              {isCompletingAttendance ? '完了処理中…' : '全Chapter完了'}
             </Button>
           </div>
 
