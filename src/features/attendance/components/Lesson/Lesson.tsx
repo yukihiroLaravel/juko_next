@@ -8,15 +8,7 @@ import { useUpdateLessonStatus } from '@/features/attendance/hooks/useUpdateLess
 import { mapAttendanceDetailToLesson } from '@/features/attendance/utils/mapAttendanceDetailToLesson';
 import { LoadingMessage } from '@/components/StatusMessage/LoadingMessage';
 import { FetchErrorMessage } from '@/components/StatusMessage/FetchErrorMessage';
-import { LessonUI, LessonBreadcrumbItem, LessonIndexItem } from './Lesson.ui';
-
-// パンくずリスト（URLは未実装）
-const breadcrumbs: LessonBreadcrumbItem[] = [
-  { label: '講座分類', href: '#' },
-  { label: '講座一覧', href: '#' },
-  { label: 'チャプター&レッスン一覧', href: '#' },
-  { label: 'レッスン' },
-];
+import { LessonUI, LessonIndexItem } from './Lesson.ui';
 
 // 目次（値はダミー）
 const index: LessonIndexItem[] = [
@@ -72,7 +64,6 @@ export function Lesson({ attendanceId, lessonId }: LessonProps) {
 
   return (
     <LessonUI
-      breadcrumbs={breadcrumbs}
       chapterTitle={lessonView.chapterTitle}
       lessonTitle={lessonView.lessonTitle}
       videoUrl={lessonView.videoUrl}
