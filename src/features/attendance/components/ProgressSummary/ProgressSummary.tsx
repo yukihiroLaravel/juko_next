@@ -4,6 +4,7 @@ import { LoadingMessage } from '@/components/StatusMessage/LoadingMessage';
 import { FetchErrorMessage } from '@/components/StatusMessage/FetchErrorMessage';
 import { useAttendanceProgress } from '@/features/attendance/hooks/useAttendanceProgress';
 import { calculateProgressPercent } from '@/features/attendance/utils/calculateProgressPercent';
+import { routes } from '@/lib/routes';
 import { ProgressSummaryUI } from './ProgressSummary.ui';
 import { useRouter } from 'next/navigation';
 
@@ -32,7 +33,10 @@ export function ProgressSummary({ attendanceId }: ProgressSummaryProps) {
   const handleContinue = () => {
     if (attendanceProgress.continue_from) {
       router.push(
-        `/attendance/${attendanceId}/lessons/${attendanceProgress.continue_from.lesson_id}`,
+        routes.attendance.lesson(
+          attendanceId,
+          attendanceProgress.continue_from.lesson_id,
+        ),
       );
     }
   };

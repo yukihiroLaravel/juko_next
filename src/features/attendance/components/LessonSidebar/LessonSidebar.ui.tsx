@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { CheckCircle2, Circle } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { routes } from '@/lib/routes';
 import { Badge } from '@/components/atoms/Badge';
 import type { LessonListItem } from '@/features/attendance/types/lessonListItem';
 import {
@@ -55,7 +56,7 @@ export function LessonSidebarUI({
                 return (
                   <li key={lesson.id} className="border-b">
                     <Link
-                      href={`/attendance/${attendanceId}/lessons/${lesson.id}`}
+                      href={routes.attendance.lesson(attendanceId, lesson.id)}
                       className="hover:bg-accent flex items-center justify-between px-3 py-3"
                     >
                       <span

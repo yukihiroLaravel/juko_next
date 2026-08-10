@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { routes } from '@/lib/routes';
 import { AttendancedCourseCardUI } from './AttendancedCourseCard.ui';
 
 type AttendancedCourseCardProps = {
@@ -16,7 +17,7 @@ export function AttendancedCourseCard({
   isExpired,
   progress,
 }: AttendancedCourseCardProps) {
-  const href = `/attendance/${attendanceId}`;
+  const href = routes.attendance.detail(attendanceId);
 
   return (
     <Link href={href} className="block w-full max-w-[350px]">

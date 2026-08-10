@@ -3,10 +3,10 @@ export const routes = {
     /** 講座一覧 */
     list: () => '/attendance',
     /** 講座詳細（チャプター＆レッスン一覧） */
-    detail: (attendanceId: string) =>
+    detail: (attendanceId: string | number) =>
       `/attendance/${encodeURIComponent(attendanceId)}`,
     /** レッスン */
-    lesson: (attendanceId: string, lessonId: string) =>
+    lesson: (attendanceId: string | number, lessonId: string | number) =>
       `/attendance/${encodeURIComponent(attendanceId)}/lessons/${encodeURIComponent(lessonId)}`,
   },
 } as const;
