@@ -11,17 +11,17 @@ import {
   BreadcrumbSeparator,
 } from '@/components/atoms/Breadcrumb';
 import { Skeleton } from '@/components/atoms/Skeleton';
-import type { BreadcrumbItem as BreadcrumbItemType } from '@/types/breadcrumb';
+import type { BreadcrumbItemData } from '@/types/breadcrumb';
 
 // ラベルのクラス（幅を制限）
 const LABEL_CLASS = 'inline-block max-w-40 truncate sm:max-w-64';
 
-type BreadcrumbsProps = {
-  items: BreadcrumbItemType[];
+type BreadcrumbsUIProps = {
+  items: BreadcrumbItemData[];
   className?: string;
 };
 
-export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
+export function BreadcrumbsUI({ items, className }: BreadcrumbsUIProps) {
   // 項目が1つ以下なら描画しない
   if (items.length <= 1) {
     return null;
@@ -29,6 +29,8 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
 
   const lastIndex = items.length - 1;
   const middleItems = items.slice(1, lastIndex);
+  // 1件だけのときは畳まず、そのままリンクとして表示する
+  const shouldCollapse = middleItems.length >= 2;
 
   return (
     <Breadcrumb aria-label="パンくずリスト" className={className}>
@@ -38,7 +40,7 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
         </BreadcrumbItem>
 
         {/* 狭幅では中間項目を省略記号に畳む */}
-        {middleItems.length > 0 && (
+        {shouldCollapse && (
           <Fragment>
             <BreadcrumbSeparator className="sm:hidden" />
             <BreadcrumbItem className="sm:hidden">
@@ -52,8 +54,12 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
 
         {middleItems.map((item, index) => (
           <Fragment key={`${index}-${item.label}`}>
-            <BreadcrumbSeparator className="hidden sm:block" />
-            <BreadcrumbItem className="hidden sm:inline-flex">
+            <BreadcrumbSeparator
+              className={shouldCollapse ? 'hidden sm:block' : undefined}
+            />
+            <BreadcrumbItem
+              className={shouldCollapse ? 'hidden sm:inline-flex' : undefined}
+            >
               <ItemLabel item={item} />
             </BreadcrumbItem>
           </Fragment>
@@ -68,13 +74,12 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
   );
 }
 
-function ItemLabel({
-  item,
-  isCurrent = false,
-}: {
-  item: BreadcrumbItemType;
+type ItemLabelProps = {
+  item: BreadcrumbItemData;
   isCurrent?: boolean;
-}) {
+};
+
+function ItemLabel({ item, isCurrent = false }: ItemLabelProps) {
   if (item.isLoading) {
     return (
       <Skeleton className="h-5 w-28">

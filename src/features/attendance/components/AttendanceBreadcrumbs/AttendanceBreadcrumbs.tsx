@@ -1,10 +1,10 @@
 'use client';
 
-import { Breadcrumbs } from '@/components/organisms/Breadcrumbs';
+import { BreadcrumbsUI } from '@/components/organisms/Breadcrumbs';
 import { useAttendanceDetail } from '@/features/attendance/hooks/useAttendanceDetail';
 import { mapAttendanceDetailToLesson } from '@/features/attendance/utils/mapAttendanceDetailToLesson';
 import { routes } from '@/lib/routes';
-import type { BreadcrumbItem } from '@/types/breadcrumb';
+import type { BreadcrumbItemData } from '@/types/breadcrumb';
 
 export type AttendanceBreadcrumbsProps = {
   attendanceId: string;
@@ -15,13 +15,9 @@ export function AttendanceBreadcrumbs({
   attendanceId,
   lessonId,
 }: AttendanceBreadcrumbsProps) {
-  const { attendanceDetail, error } = useAttendanceDetail(attendanceId);
+  const { attendanceDetail, isLoading } = useAttendanceDetail(attendanceId);
 
-  if (error) {
-    return null;
-  }
-
-  const items: BreadcrumbItem[] = [
+  const items: BreadcrumbItemData[] = [
     { label: '講座一覧', href: routes.attendance.list() },
   ];
 
@@ -32,13 +28,14 @@ export function AttendanceBreadcrumbs({
 
     items.push({
       label: attendanceDetail.course.title,
-      href: lessonTitle ? routes.attendance.detail(attendanceId) : undefined,
+      href: lessonId ? routes.attendance.detail(attendanceId) : undefined,
     });
 
-    if (lessonTitle) {
-      items.push({ label: lessonTitle });
+    if (lessonId) {
+      items.push({ label: lessonTitle ?? 'レッスン' });
     }
-  } else {
+  } else if (isLoading) {
+    // 解決待ちの項目は Skeleton にして、ヘッダーの高さと階層の数を保つ
     items.push({ label: '講座名', isLoading: true });
 
     if (lessonId) {
@@ -46,5 +43,5 @@ export function AttendanceBreadcrumbs({
     }
   }
 
-  return <Breadcrumbs items={items} />;
+  return <BreadcrumbsUI items={items} />;
 }

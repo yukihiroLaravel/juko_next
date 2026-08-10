@@ -1,1 +1,1 @@
-export { Breadcrumbs } from './Breadcrumbs';
+export { BreadcrumbsUI } from './Breadcrumbs.ui';
