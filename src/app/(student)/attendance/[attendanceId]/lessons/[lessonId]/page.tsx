@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 
 import { LessonSidebar } from '@/features/attendance/components/LessonSidebar/LessonSidebar';
 import { Lesson } from '@/features/attendance/components/Lesson/Lesson';
+import { AttendanceBreadcrumbs } from '@/features/attendance/components/AttendanceBreadcrumbs/AttendanceBreadcrumbs';
 import {
   SidebarInset,
   SidebarProvider,
@@ -19,9 +20,12 @@ export default function LessonPage() {
     <SidebarProvider>
       <LessonSidebar attendanceId={attendanceId} activeLessonId={lessonId} />
       <SidebarInset>
-        <header className="flex h-12 items-center gap-2 border-b px-4">
+        <header className="flex min-h-12 items-center gap-2 border-b px-4">
           <SidebarTrigger />
-          <span className="text-sm font-medium">レッスン</span>
+          <AttendanceBreadcrumbs
+            attendanceId={attendanceId}
+            lessonId={lessonId}
+          />
         </header>
         <main className="flex-1 space-y-2 p-4">
           <Lesson

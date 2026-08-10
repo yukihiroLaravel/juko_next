@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { ProgressSummary } from '@/features/attendance/components/ProgressSummary/ProgressSummary';
 import { CourseSidebar } from '@/features/attendance/components/CourseSidebar/CourseSidebar';
 import { ChapterList } from '@/features/attendance/components/ChapterList/ChapterList';
+import { AttendanceBreadcrumbs } from '@/features/attendance/components/AttendanceBreadcrumbs/AttendanceBreadcrumbs';
 import { Button } from '@/components/atoms/Button';
 import {
   SidebarInset,
@@ -44,9 +45,9 @@ export default function Page() {
     <SidebarProvider>
       <CourseSidebar attendanceId={attendanceId} />
       <SidebarInset>
-        <header className="flex h-12 items-center gap-2 border-b px-4">
+        <header className="flex min-h-12 items-center gap-2 border-b px-4">
           <SidebarTrigger />
-          <span className="text-sm font-medium">講座詳細</span>
+          <AttendanceBreadcrumbs attendanceId={attendanceId} />
         </header>
         <main className="flex-1 space-y-2 p-4">
           <ProgressSummary attendanceId={attendanceId} />

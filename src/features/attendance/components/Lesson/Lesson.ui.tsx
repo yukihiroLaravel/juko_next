@@ -1,12 +1,5 @@
-import Link from 'next/link';
-
 import { Button } from '@/components/atoms/Button';
 import type { LessonStatus } from '@/features/attendance/types/lessonStatus';
-
-export type LessonBreadcrumbItem = {
-  label: string;
-  href?: string;
-};
 
 export type LessonIndexItem = {
   label: string;
@@ -20,7 +13,6 @@ const STATUS_BUTTONS: { status: LessonStatus; label: string }[] = [
 ];
 
 type LessonUIProps = {
-  breadcrumbs: LessonBreadcrumbItem[];
   chapterTitle: string;
   lessonTitle: string;
   videoUrl?: string;
@@ -32,7 +24,6 @@ type LessonUIProps = {
 };
 
 export function LessonUI({
-  breadcrumbs,
   chapterTitle,
   lessonTitle,
   videoUrl,
@@ -44,32 +35,6 @@ export function LessonUI({
 }: LessonUIProps) {
   return (
     <div className="space-y-4">
-      {/* パンくず */}
-      <nav
-        aria-label="パンくずリスト"
-        className="text-muted-foreground text-xs"
-      >
-        <ol className="flex flex-wrap items-center gap-1">
-          {breadcrumbs.map((item, breadcrumbIndex) => {
-            const isLast = breadcrumbIndex === breadcrumbs.length - 1;
-
-            return (
-              <li key={item.label} className="flex items-center gap-1">
-                {item.href && !isLast ? (
-                  <Link href={item.href} className="hover:text-foreground">
-                    {item.label}
-                  </Link>
-                ) : (
-                  <span className="text-foreground">{item.label}</span>
-                )}
-
-                {!isLast && <span>&gt;</span>}
-              </li>
-            );
-          })}
-        </ol>
-      </nav>
-
       {/* チャプタータイトル */}
       <div className="space-y-4">
         <h1 className="text-lg font-semibold">{chapterTitle}</h1>

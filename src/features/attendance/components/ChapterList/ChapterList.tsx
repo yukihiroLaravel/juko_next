@@ -32,6 +32,7 @@ export function ChapterList({
   return (
     <ChapterListUI
       key={attendanceId}
+      attendanceId={attendanceId}
       chapters={mapAttendanceDetailToChapters(attendanceDetail)}
       isCompleting={isCompleting}
       completeChapterLessons={completeChapterLessons}

@@ -12,12 +12,14 @@ import type { CompleteChapterLessons } from '@/features/attendance/hooks/useComp
 import type { Chapter } from '@/features/attendance/types';
 
 type ChapterListUIProps = {
+  attendanceId: string;
   chapters: Chapter[];
   isCompleting: boolean;
   completeChapterLessons: CompleteChapterLessons;
 };
 
 export function ChapterListUI({
+  attendanceId,
   chapters,
   isCompleting,
   completeChapterLessons,
@@ -54,6 +56,7 @@ export function ChapterListUI({
         {orderedChapters.map((chapter) => (
           <ChapterAccordion
             key={chapter.id}
+            attendanceId={attendanceId}
             chapter={chapter}
             isCompleting={isCompleting}
             completeChapterLessons={completeChapterLessons}
