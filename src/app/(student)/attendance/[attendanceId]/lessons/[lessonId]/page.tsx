@@ -20,7 +20,7 @@ export default function LessonPage() {
     <SidebarProvider>
       <LessonSidebar attendanceId={attendanceId} activeLessonId={lessonId} />
       <SidebarInset>
-        <header className="flex h-12 items-center gap-2 border-b px-4">
+        <header className="flex min-h-12 items-center gap-2 border-b px-4">
           <SidebarTrigger />
           <AttendanceBreadcrumbs
             attendanceId={attendanceId}
