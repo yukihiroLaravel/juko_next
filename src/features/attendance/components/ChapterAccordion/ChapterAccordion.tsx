@@ -16,12 +16,14 @@ import type { CompleteChapterLessons } from '@/features/attendance/hooks/useComp
 import type { Chapter } from '@/features/attendance/types';
 
 type ChapterAccordionProps = {
+  attendanceId: string;
   chapter: Chapter;
   isCompleting: boolean;
   completeChapterLessons: CompleteChapterLessons;
 };
 
 export function ChapterAccordion({
+  attendanceId,
   chapter,
   isCompleting,
   completeChapterLessons,
@@ -119,7 +121,11 @@ export function ChapterAccordion({
               strategy={verticalListSortingStrategy}
             >
               {lessons.map((lesson) => (
-                <LessonItem key={lesson.id} lesson={lesson} />
+                <LessonItem
+                  key={lesson.id}
+                  attendanceId={attendanceId}
+                  lesson={lesson}
+                />
               ))}
             </SortableContext>
           </DndContext>
