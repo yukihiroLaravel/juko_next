@@ -2,17 +2,17 @@
 
 ## 技術スタック
 
-| 区分               | 採用                                                   |
-| ------------------ | ------------------------------------------------------ |
-| フレームワーク     | Next.js 16（App Router・React Compiler 有効）          |
-| 言語               | React 19・TypeScript 5                                 |
-| スタイル           | Tailwind CSS 4・shadcn/ui（Radix UI）                  |
-| データの取得と送信 | SWR・axios                                             |
-| フォーム           | React Hook Form・zod                                   |
-| 非同期とエラー     | Suspense・react-error-boundary                         |
-| テスト             | Vitest・React Testing Library・jsdom（ADR-FE-0001）    |
-| 検査               | ESLint 9・Prettier・`scripts/check-conventions.mjs`    |
-| 実行環境           | Node 24・pnpm 9（リポジトリの根の `mise.toml` で固定） |
+| 区分               | 採用                                                                            |
+| ------------------ | ------------------------------------------------------------------------------- |
+| フレームワーク     | Next.js 16（App Router・React Compiler 有効）                                   |
+| 言語               | React 19・TypeScript 5                                                          |
+| スタイル           | Tailwind CSS 4・shadcn/ui（Radix UI）                                           |
+| データの取得と送信 | SWR・axios                                                                      |
+| フォーム           | React Hook Form・zod                                                            |
+| 非同期とエラー     | Suspense・react-error-boundary・transition（Async React の考え方・ADR-FE-0002） |
+| テスト             | Vitest・React Testing Library・jsdom（ADR-FE-0001）                             |
+| 検査               | ESLint 9・Prettier・`scripts/check-conventions.mjs`                             |
+| 実行環境           | Node 24・pnpm 9（リポジトリの根の `mise.toml` で固定）                          |
 
 バックエンドは Docker で動く Laravel の API である。フロントエンドはホストで動かし、`NEXT_PUBLIC_API_URL` の API を Sanctum の Cookie 認証で呼ぶ。
 

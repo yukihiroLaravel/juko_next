@@ -34,18 +34,18 @@ description: >-
 
 横断的な変更では、複数のルールファイルが要ることが多い。
 
-| 関心ごと                                          | 読む                                                       |
-| ------------------------------------------------- | ---------------------------------------------------------- |
-| 部品の分け方・props の設計・合成                  | [`rules/component-design.md`](rules/component-design.md)   |
-| 状態の置き場・派生値・useEffect を使わない書き方  | [`rules/state-and-effects.md`](rules/state-and-effects.md) |
-| SWR での取得・キー・再検証・送信のあとの更新      | [`rules/data-fetching.md`](rules/data-fetching.md)         |
-| 読み込み中・失敗・0件、Suspense と ErrorBoundary  | [`rules/async-states.md`](rules/async-states.md)           |
-| React Hook Form と zod・サーバーからのエラー      | [`rules/forms.md`](rules/forms.md)                         |
-| App Router・Server と Client の境界・ルーティング | [`rules/app-router.md`](rules/app-router.md)               |
-| ラベル・役割・キーボード操作・フォーカス          | [`rules/accessibility.md`](rules/accessibility.md)         |
-| Tailwind CSS・shadcn/ui・`cn()`                   | [`rules/styling.md`](rules/styling.md)                     |
-| 再描画・React Compiler・リストの key・重い部品    | [`rules/performance.md`](rules/performance.md)             |
-| React Testing Library・フックの差し替え・探し方   | [`rules/testing.md`](rules/testing.md)                     |
+| 関心ごと                                                                           | 読む                                                       |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| 部品の分け方・props の設計・合成                                                   | [`rules/component-design.md`](rules/component-design.md)   |
+| 状態の置き場・派生値・useEffect を使わない書き方                                   | [`rules/state-and-effects.md`](rules/state-and-effects.md) |
+| SWR での取得・キー・再検証・送信のあとの更新                                       | [`rules/data-fetching.md`](rules/data-fetching.md)         |
+| 読み込み中・失敗・0件、Suspense・ErrorBoundary・transition・Actions（Async React） | [`rules/async-states.md`](rules/async-states.md)           |
+| React Hook Form と zod・サーバーからのエラー                                       | [`rules/forms.md`](rules/forms.md)                         |
+| App Router・Server と Client の境界・ルーティング                                  | [`rules/app-router.md`](rules/app-router.md)               |
+| ラベル・役割・キーボード操作・フォーカス                                           | [`rules/accessibility.md`](rules/accessibility.md)         |
+| Tailwind CSS・shadcn/ui・`cn()`                                                    | [`rules/styling.md`](rules/styling.md)                     |
+| 再描画・React Compiler・リストの key・重い部品                                     | [`rules/performance.md`](rules/performance.md)             |
+| React Testing Library・フックの差し替え・探し方                                    | [`rules/testing.md`](rules/testing.md)                     |
 
 ## 判断の原則
 

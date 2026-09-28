@@ -28,7 +28,7 @@
 - `features/` から `components/ui/` を直接参照しない。`components/atoms/` を経由する
 - `*.ui.tsx`（Presentational）でデータの取得と送信をしない。SWR・axios・ドメインのフックは Container で呼ぶ
 - 送信のフックは `{ success, error }` を返し、例外を投げない。利用者向けのエラーの文言はフックで決める
-- 読み込み中・取得の失敗・0件の表示を必ず決める。書き方は同じ画面の既存に合わせる
+- 読み込み中は Suspense、取得の失敗は ErrorBoundary に任せる（Async React の考え方・ADR-FE-0002）。部品の中で `isLoading`・`error` の分岐を書かない。0件の表示は必ず決める
 - 画面の文言でも用語を揺らさない。講座をコース、受講生を生徒と書かない
 
 ## 用語
