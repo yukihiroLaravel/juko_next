@@ -1,0 +1,47 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(scripts/run pnpm lint:*)",
+      "Bash(scripts/run pnpm type-check)",
+      "Bash(scripts/run pnpm format:*)",
+      "Bash(scripts/run pnpm test:*)",
+      "Bash(scripts/run pnpm exec vitest:*)",
+      "Bash(scripts/run pnpm exec eslint:*)",
+      "Bash(scripts/run pnpm check-conventions)",
+      "Bash(scripts/run pnpm check-conventions-merge)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh issue view:*)",
+      "WebFetch(domain:ui.shadcn.com)"
+    ],
+    "deny": ["Read(./.env*)"]
+  },
+  "language": "japanese",
+  "plansDirectory": "docs/changes",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" && jq -r \".tool_input.file_path // .tool_response.filePath // empty\" | { read -r f; case \"$f\" in *.ts|*.tsx|*.mts|*.mjs) scripts/run pnpm exec prettier --write \"$f\" >/dev/null 2>&1; scripts/run pnpm exec eslint \"$f\" >&2 || exit 2; scripts/run node scripts/check-conventions.mjs --quiet >&2 || exit 2 ;; *.md) scripts/run pnpm exec prettier --write \"$f\" >/dev/null 2>&1; scripts/run node scripts/check-conventions.mjs --quiet >&2 || exit 2 ;; esac; }",
+            "timeout": 60,
+            "statusMessage": "規約を検査しています"
+          }
+        ]
+      }
+    ]
+  },
+  "worktree": {
+    "baseRef": "head"
+  }
+}

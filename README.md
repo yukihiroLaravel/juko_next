@@ -25,6 +25,7 @@
 | ドラッグ&ドロップ           | dnd-kit                                        |
 | 日付                        | date-fns + react-day-picker                    |
 | Lint / フォーマット         | ESLint 9 + Prettier                            |
+| テスト                      | Vitest + React Testing Library                 |
 
 ## 環境構築
 
@@ -79,6 +80,8 @@ pnpm lint           # ESLint
 pnpm type-check     # 型チェック (tsc --noEmit)
 pnpm format         # Prettier整形
 pnpm format:check   # Prettier整形チェック
+pnpm test           # テスト (Vitest)
+pnpm check-conventions # 規約の検査（テストとドキュメント）
 ```
 
 ## パッケージ管理
@@ -130,7 +133,7 @@ juko_next/
 
 ## コーディング規約
 
-詳細は [`.claude/CLAUDE.md`](.claude/CLAUDE.md) を参照。要点は以下のとおりです。
+詳細は [`docs/architecture/coding-standards.md`](docs/architecture/coding-standards.md) を参照。AI エージェント向けの入口は [`AGENTS.md`](AGENTS.md) です。要点は以下のとおりです。
 
 - Container/Presentational パターン — ロジックは `Xxx.tsx`（Container）、表示は `Xxx.ui.tsx`（Presentational）に分離する。
 - コロケーション — 横断的なものは `src/` 直下、ドメイン固有のものは `src/features/{ドメイン}/` に集約する。
