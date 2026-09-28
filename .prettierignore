@@ -1,0 +1,2 @@
+# pnpm が書き出す形式をそのまま保つ。整形すると pnpm add のたびに全体の差分が出る
+pnpm-lock.yaml
