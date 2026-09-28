@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#
+# mise.toml で固定した Node と pnpm でコマンドを実行する。
+#
+# シェルの設定によっては、エージェントやフックから呼ばれたときに mise が有効にならず、
+# 別の版の Node で動いてしまう。版が違うと ESLint や Vitest が起動しないか、
+# 手元と結果が食い違う。このスクリプトを通せば、どこから呼んでも同じ版で動く。
+#
+# 使い方
+#   scripts/run pnpm test
+#   scripts/run pnpm lint
+#   scripts/run pnpm check-conventions
+set -uo pipefail
+
+[ $# -gt 0 ] || {
+    printf '%s\n' "実行するコマンドを指定する。例: scripts/run pnpm test" >&2
+    exit 1
+}
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit 1
+
+if command -v mise >/dev/null 2>&1; then
+    exec mise exec -- "$@"
+fi
+
+exec "$@"
