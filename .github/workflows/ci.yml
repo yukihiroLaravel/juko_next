@@ -1,0 +1,47 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    name: Code Quality Checks
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 版は package.json の packageManager（pnpm）と mise.toml（Node）に揃える
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting with Prettier
+        run: pnpm format:check
+
+      - name: Lint with ESLint
+        run: pnpm lint
+
+      - name: Check project conventions
+        run: pnpm check-conventions-merge
+
+      - name: Type check
+        run: pnpm type-check
+
+      - name: Run tests
+        run: pnpm test
