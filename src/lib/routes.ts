@@ -11,10 +11,10 @@ export const routes = {
   },
 
   instructorTag: {
-      /** 講座分類登録 */
-      create: () => '/instructor/tags/new',
-      /** 講座分類編集 */
-      edit: (tagId: string | number) =>
-        `/instructor/tags/${encodeURIComponent(tagId)}/edit`,
+    /** 講座分類登録 */
+    create: () => '/instructor/tags/new',
+    /** 講座分類編集 */
+    edit: (tagId: string | number) =>
+      `/instructor/tags/${encodeURIComponent(tagId)}/edit`,
   },
 } as const;

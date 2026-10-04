@@ -1,5 +1,5 @@
 'use client';
- 
+
 import { UseFormReturn, useFormState } from 'react-hook-form';
 import { Input } from '@/components/atoms/Input';
 import { Button } from '@/components/atoms/Button';
@@ -15,7 +15,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/atoms/AlertDialog';
 import { TagSchema } from '../../validation/TagSchema';
- 
+
 type Props = {
   form: UseFormReturn<TagSchema>;
   onSubmit: (e: React.FormEvent) => void;
@@ -23,7 +23,7 @@ type Props = {
   title: string;
   onDelete?: () => void;
 };
- 
+
 export function TagFormUI({
   form,
   onSubmit,
@@ -32,11 +32,11 @@ export function TagFormUI({
   onDelete,
 }: Props) {
   const { register, control } = form;
- 
+
   const { errors } = useFormState({
     control,
   });
- 
+
   return (
     <div className="flex min-h-screen items-start justify-center bg-gray-100 pt-10">
       <form
@@ -45,7 +45,7 @@ export function TagFormUI({
         className="w-1/2 space-y-4 rounded-md bg-white p-6 shadow"
       >
         <h1 className="text-center text-lg font-bold">{title}</h1>
- 
+
         {/* 分類タイトル */}
         <div>
           <label htmlFor="content" className="block text-sm">
@@ -56,7 +56,7 @@ export function TagFormUI({
             <p className="text-sm text-red-500">{errors.content.message}</p>
           )}
         </div>
- 
+
         {/* ボタン：削除の処理が渡されたら「削除」と「更新」、なければ「登録」 */}
         {onDelete ? (
           <div className="flex justify-between">
