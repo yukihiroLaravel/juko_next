@@ -72,4 +72,32 @@ describe('講座分類編集フォーム', () => {
       'バックエンドマスター講座',
     );
   });
+
+  it('削除を押して確認ダイアログで実行を選ぶと、削除される', async () => {
+    // Arrange
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+    render(<TagForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '削除' }));
+    await user.click(await screen.findByRole('button', { name: '実行' }));
+
+    // Assert
+    expect(log).toHaveBeenCalledWith('講座分類を削除', { tagId: '1' });
+  });
+
+  it('削除を押して確認ダイアログでキャンセルを選ぶと、削除されない', async () => {
+    // Arrange
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+    render(<TagForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '削除' }));
+    await user.click(await screen.findByRole('button', { name: 'キャンセル' }));
+
+    // Assert
+    expect(log).not.toHaveBeenCalled();
+  });
 });
