@@ -26,5 +26,12 @@ export const routes = {
       bulkCapacity: (courseIds: Array<string | number>) =>
         `/instructor/courses/capacity?course_ids=${courseIds.map(encodeURIComponent).join(',')}`,
     },
+    tags: {
+      /** 講座分類登録 */
+      create: () => '/instructor/tags/new',
+      /** 講座分類編集 */
+      edit: (tagId: string | number) =>
+        `/instructor/tags/${encodeURIComponent(tagId)}/edit`,
+    },
   },
 } as const;
