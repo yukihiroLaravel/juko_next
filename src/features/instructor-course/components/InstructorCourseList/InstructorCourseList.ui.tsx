@@ -1,5 +1,12 @@
-import type { ReactNode } from 'react';
 import { Button } from '@/components/atoms/Button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/atoms/Dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,7 +32,9 @@ type InstructorCourseListUIProps = {
   onRegister: () => void;
   groupedCourses: Array<{ tag: string; courses: Course[] }>;
   hasVisibleSelection: boolean;
-  children?: ReactNode;
+  isConfirmDialogOpen: boolean;
+  onConfirmBulkAction: () => void;
+  onCancelBulkAction: () => void;
 };
 
 export function InstructorCourseListUI({
@@ -40,7 +49,9 @@ export function InstructorCourseListUI({
   onRegister,
   groupedCourses,
   hasVisibleSelection,
-  children,
+  isConfirmDialogOpen,
+  onConfirmBulkAction,
+  onCancelBulkAction,
 }: InstructorCourseListUIProps) {
   const renderCards = (items: Course[]) => (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -184,7 +195,24 @@ export function InstructorCourseListUI({
         </Button>
       </nav>
 
-      {children}
+      <Dialog
+        open={isConfirmDialogOpen}
+        onOpenChange={(open) => !open && onCancelBulkAction()}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>一括変更の確認</DialogTitle>
+            <DialogDescription>本当に実行しますか？</DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={onCancelBulkAction}>
+              キャンセル
+            </Button>
+            <Button onClick={onConfirmBulkAction}>OK</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

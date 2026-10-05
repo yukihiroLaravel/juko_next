@@ -2,15 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/atoms/Button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/atoms/Dialog';
 import { routes } from '@/lib/routes';
 import { bulkActionLabels, type BulkAction } from '../../types/bulkAction';
 import type { Course } from '../../types/course';
@@ -60,7 +51,7 @@ export function InstructorCourseList() {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [isClassificationEnabled, setIsClassificationEnabled] = useState(false);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
-  const [pendingAction, setPendingAction] = useState<string | null>(null);
+  const [pendingAction, setPendingAction] = useState<BulkAction | null>(null);
 
   const handleCourseSelectionChange = (courseId: number, checked: boolean) => {
     setSelectedCourseIds((currentIds) =>
@@ -83,7 +74,7 @@ export function InstructorCourseList() {
   const executeBulkAction = () => {
     if (!pendingAction) return;
 
-    console.log(pendingAction, visibleSelectedCourseIds);
+    console.log(bulkActionLabels[pendingAction], visibleSelectedCourseIds);
     setPendingAction(null);
   };
 
@@ -104,7 +95,7 @@ export function InstructorCourseList() {
       return;
     }
 
-    setPendingAction(bulkActionLabels[action]);
+    setPendingAction(action);
   };
 
   const groupedCourses = Object.entries(
@@ -133,25 +124,9 @@ export function InstructorCourseList() {
       groupedCourses={groupedCourses}
       hasVisibleSelection={visibleSelectedCourseIds.length > 0}
       onRegister={() => router.push(routes.instructor.courses.create())}
-    >
-      <Dialog
-        open={pendingAction !== null}
-        onOpenChange={(open) => !open && setPendingAction(null)}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>一括変更の確認</DialogTitle>
-            <DialogDescription>本当に実行しますか？</DialogDescription>
-          </DialogHeader>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setPendingAction(null)}>
-              キャンセル
-            </Button>
-            <Button onClick={executeBulkAction}>OK</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </InstructorCourseListUI>
+      isConfirmDialogOpen={pendingAction !== null}
+      onConfirmBulkAction={executeBulkAction}
+      onCancelBulkAction={() => setPendingAction(null)}
+    />
   );
 }
