@@ -37,6 +37,32 @@ describe('講師側講座一覧', () => {
     ).toHaveAttribute('aria-disabled', 'true');
   });
 
+  it('一括変更の操作を選ぶと、確認ダイアログに操作の内容と対象の件数が表示される', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<InstructorCourseList />);
+    await user.click(
+      screen.getByRole('checkbox', { name: 'Laravel入門講座を選択' }),
+    );
+    await user.click(
+      screen.getByRole('checkbox', { name: 'React基礎講座を選択' }),
+    );
+
+    // Act
+    await selectBulkAction(user, '選択済み講座を削除');
+
+    // Assert
+    const dialog = screen.getByRole('dialog', { name: '講座を削除' });
+    expect(
+      within(dialog).getByText(
+        '選択した2件の講座を削除します。本当に実行しますか？',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole('button', { name: '削除する' }),
+    ).toBeInTheDocument();
+  });
+
   it('確認ダイアログでキャンセルを押すと、実行されない', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -52,10 +78,10 @@ describe('講師側講座一覧', () => {
 
     // Assert
     expect(log).not.toHaveBeenCalled();
-    expect(screen.queryByText('本当に実行しますか？')).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('確認ダイアログでOKを押すと、選んだ講座に実行される', async () => {
+  it('確認ダイアログで実行のボタンを押すと、選んだ講座に実行される', async () => {
     // Arrange
     const user = userEvent.setup();
     const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
@@ -66,7 +92,7 @@ describe('講師側講座一覧', () => {
     await selectBulkAction(user, '選択済み講座を公開');
 
     // Act
-    await user.click(screen.getByRole('button', { name: 'OK' }));
+    await user.click(screen.getByRole('button', { name: '公開する' }));
 
     // Assert
     expect(log).toHaveBeenCalledWith('選択済み講座を公開', [1]);
@@ -90,7 +116,7 @@ describe('講師側講座一覧', () => {
 
     // Act
     await selectBulkAction(user, '選択済み講座を公開');
-    await user.click(screen.getByRole('button', { name: 'OK' }));
+    await user.click(screen.getByRole('button', { name: '公開する' }));
 
     // Assert
     expect(log).toHaveBeenCalledWith('選択済み講座を公開', [2]);

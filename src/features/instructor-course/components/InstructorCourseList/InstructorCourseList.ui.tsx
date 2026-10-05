@@ -32,7 +32,12 @@ type InstructorCourseListUIProps = {
   onRegister: () => void;
   groupedCourses: Array<{ tag: string; courses: Course[] }>;
   hasVisibleSelection: boolean;
-  isConfirmDialogOpen: boolean;
+  confirmDialog: {
+    title: string;
+    description: string;
+    confirmLabel: string;
+    isDestructive: boolean;
+  } | null;
   onConfirmBulkAction: () => void;
   onCancelBulkAction: () => void;
 };
@@ -49,7 +54,7 @@ export function InstructorCourseListUI({
   onRegister,
   groupedCourses,
   hasVisibleSelection,
-  isConfirmDialogOpen,
+  confirmDialog,
   onConfirmBulkAction,
   onCancelBulkAction,
 }: InstructorCourseListUIProps) {
@@ -196,20 +201,25 @@ export function InstructorCourseListUI({
       </nav>
 
       <Dialog
-        open={isConfirmDialogOpen}
+        open={confirmDialog !== null}
         onOpenChange={(open) => !open && onCancelBulkAction()}
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>一括変更の確認</DialogTitle>
-            <DialogDescription>本当に実行しますか？</DialogDescription>
+            <DialogTitle>{confirmDialog?.title}</DialogTitle>
+            <DialogDescription>{confirmDialog?.description}</DialogDescription>
           </DialogHeader>
 
           <DialogFooter>
             <Button variant="outline" onClick={onCancelBulkAction}>
               キャンセル
             </Button>
-            <Button onClick={onConfirmBulkAction}>OK</Button>
+            <Button
+              variant={confirmDialog?.isDestructive ? 'destructive' : 'default'}
+              onClick={onConfirmBulkAction}
+            >
+              {confirmDialog?.confirmLabel}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

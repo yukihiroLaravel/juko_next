@@ -3,7 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { routes } from '@/lib/routes';
-import { bulkActionLabels, type BulkAction } from '../../types/bulkAction';
+import {
+  bulkActionConfirmations,
+  bulkActionLabels,
+  type BulkAction,
+  type ConfirmableBulkAction,
+} from '../../types/bulkAction';
 import type { Course } from '../../types/course';
 import { InstructorCourseListUI } from './InstructorCourseList.ui';
 
@@ -51,7 +56,8 @@ export function InstructorCourseList() {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [isClassificationEnabled, setIsClassificationEnabled] = useState(false);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
-  const [pendingAction, setPendingAction] = useState<BulkAction | null>(null);
+  const [pendingAction, setPendingAction] =
+    useState<ConfirmableBulkAction | null>(null);
 
   const handleCourseSelectionChange = (courseId: number, checked: boolean) => {
     setSelectedCourseIds((currentIds) =>
@@ -98,6 +104,16 @@ export function InstructorCourseList() {
     setPendingAction(action);
   };
 
+  const confirmation = pendingAction
+    ? bulkActionConfirmations[pendingAction]
+    : null;
+  const confirmDialog = confirmation && {
+    title: confirmation.title,
+    description: `${confirmation.describe(visibleSelectedCourseIds.length)}本当に実行しますか？`,
+    confirmLabel: confirmation.confirmLabel,
+    isDestructive: confirmation.isDestructive,
+  };
+
   const groupedCourses = Object.entries(
     filteredCourses.reduce<Record<string, Course[]>>((groups, course) => {
       const tags = course.tags.length > 0 ? course.tags : ['未分類'];
@@ -124,7 +140,7 @@ export function InstructorCourseList() {
       groupedCourses={groupedCourses}
       hasVisibleSelection={visibleSelectedCourseIds.length > 0}
       onRegister={() => router.push(routes.instructor.courses.create())}
-      isConfirmDialogOpen={pendingAction !== null}
+      confirmDialog={confirmDialog}
       onConfirmBulkAction={executeBulkAction}
       onCancelBulkAction={() => setPendingAction(null)}
     />
