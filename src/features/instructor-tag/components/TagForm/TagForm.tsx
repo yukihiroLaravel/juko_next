@@ -39,7 +39,7 @@ export function TagForm({ tagId }: Props) {
   });
 
   const handleDelete = () => {
-    // 確認ダイアログは手順6で追加する
+    // API連携は別Issueで対応する
     console.log('講座分類を削除', { tagId });
   };
 

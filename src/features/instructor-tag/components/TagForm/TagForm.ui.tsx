@@ -14,7 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/atoms/AlertDialog';
-import { TagSchema } from '../../validation/TagSchema';
+import { TagSchema } from '@/features/instructor-tag/validation/TagSchema';
 
 type Props = {
   form: UseFormReturn<TagSchema>;
