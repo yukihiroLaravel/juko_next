@@ -100,4 +100,25 @@ describe('講座分類編集フォーム', () => {
     // Assert
     expect(log).not.toHaveBeenCalled();
   });
+
+  it('分類タイトルを書き換えて更新を押すと、書き換えた内容で更新される', async () => {
+    // Arrange
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+    render(<TagForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    const input = screen.getByLabelText('分類タイトル');
+    await user.clear(input);
+    await user.type(input, 'フロントエンドマスター講座');
+    await user.click(screen.getByRole('button', { name: '更新' }));
+
+    // Assert
+    await waitFor(() =>
+      expect(log).toHaveBeenCalledWith('講座分類を更新', {
+        tagId: '1',
+        content: 'フロントエンドマスター講座',
+      }),
+    );
+  });
 });
