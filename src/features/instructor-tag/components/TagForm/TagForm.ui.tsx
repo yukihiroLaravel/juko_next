@@ -21,6 +21,8 @@ type Props = {
   onSubmit: (e: React.FormEvent) => void;
   isPending?: boolean;
   title: string;
+  // 編集画面でだけ渡す。確認ダイアログに出す、保存されている分類タイトル
+  savedContent?: string;
   onDelete?: () => void;
 };
 
@@ -29,6 +31,7 @@ export function TagFormUI({
   onSubmit,
   isPending,
   title,
+  savedContent,
   onDelete,
 }: Props) {
   const { register, control } = form;
@@ -46,7 +49,6 @@ export function TagFormUI({
       >
         <h1 className="text-center text-lg font-bold">{title}</h1>
 
-        {/* 分類タイトル */}
         <div>
           <label htmlFor="content" className="block text-sm">
             分類タイトル
@@ -60,7 +62,7 @@ export function TagFormUI({
         {/* ボタン：削除の処理が渡されたら「削除」と「更新」、なければ「登録」 */}
         {onDelete ? (
           <div className="flex justify-between">
-            {/* 削除は確認ダイアログで「実行」を押したときだけ行う */}
+            {/* 削除は確認ダイアログで「削除する」を押したときだけ行う */}
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
@@ -73,14 +75,16 @@ export function TagFormUI({
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>本当に実行しますか？</AlertDialogTitle>
+                  <AlertDialogTitle>講座分類を削除しますか？</AlertDialogTitle>
                   <AlertDialogDescription>
-                    この操作は取り消せません。
+                    「{savedContent}」を削除します。削除すると元に戻せません。
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                  <AlertDialogAction onClick={onDelete}>実行</AlertDialogAction>
+                  <AlertDialogAction variant="destructive" onClick={onDelete}>
+                    削除する
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

@@ -30,7 +30,6 @@ export function TagForm({ tagId }: Props) {
 
   const handleSubmit = form.handleSubmit((data: TagSchema) => {
     startTransition(() => {
-      // API連携は別Issueで対応する
       console.log(isEdit ? '講座分類を更新' : '講座分類を登録', {
         tagId,
         ...data,
@@ -39,7 +38,6 @@ export function TagForm({ tagId }: Props) {
   });
 
   const handleDelete = () => {
-    // API連携は別Issueで対応する
     console.log('講座分類を削除', { tagId });
   };
 
@@ -49,6 +47,7 @@ export function TagForm({ tagId }: Props) {
       onSubmit={handleSubmit}
       isPending={isPending}
       title={isEdit ? '講座分類編集' : '講座分類登録'}
+      savedContent={isEdit ? DUMMY_TAG_CONTENT : undefined}
       onDelete={isEdit ? handleDelete : undefined}
     />
   );

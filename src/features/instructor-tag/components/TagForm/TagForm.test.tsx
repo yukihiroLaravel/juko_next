@@ -8,6 +8,7 @@ afterEach(() => {
 });
 
 describe('講座分類登録フォーム', () => {
+  // AC-ITAG-001
   it('分類タイトルが空のまま登録すると、入力を促すエラーが出て登録されない', async () => {
     // Arrange
     const log = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -24,6 +25,7 @@ describe('講座分類登録フォーム', () => {
     expect(log).not.toHaveBeenCalled();
   });
 
+  // AC-ITAG-001
   it('分類タイトルが51文字のとき、文字数のエラーが出て登録されない', async () => {
     // Arrange
     const log = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -41,6 +43,7 @@ describe('講座分類登録フォーム', () => {
     expect(log).not.toHaveBeenCalled();
   });
 
+  // AC-ITAG-002
   it('分類タイトルがちょうど50文字のとき、エラーが出ずに登録される', async () => {
     // Arrange
     const log = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -60,6 +63,7 @@ describe('講座分類登録フォーム', () => {
 });
 
 describe('講座分類編集フォーム', () => {
+  // AC-ITAG-003
   it('編集画面を開くと、今の分類名が入力されている', () => {
     // Arrange
     // （準備なし）
@@ -73,7 +77,25 @@ describe('講座分類編集フォーム', () => {
     );
   });
 
-  it('削除を押して確認ダイアログで実行を選ぶと、削除される', async () => {
+  // AC-ITAG-004
+  it('削除を押すと、削除する分類の名前と元に戻せないことが確認ダイアログに出る', async () => {
+    // Arrange
+    render(<TagForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '削除' }));
+
+    // Assert
+    expect(
+      await screen.findByText(
+        '「バックエンドマスター講座」を削除します。削除すると元に戻せません。',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  // AC-ITAG-005
+  it('削除を押して確認ダイアログで削除するを選ぶと、削除される', async () => {
     // Arrange
     const log = vi.spyOn(console, 'log').mockImplementation(() => {});
     render(<TagForm tagId="1" />);
@@ -81,12 +103,13 @@ describe('講座分類編集フォーム', () => {
 
     // Act
     await user.click(screen.getByRole('button', { name: '削除' }));
-    await user.click(await screen.findByRole('button', { name: '実行' }));
+    await user.click(await screen.findByRole('button', { name: '削除する' }));
 
     // Assert
     expect(log).toHaveBeenCalledWith('講座分類を削除', { tagId: '1' });
   });
 
+  // AC-ITAG-005
   it('削除を押して確認ダイアログでキャンセルを選ぶと、削除されない', async () => {
     // Arrange
     const log = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -101,6 +124,7 @@ describe('講座分類編集フォーム', () => {
     expect(log).not.toHaveBeenCalled();
   });
 
+  // AC-ITAG-002
   it('分類タイトルを書き換えて更新を押すと、書き換えた内容で更新される', async () => {
     // Arrange
     const log = vi.spyOn(console, 'log').mockImplementation(() => {});
