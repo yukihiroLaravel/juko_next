@@ -9,6 +9,12 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push }),
 }));
 
+async function selectCourse(user: UserEvent, courseTitle: string) {
+  await user.click(
+    screen.getByRole('checkbox', { name: `${courseTitle}を選択` }),
+  );
+}
+
 async function selectBulkAction(user: UserEvent, menuItemName: string) {
   await user.click(screen.getByRole('button', { name: '一括変更' }));
   await user.click(screen.getByRole('menuitem', { name: menuItemName }));
@@ -20,6 +26,7 @@ describe('講師側講座一覧', () => {
     vi.restoreAllMocks();
   });
 
+  // AC-ICLIST-001
   it('講座を1つも選んでいないとき、一括変更のメニューが押せない', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -29,24 +36,20 @@ describe('講師側講座一覧', () => {
     await user.click(screen.getByRole('button', { name: '一括変更' }));
 
     // Assert
-    expect(
-      screen.getByRole('menuitem', { name: '選択済み講座を公開' }),
-    ).toHaveAttribute('aria-disabled', 'true');
-    expect(
-      screen.getByRole('menuitem', { name: '定員一括変更' }),
-    ).toHaveAttribute('aria-disabled', 'true');
+    const menuItems = screen.getAllByRole('menuitem');
+    expect(menuItems).toHaveLength(7);
+    menuItems.forEach((menuItem) => {
+      expect(menuItem).toHaveAttribute('aria-disabled', 'true');
+    });
   });
 
+  // AC-ICLIST-002
   it('一括変更の操作を選ぶと、確認ダイアログに操作の内容と対象の件数が表示される', async () => {
     // Arrange
     const user = userEvent.setup();
     render(<InstructorCourseList />);
-    await user.click(
-      screen.getByRole('checkbox', { name: 'Laravel入門講座を選択' }),
-    );
-    await user.click(
-      screen.getByRole('checkbox', { name: 'React基礎講座を選択' }),
-    );
+    await selectCourse(user, 'Laravel入門講座');
+    await selectCourse(user, 'React基礎講座');
 
     // Act
     await selectBulkAction(user, '選択済み講座を削除');
@@ -63,14 +66,13 @@ describe('講師側講座一覧', () => {
     ).toBeInTheDocument();
   });
 
+  // AC-ICLIST-003
   it('確認ダイアログでキャンセルを押すと、実行されない', async () => {
     // Arrange
     const user = userEvent.setup();
     const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
     render(<InstructorCourseList />);
-    await user.click(
-      screen.getByRole('checkbox', { name: 'Laravel入門講座を選択' }),
-    );
+    await selectCourse(user, 'Laravel入門講座');
     await selectBulkAction(user, '選択済み講座を公開');
 
     // Act
@@ -81,14 +83,13 @@ describe('講師側講座一覧', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  // AC-ICLIST-003
   it('確認ダイアログで実行のボタンを押すと、選んだ講座に実行される', async () => {
     // Arrange
     const user = userEvent.setup();
     const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
     render(<InstructorCourseList />);
-    await user.click(
-      screen.getByRole('checkbox', { name: 'Laravel入門講座を選択' }),
-    );
+    await selectCourse(user, 'Laravel入門講座');
     await selectBulkAction(user, '選択済み講座を公開');
 
     // Act
@@ -98,17 +99,31 @@ describe('講師側講座一覧', () => {
     expect(log).toHaveBeenCalledWith('選択済み講座を公開', [1]);
   });
 
+  // AC-ICLIST-004
+  it('受講期限一括変更を選ぶと、確認を挟まず、選んだ講座を引き継いで画面を移る', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<InstructorCourseList />);
+    await selectCourse(user, 'Laravel入門講座');
+
+    // Act
+    await selectBulkAction(user, '受講期限一括変更');
+
+    // Assert
+    expect(push).toHaveBeenCalledWith(
+      '/instructor/courses/deadline?course_ids=1',
+    );
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  // AC-ICLIST-005
   it('選んだあとに検索で表示されなくなった講座は、一括変更の対象にならない', async () => {
     // Arrange
     const user = userEvent.setup();
     const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
     render(<InstructorCourseList />);
-    await user.click(
-      screen.getByRole('checkbox', { name: 'Laravel入門講座を選択' }),
-    );
-    await user.click(
-      screen.getByRole('checkbox', { name: 'React基礎講座を選択' }),
-    );
+    await selectCourse(user, 'Laravel入門講座');
+    await selectCourse(user, 'React基礎講座');
     await user.type(
       screen.getByRole('searchbox', { name: '講座検索' }),
       'React',
@@ -122,7 +137,8 @@ describe('講師側講座一覧', () => {
     expect(log).toHaveBeenCalledWith('選択済み講座を公開', [2]);
   });
 
-  it('検索して該当する講座がないとき、該当する講座がないことが表示される', async () => {
+  // AC-ICLIST-006
+  it('検索に合う講座がないとき、その旨が表示される', async () => {
     // Arrange
     const user = userEvent.setup();
     render(<InstructorCourseList />);
@@ -137,6 +153,7 @@ describe('講師側講座一覧', () => {
     expect(screen.getByText('該当する講座はありません。')).toBeInTheDocument();
   });
 
+  // AC-ICLIST-007
   it('分類表示をオンにすると、分類ごとの見出しで講座がまとまる', async () => {
     // Arrange
     const user = userEvent.setup();

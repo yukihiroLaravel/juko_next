@@ -12,9 +12,9 @@ export const routes = {
 
   instructor: {
     courses: {
-      /** 講師側 講座一覧 */
+      /** 講座一覧 */
       list: () => '/instructor/courses',
-      /** 講師側 講座編集 */
+      /** 講座編集 */
       edit: (courseId: string | number) =>
         `/instructor/courses/${encodeURIComponent(courseId)}`,
       /** 講座登録 */
