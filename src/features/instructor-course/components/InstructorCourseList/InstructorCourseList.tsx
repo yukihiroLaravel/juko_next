@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { routes } from '@/lib/routes';
-import { InstructorCourseListUI } from './InstructorCourseList.ui';
+import { Button } from '@/components/atoms/Button';
 import {
   Dialog,
   DialogContent,
@@ -12,8 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/atoms/Dialog';
-import { Button } from '@/components/atoms/Button';
+import { routes } from '@/lib/routes';
+import { bulkActionLabels, type BulkAction } from '../../types/bulkAction';
 import type { Course } from '../../types/course';
+import { InstructorCourseListUI } from './InstructorCourseList.ui';
 
 const dummyCourses: Course[] = [
   {
@@ -74,17 +75,19 @@ export function InstructorCourseList() {
   const filteredCourses = dummyCourses.filter((course) =>
     course.title.toLowerCase().includes(searchKeyword.trim().toLowerCase()),
   );
+
   const visibleSelectedCourseIds = selectedCourseIds.filter((id) =>
     filteredCourses.some((course) => course.id === id),
   );
 
   const executeBulkAction = () => {
     if (!pendingAction) return;
+
     console.log(pendingAction, visibleSelectedCourseIds);
     setPendingAction(null);
   };
 
-  const handleBulkAction = (action: string) => {
+  const handleBulkAction = (action: BulkAction) => {
     if (visibleSelectedCourseIds.length === 0) return;
 
     if (action === 'deadline') {
@@ -93,6 +96,7 @@ export function InstructorCourseList() {
       );
       return;
     }
+
     if (action === 'capacity') {
       router.push(
         routes.instructor.courses.bulkCapacity(visibleSelectedCourseIds),
@@ -100,23 +104,18 @@ export function InstructorCourseList() {
       return;
     }
 
-    const labels: Record<string, string> = {
-      publish: '選択済み講座を公開',
-      unpublish: '選択済み講座を非公開',
-      clearDeadline: '選択して受講期限をなくす',
-      delete: '選択済み講座を削除',
-      clearCapacity: '選択して定員をなくす',
-    };
-    if (labels[action]) setPendingAction(labels[action]);
+    setPendingAction(bulkActionLabels[action]);
   };
 
   const groupedCourses = Object.entries(
     filteredCourses.reduce<Record<string, Course[]>>((groups, course) => {
       const tags = course.tags.length > 0 ? course.tags : ['未分類'];
+
       tags.forEach((tag) => {
         groups[tag] ??= [];
         groups[tag].push(course);
       });
+
       return groups;
     }, {}),
   ).map(([tag, courses]) => ({ tag, courses }));
@@ -144,6 +143,7 @@ export function InstructorCourseList() {
             <DialogTitle>一括変更の確認</DialogTitle>
             <DialogDescription>本当に実行しますか？</DialogDescription>
           </DialogHeader>
+
           <DialogFooter>
             <Button variant="outline" onClick={() => setPendingAction(null)}>
               キャンセル

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Button } from '@/components/atoms/Button';
 import {
   DropdownMenu,
@@ -8,8 +9,9 @@ import {
 } from '@/components/atoms/DropdownMenu';
 import { Input } from '@/components/atoms/Input';
 import { Switch } from '@/components/atoms/Switch';
-import { InstructorCourseCard } from '../InstructorCourseCard/InstructorCourseCard';
+import { bulkActionLabels, type BulkAction } from '../../types/bulkAction';
 import type { Course } from '../../types/course';
+import { InstructorCourseCard } from '../InstructorCourseCard/InstructorCourseCard';
 
 type InstructorCourseListUIProps = {
   courses: Course[];
@@ -19,7 +21,7 @@ type InstructorCourseListUIProps = {
   onClassificationChange: (checked: boolean) => void;
   selectedCourseIds: number[];
   onCourseSelectionChange: (courseId: number, checked: boolean) => void;
-  onBulkAction: (action: string) => void;
+  onBulkAction: (action: BulkAction) => void;
   onRegister: () => void;
   groupedCourses: Array<{ tag: string; courses: Course[] }>;
   hasVisibleSelection: boolean;
@@ -69,6 +71,7 @@ export function InstructorCourseListUI({
           value={searchKeyword}
           onChange={(event) => onSearchKeywordChange(event.target.value)}
         />
+
         <label className="flex items-center gap-2 text-sm">
           <Switch
             checked={isClassificationEnabled}
@@ -76,53 +79,62 @@ export function InstructorCourseListUI({
           />
           分類表示
         </label>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">一括変更</Button>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent align="end">
             <DropdownMenuItem
               disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('publish')}
             >
-              選択済み講座を公開
+              {bulkActionLabels.publish}
             </DropdownMenuItem>
+
             <DropdownMenuItem
               disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('unpublish')}
             >
-              選択済み講座を非公開
+              {bulkActionLabels.unpublish}
             </DropdownMenuItem>
+
             <DropdownMenuItem
               disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('clearDeadline')}
             >
-              選択して受講期限をなくす
+              {bulkActionLabels.clearDeadline}
             </DropdownMenuItem>
+
             <DropdownMenuItem
               disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('delete')}
             >
-              選択済み講座を削除
+              {bulkActionLabels.delete}
             </DropdownMenuItem>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuItem
               disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('deadline')}
             >
-              受講期限一括変更
+              {bulkActionLabels.deadline}
             </DropdownMenuItem>
+
             <DropdownMenuItem
               disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('clearCapacity')}
             >
-              選択して定員をなくす
+              {bulkActionLabels.clearCapacity}
             </DropdownMenuItem>
+
             <DropdownMenuItem
               disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('capacity')}
             >
-              定員一括変更
+              {bulkActionLabels.capacity}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -142,6 +154,7 @@ export function InstructorCourseListUI({
               >
                 {tag}
               </h2>
+
               {renderCards(tagCourses)}
             </section>
           ))}
@@ -157,18 +170,21 @@ export function InstructorCourseListUI({
         <Button variant="outline" size="sm" disabled>
           前へ
         </Button>
+
         <Button variant="secondary" size="sm" aria-current="page">
           1
         </Button>
+
         <Button variant="outline" size="sm">
           2
         </Button>
+
         <Button variant="outline" size="sm">
           次へ
         </Button>
       </nav>
+
       {children}
     </div>
   );
 }
-import type { ReactNode } from 'react';
