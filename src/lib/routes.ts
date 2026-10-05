@@ -15,7 +15,7 @@ export const routes = {
       /** 講師側 講座一覧 */
       list: () => '/instructor/courses',
       /** 講師側 講座編集 */
-      detail: (courseId: string | number) =>
+      edit: (courseId: string | number) =>
         `/instructor/courses/${encodeURIComponent(courseId)}`,
       /** 講座登録 */
       create: () => '/instructor/courses/create',

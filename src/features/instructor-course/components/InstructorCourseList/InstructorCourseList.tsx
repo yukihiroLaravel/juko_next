@@ -4,16 +4,16 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { routes } from '@/lib/routes';
 import { InstructorCourseListUI } from './InstructorCourseList.ui';
-
-type Course = {
-  id: number;
-  title: string;
-  deadline: string | null;
-  isInProgress: boolean;
-  currentStudents: number;
-  capacity: number | null;
-  tags: string[];
-};
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/atoms/Dialog';
+import { Button } from '@/components/atoms/Button';
+import type { Course } from '../../types/course';
 
 const dummyCourses: Course[] = [
   {
@@ -59,6 +59,7 @@ export function InstructorCourseList() {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [isClassificationEnabled, setIsClassificationEnabled] = useState(false);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
+  const [pendingAction, setPendingAction] = useState<string | null>(null);
 
   const handleCourseSelectionChange = (courseId: number, checked: boolean) => {
     setSelectedCourseIds((currentIds) =>
@@ -70,15 +71,32 @@ export function InstructorCourseList() {
     );
   };
 
+  const filteredCourses = dummyCourses.filter((course) =>
+    course.title.toLowerCase().includes(searchKeyword.trim().toLowerCase()),
+  );
+  const visibleSelectedCourseIds = selectedCourseIds.filter((id) =>
+    filteredCourses.some((course) => course.id === id),
+  );
+
+  const executeBulkAction = () => {
+    if (!pendingAction) return;
+    console.log(pendingAction, visibleSelectedCourseIds);
+    setPendingAction(null);
+  };
+
   const handleBulkAction = (action: string) => {
-    if (selectedCourseIds.length === 0) return;
+    if (visibleSelectedCourseIds.length === 0) return;
 
     if (action === 'deadline') {
-      router.push(routes.instructor.courses.bulkDeadline(selectedCourseIds));
+      router.push(
+        routes.instructor.courses.bulkDeadline(visibleSelectedCourseIds),
+      );
       return;
     }
     if (action === 'capacity') {
-      router.push(routes.instructor.courses.bulkCapacity(selectedCourseIds));
+      router.push(
+        routes.instructor.courses.bulkCapacity(visibleSelectedCourseIds),
+      );
       return;
     }
 
@@ -89,14 +107,19 @@ export function InstructorCourseList() {
       delete: '選択済み講座を削除',
       clearCapacity: '選択して定員をなくす',
     };
-    const label = labels[action];
-    if (!label || !window.confirm('本当に実行しますか？')) return;
-    console.log(label, selectedCourseIds);
+    if (labels[action]) setPendingAction(labels[action]);
   };
 
-  const filteredCourses = dummyCourses.filter((course) =>
-    course.title.toLowerCase().includes(searchKeyword.trim().toLowerCase()),
-  );
+  const groupedCourses = Object.entries(
+    filteredCourses.reduce<Record<string, Course[]>>((groups, course) => {
+      const tags = course.tags.length > 0 ? course.tags : ['未分類'];
+      tags.forEach((tag) => {
+        groups[tag] ??= [];
+        groups[tag].push(course);
+      });
+      return groups;
+    }, {}),
+  ).map(([tag, courses]) => ({ tag, courses }));
 
   return (
     <InstructorCourseListUI
@@ -108,7 +131,27 @@ export function InstructorCourseList() {
       selectedCourseIds={selectedCourseIds}
       onCourseSelectionChange={handleCourseSelectionChange}
       onBulkAction={handleBulkAction}
+      groupedCourses={groupedCourses}
+      hasVisibleSelection={visibleSelectedCourseIds.length > 0}
       onRegister={() => router.push(routes.instructor.courses.create())}
-    />
+    >
+      <Dialog
+        open={pendingAction !== null}
+        onOpenChange={(open) => !open && setPendingAction(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>一括変更の確認</DialogTitle>
+            <DialogDescription>本当に実行しますか？</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPendingAction(null)}>
+              キャンセル
+            </Button>
+            <Button onClick={executeBulkAction}>OK</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </InstructorCourseListUI>
   );
 }

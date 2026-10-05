@@ -9,16 +9,7 @@ import {
 import { Input } from '@/components/atoms/Input';
 import { Switch } from '@/components/atoms/Switch';
 import { InstructorCourseCard } from '../InstructorCourseCard/InstructorCourseCard';
-
-type Course = {
-  id: number;
-  title: string;
-  deadline: string | null;
-  isInProgress: boolean;
-  currentStudents: number;
-  capacity: number | null;
-  tags: string[];
-};
+import type { Course } from '../../types/course';
 
 type InstructorCourseListUIProps = {
   courses: Course[];
@@ -30,6 +21,9 @@ type InstructorCourseListUIProps = {
   onCourseSelectionChange: (courseId: number, checked: boolean) => void;
   onBulkAction: (action: string) => void;
   onRegister: () => void;
+  groupedCourses: Array<{ tag: string; courses: Course[] }>;
+  hasVisibleSelection: boolean;
+  children?: ReactNode;
 };
 
 export function InstructorCourseListUI({
@@ -42,19 +36,10 @@ export function InstructorCourseListUI({
   onCourseSelectionChange,
   onBulkAction,
   onRegister,
+  groupedCourses,
+  hasVisibleSelection,
+  children,
 }: InstructorCourseListUIProps) {
-  const groupedCourses = courses.reduce<Record<string, Course[]>>(
-    (groups, course) => {
-      const tags = course.tags.length > 0 ? course.tags : ['未分類'];
-      tags.forEach((tag) => {
-        groups[tag] ??= [];
-        groups[tag].push(course);
-      });
-      return groups;
-    },
-    {},
-  );
-  const hasSelection = selectedCourseIds.length > 0;
   const renderCards = (items: Course[]) => (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((course) => (
@@ -97,44 +82,44 @@ export function InstructorCourseListUI({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              disabled={!hasSelection}
+              disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('publish')}
             >
               選択済み講座を公開
             </DropdownMenuItem>
             <DropdownMenuItem
-              disabled={!hasSelection}
+              disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('unpublish')}
             >
               選択済み講座を非公開
             </DropdownMenuItem>
             <DropdownMenuItem
-              disabled={!hasSelection}
+              disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('clearDeadline')}
             >
               選択して受講期限をなくす
             </DropdownMenuItem>
             <DropdownMenuItem
-              disabled={!hasSelection}
+              disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('delete')}
             >
               選択済み講座を削除
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              disabled={!hasSelection}
+              disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('deadline')}
             >
               受講期限一括変更
             </DropdownMenuItem>
             <DropdownMenuItem
-              disabled={!hasSelection}
+              disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('clearCapacity')}
             >
               選択して定員をなくす
             </DropdownMenuItem>
             <DropdownMenuItem
-              disabled={!hasSelection}
+              disabled={!hasVisibleSelection}
               onSelect={() => onBulkAction('capacity')}
             >
               定員一括変更
@@ -149,10 +134,10 @@ export function InstructorCourseListUI({
         </p>
       ) : isClassificationEnabled ? (
         <div className="space-y-8">
-          {Object.entries(groupedCourses).map(([tag, tagCourses]) => (
-            <section key={tag} aria-labelledby={`course-tag-${tag}`}>
+          {groupedCourses.map(({ tag, courses: tagCourses }, index) => (
+            <section key={tag} aria-labelledby={`course-tag-${index}`}>
               <h2
-                id={`course-tag-${tag}`}
+                id={`course-tag-${index}`}
                 className="mb-4 text-xl font-semibold"
               >
                 {tag}
@@ -182,6 +167,8 @@ export function InstructorCourseListUI({
           次へ
         </Button>
       </nav>
+      {children}
     </div>
   );
 }
+import type { ReactNode } from 'react';

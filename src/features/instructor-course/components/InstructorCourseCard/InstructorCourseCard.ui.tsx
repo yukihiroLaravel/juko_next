@@ -6,6 +6,7 @@ type InstructorCourseCardUIProps = {
   isInProgress: boolean;
   currentStudents: number;
   capacity: number | null;
+  isFull: boolean;
   tags: string[];
 };
 
@@ -15,10 +16,9 @@ export function InstructorCourseCardUI({
   isInProgress,
   currentStudents,
   capacity,
+  isFull,
   tags,
 }: InstructorCourseCardUIProps) {
-  const isFull = capacity !== null && currentStudents >= capacity;
-
   return (
     <Card className="overflow-hidden rounded-md border bg-white p-0 hover:opacity-80">
       <div
