@@ -8,6 +8,7 @@ type Props = {
   notifications: Notification[];
   sortOrder: 'asc' | 'desc';
   onSortChange: () => void;
+  onNotificationClick: (notificationId: string) => void;
 
   currentPage: number;
   totalPages: number;
@@ -18,6 +19,7 @@ export function NotificationListUI({
   notifications,
   sortOrder,
   onSortChange,
+  onNotificationClick,
   currentPage,
   totalPages,
   onPageChange,
@@ -28,6 +30,7 @@ export function NotificationListUI({
         notifications={notifications}
         sortOrder={sortOrder}
         onSortChange={onSortChange}
+        onNotificationClick={onNotificationClick}
       />
 
       {/* ページネーション */}

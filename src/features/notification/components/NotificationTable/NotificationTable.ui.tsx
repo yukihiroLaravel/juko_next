@@ -17,18 +17,21 @@ export type Notification = {
   courseName: string;
   courseDeadline: string | null;
   startDate: string;
+  body: string;
 };
 
 type Props = {
   notifications: Notification[];
   sortOrder: 'asc' | 'desc';
   onSortChange: () => void;
+  onNotificationClick: (notificationId: string) => void;
 };
 
 export function NotificationTableUI({
   notifications,
   sortOrder,
   onSortChange,
+  onNotificationClick,
 }: Props) {
   return (
     <Table>
@@ -98,7 +101,10 @@ export function NotificationTableUI({
 
       <TableBody>
         {notifications.map((notification) => (
-          <TableRow key={notification.id}>
+          <TableRow
+            key={notification.id}
+            onClick={() => onNotificationClick(notification.id)}
+            className="cursor-pointer">
             <TableCell className="font-medium">{notification.title}</TableCell>
             <TableCell>{notification.courseName}</TableCell>
             <TableCell>{notification.courseDeadline ?? '—'}</TableCell>
