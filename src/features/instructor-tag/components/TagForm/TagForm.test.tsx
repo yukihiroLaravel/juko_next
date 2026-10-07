@@ -2,6 +2,9 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TagForm } from './TagForm';
+import { useInstructorTag } from '@/features/instructor-tag/hooks/useInstructorTag';
+
+vi.mock('@/features/instructor-tag/hooks/useInstructorTag');
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -64,17 +67,19 @@ describe('講座分類登録フォーム', () => {
 
 describe('講座分類編集フォーム', () => {
   // AC-ITAG-003
-  it('編集画面を開くと、今の分類名が入力されている', () => {
+  it('編集画面を開くと、APIから取得した分類名が入力されている', () => {
     // Arrange
-    // （準備なし）
+    vi.mocked(useInstructorTag).mockReturnValue({
+      instructorTag: { tag_id: 1, content: 'APIから取得した分類名' },
+      error: undefined,
+      isLoading: false,
+    });
 
     // Act
     render(<TagForm tagId="1" />);
 
     // Assert
-    expect(screen.getByLabelText('分類タイトル')).toHaveValue(
-      'バックエンドマスター講座',
-    );
+    expect(screen.getByLabelText('分類タイトル')).toHaveValue('APIから取得した分類名');
   });
 
   // AC-ITAG-004
