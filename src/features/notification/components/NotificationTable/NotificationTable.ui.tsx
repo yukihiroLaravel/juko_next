@@ -104,7 +104,8 @@ export function NotificationTableUI({
           <TableRow
             key={notification.id}
             onClick={() => onNotificationClick(notification.id)}
-            className="cursor-pointer">
+            className="cursor-pointer"
+          >
             <TableCell className="font-medium">{notification.title}</TableCell>
             <TableCell>{notification.courseName}</TableCell>
             <TableCell>{notification.courseDeadline ?? '—'}</TableCell>

@@ -35,7 +35,7 @@ export function NotificationDetailModalUI({
               お知らせ：{notification.courseName}
             </p>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               受講期限: {notification.courseDeadline ?? '—'}
             </p>
 

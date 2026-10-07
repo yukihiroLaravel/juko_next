@@ -47,7 +47,7 @@ const mockNotifications: Notification[] = [
     courseName: '共通',
     courseDeadline: null,
     startDate: '2024/3/10',
-     body: `システムメンテナンスを実施します。
+    body: `システムメンテナンスを実施します。
 
   メンテナンス中は一部の機能をご利用いただけない場合があります。
   ご理解のほどよろしくお願いいたします。`,
@@ -58,7 +58,7 @@ const mockNotifications: Notification[] = [
     courseName: 'PHPコース',
     courseDeadline: null,
     startDate: '2024/3/20',
-     body: `修了証の発行についてお知らせします。
+    body: `修了証の発行についてお知らせします。
 
   すべてのレッスンを修了した方は、修了証を申請できます。
   詳細は受講生ページをご確認ください。`,
@@ -98,10 +98,10 @@ export function NotificationList() {
     const end = start + PAGE_SIZE;
     return sortedNotifications.slice(start, end);
   }, [sortedNotifications, currentPage]);
-    const selectedNotification =
-      mockNotifications.find(
-        (notification) => notification.id === selectedNotificationId,
-      ) ?? null;
+  const selectedNotification =
+    mockNotifications.find(
+      (notification) => notification.id === selectedNotificationId,
+    ) ?? null;
 
   const handleSortChange = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));

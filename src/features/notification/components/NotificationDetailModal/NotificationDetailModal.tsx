@@ -8,10 +8,7 @@ type Props = {
   onClose: () => void;
 };
 
-export function NotificationDetailModal({
-  notification,
-  onClose,
-}: Props) {
+export function NotificationDetailModal({ notification, onClose }: Props) {
   const isOpen = notification !== null;
 
   const handleOpenChange = (open: boolean) => {
