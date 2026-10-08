@@ -103,7 +103,14 @@ export function NotificationTableUI({
         {notifications.map((notification) => (
           <TableRow
             key={notification.id}
+            tabIndex={0}
             onClick={() => onNotificationClick(notification.id)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onNotificationClick(notification.id);
+              }
+            }}
             className="cursor-pointer"
           >
             <TableCell className="font-medium">{notification.title}</TableCell>

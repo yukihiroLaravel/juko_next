@@ -3,6 +3,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -35,9 +36,9 @@ export function NotificationDetailModalUI({
               お知らせ：{notification.courseName}
             </p>
 
-            <p className="text-muted-foreground text-sm">
+            <DialogDescription>
               受講期限: {notification.courseDeadline ?? '—'}
-            </p>
+            </DialogDescription>
 
             <DialogTitle>{notification.title}</DialogTitle>
           </div>
