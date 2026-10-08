@@ -12,18 +12,32 @@ import { CourseFormUI } from './CourseForm.ui';
 type Props = { mode: 'create' | 'edit'; courseId?: string };
 
 export function CourseForm({ mode, courseId }: Props) {
+  // 編集時の初期値はダミー。TODO: API連携時に講座取得APIから取得した値へ差し替える。
   const form = useForm<CourseFormSchema>({
-    resolver: zodResolver(mode === 'create' ? courseCreateSchema : courseFormSchema),
-    defaultValues: mode === 'create'
-      ? {
-          title: '', image: undefined, tag_id: '', status: 'private',
-          deadline_type: 'none', fixed_date: '', relative_days: undefined,
-          capacity: undefined,
-        }
-      : {
-          title: 'React入門講座', image: undefined, tag_id: '', status: 'public',
-          deadline_type: 'relative_days', relative_days: 14, capacity: 30,
-        },
+    resolver: zodResolver(
+      mode === 'create' ? courseCreateSchema : courseFormSchema,
+    ),
+    defaultValues:
+      mode === 'create'
+        ? {
+            title: '',
+            image: undefined,
+            tag_id: '',
+            status: 'private',
+            deadline_type: 'none',
+            fixed_date: '',
+            relative_days: undefined,
+            capacity: undefined,
+          }
+        : {
+            title: 'React入門講座',
+            image: undefined,
+            tag_id: '',
+            status: 'public',
+            deadline_type: 'relative_days',
+            relative_days: 14,
+            capacity: 30,
+          },
   });
 
   const onSubmit = (data: CourseFormSchema) => {
@@ -34,7 +48,7 @@ export function CourseForm({ mode, courseId }: Props) {
   };
 
   const onDelete = () => {
-     console.log('delete course:', courseId);
+    console.log('delete course:', courseId);
   };
 
   return (

@@ -18,7 +18,7 @@ export const routes = {
       edit: (courseId: string | number) =>
         `/instructor/courses/${encodeURIComponent(courseId)}/edit`,
       /** 講座登録 */
-      create: () => '/instructor/courses/create',
+      create: () => '/instructor/courses/new',
       /** 受講期限一括変更 */
       bulkDeadline: (courseIds: Array<string | number>) =>
         `/instructor/courses/deadline?course_ids=${courseIds.map(encodeURIComponent).join(',')}`,
