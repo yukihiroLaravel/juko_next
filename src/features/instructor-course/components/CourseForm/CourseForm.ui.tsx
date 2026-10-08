@@ -1,7 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Controller, useWatch, UseFormReturn } from 'react-hook-form';
+import {
+  Controller,
+  useFormState,
+  useWatch,
+  UseFormReturn,
+} from 'react-hook-form';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,13 +50,8 @@ type Props = {
 const errorClass = 'text-sm text-red-600';
 
 export function CourseFormUI({ form, mode, onSubmit, onDelete }: Props) {
-  const {
-    register,
-    setValue,
-    clearErrors,
-    control,
-    formState: { errors, isSubmitting },
-  } = form;
+  const { register, setValue, clearErrors, control } = form;
+  const { errors, isSubmitting } = useFormState({ control });
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const deadlineType = useWatch({ control, name: 'deadline_type' });
   const status = useWatch({ control, name: 'status' });
