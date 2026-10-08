@@ -16,7 +16,7 @@ export const routes = {
       list: () => '/instructor/courses',
       /** 講座編集 */
       edit: (courseId: string | number) =>
-        `/instructor/courses/${encodeURIComponent(courseId)}`,
+        `/instructor/courses/${encodeURIComponent(courseId)}/edit`,
       /** 講座登録 */
       create: () => '/instructor/courses/create',
       /** 受講期限一括変更 */
