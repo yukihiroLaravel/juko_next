@@ -79,7 +79,9 @@ describe('講座分類編集フォーム', () => {
     render(<TagForm tagId="1" />);
 
     // Assert
-    expect(screen.getByLabelText('分類タイトル')).toHaveValue('APIから取得した分類名');
+    expect(screen.getByLabelText('分類タイトル')).toHaveValue(
+      'APIから取得した分類名',
+    );
   });
 
   // AC-ITAG-004
