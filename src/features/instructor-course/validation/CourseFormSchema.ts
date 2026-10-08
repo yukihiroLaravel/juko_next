@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const MAX_COURSE_IMAGE_SIZE = 2 * 1024 * 1024;
-const ALLOWED_COURSE_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const ALLOWED_COURSE_IMAGE_TYPES = ['image/jpeg', 'image/png'];
 
 const courseFormFields = {
   title: z.string().trim().min(1, '講座タイトルは必須です'),
@@ -10,7 +10,7 @@ const courseFormFields = {
     .instanceof(File)
     .refine(
       (file) => ALLOWED_COURSE_IMAGE_TYPES.includes(file.type),
-      '画像はJPEG、PNG、WebP形式で選択してください',
+      '画像はJPEG、PNG形式で選択してください',
     )
     .refine(
       (file) => file.size <= MAX_COURSE_IMAGE_SIZE,

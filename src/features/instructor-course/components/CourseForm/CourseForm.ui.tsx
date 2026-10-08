@@ -232,7 +232,7 @@ export function CourseFormUI({ form, mode, onSubmit, onDelete }: Props) {
                   value={field.value?.toString() ?? ''}
                   onValueChange={(value) => field.onChange(Number(value))}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger aria-label="開始日からの日数">
                     <SelectValue placeholder="日数を選択" />
                   </SelectTrigger>
                   <SelectContent>
