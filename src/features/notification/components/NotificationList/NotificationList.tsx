@@ -1,8 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { NotificationListUI } from './NotificationList.ui';
 import { Notification } from '../NotificationTable/NotificationTable.ui';
+import { NotificationDetailModal } from '../NotificationDetailModal/NotificationDetailModal';
 
 const PAGE_SIZE = 5;
 
@@ -13,6 +14,10 @@ const mockNotifications: Notification[] = [
     courseName: 'PHPコース',
     courseDeadline: null,
     startDate: '2023/9/25',
+    body: `領収書の発行についてお知らせします。
+
+領収書をご希望の場合は、受講生ページより申請してください。
+申請内容を確認後、順次発行いたします。`,
   },
   {
     id: '2',
@@ -20,6 +25,10 @@ const mockNotifications: Notification[] = [
     courseName: 'Javaコース',
     courseDeadline: '2024/12/31',
     startDate: '2024/1/1',
+    body: `レッスンについてのお知らせです。
+
+受講前に教材をご確認ください。
+ご不明な点がありましたら、担当講師までお問い合わせください。`,
   },
   {
     id: '3',
@@ -27,6 +36,10 @@ const mockNotifications: Notification[] = [
     courseName: 'Reactコース',
     courseDeadline: '2024/6/30',
     startDate: '2024/2/15',
+    body: `課題提出についてのお知らせです。
+
+提出期限までに課題を提出してください。
+提出後は担当講師からのフィードバックをご確認ください。`,
   },
   {
     id: '4',
@@ -34,6 +47,10 @@ const mockNotifications: Notification[] = [
     courseName: '共通',
     courseDeadline: null,
     startDate: '2024/3/10',
+    body: `システムメンテナンスを実施します。
+
+メンテナンス中は一部の機能をご利用いただけない場合があります。
+ご理解のほどよろしくお願いいたします。`,
   },
   {
     id: '5',
@@ -41,6 +58,10 @@ const mockNotifications: Notification[] = [
     courseName: 'PHPコース',
     courseDeadline: null,
     startDate: '2024/3/20',
+    body: `修了証の発行についてお知らせします。
+
+すべてのレッスンを修了した方は、修了証を申請できます。
+詳細は受講生ページをご確認ください。`,
   },
   {
     id: '6',
@@ -48,12 +69,20 @@ const mockNotifications: Notification[] = [
     courseName: 'Javaコース',
     courseDeadline: null,
     startDate: '2024/4/1',
+    body: `新しい教材を追加しました。
+
+受講中の講座ページからご確認いただけます。
+ぜひ今後の学習にご活用ください。`,
   },
 ];
 
 export function NotificationList() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedNotificationId, setSelectedNotificationId] = useState<
+    string | null
+  >(null);
+  const openerRef = useRef<HTMLElement | null>(null);
 
   const sortedNotifications = useMemo(() => {
     return [...mockNotifications].sort((a, b) => {
@@ -70,20 +99,46 @@ export function NotificationList() {
     const end = start + PAGE_SIZE;
     return sortedNotifications.slice(start, end);
   }, [sortedNotifications, currentPage]);
+  const selectedNotification =
+    mockNotifications.find(
+      (notification) => notification.id === selectedNotificationId,
+    ) ?? null;
 
   const handleSortChange = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
     setCurrentPage(1);
   };
 
+  const handleNotificationClick = (notificationId: string) => {
+    openerRef.current = document.activeElement as HTMLElement | null;
+    setSelectedNotificationId(notificationId);
+    console.log('既読登録:', notificationId);
+  };
+
+  const handleModalClose = () => {
+    setSelectedNotificationId(null);
+  };
+
   return (
-    <NotificationListUI
-      notifications={paginatedNotifications}
-      sortOrder={sortOrder}
-      onSortChange={handleSortChange}
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={setCurrentPage}
-    />
+    <>
+      <NotificationListUI
+        notifications={paginatedNotifications}
+        sortOrder={sortOrder}
+        onSortChange={handleSortChange}
+        onNotificationClick={handleNotificationClick}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
+
+      <NotificationDetailModal
+        notification={selectedNotification}
+        onClose={handleModalClose}
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          openerRef.current?.focus();
+        }}
+      />
+    </>
   );
 }
