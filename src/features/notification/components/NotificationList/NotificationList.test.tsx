@@ -45,4 +45,27 @@ describe('受講生側お知らせ一覧', () => {
     const dialog = screen.getByRole('dialog');
     expect(within(dialog).getByText('受講期限: —')).toBeInTheDocument();
   });
+
+  it('モーダルを閉じると、開いたお知らせ行にフォーカスが戻る', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<NotificationList />);
+
+    const notificationRow = screen
+      .getByText('追加教材のお知らせ')
+      .closest('tr');
+
+    expect(notificationRow).not.toBeNull();
+
+    // Act
+    notificationRow!.focus();
+    await user.keyboard('{Enter}');
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    await user.click(screen.getAllByRole('button', { name: '閉じる' })[0]);
+
+    // Assert
+    expect(notificationRow).toHaveFocus();
+  });
 });

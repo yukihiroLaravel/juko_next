@@ -6,9 +6,14 @@ import { NotificationDetailModalUI } from './NotificationDetailModal.ui';
 type Props = {
   notification: Notification | null;
   onClose: () => void;
+  onCloseAutoFocus: (event: Event) => void;
 };
 
-export function NotificationDetailModal({ notification, onClose }: Props) {
+export function NotificationDetailModal({
+  notification,
+  onClose,
+  onCloseAutoFocus,
+}: Props) {
   const isOpen = notification !== null;
 
   const handleOpenChange = (open: boolean) => {
@@ -22,6 +27,7 @@ export function NotificationDetailModal({ notification, onClose }: Props) {
       notification={notification}
       open={isOpen}
       onOpenChange={handleOpenChange}
+      onCloseAutoFocus={onCloseAutoFocus}
     />
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { NotificationListUI } from './NotificationList.ui';
 import { Notification } from '../NotificationTable/NotificationTable.ui';
 import { NotificationDetailModal } from '../NotificationDetailModal/NotificationDetailModal';
@@ -82,6 +82,7 @@ export function NotificationList() {
   const [selectedNotificationId, setSelectedNotificationId] = useState<
     string | null
   >(null);
+  const openerRef = useRef<HTMLElement | null>(null);
 
   const sortedNotifications = useMemo(() => {
     return [...mockNotifications].sort((a, b) => {
@@ -109,6 +110,7 @@ export function NotificationList() {
   };
 
   const handleNotificationClick = (notificationId: string) => {
+    openerRef.current = document.activeElement as HTMLElement | null;
     setSelectedNotificationId(notificationId);
     console.log('既読登録:', notificationId);
   };
@@ -132,6 +134,10 @@ export function NotificationList() {
       <NotificationDetailModal
         notification={selectedNotification}
         onClose={handleModalClose}
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          openerRef.current?.focus();
+        }}
       />
     </>
   );

@@ -16,12 +16,14 @@ type Props = {
   notification: Notification | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onCloseAutoFocus: (event: Event) => void;
 };
 
 export function NotificationDetailModalUI({
   notification,
   open,
   onOpenChange,
+  onCloseAutoFocus,
 }: Props) {
   if (!notification) {
     return null;
@@ -29,7 +31,7 @@ export function NotificationDetailModalUI({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl" onCloseAutoFocus={onCloseAutoFocus}>
         <DialogHeader>
           <div className="space-y-1 text-left">
             <p className="text-sm font-medium">
