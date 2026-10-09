@@ -3,7 +3,7 @@
 import { UseFormReturn, Controller, useFormState } from 'react-hook-form';
 import { Button } from '@/components/atoms/Button';
 import { EditSchema } from '../../validation/EditSchema';
-import { ImageUploader } from './ImageUploader';
+import { ImageUploader } from '@/components/molecules/ImageUploader';
 import { StudentFormFields } from '../StudentFormFields/StudentFormFields';
 
 type Props = {
@@ -65,6 +65,8 @@ export function EditFormUI({
                 value={field.value}
                 onChange={field.onChange}
                 defaultImageUrl={defaultProfileImageUrl}
+                alt="プロフィール画像プレビュー"
+                emptyMessage="プロフィール画像"
               />
             )}
           />
