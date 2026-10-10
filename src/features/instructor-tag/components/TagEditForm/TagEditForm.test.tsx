@@ -114,4 +114,42 @@ describe('講座分類編集フォーム', () => {
       }),
     );
   });
+
+  // AC-ITAG-001
+  it('分類タイトルを空にして更新を押すと、入力を促すエラーが出て更新されない', async () => {
+    // Arrange
+    mockUseInstructorTag('APIから取得した分類名');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.clear(screen.getByLabelText('分類タイトル'));
+    await user.click(screen.getByRole('button', { name: '更新' }));
+
+    // Assert
+    expect(
+      await screen.findByText('分類タイトルが未入力です'),
+    ).toBeInTheDocument();
+    expect(updateInstructorTag).not.toHaveBeenCalled();
+  });
+
+  // AC-ITAG-001
+  it('分類タイトルが51文字のとき、文字数のエラーが出て更新されない', async () => {
+    // Arrange
+    mockUseInstructorTag('APIから取得した分類名');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    const input = screen.getByLabelText('分類タイトル');
+    await user.clear(input);
+    await user.type(input, 'あ'.repeat(51));
+    await user.click(screen.getByRole('button', { name: '更新' }));
+
+    // Assert
+    expect(
+      await screen.findByText('分類タイトルは50文字以内で入力してください'),
+    ).toBeInTheDocument();
+    expect(updateInstructorTag).not.toHaveBeenCalled();
+  });
 });
