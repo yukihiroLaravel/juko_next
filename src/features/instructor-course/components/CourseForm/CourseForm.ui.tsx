@@ -141,13 +141,10 @@ export function CourseFormUI({ form, mode, onSubmit, onDelete }: Props) {
           fixedDateName="fixed_date"
           relativeDaysName="relative_days"
           onDeadlineTypeChange={(value: DeadlineType) => {
-            setValue('deadline_type', value);
             form.clearErrors(['fixed_date', 'relative_days']);
             if (value !== 'fixed_date') setValue('fixed_date', '');
             if (value !== 'relative_days') setValue('relative_days', undefined);
           }}
-          onFixedDateChange={(value) => setValue('fixed_date', value)}
-          onRelativeDaysChange={(value) => setValue('relative_days', value)}
           fixedDateError={errors.fixed_date?.message}
           relativeDaysError={errors.relative_days?.message}
         />

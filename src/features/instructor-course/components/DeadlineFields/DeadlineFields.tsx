@@ -34,8 +34,6 @@ type Props<T extends FieldValues> = {
   fixedDateName: Path<T>;
   relativeDaysName: Path<T>;
   onDeadlineTypeChange: (value: DeadlineType) => void;
-  onFixedDateChange: (value: string) => void;
-  onRelativeDaysChange: (value: number) => void;
   fixedDateError?: string;
   relativeDaysError?: string;
   idPrefix?: string;
@@ -49,25 +47,12 @@ export function DeadlineFields<T extends FieldValues>({
   fixedDateName,
   relativeDaysName,
   onDeadlineTypeChange,
-  onFixedDateChange,
-  onRelativeDaysChange,
   fixedDateError,
   relativeDaysError,
   idPrefix = 'deadline',
 }: Props<T>) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const watchedDeadlineType = useWatch({ control, name: deadlineTypeName });
-  const watchedDeadlineTypeValue = String(watchedDeadlineType);
-  let deadlineType: DeadlineType = 'none';
-  if (watchedDeadlineTypeValue === 'fixed_date') deadlineType = 'fixed_date';
-  if (watchedDeadlineTypeValue === 'relative_days') {
-    deadlineType = 'relative_days';
-  }
-  const watchedFixedDate = useWatch({ control, name: fixedDateName });
-  const fixedDate = watchedFixedDate == null ? '' : String(watchedFixedDate);
-  const watchedRelativeDays = useWatch({ control, name: relativeDaysName });
-  const relativeDays =
-    watchedRelativeDays == null ? undefined : Number(watchedRelativeDays);
+  const deadlineType = useWatch({ control, name: deadlineTypeName });
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const startMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -79,8 +64,14 @@ export function DeadlineFields<T extends FieldValues>({
       <Controller
         control={control}
         name={deadlineTypeName}
-        render={() => (
-          <RadioGroup value={deadlineType} onValueChange={onDeadlineTypeChange}>
+        render={({ field }) => (
+          <RadioGroup
+            value={field.value}
+            onValueChange={(value: DeadlineType) => {
+              field.onChange(value);
+              onDeadlineTypeChange(value);
+            }}
+          >
             <div className="flex items-center gap-2">
               <RadioGroupItem value="none" id={`${idPrefix}-none`} />
               <Label htmlFor={`${idPrefix}-none`}>なし</Label>
@@ -108,8 +99,8 @@ export function DeadlineFields<T extends FieldValues>({
         <Controller
           control={control}
           name={fixedDateName}
-          render={() => {
-            const selectedDate = parseInputDate(fixedDate);
+          render={({ field }) => {
+            const selectedDate = parseInputDate(field.value ?? '');
             return (
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
@@ -125,7 +116,7 @@ export function DeadlineFields<T extends FieldValues>({
                     selected={selectedDate}
                     onSelect={(date) => {
                       if (date) {
-                        onFixedDateChange(formatInputDate(date));
+                        field.onChange(formatInputDate(date));
                         setIsCalendarOpen(false);
                       }
                     }}
@@ -144,10 +135,10 @@ export function DeadlineFields<T extends FieldValues>({
         <Controller
           control={control}
           name={relativeDaysName}
-          render={() => (
+          render={({ field }) => (
             <Select
-              value={relativeDays?.toString() ?? ''}
-              onValueChange={(value) => onRelativeDaysChange(Number(value))}
+              value={field.value?.toString() ?? ''}
+              onValueChange={(value) => field.onChange(Number(value))}
             >
               <SelectTrigger aria-label="開始日からの日数">
                 <SelectValue placeholder="日数を選択" />

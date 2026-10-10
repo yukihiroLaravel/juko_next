@@ -25,19 +25,22 @@ export function InstructorCourseBulkCapacity() {
   });
 
   useEffect(() => {
-    if (courseIds.length === 0) router.push(routes.instructor.courses.list());
+    if (courseIds.length === 0)
+      router.replace(routes.instructor.courses.list());
   }, [courseIds.length, router]);
 
   const onSubmit = form.handleSubmit(() => setConfirmAction('update'));
   const onDelete = () => setConfirmAction('delete');
   const onConfirm = () => {
-    console.log(
-      confirmAction === 'delete'
-        ? 'bulk capacity delete'
-        : 'bulk capacity update',
-      courseIds,
-      form.getValues('capacity'),
-    );
+    if (confirmAction === 'delete') {
+      console.log('bulk capacity delete', courseIds);
+    } else {
+      console.log(
+        'bulk capacity update',
+        courseIds,
+        form.getValues('capacity'),
+      );
+    }
     router.push(routes.instructor.courses.list());
   };
 
@@ -45,8 +48,7 @@ export function InstructorCourseBulkCapacity() {
   return (
     <InstructorCourseBulkCapacityUI
       courseCount={courseIds.length}
-      register={form.register}
-      error={form.formState.errors.capacity?.message}
+      form={form}
       onSubmit={onSubmit}
       onDelete={onDelete}
       confirmAction={confirmAction}

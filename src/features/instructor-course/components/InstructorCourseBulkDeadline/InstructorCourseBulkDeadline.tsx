@@ -29,25 +29,23 @@ export function InstructorCourseBulkDeadline() {
   });
 
   useEffect(() => {
-    if (courseIds.length === 0) router.push(routes.instructor.courses.list());
+    if (courseIds.length === 0)
+      router.replace(routes.instructor.courses.list());
   }, [courseIds.length, router]);
 
   const onSubmit = form.handleSubmit(() => setConfirmAction('update'));
   const onDeadlineTypeChange = (value: BulkDeadlineSchema['deadline_type']) => {
-    form.setValue('deadline_type', value);
     form.clearErrors(['fixed_date', 'relative_days']);
     if (value !== 'fixed_date') form.setValue('fixed_date', '');
     if (value !== 'relative_days') form.setValue('relative_days', undefined);
   };
   const onDelete = () => setConfirmAction('delete');
   const onConfirm = () => {
-    console.log(
-      confirmAction === 'delete'
-        ? 'bulk deadline delete'
-        : 'bulk deadline update',
-      courseIds,
-      form.getValues(),
-    );
+    if (confirmAction === 'delete') {
+      console.log('bulk deadline delete', courseIds);
+    } else {
+      console.log('bulk deadline update', courseIds, form.getValues());
+    }
     router.push(routes.instructor.courses.list());
   };
 
@@ -55,15 +53,8 @@ export function InstructorCourseBulkDeadline() {
   return (
     <InstructorCourseBulkDeadlineUI
       courseCount={courseIds.length}
-      control={form.control}
-      deadlineTypeName="deadline_type"
-      fixedDateName="fixed_date"
-      relativeDaysName="relative_days"
-      fixedDateError={form.formState.errors.fixed_date?.message}
-      relativeDaysError={form.formState.errors.relative_days?.message}
+      form={form}
       onDeadlineTypeChange={onDeadlineTypeChange}
-      onFixedDateChange={(value) => form.setValue('fixed_date', value)}
-      onRelativeDaysChange={(value) => form.setValue('relative_days', value)}
       onSubmit={onSubmit}
       onDelete={onDelete}
       confirmAction={confirmAction}

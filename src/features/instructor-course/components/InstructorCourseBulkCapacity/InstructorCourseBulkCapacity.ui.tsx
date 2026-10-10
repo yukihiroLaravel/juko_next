@@ -1,14 +1,20 @@
+import { useFormState, type UseFormReturn } from 'react-hook-form';
+import type { BulkCapacitySchema } from '../../validation/BulkCourseSettingsSchema';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/atoms/Dialog';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Label } from '@/components/atoms/Label';
 
 type Props = {
   courseCount: number;
-  register: (
-    name: 'capacity',
-    options: { setValueAs: (value: string) => number | undefined },
-  ) => Record<string, unknown>;
-  error?: string;
+  form: UseFormReturn<BulkCapacitySchema>;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   onDelete: () => void;
   confirmAction: 'update' | 'delete' | null;
@@ -18,16 +24,16 @@ type Props = {
 
 export function InstructorCourseBulkCapacityUI({
   courseCount,
-  register,
-  error,
+  form,
   onSubmit,
   onDelete,
   confirmAction,
   onConfirm,
   onCancel,
 }: Props) {
+  const { errors } = useFormState({ control: form.control });
   return (
-    <main className="mx-auto max-w-3xl space-y-6 p-6">
+    <div className="mx-auto max-w-3xl space-y-6 p-6">
       <h1 className="text-2xl font-bold">講座定員一括変更</h1>
       <p>対象講座：{courseCount}件</p>
       <form
@@ -41,13 +47,16 @@ export function InstructorCourseBulkCapacityUI({
             id="bulk-capacity"
             type="number"
             min={1}
+            max={100}
             step={1}
             placeholder="上限なし"
-            {...register('capacity', {
+            {...form.register('capacity', {
               setValueAs: (value) => (value === '' ? undefined : Number(value)),
             })}
           />
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {errors.capacity && (
+            <p className="text-sm text-red-600">{errors.capacity.message}</p>
+          )}
         </div>
         <div className="flex justify-end gap-3">
           <Button type="button" variant="destructive" onClick={onDelete}>
@@ -56,25 +65,31 @@ export function InstructorCourseBulkCapacityUI({
           <Button type="submit">更新</Button>
         </div>
       </form>
-      {confirmAction && (
-        <div
-          role="dialog"
-          aria-label="確認"
-          className="fixed inset-0 grid place-items-center bg-black/30"
-        >
-          <div className="space-y-4 rounded-md bg-white p-6">
-            <p>本当に実行しますか？</p>
-            <div className="flex justify-end gap-3">
-              <Button type="button" variant="outline" onClick={onCancel}>
-                キャンセル
-              </Button>
-              <Button type="button" onClick={onConfirm}>
-                {confirmAction === 'delete' ? '削除する' : '更新する'}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-    </main>
+      <Dialog
+        open={confirmAction !== null}
+        onOpenChange={(open) => !open && onCancel()}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {confirmAction === 'delete' ? '削除の確認' : '更新の確認'}
+            </DialogTitle>
+            <DialogDescription>{`${courseCount}件の講座の定員を${confirmAction === 'delete' || form.getValues('capacity') === undefined ? 'なくします' : `${form.getValues('capacity')}に変更します`}。本当に実行しますか？`}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={onCancel}>
+              キャンセル
+            </Button>
+            <Button
+              type="button"
+              variant={confirmAction === 'delete' ? 'destructive' : 'default'}
+              onClick={onConfirm}
+            >
+              {confirmAction === 'delete' ? '削除する' : '更新する'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
