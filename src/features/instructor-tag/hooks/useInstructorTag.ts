@@ -8,14 +8,13 @@ type InstructorTagResponse = {
 };
 
 export function useInstructorTag(tagId: string) {
-  const { data, error, isLoading } = useSWR<InstructorTagResponse>(
+  const { data } = useSWR<InstructorTagResponse>(
     instructorTagKey(tagId),
     fetcher,
+    { suspense: true },
   );
 
   return {
     instructorTag: data?.data,
-    error,
-    isLoading,
   };
 }
