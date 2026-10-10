@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   Controller,
   useFormState,
@@ -19,15 +18,8 @@ import {
   AlertDialogTrigger,
 } from '@/components/atoms/AlertDialog';
 import { Button } from '@/components/atoms/Button';
-import { Calendar } from '@/components/atoms/Calendar';
 import { Input } from '@/components/atoms/Input';
 import { Label } from '@/components/atoms/Label';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/atoms/Popover';
-import { RadioGroup, RadioGroupItem } from '@/components/atoms/RadioGroup';
 import {
   Select,
   SelectContent,
@@ -37,7 +29,10 @@ import {
 } from '@/components/atoms/Select';
 import { Switch } from '@/components/atoms/Switch';
 import { ImageUploader } from '@/components/molecules/ImageUploader';
-import { formatInputDate, parseInputDate } from '@/utils/date';
+import {
+  DeadlineFields,
+  type DeadlineType,
+} from '../DeadlineFields/DeadlineFields';
 import type { CourseFormSchema } from '../../validation/CourseFormSchema';
 
 type Props = {
@@ -50,15 +45,9 @@ type Props = {
 const errorClass = 'text-sm text-red-600';
 
 export function CourseFormUI({ form, mode, onSubmit, onDelete }: Props) {
-  const { register, setValue, clearErrors, control } = form;
+  const { register, setValue, control } = form;
   const { errors, isSubmitting } = useFormState({ control });
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const deadlineType = useWatch({ control, name: 'deadline_type' });
   const status = useWatch({ control, name: 'status' });
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const startMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  const endMonth = new Date(today.getFullYear() + 10, 11, 1);
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-6">
@@ -146,115 +135,22 @@ export function CourseFormUI({ form, mode, onSubmit, onDelete }: Props) {
           </div>
         )}
 
-        <fieldset className="space-y-3">
-          <legend className="text-sm font-medium">受講期限</legend>
-          <Controller
-            control={control}
-            name="deadline_type"
-            render={({ field }) => (
-              <RadioGroup
-                value={field.value}
-                onValueChange={(value) => {
-                  field.onChange(value);
-                  clearErrors(['fixed_date', 'relative_days']);
-                  if (value !== 'fixed_date') setValue('fixed_date', '');
-                  if (value !== 'relative_days')
-                    setValue('relative_days', undefined);
-                }}
-              >
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="none" id="deadline-none" />
-                  <Label htmlFor="deadline-none">なし</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="fixed_date" id="deadline-fixed-date" />
-                  <Label htmlFor="deadline-fixed-date">一括日程</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem
-                    value="relative_days"
-                    id="deadline-relative-days"
-                  />
-                  <Label htmlFor="deadline-relative-days">
-                    開始日から○日後
-                  </Label>
-                </div>
-              </RadioGroup>
-            )}
-          />
-
-          {deadlineType === 'fixed_date' && (
-            <Controller
-              control={control}
-              name="fixed_date"
-              render={({ field }) => {
-                const selectedDate = parseInputDate(field.value);
-                return (
-                  <Popover
-                    open={isCalendarOpen}
-                    onOpenChange={setIsCalendarOpen}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button type="button" variant="outline">
-                        {selectedDate
-                          ? formatInputDate(selectedDate)
-                          : '年月日を選択'}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={(date) => {
-                          if (date) {
-                            field.onChange(formatInputDate(date));
-                            setIsCalendarOpen(false);
-                          }
-                        }}
-                        disabled={(date) => date < today}
-                        startMonth={startMonth}
-                        endMonth={endMonth}
-                        captionLayout="dropdown"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                );
-              }}
-            />
-          )}
-
-          {deadlineType === 'relative_days' && (
-            <Controller
-              control={control}
-              name="relative_days"
-              render={({ field }) => (
-                <Select
-                  value={field.value?.toString() ?? ''}
-                  onValueChange={(value) => field.onChange(Number(value))}
-                >
-                  <SelectTrigger aria-label="開始日からの日数">
-                    <SelectValue placeholder="日数を選択" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: 31 }, (_, index) => index + 1).map(
-                      (day) => (
-                        <SelectItem key={day} value={String(day)}>
-                          {day}日
-                        </SelectItem>
-                      ),
-                    )}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-          )}
-          {errors.fixed_date && (
-            <p className={errorClass}>{errors.fixed_date.message}</p>
-          )}
-          {errors.relative_days && (
-            <p className={errorClass}>{errors.relative_days.message}</p>
-          )}
-        </fieldset>
+        <DeadlineFields
+          control={control}
+          deadlineTypeName="deadline_type"
+          fixedDateName="fixed_date"
+          relativeDaysName="relative_days"
+          onDeadlineTypeChange={(value: DeadlineType) => {
+            setValue('deadline_type', value);
+            form.clearErrors(['fixed_date', 'relative_days']);
+            if (value !== 'fixed_date') setValue('fixed_date', '');
+            if (value !== 'relative_days') setValue('relative_days', undefined);
+          }}
+          onFixedDateChange={(value) => setValue('fixed_date', value)}
+          onRelativeDaysChange={(value) => setValue('relative_days', value)}
+          fixedDateError={errors.fixed_date?.message}
+          relativeDaysError={errors.relative_days?.message}
+        />
 
         <div className="space-y-2">
           <Label htmlFor="capacity">講座定員</Label>

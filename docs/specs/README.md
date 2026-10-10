@@ -8,11 +8,13 @@
 
 ## 文書一覧
 
-| 文書                                | 画面                                                              | ID                 |
-| ----------------------------------- | ----------------------------------------------------------------- | ------------------ |
-| `screens/conventions.md`            | 全画面に共通する振る舞い（読み込み中・取得の失敗・0件の表示など） | `AC-SCREEN-<連番>` |
-| `screens/instructor-course-list.md` | 講師側 講座一覧                                                   | `AC-ICLIST-<連番>` |
-| `screens/instructor-tag-form.md`    | 講師側 講座分類登録・講座分類編集                                 | `AC-ITAG-<連番>`   |
+| 文書                                         | 画面                                                              | ID                 |
+| -------------------------------------------- | ----------------------------------------------------------------- | ------------------ |
+| `screens/conventions.md`                     | 全画面に共通する振る舞い（読み込み中・取得の失敗・0件の表示など） | `AC-SCREEN-<連番>` |
+| `screens/instructor-course-list.md`          | 講師側 講座一覧                                                   | `AC-ICLIST-<連番>` |
+| `screens/instructor-course-bulk-capacity.md` | 講師側 講座定員一括変更                                           | `AC-ICCAP-<連番>`  |
+| `screens/instructor-course-bulk-deadline.md` | 講師側 受講期限一括変更                                           | `AC-ICDEAD-<連番>` |
+| `screens/instructor-tag-form.md`             | 講師側 講座分類登録・講座分類編集                                 | `AC-ITAG-<連番>`   |
 
 画面を書き起こしたら、この表に行を足し、画面の略称を決める。略称はバックエンドの機能の略称と重ねない（`docs/documentation-rules.md`）。
 
