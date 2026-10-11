@@ -40,6 +40,13 @@ type InstructorCourseListUIProps = {
   } | null;
   onConfirmBulkAction: () => void;
   onCancelBulkAction: () => void;
+  meta?: {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+  };
+  onPageChange: (page: number) => void;
 };
 
 export function InstructorCourseListUI({
@@ -57,7 +64,13 @@ export function InstructorCourseListUI({
   confirmDialog,
   onConfirmBulkAction,
   onCancelBulkAction,
+  meta,
+  onPageChange,
 }: InstructorCourseListUIProps) {
+  const currentPage = meta?.current_page ?? 1;
+  const lastPage = meta?.last_page ?? 1;
+  const pageNumbers = Array.from({ length: lastPage }, (_, index) => index + 1);
+
   const renderCards = (items: Course[]) => (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((course) => (
@@ -183,19 +196,33 @@ export function InstructorCourseListUI({
         aria-label="ページネーション"
         className="flex items-center justify-center gap-2 pt-4"
       >
-        <Button variant="outline" size="sm" disabled>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={currentPage <= 1}
+          onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+        >
           前へ
         </Button>
 
-        <Button variant="secondary" size="sm" aria-current="page">
-          1
-        </Button>
+        {pageNumbers.map((page) => (
+          <Button
+            key={page}
+            variant={page === currentPage ? 'secondary' : 'outline'}
+            size="sm"
+            aria-current={page === currentPage ? 'page' : undefined}
+            onClick={() => onPageChange(page)}
+          >
+            {page}
+          </Button>
+        ))}
 
-        <Button variant="outline" size="sm">
-          2
-        </Button>
-
-        <Button variant="outline" size="sm">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={currentPage >= lastPage}
+          onClick={() => onPageChange(Math.min(lastPage, currentPage + 1))}
+        >
           次へ
         </Button>
       </nav>

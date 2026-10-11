@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useInstructorCourses } from '@/features/instructor-course/hooks/useInstructorCourses';
 import { routes } from '@/lib/routes';
 import {
   bulkActionConfirmations,
@@ -12,52 +13,64 @@ import {
 import type { Course } from '../../types/course';
 import { InstructorCourseListUI } from './InstructorCourseList.ui';
 
-const dummyCourses: Course[] = [
-  {
-    id: 1,
-    title: 'Laravel入門講座',
-    deadline: '2025/12/31まで',
-    isInProgress: true,
-    currentStudents: 3,
-    capacity: 10,
-    tags: ['Laravel'],
-  },
-  {
-    id: 2,
-    title: 'React基礎講座',
-    deadline: '開始日から30日後',
-    isInProgress: false,
-    currentStudents: 5,
-    capacity: 5,
-    tags: ['React'],
-  },
-  {
-    id: 3,
-    title: 'Web開発基礎',
-    deadline: null,
-    isInProgress: true,
-    currentStudents: 2,
-    capacity: null,
-    tags: ['Laravel', 'React'],
-  },
-  {
-    id: 4,
-    title: '新任講師向け講座',
-    deadline: null,
-    isInProgress: false,
-    currentStudents: 0,
-    capacity: 20,
-    tags: [],
-  },
-];
+type ApiCourse = {
+  course_id: number;
+  title: string;
+  image: string | null;
+  status: string;
+  has_active_students: boolean;
+  tags: Array<{ tag_id: number; content: string }>;
+  course_deadline: { fixed_date?: string | null; relative_days?: number | null } | null;
+};
+
+const formatDeadline = (
+  courseDeadline: ApiCourse['course_deadline'],
+): string | null => {
+  if (!courseDeadline) {
+    return null;
+  }
+
+  if (courseDeadline.fixed_date) {
+    return `${courseDeadline.fixed_date}まで`;
+  }
+
+  if (courseDeadline.relative_days !== null && courseDeadline.relative_days !== undefined) {
+    return `開始日から${courseDeadline.relative_days}日後`;
+  }
+
+  return null;
+};
+
+const mapApiCourseToCourse = (course: ApiCourse): Course => ({
+  id: course.course_id,
+  title: course.title,
+  deadline: formatDeadline(course.course_deadline),
+  isInProgress: course.has_active_students,
+  currentStudents: 0,
+  capacity: null,
+  tags: course.tags.map((tag) => tag.content),
+  image: course.image ?? undefined,
+});
 
 export function InstructorCourseList() {
   const router = useRouter();
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [page, setPage] = useState(1);
   const [isClassificationEnabled, setIsClassificationEnabled] = useState(false);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
   const [pendingAction, setPendingAction] =
     useState<ConfirmableBulkAction | null>(null);
+
+  const { courses: apiCourses, meta, error } = useInstructorCourses({
+    page,
+    search_word: searchKeyword.trim(),
+    per_page: 6,
+  });
+
+  const courses = useMemo(
+    () => apiCourses.map((course) => mapApiCourseToCourse(course)),
+    [apiCourses],
+  );
 
   const handleCourseSelectionChange = (courseId: number, checked: boolean) => {
     setSelectedCourseIds((currentIds) =>
@@ -69,12 +82,8 @@ export function InstructorCourseList() {
     );
   };
 
-  const filteredCourses = dummyCourses.filter((course) =>
-    course.title.toLowerCase().includes(searchKeyword.trim().toLowerCase()),
-  );
-
   const visibleSelectedCourseIds = selectedCourseIds.filter((id) =>
-    filteredCourses.some((course) => course.id === id),
+    courses.some((course) => course.id === id),
   );
 
   const executeBulkAction = () => {
@@ -115,7 +124,7 @@ export function InstructorCourseList() {
   };
 
   const groupedCourses = Object.entries(
-    filteredCourses.reduce<Record<string, Course[]>>((groups, course) => {
+    courses.reduce<Record<string, Course[]>>((groups, course) => {
       const tags = course.tags.length > 0 ? course.tags : ['未分類'];
 
       tags.forEach((tag) => {
@@ -125,13 +134,26 @@ export function InstructorCourseList() {
 
       return groups;
     }, {}),
-  ).map(([tag, courses]) => ({ tag, courses }));
+  ).map(([tag, grouped]) => ({ tag, courses: grouped }));
+
+  const handleSearchKeywordChange = (value: string) => {
+    setSearchKeyword(value);
+    setPage(1);
+  };
+
+  if (error) {
+    return (
+      <div className="mx-auto max-w-6xl space-y-6 p-6">
+        <p role="alert">講座の取得に失敗しました。</p>
+      </div>
+    );
+  }
 
   return (
     <InstructorCourseListUI
-      courses={filteredCourses}
+      courses={courses}
       searchKeyword={searchKeyword}
-      onSearchKeywordChange={setSearchKeyword}
+      onSearchKeywordChange={handleSearchKeywordChange}
       isClassificationEnabled={isClassificationEnabled}
       onClassificationChange={setIsClassificationEnabled}
       selectedCourseIds={selectedCourseIds}
@@ -143,6 +165,8 @@ export function InstructorCourseList() {
       confirmDialog={confirmDialog}
       onConfirmBulkAction={executeBulkAction}
       onCancelBulkAction={() => setPendingAction(null)}
+      meta={meta}
+      onPageChange={setPage}
     />
   );
 }
