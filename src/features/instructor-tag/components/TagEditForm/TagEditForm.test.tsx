@@ -6,6 +6,12 @@ import { useInstructorTag } from '@/features/instructor-tag/hooks/useInstructorT
 import { useUpdateInstructorTag } from '@/features/instructor-tag/hooks/useUpdateInstructorTag';
 import { useDeleteInstructorTag } from '@/features/instructor-tag/hooks/useDeleteInstructorTag';
 
+const navigation = vi.hoisted(() => ({ push: vi.fn() }));
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: navigation.push }),
+}));
+
 vi.mock('@/features/instructor-tag/hooks/useInstructorTag');
 vi.mock('@/features/instructor-tag/hooks/useUpdateInstructorTag');
 vi.mock('@/features/instructor-tag/hooks/useDeleteInstructorTag');
@@ -20,6 +26,7 @@ function mockUseInstructorTag(content: string) {
 }
 
 beforeEach(() => {
+  navigation.push.mockReset();
   updateInstructorTag.mockReset();
   updateInstructorTag.mockResolvedValue({ success: true });
   deleteInstructorTag.mockReset();
@@ -151,5 +158,115 @@ describe('講座分類編集フォーム', () => {
       await screen.findByText('分類タイトルは50文字以内で入力してください'),
     ).toBeInTheDocument();
     expect(updateInstructorTag).not.toHaveBeenCalled();
+  });
+
+  it('更新に成功すると、講座一覧に移る', async () => {
+    // Arrange
+    mockUseInstructorTag('APIから取得した分類タイトル');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '更新' }));
+
+    // Assert
+    await waitFor(() =>
+      expect(navigation.push).toHaveBeenCalledWith('/instructor/courses'),
+    );
+  });
+
+  it('更新に失敗すると、エラーが出て、講座一覧に移らない', async () => {
+    // Arrange
+    updateInstructorTag.mockResolvedValue({
+      success: false,
+      error: 'この操作を行う権限がありません',
+    });
+    mockUseInstructorTag('APIから取得した分類タイトル');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '更新' }));
+
+    // Assert
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'この操作を行う権限がありません',
+    );
+    expect(navigation.push).not.toHaveBeenCalled();
+  });
+
+  it('入力まちがい(422)のとき、メッセージが入力欄の下に1つだけ出て、講座一覧に移らない', async () => {
+    // Arrange
+    updateInstructorTag.mockResolvedValue({
+      success: false,
+      error: 'このタイトルは使用できません',
+      fieldErrors: { content: 'このタイトルは使用できません' },
+    });
+    mockUseInstructorTag('APIから取得した分類タイトル');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '更新' }));
+
+    // Assert
+    expect(
+      await screen.findByText('このタイトルは使用できません'),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(navigation.push).not.toHaveBeenCalled();
+  });
+
+  it('削除に成功すると、講座一覧に移る', async () => {
+    // Arrange
+    mockUseInstructorTag('APIから取得した分類タイトル');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '削除' }));
+    await user.click(await screen.findByRole('button', { name: '削除する' }));
+
+    // Assert
+    await waitFor(() =>
+      expect(navigation.push).toHaveBeenCalledWith('/instructor/courses'),
+    );
+  });
+
+  it('講座が紐づいていて削除に失敗すると、削除できない旨が出て、講座一覧に移らない', async () => {
+    // Arrange
+    deleteInstructorTag.mockResolvedValue({
+      success: false,
+      error: '講座が紐づいている講座分類は削除できません',
+    });
+    mockUseInstructorTag('APIから取得した分類タイトル');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '削除' }));
+    await user.click(await screen.findByRole('button', { name: '削除する' }));
+
+    // Assert
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      '講座が紐づいている講座分類は削除できません',
+    );
+    expect(navigation.push).not.toHaveBeenCalled();
+  });
+
+  it('更新の送信中は、ボタンが「更新中...」になり、押せない', async () => {
+    // Arrange
+    updateInstructorTag.mockReturnValue(new Promise(() => {}));
+    mockUseInstructorTag('APIから取得した分類タイトル');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '更新' }));
+
+    // Assert
+    expect(
+      await screen.findByRole('button', { name: '更新中...' }),
+    ).toBeDisabled();
   });
 });
