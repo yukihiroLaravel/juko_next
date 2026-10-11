@@ -30,23 +30,23 @@ beforeEach(() => {
 
 describe('講座分類編集フォーム', () => {
   // AC-ITAG-003
-  it('編集画面を開くと、APIから取得した分類名が入力されている', () => {
+  it('編集画面を開くと、APIから取得した分類タイトルが入力されている', () => {
     // Arrange
-    mockUseInstructorTag('APIから取得した分類名');
+    mockUseInstructorTag('APIから取得した分類タイトル');
 
     // Act
     render(<TagEditForm tagId="1" />);
 
     // Assert
     expect(screen.getByLabelText('分類タイトル')).toHaveValue(
-      'APIから取得した分類名',
+      'APIから取得した分類タイトル',
     );
   });
 
   // AC-ITAG-004
-  it('削除を押すと、取得した分類名と元に戻せないことが確認ダイアログに出る', async () => {
+  it('削除を押すと、取得した分類タイトルと元に戻せないことが確認ダイアログに出る', async () => {
     // Arrange
-    mockUseInstructorTag('APIから取得した分類名');
+    mockUseInstructorTag('APIから取得した分類タイトル');
     render(<TagEditForm tagId="1" />);
     const user = userEvent.setup();
 
@@ -56,7 +56,7 @@ describe('講座分類編集フォーム', () => {
     // Assert
     expect(
       await screen.findByText(
-        '「APIから取得した分類名」を削除します。削除すると元に戻せません。',
+        '「APIから取得した分類タイトル」を削除します。削除すると元に戻せません。',
       ),
     ).toBeInTheDocument();
   });
@@ -64,7 +64,7 @@ describe('講座分類編集フォーム', () => {
   // AC-ITAG-005
   it('削除を押して確認ダイアログで削除するを選ぶと、削除される', async () => {
     // Arrange
-    mockUseInstructorTag('APIから取得した分類名');
+    mockUseInstructorTag('APIから取得した分類タイトル');
     render(<TagEditForm tagId="1" />);
     const user = userEvent.setup();
 
@@ -81,7 +81,7 @@ describe('講座分類編集フォーム', () => {
   // AC-ITAG-005
   it('削除を押して確認ダイアログでキャンセルを選ぶと、削除されない', async () => {
     // Arrange
-    mockUseInstructorTag('APIから取得した分類名');
+    mockUseInstructorTag('APIから取得した分類タイトル');
     render(<TagEditForm tagId="1" />);
     const user = userEvent.setup();
 
@@ -96,7 +96,7 @@ describe('講座分類編集フォーム', () => {
   // AC-ITAG-002
   it('分類タイトルを書き換えて更新を押すと、書き換えた内容で更新される', async () => {
     // Arrange
-    mockUseInstructorTag('APIから取得した分類名');
+    mockUseInstructorTag('APIから取得した分類タイトル');
     render(<TagEditForm tagId="1" />);
     const user = userEvent.setup();
 
@@ -118,7 +118,7 @@ describe('講座分類編集フォーム', () => {
   // AC-ITAG-001
   it('分類タイトルを空にして更新を押すと、入力を促すエラーが出て更新されない', async () => {
     // Arrange
-    mockUseInstructorTag('APIから取得した分類名');
+    mockUseInstructorTag('APIから取得した分類タイトル');
     render(<TagEditForm tagId="1" />);
     const user = userEvent.setup();
 
@@ -136,7 +136,7 @@ describe('講座分類編集フォーム', () => {
   // AC-ITAG-001
   it('分類タイトルが51文字のとき、文字数のエラーが出て更新されない', async () => {
     // Arrange
-    mockUseInstructorTag('APIから取得した分類名');
+    mockUseInstructorTag('APIから取得した分類タイトル');
     render(<TagEditForm tagId="1" />);
     const user = userEvent.setup();
 
