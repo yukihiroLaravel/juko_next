@@ -59,6 +59,16 @@ export function TagFormUI({
           )}
         </div>
 
+        {/* 入力欄に結びつかないエラー(ログイン切れ、権限なし、削除できないなど) */}
+        {errors.root && (
+          <p
+            role="alert"
+            className="rounded-md bg-red-50 p-3 text-sm text-red-600"
+          >
+            {errors.root.message}
+          </p>
+        )}
+
         {/* ボタン：削除の処理が渡されたら「削除」と「更新」、なければ「登録」 */}
         {onDelete ? (
           <div className="flex justify-between">
