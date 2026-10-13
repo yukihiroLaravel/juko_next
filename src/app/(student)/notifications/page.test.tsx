@@ -26,15 +26,13 @@ describe('お知らせ一覧ページ', () => {
     render(<NotificationsPage />);
 
     // Assert
-    expect(
-      screen.getByText('エラーが発生しました'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('エラーが発生しました')).toBeInTheDocument();
   });
-  
+
   it('読み込み中はスケルトンを表示する', async () => {
     // Arrange
     mockNotificationList.mockImplementation(() => {
-        throw new Promise<void>(() => {});
+      throw new Promise<void>(() => {});
     });
 
     // Act
@@ -42,8 +40,7 @@ describe('お知らせ一覧ページ', () => {
 
     // Assert
     expect(
-        await screen.findByTestId('notification-list-skeleton'),
+      await screen.findByTestId('notification-list-skeleton'),
     ).toBeInTheDocument();
-    });
-
+  });
 });

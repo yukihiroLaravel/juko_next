@@ -138,9 +138,6 @@ describe('受講生側お知らせ一覧', () => {
       screen.getByText('現在、お知らせはありません。'),
     ).toBeInTheDocument();
 
-    expect(
-      screen.queryByRole('button', { name: '2' }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '2' })).not.toBeInTheDocument();
   });
-
 });

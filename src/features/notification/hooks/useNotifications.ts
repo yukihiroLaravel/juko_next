@@ -5,7 +5,12 @@ import type { NotificationsResponse } from '../types/notification';
 type UseNotificationsParams = {
   page: number;
   perPage: number;
-  sortBy: 'title' | 'course_id' | 'start_date' | 'instructor_nick_name' | 'read_status';
+  sortBy:
+    | 'title'
+    | 'course_id'
+    | 'start_date'
+    | 'instructor_nick_name'
+    | 'read_status';
   order: 'asc' | 'desc';
 };
 

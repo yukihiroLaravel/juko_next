@@ -21,7 +21,7 @@ export default function NotificationsPage() {
         <Suspense fallback={<NotificationListSkeleton />}>
           <NotificationList />
         </Suspense>
-      </ErrorBoundary>  
+      </ErrorBoundary>
     </div>
   );
 }
