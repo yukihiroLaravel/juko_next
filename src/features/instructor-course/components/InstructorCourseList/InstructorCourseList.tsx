@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { type KeyboardEvent, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInstructorCourses } from '@/features/instructor-course/hooks/useInstructorCourses';
 import { routes } from '@/lib/routes';
@@ -20,7 +20,10 @@ type ApiCourse = {
   status: string;
   has_active_students: boolean;
   tags: Array<{ tag_id: number; content: string }>;
-  course_deadline: { fixed_date?: string | null; relative_days?: number | null } | null;
+  course_deadline: {
+    fixed_date?: string | null;
+    relative_days?: number | null;
+  } | null;
 };
 
 const formatDeadline = (
@@ -31,39 +34,54 @@ const formatDeadline = (
   }
 
   if (courseDeadline.fixed_date) {
-    return `${courseDeadline.fixed_date}まで`;
+    return `${courseDeadline.fixed_date.replace(/-/g, '/')}まで`;
   }
 
-  if (courseDeadline.relative_days !== null && courseDeadline.relative_days !== undefined) {
+  if (
+    courseDeadline.relative_days !== null &&
+    courseDeadline.relative_days !== undefined
+  ) {
     return `開始日から${courseDeadline.relative_days}日後`;
   }
 
   return null;
 };
 
-const mapApiCourseToCourse = (course: ApiCourse): Course => ({
-  id: course.course_id,
-  title: course.title,
-  deadline: formatDeadline(course.course_deadline),
-  isInProgress: course.has_active_students,
-  currentStudents: 0,
-  capacity: null,
-  tags: course.tags.map((tag) => tag.content),
-  image: course.image ?? undefined,
-});
+const mapApiCourseToCourse = (course: ApiCourse): Course => {
+  const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL ?? '';
+  const image = course.image
+    ? `${storageUrl.replace(/\/+$/, '')}/${course.image.replace(/^\/+/, '')}`
+    : undefined;
+
+  return {
+    id: course.course_id,
+    title: course.title,
+    deadline: formatDeadline(course.course_deadline),
+    isInProgress: course.has_active_students,
+    currentStudents: 0,
+    capacity: null,
+    tags: course.tags.map((tag) => tag.content),
+    image,
+  };
+};
 
 export function InstructorCourseList() {
   const router = useRouter();
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [submittedSearchKeyword, setSubmittedSearchKeyword] = useState('');
   const [page, setPage] = useState(1);
   const [isClassificationEnabled, setIsClassificationEnabled] = useState(false);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
   const [pendingAction, setPendingAction] =
     useState<ConfirmableBulkAction | null>(null);
 
-  const { courses: apiCourses, meta, error } = useInstructorCourses({
+  const {
+    courses: apiCourses,
+    meta,
+    error,
+  } = useInstructorCourses({
     page,
-    search_word: searchKeyword.trim(),
+    search_word: submittedSearchKeyword,
     per_page: 6,
   });
 
@@ -141,6 +159,18 @@ export function InstructorCourseList() {
     setPage(1);
   };
 
+  const handleSearchSubmit = () => {
+    setSubmittedSearchKeyword(searchKeyword.trim());
+    setPage(1);
+  };
+
+  const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSearchSubmit();
+    }
+  };
+
   if (error) {
     return (
       <div className="mx-auto max-w-6xl space-y-6 p-6">
@@ -154,6 +184,8 @@ export function InstructorCourseList() {
       courses={courses}
       searchKeyword={searchKeyword}
       onSearchKeywordChange={handleSearchKeywordChange}
+      onSearchSubmit={handleSearchSubmit}
+      onSearchKeyDown={handleSearchKeyDown}
       isClassificationEnabled={isClassificationEnabled}
       onClassificationChange={setIsClassificationEnabled}
       selectedCourseIds={selectedCourseIds}

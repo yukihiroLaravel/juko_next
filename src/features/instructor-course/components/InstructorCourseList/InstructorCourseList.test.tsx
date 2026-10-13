@@ -13,7 +13,8 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('@/features/instructor-course/hooks/useInstructorCourses', () => ({
-  useInstructorCourses: (...args: unknown[]) => mockUseInstructorCourses(...args),
+  useInstructorCourses: (...args: unknown[]) =>
+    mockUseInstructorCourses(...args),
 }));
 
 type ApiCourseTestItem = {
@@ -23,13 +24,11 @@ type ApiCourseTestItem = {
   status: string;
   has_active_students: boolean;
   tags: Array<{ tag_id: number; content: string }>;
-  course_deadline:
-    | null
-    | {
-        course_deadline_id?: number;
-        fixed_date?: string | null;
-        relative_days?: number | null;
-      };
+  course_deadline: null | {
+    course_deadline_id?: number;
+    fixed_date?: string | null;
+    relative_days?: number | null;
+  };
 };
 
 const baseCourses: ApiCourseTestItem[] = [
@@ -120,7 +119,9 @@ describe('講師側講座一覧', () => {
     // Act
 
     // Assert
-    expect(screen.getByRole('heading', { name: '講座一覧' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: '講座一覧' }),
+    ).toBeInTheDocument();
     expect(screen.getByText('PHPコース')).toBeInTheDocument();
     expect(screen.getByText('バックエンド')).toBeInTheDocument();
     expect(screen.getByText('PHP')).toBeInTheDocument();
@@ -128,9 +129,7 @@ describe('講師側講座一覧', () => {
       screen.getByRole('img', { name: 'PHPコースのサムネイル' }),
     ).toHaveAttribute(
       'src',
-      expect.stringContaining(
-        'http%3A%2F%2Flocalhost%3A8080%2Fstorage%2Fpublic%2Fcourse%2Fphp.png',
-      ),
+      'http://localhost:8080/storage/public/course/php.png',
     );
   });
 
@@ -152,14 +151,15 @@ describe('講師側講座一覧', () => {
     const user = userEvent.setup();
     mockUseInstructorCourses.mockImplementation(({ search_word = '' } = {}) =>
       buildHookResponse({
-        courses:
-          search_word === '存在しない検索語' ? [] : baseCourses,
+        courses: search_word === '存在しない検索語' ? [] : baseCourses,
       }),
     );
 
     // Act
     render(<InstructorCourseList />);
-    await user.type(screen.getByRole('searchbox', { name: '講座検索' }), '存在しない検索語');
+    const searchInput = screen.getByRole('searchbox', { name: '講座検索' });
+    await user.type(searchInput, '存在しない検索語');
+    await user.keyboard('{Enter}');
 
     // Assert
     expect(screen.getByText('該当する講座はありません。')).toBeInTheDocument();
@@ -178,27 +178,35 @@ describe('講師側講座一覧', () => {
     expect(screen.getByText(/エラー|失敗|取得/)).toBeInTheDocument();
   });
 
-  it('検索実行時に search_word が API 取得条件へ反映される', async () => {
+  it('検索入力は入力中に即時送信せず、Enter 後に検索条件を送信する', async () => {
     // Arrange
     const user = userEvent.setup();
     render(<InstructorCourseList />);
+    const searchInput = screen.getByRole('searchbox', { name: '講座検索' });
 
     // Act
-    await user.type(screen.getByRole('searchbox', { name: '講座検索' }), 'React');
+    await user.type(searchInput, 'React');
 
     // Assert
-    expect(mockUseInstructorCourses).toHaveBeenCalledWith(
+    expect(mockUseInstructorCourses).toHaveBeenLastCalledWith(
+      expect.objectContaining({ search_word: '' }),
+    );
+
+    await user.keyboard('{Enter}');
+    expect(mockUseInstructorCourses).toHaveBeenLastCalledWith(
       expect.objectContaining({ search_word: 'React' }),
     );
   });
 
-  it('検索語変更時に page が 1 へ戻る', async () => {
+  it('検索確定時に page が 1 へ戻り、検索条件が送信される', async () => {
     // Arrange
     const user = userEvent.setup();
     render(<InstructorCourseList />);
 
     // Act
-    await user.type(screen.getByRole('searchbox', { name: '講座検索' }), 'React');
+    const searchInput = screen.getByRole('searchbox', { name: '講座検索' });
+    await user.type(searchInput, 'React');
+    await user.keyboard('{Enter}');
 
     // Assert
     expect(mockUseInstructorCourses).toHaveBeenLastCalledWith(
@@ -255,7 +263,9 @@ describe('講師側講座一覧', () => {
     await user.click(screen.getByRole('switch'));
 
     // Assert
-    expect(screen.getByRole('region', { name: 'バックエンド' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('region', { name: 'バックエンド' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'PHP' })).toBeInTheDocument();
   });
 
@@ -318,7 +328,7 @@ describe('講師側講座一覧', () => {
     render(<InstructorCourseList />);
 
     // Assert
-    expect(screen.getByText('2026-12-31まで')).toBeInTheDocument();
+    expect(screen.getByText('2026/12/31まで')).toBeInTheDocument();
     expect(screen.getByText('開始日から30日後')).toBeInTheDocument();
     expect(screen.queryByText('期限なし')).not.toBeInTheDocument();
   });

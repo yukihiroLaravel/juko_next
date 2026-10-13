@@ -24,6 +24,10 @@ type InstructorCourseListUIProps = {
   courses: Course[];
   searchKeyword: string;
   onSearchKeywordChange: (value: string) => void;
+  onSearchSubmit: () => void;
+  onSearchKeyDown: (
+    event: import('react').KeyboardEvent<HTMLInputElement>,
+  ) => void;
   isClassificationEnabled: boolean;
   onClassificationChange: (checked: boolean) => void;
   selectedCourseIds: number[];
@@ -53,6 +57,8 @@ export function InstructorCourseListUI({
   courses,
   searchKeyword,
   onSearchKeywordChange,
+  onSearchSubmit,
+  onSearchKeyDown,
   isClassificationEnabled,
   onClassificationChange,
   selectedCourseIds,
@@ -95,10 +101,12 @@ export function InstructorCourseListUI({
         <Input
           aria-label="講座検索"
           className="max-w-md"
-          placeholder="講座名で検索"
+          placeholder="講座名・分類名で検索"
           type="search"
           value={searchKeyword}
           onChange={(event) => onSearchKeywordChange(event.target.value)}
+          onKeyDown={onSearchKeyDown}
+          onBlur={onSearchSubmit}
         />
 
         <label className="flex items-center gap-2 text-sm">

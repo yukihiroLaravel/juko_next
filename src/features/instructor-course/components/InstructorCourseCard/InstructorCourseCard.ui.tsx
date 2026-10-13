@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { Card } from '@/components/atoms/Card';
 
 type InstructorCourseCardUIProps = {
@@ -16,19 +15,12 @@ export function InstructorCourseCardUI({
   tags,
   image,
 }: InstructorCourseCardUIProps) {
-  const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL ?? '';
-  const imageSrc = image
-    ? `${storageUrl.replace(/\/+$/, '')}/${image.replace(/^\/+/, '')}`
-    : null;
-
   return (
     <Card className="overflow-hidden rounded-md border bg-white p-0 hover:opacity-80">
-      {imageSrc ? (
-        <Image
-          src={imageSrc}
+      {image ? (
+        <img
+          src={image}
           alt={`${title}のサムネイル`}
-          width={800}
-          height={450}
           className="aspect-[16/9] h-auto w-full object-cover"
         />
       ) : (
