@@ -195,7 +195,7 @@ describe('講座分類編集フォーム', () => {
     expect(navigation.push).not.toHaveBeenCalled();
   });
 
-  it('入力まちがい(422)のとき、メッセージが入力欄の下に1つだけ出て、講座一覧に移らない', async () => {
+  it('サーバーから分類タイトルのエラーが返ると、メッセージが入力欄の下に1つだけ出て、講座一覧に移らない', async () => {
     // Arrange
     updateInstructorTag.mockResolvedValue({
       success: false,
@@ -268,5 +268,30 @@ describe('講座分類編集フォーム', () => {
     expect(
       await screen.findByRole('button', { name: '更新中...' }),
     ).toBeDisabled();
+  });
+
+  it('削除に失敗したあと、もう一度削除すると、前回のエラーが消える', async () => {
+    // Arrange
+    deleteInstructorTag
+      .mockResolvedValueOnce({
+        success: false,
+        error: '講座が紐づいている講座分類は削除できません',
+      })
+      .mockResolvedValueOnce({ success: true });
+    mockUseInstructorTag('APIから取得した分類タイトル');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '削除' }));
+    await user.click(await screen.findByRole('button', { name: '削除する' }));
+    await screen.findByRole('alert');
+    await user.click(screen.getByRole('button', { name: '削除' }));
+    await user.click(await screen.findByRole('button', { name: '削除する' }));
+
+    // Assert
+    await waitFor(() =>
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument(),
+    );
   });
 });

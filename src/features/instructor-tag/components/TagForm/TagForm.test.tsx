@@ -95,7 +95,7 @@ describe('講座分類登録フォーム', () => {
     // Arrange
     createInstructorTag.mockResolvedValue({
       success: false,
-      error: 'ログイン切れのため、講座分類タイトルの登録に失敗しました。',
+      error: '講座分類の登録に失敗しました',
     });
     render(<TagForm />);
     const user = userEvent.setup();
@@ -106,12 +106,12 @@ describe('講座分類登録フォーム', () => {
 
     // Assert
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'ログイン切れのため、講座分類タイトルの登録に失敗しました。',
+      '講座分類の登録に失敗しました',
     );
     expect(navigation.push).not.toHaveBeenCalled();
   });
 
-  it('入力まちがい(422)のとき、メッセージが入力欄の下に1つだけ出て、講座一覧に移らない', async () => {
+  it('サーバーから分類タイトルのエラーが返ると、メッセージが入力欄の下に1つだけ出て、講座一覧に移らない', async () => {
     // Arrange
     createInstructorTag.mockResolvedValue({
       success: false,
