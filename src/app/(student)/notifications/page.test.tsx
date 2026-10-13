@@ -22,10 +22,9 @@ beforeEach(() => {
 
 describe('お知らせ一覧ページ', () => {
   it('エラーが発生した場合、エラーメッセージを表示する', () => {
-
     // Arrange
     // beforeEach で API エラーを発生させる設定済み
-    
+
     // Act
     render(<NotificationsPage />);
 
