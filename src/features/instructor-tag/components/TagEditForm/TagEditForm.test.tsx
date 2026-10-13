@@ -256,7 +256,13 @@ describe('講座分類編集フォーム', () => {
 
   it('更新の送信中は、ボタンが「更新中...」になり、押せない', async () => {
     // Arrange
-    updateInstructorTag.mockReturnValue(new Promise(() => {}));
+    // 送信中のまま止めておき、確認が終わったら finishUpdate で終わらせる
+    let finishUpdate: (result: { success: true }) => void = () => {};
+    updateInstructorTag.mockReturnValue(
+      new Promise((resolve) => {
+        finishUpdate = resolve;
+      }),
+    );
     mockUseInstructorTag('APIから取得した分類タイトル');
     render(<TagEditForm tagId="1" />);
     const user = userEvent.setup();
@@ -268,6 +274,12 @@ describe('講座分類編集フォーム', () => {
     expect(
       await screen.findByRole('button', { name: '更新中...' }),
     ).toBeDisabled();
+
+    // 後片付け: 送信を終わらせ、送信中の状態を次のテストに持ち越さない
+    finishUpdate({ success: true });
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: '更新' })).toBeEnabled(),
+    );
   });
 
   it('削除に失敗したあと、もう一度削除すると、前回のエラーが消える', async () => {
