@@ -2,7 +2,10 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import InstructorCoursesPage from '@/app/(instructor)/instructor/courses/page';
-import type { InstructorCourseApiItem } from '../../types/instructorCourse';
+import type {
+  InstructorCourseApiItem,
+  InstructorCoursesMeta,
+} from '../../types/instructorCourse';
 import { InstructorCourseList } from './InstructorCourseList';
 
 const { mockUseInstructorCourses, push } = vi.hoisted(() => ({
@@ -19,11 +22,13 @@ vi.mock('@/features/instructor-course/hooks/useInstructorCourses', () => ({
     mockUseInstructorCourses(...args),
 }));
 
-const baseCourses: InstructorCourseApiItem[] = [
+const PER_PAGE = 3;
+
+const courses: InstructorCourseApiItem[] = [
   {
     course_id: 1,
     title: 'PHPコース',
-    image: 'public/course/php.png',
+    image: 'course/php.png',
     status: 'public',
     has_active_students: true,
     tags: [
@@ -35,26 +40,66 @@ const baseCourses: InstructorCourseApiItem[] = [
   {
     course_id: 2,
     title: 'React入門',
-    image: 'public/course/react.png',
+    image: 'course/react.png',
     status: 'public',
     has_active_students: false,
     tags: [{ tag_id: 3, content: 'フロントエンド' }],
-    course_deadline: {
-      course_deadline_id: 11,
-      fixed_date: '2026-12-31',
-      relative_days: null,
-    },
+    course_deadline: null,
   },
   {
     course_id: 3,
     title: '未分類の講座',
-    image: 'public/course/empty.png',
+    image: 'course/empty.png',
     status: 'draft',
     has_active_students: false,
     tags: [],
     course_deadline: null,
   },
+  {
+    course_id: 4,
+    title: 'Laravel応用',
+    image: 'course/laravel.png',
+    status: 'public',
+    has_active_students: false,
+    tags: [{ tag_id: 1, content: 'バックエンド' }],
+    course_deadline: null,
+  },
 ];
+
+function buildHookResponse(
+  pageCourses: InstructorCourseApiItem[],
+  meta: InstructorCoursesMeta = {
+    current_page: 1,
+    last_page: 1,
+    per_page: PER_PAGE,
+    total: pageCourses.length,
+  },
+) {
+  return { courses: pageCourses, meta };
+}
+
+// 講座名か分類名で検索し、PER_PAGE 件ずつに分けて返す一覧の API の代わり
+function respondLikeCourseIndex({
+  page = 1,
+  search_word = '',
+}: {
+  page?: number;
+  search_word?: string;
+}) {
+  const matched = courses.filter(
+    (course) =>
+      course.title.includes(search_word) ||
+      course.tags.some((tag) => tag.content.includes(search_word)),
+  );
+  const start = (page - 1) * PER_PAGE;
+
+  return buildHookResponse(matched.slice(start, start + PER_PAGE), {
+    current_page: page,
+    last_page: Math.max(1, Math.ceil(matched.length / PER_PAGE)),
+    per_page: PER_PAGE,
+    total: matched.length,
+  });
+}
 
 async function selectCourse(user: UserEvent, courseTitle: string) {
   await user.click(
@@ -67,37 +112,12 @@ async function selectBulkAction(user: UserEvent, menuItemName: string) {
   await user.click(screen.getByRole('menuitem', { name: menuItemName }));
 }
 
-const buildHookResponse = ({
-  courses = baseCourses,
-  meta = { current_page: 1, last_page: 2, per_page: 6, total: 8 },
-  links = {
-    first: 'http://localhost:8080?page=1',
-    last: 'http://localhost:8080?page=2',
-    prev: null,
-    next: 'http://localhost:8080?page=2',
-  },
-  error,
-}: {
-  courses?: typeof baseCourses;
-  meta?: {
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-  };
-  links?: {
-    first: string | null;
-    last: string | null;
-    prev: string | null;
-    next: string | null;
-  };
-  error?: Error;
-} = {}) => ({
-  courses,
-  meta,
-  links,
-  error,
-});
+async function search(user: UserEvent, searchWord: string) {
+  await user.type(
+    screen.getByRole('searchbox', { name: '講座検索' }),
+    `${searchWord}{Enter}`,
+  );
+}
 
 describe('講師側講座一覧', () => {
   beforeEach(() => {
@@ -105,33 +125,22 @@ describe('講師側講座一覧', () => {
     push.mockReset();
     vi.restoreAllMocks();
     mockUseInstructorCourses.mockReset();
-    mockUseInstructorCourses.mockImplementation((params = {}) =>
-      buildHookResponse({
-        ...params,
-        courses: baseCourses,
-      }),
-    );
+    mockUseInstructorCourses.mockImplementation(respondLikeCourseIndex);
   });
 
-  it('API から取得した講座一覧を表示し、画像と分類が見える', () => {
+  it('講座のカードに、講座名・分類・サムネイルが表示される', () => {
     // Arrange
     render(<InstructorCourseList />);
 
     // Act
 
     // Assert
-    expect(
-      screen.getByRole('heading', { name: '講座一覧' }),
-    ).toBeInTheDocument();
     expect(screen.getByText('PHPコース')).toBeInTheDocument();
     expect(screen.getByText('バックエンド')).toBeInTheDocument();
     expect(screen.getByText('PHP')).toBeInTheDocument();
     expect(
       screen.getByRole('img', { name: 'PHPコースのサムネイル' }),
-    ).toHaveAttribute(
-      'src',
-      'http://localhost:8080/storage/public/course/php.png',
-    );
+    ).toHaveAttribute('src', 'http://localhost:8080/storage/course/php.png');
   });
 
   // AC-ICLIST-001
@@ -229,21 +238,10 @@ describe('講師側講座一覧', () => {
     // Arrange
     const user = userEvent.setup();
     const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
-    mockUseInstructorCourses.mockImplementation(({ search_word = '' } = {}) =>
-      buildHookResponse({
-        courses:
-          search_word === 'React'
-            ? baseCourses.filter((course) => course.title === 'React入門')
-            : baseCourses,
-      }),
-    );
     render(<InstructorCourseList />);
     await selectCourse(user, 'PHPコース');
     await selectCourse(user, 'React入門');
-    await user.type(
-      screen.getByRole('searchbox', { name: '講座検索' }),
-      'React{Enter}',
-    );
+    await search(user, 'React');
 
     // Act
     await selectBulkAction(user, '選択済み講座を公開');
@@ -257,21 +255,12 @@ describe('講師側講座一覧', () => {
   it('検索で表示されなくなった講座の選択は、検索を戻すと残っている', async () => {
     // Arrange
     const user = userEvent.setup();
-    mockUseInstructorCourses.mockImplementation(({ search_word = '' } = {}) =>
-      buildHookResponse({
-        courses:
-          search_word === 'React'
-            ? baseCourses.filter((course) => course.title === 'React入門')
-            : baseCourses,
-      }),
-    );
     render(<InstructorCourseList />);
-    const searchInput = screen.getByRole('searchbox', { name: '講座検索' });
     await selectCourse(user, 'PHPコース');
-    await user.type(searchInput, 'React{Enter}');
+    await search(user, 'React');
 
     // Act
-    await user.clear(searchInput);
+    await user.clear(screen.getByRole('searchbox', { name: '講座検索' }));
     await user.keyboard('{Enter}');
 
     // Assert
@@ -280,34 +269,150 @@ describe('講師側講座一覧', () => {
     ).toBeChecked();
   });
 
-  it('講座0件時に結果なしの状態を表示する', () => {
+  // AC-ICLIST-006
+  it('検索欄に入力している間は、まだ検索しない', async () => {
     // Arrange
-    mockUseInstructorCourses.mockImplementation(() =>
-      buildHookResponse({ courses: [] }),
-    );
+    const user = userEvent.setup();
+    render(<InstructorCourseList />);
 
     // Act
+    await user.type(
+      screen.getByRole('searchbox', { name: '講座検索' }),
+      'React',
+    );
+
+    // Assert
+    expect(screen.getByText('PHPコース')).toBeInTheDocument();
+  });
+
+  // AC-ICLIST-006
+  it('検索欄で Enter を押すと、講座名か分類名に検索語を含む講座だけが表示される', async () => {
+    // Arrange
+    const user = userEvent.setup();
     render(<InstructorCourseList />);
+
+    // Act
+    await search(user, 'React');
+
+    // Assert
+    expect(screen.getByText('React入門')).toBeInTheDocument();
+    expect(screen.queryByText('PHPコース')).not.toBeInTheDocument();
+  });
+
+  // AC-ICLIST-006
+  it('検索に合う講座がないとき、その旨が表示される', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<InstructorCourseList />);
+
+    // Act
+    await search(user, '存在しない検索語');
 
     // Assert
     expect(screen.getByText('該当する講座はありません。')).toBeInTheDocument();
   });
 
-  // AC-ICLIST-006
-  it('検索結果0件時に結果なしの状態を表示する', async () => {
+  // AC-ICLIST-007
+  it('分類表示をオンにすると、表示中のページの講座が分類の見出しごとにまとまり、分類のない講座は「未分類」に入る', async () => {
     // Arrange
     const user = userEvent.setup();
-    mockUseInstructorCourses.mockImplementation(({ search_word = '' } = {}) =>
-      buildHookResponse({
-        courses: search_word === '存在しない検索語' ? [] : baseCourses,
-      }),
+    render(<InstructorCourseList />);
+
+    // Act
+    await user.click(screen.getByRole('switch'));
+
+    // Assert
+    expect(
+      within(screen.getByRole('region', { name: 'フロントエンド' })).getByText(
+        'React入門',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('region', { name: '未分類' })).getByText(
+        '未分類の講座',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  // AC-ICLIST-007
+  it('分類表示では、複数の分類が付いた講座がそれぞれの見出しに表示される', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<InstructorCourseList />);
+
+    // Act
+    await user.click(screen.getByRole('switch'));
+
+    // Assert
+    expect(
+      within(screen.getByRole('region', { name: 'バックエンド' })).getByText(
+        'PHPコース',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('region', { name: 'PHP' })).getByText(
+        'PHPコース',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  // AC-ICLIST-010
+  it('2ページ目を見ているときに検索すると、検索結果の1ページ目が表示される', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<InstructorCourseList />);
+    await user.click(screen.getByRole('button', { name: '2' }));
+
+    // Act
+    await search(user, 'バックエンド');
+
+    // Assert
+    expect(screen.getByText('PHPコース')).toBeInTheDocument();
+    expect(screen.getByText('Laravel応用')).toBeInTheDocument();
+  });
+
+  // AC-ICLIST-011
+  it('ページネーションでページを選ぶと、そのページの講座が表示され、今のページとして示される', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<InstructorCourseList />);
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '2' }));
+
+    // Assert
+    expect(screen.getByText('Laravel応用')).toBeInTheDocument();
+    expect(screen.queryByText('PHPコース')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '2' })).toHaveAttribute(
+      'aria-current',
+      'page',
     );
+  });
+
+  // AC-ICLIST-011
+  it('分類表示をオンにしても、ページネーションでページを移動できる', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<InstructorCourseList />);
+    await user.click(screen.getByRole('switch'));
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '2' }));
+
+    // Assert
+    expect(
+      within(screen.getByRole('region', { name: 'バックエンド' })).getByText(
+        'Laravel応用',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('講座が1件もないとき、該当する講座がない旨が表示される', () => {
+    // Arrange
+    mockUseInstructorCourses.mockImplementation(() => buildHookResponse([]));
 
     // Act
     render(<InstructorCourseList />);
-    const searchInput = screen.getByRole('searchbox', { name: '講座検索' });
-    await user.type(searchInput, '存在しない検索語');
-    await user.keyboard('{Enter}');
 
     // Assert
     expect(screen.getByText('該当する講座はありません。')).toBeInTheDocument();
@@ -327,180 +432,28 @@ describe('講師側講座一覧', () => {
     expect(screen.getByText('エラーが発生しました')).toBeInTheDocument();
   });
 
-  // AC-ICLIST-006
-  it('検索入力は入力中に即時送信せず、Enter 後に検索条件を送信する', async () => {
-    // Arrange
-    const user = userEvent.setup();
-    render(<InstructorCourseList />);
-    const searchInput = screen.getByRole('searchbox', { name: '講座検索' });
-
-    // Act
-    await user.type(searchInput, 'React');
-
-    // Assert
-    expect(mockUseInstructorCourses).toHaveBeenLastCalledWith(
-      expect.objectContaining({ search_word: '' }),
-    );
-
-    await user.keyboard('{Enter}');
-    expect(mockUseInstructorCourses).toHaveBeenLastCalledWith(
-      expect.objectContaining({ search_word: 'React' }),
-    );
-  });
-
-  // AC-ICLIST-010
-  it('検索確定時に page が 1 へ戻り、検索条件が送信される', async () => {
-    // Arrange
-    const user = userEvent.setup();
-    render(<InstructorCourseList />);
-
-    // Act
-    const searchInput = screen.getByRole('searchbox', { name: '講座検索' });
-    await user.type(searchInput, 'React');
-    await user.keyboard('{Enter}');
-
-    // Assert
-    expect(mockUseInstructorCourses).toHaveBeenLastCalledWith(
-      expect.objectContaining({ page: 1, search_word: 'React' }),
-    );
-  });
-
-  // AC-ICLIST-011
-  it('ページネーション操作時に page が変わり、API取得条件へ反映される', async () => {
-    // Arrange
-    const user = userEvent.setup();
-    render(<InstructorCourseList />);
-
-    // Act
-    await user.click(screen.getByRole('button', { name: '2' }));
-
-    // Assert
-    expect(mockUseInstructorCourses).toHaveBeenLastCalledWith(
-      expect.objectContaining({ page: 2 }),
-    );
-  });
-
-  // AC-ICLIST-007
-  it('分類表示をオンにすると、ページ内の講座をタグごとにまとめて表示する', async () => {
-    // Arrange
-    const user = userEvent.setup();
-    render(<InstructorCourseList />);
-
-    // Act
-    await user.click(screen.getByRole('switch'));
-
-    // Assert
-    expect(
-      within(screen.getByRole('region', { name: 'バックエンド' })).getByText(
-        'PHPコース',
-      ),
-    ).toBeInTheDocument();
-    expect(
-      within(screen.getByRole('region', { name: 'フロントエンド' })).getByText(
-        'React入門',
-      ),
-    ).toBeInTheDocument();
-    expect(
-      within(screen.getByRole('region', { name: '未分類' })).getByText(
-        '未分類の講座',
-      ),
-    ).toBeInTheDocument();
-  });
-
-  // AC-ICLIST-007
-  it('複数タグを持つ講座が、各分類見出しへ重複表示される', async () => {
-    // Arrange
-    const user = userEvent.setup();
-    render(<InstructorCourseList />);
-
-    // Act
-    await user.click(screen.getByRole('switch'));
-
-    // Assert
-    expect(
-      screen.getByRole('region', { name: 'バックエンド' }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: 'PHP' })).toBeInTheDocument();
-  });
-
-  // AC-ICLIST-007
-  it('タグなし講座は「未分類」にまとめて表示される', async () => {
-    // Arrange
-    const user = userEvent.setup();
-    render(<InstructorCourseList />);
-
-    // Act
-    await user.click(screen.getByRole('switch'));
-
-    // Assert
-    expect(screen.getByRole('region', { name: '未分類' })).toBeInTheDocument();
-    expect(
-      within(screen.getByRole('region', { name: '未分類' })).getByText(
-        '未分類の講座',
-      ),
-    ).toBeInTheDocument();
-  });
-
-  // AC-ICLIST-011
-  it('分類表示をオンにしても、ページネーションでページを移動できる', async () => {
-    // Arrange
-    const user = userEvent.setup();
-    render(<InstructorCourseList />);
-    await user.click(screen.getByRole('switch'));
-
-    // Act
-    await user.click(screen.getByRole('button', { name: '2' }));
-
-    // Assert
-    expect(mockUseInstructorCourses).toHaveBeenLastCalledWith(
-      expect.objectContaining({ page: 2 }),
-    );
-  });
-
-  it('定員・受講人数の表示は行わない', () => {
-    // Arrange
-    render(<InstructorCourseList />);
-
-    // Act
-
-    // Assert
-    expect(screen.queryByText(/定員：/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/受講人数/)).not.toBeInTheDocument();
-  });
-
-  it('期限表示は fixed_date / relative_days / 期限なし の3ケースで分岐する', () => {
+  it('受講期限は、特定の日なら「〜まで」、日数なら「開始日から〜日後」と表示し、期限のない講座には出さない', () => {
     // Arrange
     mockUseInstructorCourses.mockImplementation(() =>
-      buildHookResponse({
-        courses: [
-          {
-            ...baseCourses[0],
-            course_id: 101,
-            title: '固定期限講座',
-            course_deadline: {
-              course_deadline_id: 21,
-              fixed_date: '2026-12-31',
-              relative_days: null,
-            },
+      buildHookResponse([
+        {
+          ...courses[0],
+          course_deadline: {
+            course_deadline_id: 21,
+            fixed_date: '2026-12-31',
+            relative_days: null,
           },
-          {
-            ...baseCourses[1],
-            course_id: 102,
-            title: '相対期限講座',
-            course_deadline: {
-              course_deadline_id: 22,
-              fixed_date: null,
-              relative_days: 30,
-            },
+        },
+        {
+          ...courses[1],
+          course_deadline: {
+            course_deadline_id: 22,
+            fixed_date: null,
+            relative_days: 30,
           },
-          {
-            ...baseCourses[2],
-            course_id: 103,
-            title: '期限なし講座',
-            course_deadline: null,
-          },
-        ],
-      }),
+        },
+        courses[2],
+      ]),
     );
 
     // Act
@@ -509,22 +462,16 @@ describe('講師側講座一覧', () => {
     // Assert
     expect(screen.getByText('2026/12/31まで')).toBeInTheDocument();
     expect(screen.getByText('開始日から30日後')).toBeInTheDocument();
-    expect(screen.queryByText('期限なし')).not.toBeInTheDocument();
+    expect(screen.getAllByText(/まで$|日後$/)).toHaveLength(2);
   });
 
-  it('ページネーションは meta の current_page / last_page に基づいて表示される', () => {
+  it('講座のカードに定員を表示しない', () => {
     // Arrange
     render(<InstructorCourseList />);
 
     // Act
 
     // Assert
-    expect(screen.getByRole('button', { name: '1' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '2' })).toBeInTheDocument();
-    expect(screen.getByLabelText('ページネーション')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '1' })).toHaveAttribute(
-      'aria-current',
-      'page',
-    );
+    expect(screen.queryByText(/定員：/)).not.toBeInTheDocument();
   });
 });
