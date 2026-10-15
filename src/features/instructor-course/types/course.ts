@@ -6,4 +6,5 @@ export type Course = {
   currentStudents: number;
   capacity: number | null;
   tags: string[];
+  image?: string;
 };

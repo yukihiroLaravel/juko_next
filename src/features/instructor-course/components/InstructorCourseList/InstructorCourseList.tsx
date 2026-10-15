@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { type KeyboardEvent, useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { routes } from '@/lib/routes';
+import { useInstructorCourses } from '../../hooks/useInstructorCourses';
 import {
   bulkActionConfirmations,
   bulkActionLabels,
@@ -10,54 +11,43 @@ import {
   type ConfirmableBulkAction,
 } from '../../types/bulkAction';
 import type { Course } from '../../types/course';
+import { mapInstructorCourseApiToCourse } from '../../utils/mapInstructorCourseApiToCourse';
 import { InstructorCourseListUI } from './InstructorCourseList.ui';
-
-const dummyCourses: Course[] = [
-  {
-    id: 1,
-    title: 'Laravel入門講座',
-    deadline: '2025/12/31まで',
-    isInProgress: true,
-    currentStudents: 3,
-    capacity: 10,
-    tags: ['Laravel'],
-  },
-  {
-    id: 2,
-    title: 'React基礎講座',
-    deadline: '開始日から30日後',
-    isInProgress: false,
-    currentStudents: 5,
-    capacity: 5,
-    tags: ['React'],
-  },
-  {
-    id: 3,
-    title: 'Web開発基礎',
-    deadline: null,
-    isInProgress: true,
-    currentStudents: 2,
-    capacity: null,
-    tags: ['Laravel', 'React'],
-  },
-  {
-    id: 4,
-    title: '新任講師向け講座',
-    deadline: null,
-    isInProgress: false,
-    currentStudents: 0,
-    capacity: 20,
-    tags: [],
-  },
-];
 
 export function InstructorCourseList() {
   const router = useRouter();
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [submittedSearchKeyword, setSubmittedSearchKeyword] = useState('');
+  const [page, setPage] = useState(1);
   const [isClassificationEnabled, setIsClassificationEnabled] = useState(false);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
   const [pendingAction, setPendingAction] =
     useState<ConfirmableBulkAction | null>(null);
+  const [isRefreshing, startTransition] = useTransition();
+
+  const { courses: apiCourses, meta } = useInstructorCourses({
+    page,
+    search_word: submittedSearchKeyword,
+    per_page: 6,
+  });
+
+  const courses = useMemo(
+    () => apiCourses.map((course) => mapInstructorCourseApiToCourse(course)),
+    [apiCourses],
+  );
+
+  const groupedCourses = Object.entries(
+    courses.reduce<Record<string, Course[]>>((groups, course) => {
+      const tags = course.tags.length > 0 ? course.tags : ['未分類'];
+
+      tags.forEach((tag) => {
+        groups[tag] ??= [];
+        groups[tag].push(course);
+      });
+
+      return groups;
+    }, {}),
+  ).map(([tag, grouped]) => ({ tag, courses: grouped }));
 
   const handleCourseSelectionChange = (courseId: number, checked: boolean) => {
     setSelectedCourseIds((currentIds) =>
@@ -69,12 +59,8 @@ export function InstructorCourseList() {
     );
   };
 
-  const filteredCourses = dummyCourses.filter((course) =>
-    course.title.toLowerCase().includes(searchKeyword.trim().toLowerCase()),
-  );
-
   const visibleSelectedCourseIds = selectedCourseIds.filter((id) =>
-    filteredCourses.some((course) => course.id === id),
+    courses.some((course) => course.id === id),
   );
 
   const executeBulkAction = () => {
@@ -114,35 +100,55 @@ export function InstructorCourseList() {
     isDestructive: confirmation.isDestructive,
   };
 
-  const groupedCourses = Object.entries(
-    filteredCourses.reduce<Record<string, Course[]>>((groups, course) => {
-      const tags = course.tags.length > 0 ? course.tags : ['未分類'];
+  const handleSearchKeywordChange = (value: string) => {
+    setSearchKeyword(value);
+  };
 
-      tags.forEach((tag) => {
-        groups[tag] ??= [];
-        groups[tag].push(course);
-      });
+  // 検索とページの移動で取り直す間は、代替表示に戻さず前の結果を残す
+  const handleSearchSubmit = () => {
+    const nextSearchKeyword = searchKeyword.trim();
 
-      return groups;
-    }, {}),
-  ).map(([tag, courses]) => ({ tag, courses }));
+    startTransition(() => {
+      setSubmittedSearchKeyword(nextSearchKeyword);
+      setPage(1);
+    });
+  };
+
+  const handlePageChange = (nextPage: number) => {
+    startTransition(() => {
+      setPage(nextPage);
+    });
+  };
+
+  const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSearchSubmit();
+    }
+  };
 
   return (
     <InstructorCourseListUI
-      courses={filteredCourses}
       searchKeyword={searchKeyword}
-      onSearchKeywordChange={setSearchKeyword}
+      onSearchKeywordChange={handleSearchKeywordChange}
+      onSearchSubmit={handleSearchSubmit}
+      onSearchKeyDown={handleSearchKeyDown}
       isClassificationEnabled={isClassificationEnabled}
       onClassificationChange={setIsClassificationEnabled}
-      selectedCourseIds={selectedCourseIds}
-      onCourseSelectionChange={handleCourseSelectionChange}
       onBulkAction={handleBulkAction}
-      groupedCourses={groupedCourses}
       hasVisibleSelection={visibleSelectedCourseIds.length > 0}
       onRegister={() => router.push(routes.instructor.courses.create())}
       confirmDialog={confirmDialog}
       onConfirmBulkAction={executeBulkAction}
       onCancelBulkAction={() => setPendingAction(null)}
+      courses={courses}
+      groupedCourses={groupedCourses}
+      selectedCourseIds={selectedCourseIds}
+      onCourseSelectionChange={handleCourseSelectionChange}
+      currentPage={meta?.current_page ?? 1}
+      lastPage={meta?.last_page ?? 1}
+      onPageChange={handlePageChange}
+      isRefreshing={isRefreshing}
     />
   );
 }

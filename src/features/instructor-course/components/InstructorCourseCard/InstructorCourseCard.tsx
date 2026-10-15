@@ -14,13 +14,11 @@ export function InstructorCourseCard({
   title,
   deadline,
   isInProgress,
-  currentStudents,
-  capacity,
   tags,
+  image,
   isSelected,
   onSelectionChange,
 }: InstructorCourseCardProps) {
-  const isFull = capacity !== null && currentStudents >= capacity;
   return (
     <div className="relative">
       <div className="absolute top-3 left-3 z-10">
@@ -36,10 +34,8 @@ export function InstructorCourseCard({
           title={title}
           deadline={deadline}
           isInProgress={isInProgress}
-          currentStudents={currentStudents}
-          capacity={capacity}
-          isFull={isFull}
           tags={tags}
+          image={image}
         />
       </Link>
     </div>
