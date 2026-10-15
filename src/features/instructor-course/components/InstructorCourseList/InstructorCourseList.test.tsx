@@ -293,6 +293,7 @@ describe('講師側講座一覧', () => {
     expect(screen.getByText('該当する講座はありません。')).toBeInTheDocument();
   });
 
+  // AC-ICLIST-006
   it('検索結果0件時に結果なしの状態を表示する', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -326,6 +327,7 @@ describe('講師側講座一覧', () => {
     expect(screen.getByText('エラーが発生しました')).toBeInTheDocument();
   });
 
+  // AC-ICLIST-006
   it('検索入力は入力中に即時送信せず、Enter 後に検索条件を送信する', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -346,6 +348,7 @@ describe('講師側講座一覧', () => {
     );
   });
 
+  // AC-ICLIST-010
   it('検索確定時に page が 1 へ戻り、検索条件が送信される', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -362,6 +365,7 @@ describe('講師側講座一覧', () => {
     );
   });
 
+  // AC-ICLIST-011
   it('ページネーション操作時に page が変わり、API取得条件へ反映される', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -376,6 +380,7 @@ describe('講師側講座一覧', () => {
     );
   });
 
+  // AC-ICLIST-007
   it('分類表示をオンにすると、ページ内の講座をタグごとにまとめて表示する', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -402,6 +407,7 @@ describe('講師側講座一覧', () => {
     ).toBeInTheDocument();
   });
 
+  // AC-ICLIST-007
   it('複数タグを持つ講座が、各分類見出しへ重複表示される', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -417,6 +423,7 @@ describe('講師側講座一覧', () => {
     expect(screen.getByRole('region', { name: 'PHP' })).toBeInTheDocument();
   });
 
+  // AC-ICLIST-007
   it('タグなし講座は「未分類」にまとめて表示される', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -434,6 +441,7 @@ describe('講師側講座一覧', () => {
     ).toBeInTheDocument();
   });
 
+  // AC-ICLIST-011
   it('分類表示をオンにしても、ページネーションでページを移動できる', async () => {
     // Arrange
     const user = userEvent.setup();
