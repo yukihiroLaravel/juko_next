@@ -3,6 +3,15 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { CourseForm } from './CourseForm';
 
+Object.defineProperty(HTMLElement.prototype, 'hasPointerCapture', {
+  configurable: true,
+  value: () => false,
+});
+Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+  configurable: true,
+  value: () => {},
+});
+
 if (typeof ResizeObserver === 'undefined') {
   globalThis.ResizeObserver = class implements ResizeObserver {
     observe() {}
@@ -151,5 +160,54 @@ describe('講座編集フォーム', () => {
 
     // Assert
     expect(await screen.findByText('本当に実行しますか？')).toBeInTheDocument();
+  });
+});
+
+describe('受講期限の入力修正', () => {
+  it('日付を選択すると未入力エラーが消える', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<CourseForm mode="create" />);
+    await user.click(screen.getByLabelText('一括日程'));
+    await user.click(screen.getByRole('button', { name: '登録' }));
+    expect(
+      await screen.findByText('日付を選択してください'),
+    ).toBeInTheDocument();
+    // Act
+    await user.click(screen.getByRole('button', { name: '年月日を選択' }));
+    await user.click(
+      screen.getByRole('button', { name: 'Go to the Next Month' }),
+    );
+    await user.click(screen.getByRole('button', { name: /15th/ }));
+    // Assert
+    await waitFor(() =>
+      expect(
+        screen.queryByText('日付を選択してください'),
+      ).not.toBeInTheDocument(),
+    );
+  });
+});
+
+describe('受講期限の入力修正', () => {
+  it('日数を選択すると未入力エラーが消える', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<CourseForm mode="create" />);
+    await user.click(screen.getByLabelText('開始日から○日後'));
+    await user.click(screen.getByRole('button', { name: '登録' }));
+    expect(
+      await screen.findByText('日数を選択してください'),
+    ).toBeInTheDocument();
+    // Act
+    await user.click(
+      screen.getByRole('combobox', { name: '開始日からの日数' }),
+    );
+    await user.click(screen.getByRole('option', { name: '10日' }));
+    // Assert
+    await waitFor(() =>
+      expect(
+        screen.queryByText('日数を選択してください'),
+      ).not.toBeInTheDocument(),
+    );
   });
 });
