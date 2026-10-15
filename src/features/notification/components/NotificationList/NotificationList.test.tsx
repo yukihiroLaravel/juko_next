@@ -141,6 +141,24 @@ describe('受講生側お知らせ一覧', () => {
     expect(screen.queryByRole('button', { name: '2' })).not.toBeInTheDocument();
   });
 
+  it('お知らせが0件の場合、ページ送りを表示しない', () => {
+    // Arrange
+    mockUseNotifications.mockReturnValue({
+      notifications: [],
+      pagination: {
+        page: 1,
+        total: 0,
+      },
+    });
+
+    // Act
+    render(<NotificationList />);
+
+    // Assert
+    expect(screen.queryByRole('button', { name: '<' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '>' })).not.toBeInTheDocument();
+  });
+
   it('タイトル列をクリックすると、タイトルの昇順でデータを取得する', async () => {
     // Arrange
     const user = userEvent.setup();

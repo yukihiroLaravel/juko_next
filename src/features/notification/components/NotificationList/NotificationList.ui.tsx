@@ -43,45 +43,47 @@ export function NotificationListUI({
         />
       )}
 
-      {/* ページネーション */}
-      <div className="flex items-center justify-center gap-2">
-        {/* 前へ */}
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={currentPage === 1}
-          onClick={() => onPageChange(currentPage - 1)}
-        >
-          &lt;
-        </Button>
+      {/* ページネーション（0件のときは出さない） */}
+      {totalPages > 0 && (
+        <div className="flex items-center justify-center gap-2">
+          {/* 前へ */}
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage <= 1}
+            onClick={() => onPageChange(currentPage - 1)}
+          >
+            &lt;
+          </Button>
 
-        {/* ページ番号 */}
-        {Array.from({ length: totalPages }).map((_, index) => {
-          const page = index + 1;
-          const isActive = page === currentPage;
+          {/* ページ番号 */}
+          {Array.from({ length: totalPages }).map((_, index) => {
+            const page = index + 1;
+            const isActive = page === currentPage;
 
-          return (
-            <Button
-              key={page}
-              variant={isActive ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => onPageChange(page)}
-            >
-              {page}
-            </Button>
-          );
-        })}
+            return (
+              <Button
+                key={page}
+                variant={isActive ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => onPageChange(page)}
+              >
+                {page}
+              </Button>
+            );
+          })}
 
-        {/* 次へ */}
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={currentPage === totalPages}
-          onClick={() => onPageChange(currentPage + 1)}
-        >
-          &gt;
-        </Button>
-      </div>
+          {/* 次へ */}
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage >= totalPages}
+            onClick={() => onPageChange(currentPage + 1)}
+          >
+            &gt;
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
