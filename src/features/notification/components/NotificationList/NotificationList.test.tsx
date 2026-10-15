@@ -240,7 +240,7 @@ describe('受講生側お知らせ一覧', () => {
   });
 
   // AC-SNLIST-007
-  it('総件数が減って現在のページが存在しなくなったら、1ページ目に戻る', async () => {
+  it('総件数が減って現在のページが存在しなくなったら、最後のページに戻る', async () => {
     // Arrange
     const user = userEvent.setup();
     const { rerender } = render(<NotificationList />);
@@ -266,7 +266,7 @@ describe('受講生側お知らせ一覧', () => {
 
     rerender(<NotificationList />);
 
-    // Assert：1ページ目に戻る
+    // Assert：最後のページ（1ページ目）に戻る
     await waitFor(() => {
       expect(mockUseNotifications).toHaveBeenLastCalledWith({
         page: 1,
