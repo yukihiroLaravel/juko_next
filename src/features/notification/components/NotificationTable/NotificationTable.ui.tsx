@@ -53,9 +53,9 @@ export function NotificationTableUI({
               >
                 {sortBy === 'title' && sortOrder === 'asc' ? (
                   <ChevronUp />
-                 ) : (
-                 <ChevronDown />
-                 )}
+                ) : (
+                  <ChevronDown />
+                )}
               </Button>
             </span>
           </TableHead>
@@ -72,9 +72,9 @@ export function NotificationTableUI({
               >
                 {sortBy === 'course_id' && sortOrder === 'asc' ? (
                   <ChevronUp />
-                 ) : (
-                 <ChevronDown />
-                 )}
+                ) : (
+                  <ChevronDown />
+                )}
               </Button>
             </span>
           </TableHead>
@@ -91,9 +91,9 @@ export function NotificationTableUI({
               >
                 {sortBy === 'start_date' && sortOrder === 'asc' ? (
                   <ChevronUp />
-                 ) : (
-                 <ChevronDown />
-                 )}
+                ) : (
+                  <ChevronDown />
+                )}
               </Button>
             </span>
           </TableHead>

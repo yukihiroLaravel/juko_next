@@ -27,13 +27,12 @@ export function NotificationListUI({
   totalPages,
   onPageChange,
 }: Props) {
-
   return (
     <div className="space-y-6">
       {notifications.length === 0 ? (
-      <div className="text-muted-foreground py-12 text-center text-sm">
-        現在、お知らせはありません。
-      </div>
+        <div className="text-muted-foreground py-12 text-center text-sm">
+          現在、お知らせはありません。
+        </div>
       ) : (
         <NotificationTable
           notifications={notifications}

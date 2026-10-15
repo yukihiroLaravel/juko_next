@@ -143,20 +143,20 @@ describe('受講生側お知らせ一覧', () => {
 
   it('タイトル列をクリックすると、タイトルの昇順でデータを取得する', async () => {
     // Arrange
-      const user = userEvent.setup();
-      render(<NotificationList />);
+    const user = userEvent.setup();
+    render(<NotificationList />);
 
-      // Act
-      await user.click(screen.getByRole('button', { name: /タイトル/ }));
+    // Act
+    await user.click(screen.getByRole('button', { name: /タイトル/ }));
 
-      // Assert
-      expect(mockUseNotifications).toHaveBeenLastCalledWith({
-        page: 1,
-        perPage: 5,
-        sortBy: 'title',
-        order: 'asc',
-      });
+    // Assert
+    expect(mockUseNotifications).toHaveBeenLastCalledWith({
+      page: 1,
+      perPage: 5,
+      sortBy: 'title',
+      order: 'asc',
     });
+  });
 
   it('講座名列をクリックすると、講座名の昇順でデータを取得する', async () => {
     // Arrange
