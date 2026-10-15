@@ -273,6 +273,21 @@ describe('講師側講座一覧', () => {
     ).toBeInTheDocument();
   });
 
+  it('分類表示をオンにしても、ページネーションでページを移動できる', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<InstructorCourseList />);
+    await user.click(screen.getByRole('switch'));
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '2' }));
+
+    // Assert
+    expect(mockUseInstructorCourses).toHaveBeenLastCalledWith(
+      expect.objectContaining({ page: 2 }),
+    );
+  });
+
   it('定員・受講人数の表示は行わない', () => {
     // Arrange
     render(<InstructorCourseList />);

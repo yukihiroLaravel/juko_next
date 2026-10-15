@@ -46,28 +46,26 @@ export function InstructorCourseCardListUI({
     );
   }
 
-  if (isClassificationEnabled) {
-    return (
-      <div className="space-y-8">
-        {groupedCourses.map(({ tag, courses: tagCourses }, index) => (
-          <section key={tag} aria-labelledby={`course-tag-${index}`}>
-            <h2
-              id={`course-tag-${index}`}
-              className="mb-4 text-xl font-semibold"
-            >
-              {tag}
-            </h2>
-
-            {renderCards(tagCourses)}
-          </section>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <>
-      {renderCards(courses)}
+      {isClassificationEnabled ? (
+        <div className="space-y-8">
+          {groupedCourses.map(({ tag, courses: tagCourses }, index) => (
+            <section key={tag} aria-labelledby={`course-tag-${index}`}>
+              <h2
+                id={`course-tag-${index}`}
+                className="mb-4 text-xl font-semibold"
+              >
+                {tag}
+              </h2>
+
+              {renderCards(tagCourses)}
+            </section>
+          ))}
+        </div>
+      ) : (
+        renderCards(courses)
+      )}
 
       <nav
         aria-label="ページネーション"
