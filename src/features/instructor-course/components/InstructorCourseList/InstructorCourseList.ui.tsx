@@ -1,4 +1,4 @@
-import { type KeyboardEvent, type ReactNode } from 'react';
+import { type KeyboardEvent } from 'react';
 import { Button } from '@/components/atoms/Button';
 import {
   Dialog,
@@ -18,6 +18,8 @@ import {
 import { Input } from '@/components/atoms/Input';
 import { Switch } from '@/components/atoms/Switch';
 import { bulkActionLabels, type BulkAction } from '../../types/bulkAction';
+import type { Course } from '../../types/course';
+import { InstructorCourseCardListUI } from '../InstructorCourseCardList/InstructorCourseCardList.ui';
 
 type InstructorCourseListUIProps = {
   searchKeyword: string;
@@ -37,7 +39,14 @@ type InstructorCourseListUIProps = {
   } | null;
   onConfirmBulkAction: () => void;
   onCancelBulkAction: () => void;
-  listContent: ReactNode;
+  courses: Course[];
+  groupedCourses: Array<{ tag: string; courses: Course[] }>;
+  selectedCourseIds: number[];
+  onCourseSelectionChange: (courseId: number, checked: boolean) => void;
+  currentPage: number;
+  lastPage: number;
+  onPageChange: (page: number) => void;
+  isRefreshing: boolean;
 };
 
 export function InstructorCourseListUI({
@@ -53,7 +62,14 @@ export function InstructorCourseListUI({
   confirmDialog,
   onConfirmBulkAction,
   onCancelBulkAction,
-  listContent,
+  courses,
+  groupedCourses,
+  selectedCourseIds,
+  onCourseSelectionChange,
+  currentPage,
+  lastPage,
+  onPageChange,
+  isRefreshing,
 }: InstructorCourseListUIProps) {
   return (
     <div className="mx-auto max-w-6xl space-y-6 p-6">
@@ -142,7 +158,21 @@ export function InstructorCourseListUI({
         </DropdownMenu>
       </div>
 
-      {listContent}
+      <div
+        aria-busy={isRefreshing}
+        className={isRefreshing ? 'opacity-60 transition-opacity' : undefined}
+      >
+        <InstructorCourseCardListUI
+          courses={courses}
+          groupedCourses={groupedCourses}
+          isClassificationEnabled={isClassificationEnabled}
+          selectedCourseIds={selectedCourseIds}
+          onCourseSelectionChange={onCourseSelectionChange}
+          currentPage={currentPage}
+          lastPage={lastPage}
+          onPageChange={onPageChange}
+        />
+      </div>
 
       <Dialog
         open={confirmDialog !== null}

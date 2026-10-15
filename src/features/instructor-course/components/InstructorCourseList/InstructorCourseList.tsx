@@ -1,16 +1,17 @@
 'use client';
 
-import { Suspense, type KeyboardEvent, useState } from 'react';
+import { type KeyboardEvent, useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { routes } from '@/lib/routes';
+import { useInstructorCourses } from '../../hooks/useInstructorCourses';
 import {
   bulkActionConfirmations,
   bulkActionLabels,
   type BulkAction,
   type ConfirmableBulkAction,
 } from '../../types/bulkAction';
-import { InstructorCourseCardList } from '../InstructorCourseCardList/InstructorCourseCardList';
-import { InstructorCourseCardListSkeleton } from '../InstructorCourseCardList/InstructorCourseCardList.skeleton';
+import type { Course } from '../../types/course';
+import { mapInstructorCourseApiToCourse } from '../../utils/mapInstructorCourseApiToCourse';
 import { InstructorCourseListUI } from './InstructorCourseList.ui';
 
 export function InstructorCourseList() {
@@ -20,9 +21,33 @@ export function InstructorCourseList() {
   const [page, setPage] = useState(1);
   const [isClassificationEnabled, setIsClassificationEnabled] = useState(false);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
-  const [visibleCourseIds, setVisibleCourseIds] = useState<number[]>([]);
   const [pendingAction, setPendingAction] =
     useState<ConfirmableBulkAction | null>(null);
+  const [isRefreshing, startTransition] = useTransition();
+
+  const { courses: apiCourses, meta } = useInstructorCourses({
+    page,
+    search_word: submittedSearchKeyword,
+    per_page: 6,
+  });
+
+  const courses = useMemo(
+    () => apiCourses.map((course) => mapInstructorCourseApiToCourse(course)),
+    [apiCourses],
+  );
+
+  const groupedCourses = Object.entries(
+    courses.reduce<Record<string, Course[]>>((groups, course) => {
+      const tags = course.tags.length > 0 ? course.tags : ['未分類'];
+
+      tags.forEach((tag) => {
+        groups[tag] ??= [];
+        groups[tag].push(course);
+      });
+
+      return groups;
+    }, {}),
+  ).map(([tag, grouped]) => ({ tag, courses: grouped }));
 
   const handleCourseSelectionChange = (courseId: number, checked: boolean) => {
     setSelectedCourseIds((currentIds) =>
@@ -34,17 +59,8 @@ export function InstructorCourseList() {
     );
   };
 
-  const handleVisibleCourseIdsChange = (courseIds: number[]) => {
-    setVisibleCourseIds((currentIds) =>
-      currentIds.length === courseIds.length &&
-      currentIds.every((id, index) => id === courseIds[index])
-        ? currentIds
-        : courseIds,
-    );
-  };
-
   const visibleSelectedCourseIds = selectedCourseIds.filter((id) =>
-    visibleCourseIds.includes(id),
+    courses.some((course) => course.id === id),
   );
 
   const executeBulkAction = () => {
@@ -88,9 +104,20 @@ export function InstructorCourseList() {
     setSearchKeyword(value);
   };
 
+  // 検索とページの移動で取り直す間は、代替表示に戻さず前の結果を残す
   const handleSearchSubmit = () => {
-    setSubmittedSearchKeyword(searchKeyword.trim());
-    setPage(1);
+    const nextSearchKeyword = searchKeyword.trim();
+
+    startTransition(() => {
+      setSubmittedSearchKeyword(nextSearchKeyword);
+      setPage(1);
+    });
+  };
+
+  const handlePageChange = (nextPage: number) => {
+    startTransition(() => {
+      setPage(nextPage);
+    });
   };
 
   const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -114,19 +141,14 @@ export function InstructorCourseList() {
       confirmDialog={confirmDialog}
       onConfirmBulkAction={executeBulkAction}
       onCancelBulkAction={() => setPendingAction(null)}
-      listContent={
-        <Suspense fallback={<InstructorCourseCardListSkeleton />}>
-          <InstructorCourseCardList
-            page={page}
-            searchWord={submittedSearchKeyword}
-            isClassificationEnabled={isClassificationEnabled}
-            selectedCourseIds={selectedCourseIds}
-            onCourseSelectionChange={handleCourseSelectionChange}
-            onPageChange={setPage}
-            onVisibleCourseIdsChange={handleVisibleCourseIdsChange}
-          />
-        </Suspense>
-      }
+      courses={courses}
+      groupedCourses={groupedCourses}
+      selectedCourseIds={selectedCourseIds}
+      onCourseSelectionChange={handleCourseSelectionChange}
+      currentPage={meta?.current_page ?? 1}
+      lastPage={meta?.last_page ?? 1}
+      onPageChange={handlePageChange}
+      isRefreshing={isRefreshing}
     />
   );
 }
