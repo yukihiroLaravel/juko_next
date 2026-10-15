@@ -36,6 +36,7 @@ beforeEach(() => {
 });
 
 describe('受講生側お知らせ一覧', () => {
+  // AC-SNLIST-008
   it('お知らせの行をクリックすると、タイトルと本文が表示される', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -52,6 +53,8 @@ describe('受講生側お知らせ一覧', () => {
     ).toBeInTheDocument();
   });
 
+  // AC-SNLIST-001
+  // AC-SNLIST-006
   it('次のページをクリックすると、2ページ目のデータを取得する', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -82,6 +85,7 @@ describe('受講生側お知らせ一覧', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  // AC-SNLIST-008
   it('受講期限がないお知らせでは「—」と表示される', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -95,6 +99,7 @@ describe('受講生側お知らせ一覧', () => {
     expect(within(dialog).getByText('受講期限: —')).toBeInTheDocument();
   });
 
+  // AC-SNLIST-009
   it('モーダルを閉じると、開いたお知らせ行にフォーカスが戻る', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -157,6 +162,7 @@ describe('受講生側お知らせ一覧', () => {
     expect(screen.queryByRole('button', { name: '>' })).not.toBeInTheDocument();
   });
 
+  // AC-SNLIST-002
   it('タイトル列をクリックすると、タイトルの昇順でデータを取得する', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -174,6 +180,7 @@ describe('受講生側お知らせ一覧', () => {
     });
   });
 
+  // AC-SNLIST-002
   it('講座名列をクリックすると、講座名の昇順でデータを取得する', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -191,6 +198,7 @@ describe('受講生側お知らせ一覧', () => {
     });
   });
 
+  // AC-SNLIST-002
   it('開始日付列をクリックすると、昇順でデータを取得する', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -208,6 +216,7 @@ describe('受講生側お知らせ一覧', () => {
     });
   });
 
+  // AC-SNLIST-003
   it('同じ列を2回クリックすると、降順に戻る', async () => {
     // Arrange
     const user = userEvent.setup();
@@ -230,6 +239,7 @@ describe('受講生側お知らせ一覧', () => {
     });
   });
 
+  // AC-SNLIST-007
   it('総件数が減って現在のページが存在しなくなったら、1ページ目に戻る', async () => {
     // Arrange
     const user = userEvent.setup();

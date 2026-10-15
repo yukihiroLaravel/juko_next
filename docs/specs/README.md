@@ -15,6 +15,7 @@
 | `screens/instructor-course-bulk-capacity.md` | 講師側 講座定員一括変更                                           | `AC-ICCAP-<連番>`  |
 | `screens/instructor-course-bulk-deadline.md` | 講師側 受講期限一括変更                                           | `AC-ICDEAD-<連番>` |
 | `screens/instructor-tag-form.md`             | 講師側 講座分類登録・講座分類編集                                 | `AC-ITAG-<連番>`   |
+| `screens/student-notification-list.md`       | 受講生側 お知らせ一覧                                             | `AC-SNLIST-<連番>` |
 
 画面を書き起こしたら、この表に行を足し、画面の略称を決める。略称はバックエンドの機能の略称と重ねない（`docs/documentation-rules.md`）。
 
