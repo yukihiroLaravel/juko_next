@@ -15,10 +15,7 @@ function formatDeadline(
     return `${courseDeadline.fixed_date.replace(/-/g, '/')}まで`;
   }
 
-  if (
-    courseDeadline.relative_days !== null &&
-    courseDeadline.relative_days !== undefined
-  ) {
+  if (courseDeadline.relative_days !== null) {
     return `開始日から${courseDeadline.relative_days}日後`;
   }
 

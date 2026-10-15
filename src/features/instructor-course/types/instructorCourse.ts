@@ -1,6 +1,7 @@
 export type InstructorCourseApiDeadline = {
-  fixed_date?: string | null;
-  relative_days?: number | null;
+  course_deadline_id: number;
+  fixed_date: string | null;
+  relative_days: number | null;
 };
 
 export type InstructorCourseApiItem = {

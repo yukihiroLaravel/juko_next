@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { InstructorCourseApiItem } from '../../types/instructorCourse';
 import { InstructorCourseList } from './InstructorCourseList';
 
 const { mockUseInstructorCourses, push } = vi.hoisted(() => ({
@@ -17,21 +18,7 @@ vi.mock('@/features/instructor-course/hooks/useInstructorCourses', () => ({
     mockUseInstructorCourses(...args),
 }));
 
-type ApiCourseTestItem = {
-  course_id: number;
-  title: string;
-  image: string;
-  status: string;
-  has_active_students: boolean;
-  tags: Array<{ tag_id: number; content: string }>;
-  course_deadline: null | {
-    course_deadline_id?: number;
-    fixed_date?: string | null;
-    relative_days?: number | null;
-  };
-};
-
-const baseCourses: ApiCourseTestItem[] = [
+const baseCourses: InstructorCourseApiItem[] = [
   {
     course_id: 1,
     title: 'PHPコース',
@@ -467,13 +454,21 @@ describe('講師側講座一覧', () => {
             ...baseCourses[0],
             course_id: 101,
             title: '固定期限講座',
-            course_deadline: { fixed_date: '2026-12-31', relative_days: null },
+            course_deadline: {
+              course_deadline_id: 21,
+              fixed_date: '2026-12-31',
+              relative_days: null,
+            },
           },
           {
             ...baseCourses[1],
             course_id: 102,
             title: '相対期限講座',
-            course_deadline: { fixed_date: null, relative_days: 30 },
+            course_deadline: {
+              course_deadline_id: 22,
+              fixed_date: null,
+              relative_days: 30,
+            },
           },
           {
             ...baseCourses[2],
