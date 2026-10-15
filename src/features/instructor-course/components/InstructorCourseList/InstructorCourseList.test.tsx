@@ -236,6 +236,62 @@ describe('講師側講座一覧', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  // AC-ICLIST-005
+  it('選んだあとに検索で表示されなくなった講座は、一括変更の対象にならない', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    mockUseInstructorCourses.mockImplementation(({ search_word = '' } = {}) =>
+      buildHookResponse({
+        courses:
+          search_word === 'React'
+            ? baseCourses.filter((course) => course.title === 'React入門')
+            : baseCourses,
+      }),
+    );
+    render(<InstructorCourseList />);
+    await selectCourse(user, 'PHPコース');
+    await selectCourse(user, 'React入門');
+    await user.type(
+      screen.getByRole('searchbox', { name: '講座検索' }),
+      'React{Enter}',
+    );
+
+    // Act
+    await selectBulkAction(user, '選択済み講座を公開');
+    await user.click(screen.getByRole('button', { name: '公開する' }));
+
+    // Assert
+    expect(log).toHaveBeenCalledWith('選択済み講座を公開', [2]);
+  });
+
+  // AC-ICLIST-005
+  it('検索で表示されなくなった講座の選択は、検索を戻すと残っている', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    mockUseInstructorCourses.mockImplementation(({ search_word = '' } = {}) =>
+      buildHookResponse({
+        courses:
+          search_word === 'React'
+            ? baseCourses.filter((course) => course.title === 'React入門')
+            : baseCourses,
+      }),
+    );
+    render(<InstructorCourseList />);
+    const searchInput = screen.getByRole('searchbox', { name: '講座検索' });
+    await selectCourse(user, 'PHPコース');
+    await user.type(searchInput, 'React{Enter}');
+
+    // Act
+    await user.clear(searchInput);
+    await user.keyboard('{Enter}');
+
+    // Assert
+    expect(
+      screen.getByRole('checkbox', { name: 'PHPコースを選択' }),
+    ).toBeChecked();
+  });
+
   it('講座0件時に結果なしの状態を表示する', () => {
     // Arrange
     mockUseInstructorCourses.mockImplementation(() =>

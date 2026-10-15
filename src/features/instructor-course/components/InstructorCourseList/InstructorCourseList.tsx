@@ -20,6 +20,7 @@ export function InstructorCourseList() {
   const [page, setPage] = useState(1);
   const [isClassificationEnabled, setIsClassificationEnabled] = useState(false);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
+  const [visibleCourseIds, setVisibleCourseIds] = useState<number[]>([]);
   const [pendingAction, setPendingAction] =
     useState<ConfirmableBulkAction | null>(null);
 
@@ -33,7 +34,18 @@ export function InstructorCourseList() {
     );
   };
 
-  const visibleSelectedCourseIds = selectedCourseIds;
+  const handleVisibleCourseIdsChange = (courseIds: number[]) => {
+    setVisibleCourseIds((currentIds) =>
+      currentIds.length === courseIds.length &&
+      currentIds.every((id, index) => id === courseIds[index])
+        ? currentIds
+        : courseIds,
+    );
+  };
+
+  const visibleSelectedCourseIds = selectedCourseIds.filter((id) =>
+    visibleCourseIds.includes(id),
+  );
 
   const executeBulkAction = () => {
     if (!pendingAction) return;
@@ -111,6 +123,7 @@ export function InstructorCourseList() {
             selectedCourseIds={selectedCourseIds}
             onCourseSelectionChange={handleCourseSelectionChange}
             onPageChange={setPage}
+            onVisibleCourseIdsChange={handleVisibleCourseIdsChange}
           />
         </Suspense>
       }

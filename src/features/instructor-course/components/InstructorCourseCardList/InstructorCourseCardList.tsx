@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useInstructorCourses } from '../../hooks/useInstructorCourses';
 import type { Course } from '../../types/course';
 import { mapInstructorCourseApiToCourse } from '../../utils/mapInstructorCourseApiToCourse';
@@ -13,6 +13,7 @@ type InstructorCourseCardListProps = {
   selectedCourseIds: number[];
   onCourseSelectionChange: (courseId: number, checked: boolean) => void;
   onPageChange: (page: number) => void;
+  onVisibleCourseIdsChange: (courseIds: number[]) => void;
 };
 
 export function InstructorCourseCardList({
@@ -22,6 +23,7 @@ export function InstructorCourseCardList({
   selectedCourseIds,
   onCourseSelectionChange,
   onPageChange,
+  onVisibleCourseIdsChange,
 }: InstructorCourseCardListProps) {
   const { courses: apiCourses, meta } = useInstructorCourses({
     page,
@@ -33,6 +35,11 @@ export function InstructorCourseCardList({
     () => apiCourses.map((course) => mapInstructorCourseApiToCourse(course)),
     [apiCourses],
   );
+
+  // 一括変更の対象を表示中の講座に絞るため、取得した講座を一覧の外に知らせる
+  useEffect(() => {
+    onVisibleCourseIdsChange(courses.map((course) => course.id));
+  }, [courses, onVisibleCourseIdsChange]);
 
   const groupedCourses = Object.entries(
     courses.reduce<Record<string, Course[]>>((groups, course) => {
