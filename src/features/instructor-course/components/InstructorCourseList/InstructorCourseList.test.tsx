@@ -165,19 +165,6 @@ describe('講師側講座一覧', () => {
     expect(screen.getByText('該当する講座はありません。')).toBeInTheDocument();
   });
 
-  it('API取得エラー時に取得失敗の表示を返す', () => {
-    // Arrange
-    mockUseInstructorCourses.mockImplementation(() =>
-      buildHookResponse({ error: new Error('network error') }),
-    );
-
-    // Act
-    render(<InstructorCourseList />);
-
-    // Assert
-    expect(screen.getByText(/エラー|失敗|取得/)).toBeInTheDocument();
-  });
-
   it('検索入力は入力中に即時送信せず、Enter 後に検索条件を送信する', async () => {
     // Arrange
     const user = userEvent.setup();

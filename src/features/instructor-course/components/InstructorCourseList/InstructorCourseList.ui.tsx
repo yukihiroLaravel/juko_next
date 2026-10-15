@@ -1,3 +1,4 @@
+import { type KeyboardEvent, type ReactNode } from 'react';
 import { Button } from '@/components/atoms/Button';
 import {
   Dialog,
@@ -17,24 +18,16 @@ import {
 import { Input } from '@/components/atoms/Input';
 import { Switch } from '@/components/atoms/Switch';
 import { bulkActionLabels, type BulkAction } from '../../types/bulkAction';
-import type { Course } from '../../types/course';
-import { InstructorCourseCard } from '../InstructorCourseCard/InstructorCourseCard';
 
 type InstructorCourseListUIProps = {
-  courses: Course[];
   searchKeyword: string;
   onSearchKeywordChange: (value: string) => void;
   onSearchSubmit: () => void;
-  onSearchKeyDown: (
-    event: import('react').KeyboardEvent<HTMLInputElement>,
-  ) => void;
+  onSearchKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
   isClassificationEnabled: boolean;
   onClassificationChange: (checked: boolean) => void;
-  selectedCourseIds: number[];
-  onCourseSelectionChange: (courseId: number, checked: boolean) => void;
   onBulkAction: (action: BulkAction) => void;
   onRegister: () => void;
-  groupedCourses: Array<{ tag: string; courses: Course[] }>;
   hasVisibleSelection: boolean;
   confirmDialog: {
     title: string;
@@ -44,52 +37,24 @@ type InstructorCourseListUIProps = {
   } | null;
   onConfirmBulkAction: () => void;
   onCancelBulkAction: () => void;
-  meta?: {
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-  };
-  onPageChange: (page: number) => void;
+  listContent: ReactNode;
 };
 
 export function InstructorCourseListUI({
-  courses,
   searchKeyword,
   onSearchKeywordChange,
   onSearchSubmit,
   onSearchKeyDown,
   isClassificationEnabled,
   onClassificationChange,
-  selectedCourseIds,
-  onCourseSelectionChange,
   onBulkAction,
   onRegister,
-  groupedCourses,
   hasVisibleSelection,
   confirmDialog,
   onConfirmBulkAction,
   onCancelBulkAction,
-  meta,
-  onPageChange,
+  listContent,
 }: InstructorCourseListUIProps) {
-  const currentPage = meta?.current_page ?? 1;
-  const lastPage = meta?.last_page ?? 1;
-  const pageNumbers = Array.from({ length: lastPage }, (_, index) => index + 1);
-
-  const renderCards = (items: Course[]) => (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((course) => (
-        <InstructorCourseCard
-          key={course.id}
-          {...course}
-          isSelected={selectedCourseIds.includes(course.id)}
-          onSelectionChange={onCourseSelectionChange}
-        />
-      ))}
-    </div>
-  );
-
   return (
     <div className="mx-auto max-w-6xl space-y-6 p-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -177,63 +142,7 @@ export function InstructorCourseListUI({
         </DropdownMenu>
       </div>
 
-      {courses.length === 0 ? (
-        <p className="text-muted-foreground py-12 text-center">
-          該当する講座はありません。
-        </p>
-      ) : isClassificationEnabled ? (
-        <div className="space-y-8">
-          {groupedCourses.map(({ tag, courses: tagCourses }, index) => (
-            <section key={tag} aria-labelledby={`course-tag-${index}`}>
-              <h2
-                id={`course-tag-${index}`}
-                className="mb-4 text-xl font-semibold"
-              >
-                {tag}
-              </h2>
-
-              {renderCards(tagCourses)}
-            </section>
-          ))}
-        </div>
-      ) : (
-        renderCards(courses)
-      )}
-
-      <nav
-        aria-label="ページネーション"
-        className="flex items-center justify-center gap-2 pt-4"
-      >
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={currentPage <= 1}
-          onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-        >
-          前へ
-        </Button>
-
-        {pageNumbers.map((page) => (
-          <Button
-            key={page}
-            variant={page === currentPage ? 'secondary' : 'outline'}
-            size="sm"
-            aria-current={page === currentPage ? 'page' : undefined}
-            onClick={() => onPageChange(page)}
-          >
-            {page}
-          </Button>
-        ))}
-
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={currentPage >= lastPage}
-          onClick={() => onPageChange(Math.min(lastPage, currentPage + 1))}
-        >
-          次へ
-        </Button>
-      </nav>
+      {listContent}
 
       <Dialog
         open={confirmDialog !== null}
