@@ -1,4 +1,9 @@
+'use client';
+
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { NotificationList } from '@/features/notification/components/NotificationList/NotificationList';
+import { NotificationListSkeleton } from '@/features/notification/components/NotificationList/NotificationList.skeleton';
 
 export default function NotificationsPage() {
   return (
@@ -12,7 +17,11 @@ export default function NotificationsPage() {
       </div>
 
       {/* お知らせ一覧 */}
-      <NotificationList />
+      <ErrorBoundary fallback={<div>エラーが発生しました</div>}>
+        <Suspense fallback={<NotificationListSkeleton />}>
+          <NotificationList />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }
