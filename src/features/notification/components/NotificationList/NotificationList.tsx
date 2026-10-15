@@ -2,13 +2,10 @@
 
 import { startTransition, useRef, useState } from 'react';
 import { NotificationListUI } from './NotificationList.ui';
-import {
-  Notification,
-  NotificationSortColumn,
-} from '../NotificationTable/NotificationTable.ui';
+import type { NotificationSortColumn } from '../NotificationTable/NotificationTable.ui';
 import { NotificationDetailModal } from '../NotificationDetailModal/NotificationDetailModal';
 import { useNotifications } from '../../hooks/useNotifications';
-import { format, parseISO } from 'date-fns';
+import { mapNotificationItemToNotification } from '../../utils/mapNotificationItemToNotification';
 import type { NotificationSortOrder } from '../../types/notification';
 
 const PAGE_SIZE = 5;
@@ -24,17 +21,7 @@ export function NotificationList() {
     order: sortOrder,
   });
 
-  const notifications: Notification[] = apiNotifications.map((item) => ({
-    id: String(item.notification_id),
-    title: item.title,
-    courseName: item.course_title,
-    courseDeadline: null,
-    startDate: format(
-      parseISO(item.start_date.replace(' ', 'T')),
-      'yyyy/MM/dd',
-    ),
-    body: item.content,
-  }));
+  const notifications = apiNotifications.map(mapNotificationItemToNotification);
 
   const [selectedNotificationId, setSelectedNotificationId] = useState<
     string | null

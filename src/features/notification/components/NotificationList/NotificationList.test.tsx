@@ -32,7 +32,6 @@ beforeEach(() => {
       page: 1,
       total: 10,
     },
-    error: undefined,
   });
 });
 
@@ -127,7 +126,6 @@ describe('受講生側お知らせ一覧', () => {
         page: 1,
         total: 0,
       },
-      error: undefined,
     });
 
     // Act
@@ -254,7 +252,6 @@ describe('受講生側お知らせ一覧', () => {
         page: 2,
         total: 5,
       },
-      error: undefined,
     });
 
     rerender(<NotificationList />);

@@ -1,25 +1,14 @@
 import useSWR from 'swr';
 import { fetcher } from '@/utils/fetcher';
+import { notificationsKey } from '../utils/swrKeys';
 import type {
   NotificationsQuery,
   NotificationsResponse,
 } from '../types/notification';
 
-export function useNotifications({
-  page,
-  perPage,
-  sortBy,
-  order,
-}: NotificationsQuery) {
-  const params = new URLSearchParams({
-    page: String(page),
-    per_page: String(perPage),
-    sort_by: sortBy,
-    order,
-  });
-
-  const { data, error } = useSWR<NotificationsResponse>(
-    `/api/v1/notifications/index?${params.toString()}`,
+export function useNotifications(query: NotificationsQuery) {
+  const { data } = useSWR<NotificationsResponse>(
+    notificationsKey(query),
     fetcher,
     { suspense: true },
   );
@@ -27,6 +16,5 @@ export function useNotifications({
   return {
     notifications: data?.data.notifications ?? [],
     pagination: data?.data.pagination,
-    error,
   };
 }
