@@ -10,7 +10,7 @@ import {
   type ConfirmableBulkAction,
 } from '../../types/bulkAction';
 import { InstructorCourseCardList } from '../InstructorCourseCardList/InstructorCourseCardList';
-import { InstructorCourseListSkeleton } from './InstructorCourseList.skeleton';
+import { InstructorCourseCardListSkeleton } from '../InstructorCourseCardList/InstructorCourseCardList.skeleton';
 import { InstructorCourseListUI } from './InstructorCourseList.ui';
 
 export function InstructorCourseList() {
@@ -103,7 +103,7 @@ export function InstructorCourseList() {
       onConfirmBulkAction={executeBulkAction}
       onCancelBulkAction={() => setPendingAction(null)}
       listContent={
-        <Suspense fallback={<InstructorCourseListSkeleton />}>
+        <Suspense fallback={<InstructorCourseCardListSkeleton />}>
           <InstructorCourseCardList
             page={page}
             searchWord={submittedSearchKeyword}
