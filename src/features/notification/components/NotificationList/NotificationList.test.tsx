@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NotificationList } from './NotificationList';
@@ -139,5 +139,120 @@ describe('受講生側お知らせ一覧', () => {
     ).toBeInTheDocument();
 
     expect(screen.queryByRole('button', { name: '2' })).not.toBeInTheDocument();
+  });
+
+  it('タイトル列をクリックすると、タイトルの昇順でデータを取得する', async () => {
+    // Arrange
+      const user = userEvent.setup();
+      render(<NotificationList />);
+
+      // Act
+      await user.click(screen.getByRole('button', { name: /タイトル/ }));
+
+      // Assert
+      expect(mockUseNotifications).toHaveBeenLastCalledWith({
+        page: 1,
+        perPage: 5,
+        sortBy: 'title',
+        order: 'asc',
+      });
+    });
+
+  it('講座名列をクリックすると、講座名の昇順でデータを取得する', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<NotificationList />);
+
+    // Act
+    await user.click(screen.getByRole('button', { name: /講座名/ }));
+
+    // Assert
+    expect(mockUseNotifications).toHaveBeenLastCalledWith({
+      page: 1,
+      perPage: 5,
+      sortBy: 'course_id',
+      order: 'asc',
+    });
+  });
+
+  it('開始日付列をクリックすると、昇順でデータを取得する', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<NotificationList />);
+
+    // Act
+    await user.click(screen.getByRole('button', { name: /開始日付/ }));
+
+    // Assert
+    expect(mockUseNotifications).toHaveBeenLastCalledWith({
+      page: 1,
+      perPage: 5,
+      sortBy: 'start_date',
+      order: 'asc',
+    });
+  });
+
+  it('同じ列を2回クリックすると、降順に戻る', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<NotificationList />);
+
+    const titleSortButton = screen.getByRole('button', {
+      name: /タイトル/,
+    });
+
+    // Act
+    await user.click(titleSortButton);
+    await user.click(titleSortButton);
+
+    // Assert
+    expect(mockUseNotifications).toHaveBeenLastCalledWith({
+      page: 1,
+      perPage: 5,
+      sortBy: 'title',
+      order: 'desc',
+    });
+  });
+
+  it('総件数が減って現在のページが存在しなくなったら、1ページ目に戻る', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    const { rerender } = render(<NotificationList />);
+
+    // 2ページ目に移動
+    await user.click(screen.getByRole('button', { name: '2' }));
+
+    expect(mockUseNotifications).toHaveBeenLastCalledWith({
+      page: 2,
+      perPage: 5,
+      sortBy: 'start_date',
+      order: 'desc',
+    });
+
+    // Act：総件数が10件から5件に減った状態を再現
+    mockUseNotifications.mockReturnValue({
+      notifications: [],
+      pagination: {
+        page: 2,
+        total: 5,
+      },
+      error: undefined,
+    });
+
+    rerender(<NotificationList />);
+
+    // Assert：1ページ目に戻る
+    await waitFor(() => {
+      expect(mockUseNotifications).toHaveBeenLastCalledWith({
+        page: 1,
+        perPage: 5,
+        sortBy: 'start_date',
+        order: 'desc',
+      });
+    });
+
+    expect(
+      screen.getByText('現在、お知らせはありません。'),
+    ).toBeInTheDocument();
   });
 });

@@ -4,10 +4,12 @@ import { NotificationTable } from '../NotificationTable/NotificationTable';
 import { Notification } from '../NotificationTable/NotificationTable.ui';
 import { Button } from '@/components/atoms/Button';
 
+type SortBy = 'title' | 'course_id' | 'start_date';
 type Props = {
   notifications: Notification[];
+  sortBy: SortBy;
   sortOrder: 'asc' | 'desc';
-  onSortChange: () => void;
+  onSortChange: (column: SortBy) => void;
   onNotificationClick: (notificationId: string) => void;
 
   currentPage: number;
@@ -17,6 +19,7 @@ type Props = {
 
 export function NotificationListUI({
   notifications,
+  sortBy,
   sortOrder,
   onSortChange,
   onNotificationClick,
@@ -24,21 +27,22 @@ export function NotificationListUI({
   totalPages,
   onPageChange,
 }: Props) {
-  if (notifications.length === 0) {
-    return (
+
+  return (
+    <div className="space-y-6">
+      {notifications.length === 0 ? (
       <div className="text-muted-foreground py-12 text-center text-sm">
         現在、お知らせはありません。
       </div>
-    );
-  }
-  return (
-    <div className="space-y-6">
-      <NotificationTable
-        notifications={notifications}
-        sortOrder={sortOrder}
-        onSortChange={onSortChange}
-        onNotificationClick={onNotificationClick}
-      />
+      ) : (
+        <NotificationTable
+          notifications={notifications}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSortChange={onSortChange}
+          onNotificationClick={onNotificationClick}
+        />
+      )}
 
       {/* ページネーション */}
       <div className="flex items-center justify-center gap-2">

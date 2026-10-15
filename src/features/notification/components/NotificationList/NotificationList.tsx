@@ -1,20 +1,24 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { startTransition, useRef, useState } from 'react';
 import { NotificationListUI } from './NotificationList.ui';
 import { Notification } from '../NotificationTable/NotificationTable.ui';
 import { NotificationDetailModal } from '../NotificationDetailModal/NotificationDetailModal';
 import { useNotifications } from '../../hooks/useNotifications';
+import { format, parseISO } from 'date-fns';
 
 const PAGE_SIZE = 5;
 
 export function NotificationList() {
+  type SortBy = 'title' | 'course_id' | 'start_date';
+
+  const [sortBy, setSortBy] = useState<SortBy>('start_date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [currentPage, setCurrentPage] = useState(1);
   const { notifications: apiNotifications, pagination } = useNotifications({
     page: currentPage,
     perPage: PAGE_SIZE,
-    sortBy: 'start_date',
+    sortBy: sortBy,
     order: sortOrder,
   });
 
@@ -23,7 +27,10 @@ export function NotificationList() {
     title: item.title,
     courseName: item.course_title,
     courseDeadline: null,
-    startDate: item.start_date,
+    startDate: format(
+      parseISO(item.start_date.replace(' ', 'T')),
+      'yyyy/MM/dd',
+    ),
     body: item.content,
   }));
 
@@ -33,15 +40,34 @@ export function NotificationList() {
   const openerRef = useRef<HTMLElement | null>(null);
 
   const totalPages = Math.ceil((pagination?.total ?? 0) / PAGE_SIZE);
+  const lastPage = Math.max(1, totalPages);
+
+  if (pagination && currentPage > lastPage) {
+    setCurrentPage(lastPage);
+  }
 
   const selectedNotification =
     notifications.find(
       (notification) => notification.id === selectedNotificationId,
     ) ?? null;
 
-  const handleSortChange = () => {
-    setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-    setCurrentPage(1);
+  const handleSortChange = (column: SortBy) => {
+    startTransition(() => {
+      if (sortBy === column) {
+        setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      } else {
+        setSortBy(column);
+        setSortOrder('asc');
+      }
+
+      setCurrentPage(1);
+    });
+  };
+
+  const handlePageChange = (page: number) => {
+    startTransition(() => {
+      setCurrentPage(page);
+    });
   };
 
   const handleNotificationClick = (notificationId: string) => {
@@ -58,12 +84,13 @@ export function NotificationList() {
     <>
       <NotificationListUI
         notifications={notifications}
+        sortBy={sortBy}
         sortOrder={sortOrder}
         onSortChange={handleSortChange}
         onNotificationClick={handleNotificationClick}
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
       />
 
       <NotificationDetailModal

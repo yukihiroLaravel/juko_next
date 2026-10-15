@@ -2,10 +2,12 @@
 
 import { NotificationTableUI, Notification } from './NotificationTable.ui';
 
+type SortBy = 'title' | 'course_id' | 'start_date';
 type Props = {
   notifications: Notification[];
+  sortBy: SortBy;
   sortOrder: 'asc' | 'desc';
-  onSortChange: () => void;
+  onSortChange: (column: SortBy) => void;
   onNotificationClick: (notificationId: string) => void;
 };
 

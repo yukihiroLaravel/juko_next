@@ -20,15 +20,19 @@ export type Notification = {
   body: string;
 };
 
+type SortBy = 'title' | 'course_id' | 'start_date';
+
 type Props = {
   notifications: Notification[];
+  sortBy: SortBy;
   sortOrder: 'asc' | 'desc';
-  onSortChange: () => void;
+  onSortChange: (column: SortBy) => void;
   onNotificationClick: (notificationId: string) => void;
 };
 
 export function NotificationTableUI({
   notifications,
+  sortBy,
   sortOrder,
   onSortChange,
   onNotificationClick,
@@ -43,11 +47,15 @@ export function NotificationTableUI({
               <Button
                 variant="ghost"
                 size="icon-sm"
-                onClick={onSortChange}
+                onClick={() => onSortChange('title')}
                 aria-label="タイトルで並び替え"
                 className="text-muted-foreground"
               >
-                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
+                {sortBy === 'title' && sortOrder === 'asc' ? (
+                  <ChevronUp />
+                 ) : (
+                 <ChevronDown />
+                 )}
               </Button>
             </span>
           </TableHead>
@@ -58,26 +66,15 @@ export function NotificationTableUI({
               <Button
                 variant="ghost"
                 size="icon-sm"
-                onClick={onSortChange}
+                onClick={() => onSortChange('course_id')}
                 aria-label="講座名で並び替え"
                 className="text-muted-foreground"
               >
-                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
-              </Button>
-            </span>
-          </TableHead>
-
-          <TableHead>
-            <span className="inline-flex items-center gap-1">
-              講座受講期限
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={onSortChange}
-                aria-label="講座受講期限で並び替え"
-                className="text-muted-foreground"
-              >
-                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
+                {sortBy === 'course_id' && sortOrder === 'asc' ? (
+                  <ChevronUp />
+                 ) : (
+                 <ChevronDown />
+                 )}
               </Button>
             </span>
           </TableHead>
@@ -88,11 +85,15 @@ export function NotificationTableUI({
               <Button
                 variant="ghost"
                 size="icon-sm"
-                onClick={onSortChange}
+                onClick={() => onSortChange('start_date')}
                 aria-label="開始日付で並び替え"
                 className="text-muted-foreground"
               >
-                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
+                {sortBy === 'start_date' && sortOrder === 'asc' ? (
+                  <ChevronUp />
+                 ) : (
+                 <ChevronDown />
+                 )}
               </Button>
             </span>
           </TableHead>
@@ -115,7 +116,6 @@ export function NotificationTableUI({
           >
             <TableCell className="font-medium">{notification.title}</TableCell>
             <TableCell>{notification.courseName}</TableCell>
-            <TableCell>{notification.courseDeadline ?? '—'}</TableCell>
             <TableCell>{notification.startDate}</TableCell>
           </TableRow>
         ))}
