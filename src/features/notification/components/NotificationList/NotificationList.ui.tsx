@@ -1,15 +1,18 @@
 'use client';
 
 import { NotificationTable } from '../NotificationTable/NotificationTable';
-import { Notification } from '../NotificationTable/NotificationTable.ui';
+import {
+  Notification,
+  NotificationSortColumn,
+} from '../NotificationTable/NotificationTable.ui';
 import { Button } from '@/components/atoms/Button';
+import type { NotificationSortOrder } from '@/features/notification/types/notification';
 
-type SortBy = 'title' | 'course_id' | 'start_date';
 type Props = {
   notifications: Notification[];
-  sortBy: SortBy;
-  sortOrder: 'asc' | 'desc';
-  onSortChange: (column: SortBy) => void;
+  sortBy: NotificationSortColumn;
+  sortOrder: NotificationSortOrder;
+  onSortChange: (column: NotificationSortColumn) => void;
   onNotificationClick: (notificationId: string) => void;
 
   currentPage: number;

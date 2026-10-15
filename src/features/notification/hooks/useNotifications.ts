@@ -1,25 +1,16 @@
 import useSWR from 'swr';
 import { fetcher } from '@/utils/fetcher';
-import type { NotificationsResponse } from '../types/notification';
-
-type UseNotificationsParams = {
-  page: number;
-  perPage: number;
-  sortBy:
-    | 'title'
-    | 'course_id'
-    | 'start_date'
-    | 'instructor_nick_name'
-    | 'read_status';
-  order: 'asc' | 'desc';
-};
+import type {
+  NotificationsQuery,
+  NotificationsResponse,
+} from '../types/notification';
 
 export function useNotifications({
   page,
   perPage,
   sortBy,
   order,
-}: UseNotificationsParams) {
+}: NotificationsQuery) {
   const params = new URLSearchParams({
     page: String(page),
     per_page: String(perPage),

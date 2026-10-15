@@ -9,7 +9,11 @@ import {
   TableRow,
 } from '@/components/atoms/Table';
 import { Button } from '@/components/atoms/Button';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import type {
+  NotificationSortBy,
+  NotificationSortOrder,
+} from '@/features/notification/types/notification';
 
 export type Notification = {
   id: string;
@@ -20,13 +24,17 @@ export type Notification = {
   body: string;
 };
 
-type SortBy = 'title' | 'course_id' | 'start_date';
+/** 一覧で並び替えられる列 */
+export type NotificationSortColumn = Extract<
+  NotificationSortBy,
+  'title' | 'course_id' | 'start_date'
+>;
 
 type Props = {
   notifications: Notification[];
-  sortBy: SortBy;
-  sortOrder: 'asc' | 'desc';
-  onSortChange: (column: SortBy) => void;
+  sortBy: NotificationSortColumn;
+  sortOrder: NotificationSortOrder;
+  onSortChange: (column: NotificationSortColumn) => void;
   onNotificationClick: (notificationId: string) => void;
 };
 
@@ -37,6 +45,14 @@ export function NotificationTableUI({
   onSortChange,
   onNotificationClick,
 }: Props) {
+  // 並び替えていない列は、どちらの向きでもない上下のアイコンにする
+  const renderSortIcon = (column: NotificationSortColumn) => {
+    if (sortBy !== column) {
+      return <ChevronsUpDown />;
+    }
+    return sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />;
+  };
+
   return (
     <Table>
       <TableHeader>
@@ -51,11 +67,7 @@ export function NotificationTableUI({
                 aria-label="タイトルで並び替え"
                 className="text-muted-foreground"
               >
-                {sortBy === 'title' && sortOrder === 'asc' ? (
-                  <ChevronUp />
-                ) : (
-                  <ChevronDown />
-                )}
+                {renderSortIcon('title')}
               </Button>
             </span>
           </TableHead>
@@ -70,11 +82,7 @@ export function NotificationTableUI({
                 aria-label="講座名で並び替え"
                 className="text-muted-foreground"
               >
-                {sortBy === 'course_id' && sortOrder === 'asc' ? (
-                  <ChevronUp />
-                ) : (
-                  <ChevronDown />
-                )}
+                {renderSortIcon('course_id')}
               </Button>
             </span>
           </TableHead>
@@ -89,11 +97,7 @@ export function NotificationTableUI({
                 aria-label="開始日付で並び替え"
                 className="text-muted-foreground"
               >
-                {sortBy === 'start_date' && sortOrder === 'asc' ? (
-                  <ChevronUp />
-                ) : (
-                  <ChevronDown />
-                )}
+                {renderSortIcon('start_date')}
               </Button>
             </span>
           </TableHead>
