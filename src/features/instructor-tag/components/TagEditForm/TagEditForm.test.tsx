@@ -306,4 +306,34 @@ describe('講座分類編集フォーム', () => {
       expect(screen.queryByRole('alert')).not.toBeInTheDocument(),
     );
   });
+
+  it('削除の送信中は、削除のボタンが「削除中...」になり、押せない', async () => {
+    // Arrange
+    // 送信中のまま止めておき、確認が終わったら finishDelete で終わらせる
+    let finishDelete: (result: { success: true }) => void = () => {};
+    deleteInstructorTag.mockReturnValue(
+      new Promise((resolve) => {
+        finishDelete = resolve;
+      }),
+    );
+    mockUseInstructorTag('APIから取得した分類タイトル');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '削除' }));
+    await user.click(await screen.findByRole('button', { name: '削除する' }));
+
+    // Assert
+    expect(
+      await screen.findByRole('button', { name: '削除中...' }),
+    ).toBeDisabled();
+    expect(screen.getByRole('button', { name: '更新' })).toBeDisabled();
+
+    // 後片付け: 送信を終わらせ、送信中の状態を次のテストに持ち越さない
+    finishDelete({ success: true });
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: '削除' })).toBeEnabled(),
+    );
+  });
 });

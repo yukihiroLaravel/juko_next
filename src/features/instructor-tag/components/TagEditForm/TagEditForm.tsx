@@ -23,7 +23,9 @@ export function TagEditForm({ tagId }: Props) {
   const { instructorTag } = useInstructorTag(tagId);
   const { updateInstructorTag } = useUpdateInstructorTag();
   const { deleteInstructorTag } = useDeleteInstructorTag();
-  const [isPending, startTransition] = useTransition();
+  // 更新と削除で送信中の印を分け、どちらが送信中かでボタンの表示を変える
+  const [isUpdating, startUpdate] = useTransition();
+  const [isDeleting, startDelete] = useTransition();
 
   const form = useForm<TagSchema>({
     resolver: zodResolver(tagSchema),
@@ -35,7 +37,7 @@ export function TagEditForm({ tagId }: Props) {
   const handleSubmit = form.handleSubmit((data: TagSchema) => {
     // 前回のエラー枠を消してから送る
     form.clearErrors('root');
-    startTransition(async () => {
+    startUpdate(async () => {
       const result = await updateInstructorTag({
         tagId,
         content: data.content,
@@ -58,7 +60,7 @@ export function TagEditForm({ tagId }: Props) {
   const handleDelete = () => {
     // 削除は handleSubmit を通らないので、前回のエラー枠を自分で消す
     form.clearErrors('root');
-    startTransition(async () => {
+    startDelete(async () => {
       const result = await deleteInstructorTag({ tagId });
       if (result.success) {
         router.push(routes.instructor.courses.list());
@@ -72,7 +74,8 @@ export function TagEditForm({ tagId }: Props) {
     <TagFormUI
       form={form}
       onSubmit={handleSubmit}
-      isPending={isPending}
+      isPending={isUpdating || isDeleting}
+      isDeleting={isDeleting}
       title="講座分類編集"
       savedContent={instructorTag?.content}
       onDelete={handleDelete}
