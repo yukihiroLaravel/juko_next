@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import InstructorCoursesPage from '@/app/(instructor)/instructor/courses/page';
 import type { InstructorCourseApiItem } from '../../types/instructorCourse';
 import { InstructorCourseList } from './InstructorCourseList';
 
@@ -309,6 +310,20 @@ describe('講師側講座一覧', () => {
 
     // Assert
     expect(screen.getByText('該当する講座はありません。')).toBeInTheDocument();
+  });
+
+  it('講座の取得に失敗すると、エラーの表示が出る', () => {
+    // Arrange
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    mockUseInstructorCourses.mockImplementation(() => {
+      throw new Error('network error');
+    });
+
+    // Act
+    render(<InstructorCoursesPage />);
+
+    // Assert
+    expect(screen.getByText('エラーが発生しました')).toBeInTheDocument();
   });
 
   it('検索入力は入力中に即時送信せず、Enter 後に検索条件を送信する', async () => {
