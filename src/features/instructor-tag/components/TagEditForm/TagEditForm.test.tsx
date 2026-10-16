@@ -160,6 +160,7 @@ describe('講座分類編集フォーム', () => {
     expect(updateInstructorTag).not.toHaveBeenCalled();
   });
 
+  // AC-ITAG-006
   it('更新に成功すると、講座一覧に移る', async () => {
     // Arrange
     mockUseInstructorTag('APIから取得した分類タイトル');
@@ -175,6 +176,7 @@ describe('講座分類編集フォーム', () => {
     );
   });
 
+  // AC-ITAG-008
   it('更新に失敗すると、エラーが出て、講座一覧に移らない', async () => {
     // Arrange
     updateInstructorTag.mockResolvedValue({
@@ -195,6 +197,7 @@ describe('講座分類編集フォーム', () => {
     expect(navigation.push).not.toHaveBeenCalled();
   });
 
+  // AC-ITAG-007
   it('サーバーから分類タイトルのエラーが返ると、メッセージが入力欄の下に1つだけ出て、講座一覧に移らない', async () => {
     // Arrange
     updateInstructorTag.mockResolvedValue({
@@ -217,6 +220,7 @@ describe('講座分類編集フォーム', () => {
     expect(navigation.push).not.toHaveBeenCalled();
   });
 
+  // AC-ITAG-006
   it('削除に成功すると、講座一覧に移る', async () => {
     // Arrange
     mockUseInstructorTag('APIから取得した分類タイトル');
@@ -233,6 +237,7 @@ describe('講座分類編集フォーム', () => {
     );
   });
 
+  // AC-ITAG-008
   it('講座が紐づいていて削除に失敗すると、削除できない旨が出て、講座一覧に移らない', async () => {
     // Arrange
     deleteInstructorTag.mockResolvedValue({
@@ -252,6 +257,32 @@ describe('講座分類編集フォーム', () => {
       '講座が紐づいている講座分類は削除できません',
     );
     expect(navigation.push).not.toHaveBeenCalled();
+  });
+
+  // AC-ITAG-009
+  it('削除に失敗したあと、もう一度削除すると、前回のエラーが消える', async () => {
+    // Arrange
+    deleteInstructorTag
+      .mockResolvedValueOnce({
+        success: false,
+        error: '講座が紐づいている講座分類は削除できません',
+      })
+      .mockResolvedValueOnce({ success: true });
+    mockUseInstructorTag('APIから取得した分類タイトル');
+    render(<TagEditForm tagId="1" />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.click(screen.getByRole('button', { name: '削除' }));
+    await user.click(await screen.findByRole('button', { name: '削除する' }));
+    await screen.findByRole('alert');
+    await user.click(screen.getByRole('button', { name: '削除' }));
+    await user.click(await screen.findByRole('button', { name: '削除する' }));
+
+    // Assert
+    await waitFor(() =>
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument(),
+    );
   });
 
   it('更新の送信中は、ボタンが「更新中...」になり、押せない', async () => {
@@ -279,31 +310,6 @@ describe('講座分類編集フォーム', () => {
     finishUpdate({ success: true });
     await waitFor(() =>
       expect(screen.getByRole('button', { name: '更新' })).toBeEnabled(),
-    );
-  });
-
-  it('削除に失敗したあと、もう一度削除すると、前回のエラーが消える', async () => {
-    // Arrange
-    deleteInstructorTag
-      .mockResolvedValueOnce({
-        success: false,
-        error: '講座が紐づいている講座分類は削除できません',
-      })
-      .mockResolvedValueOnce({ success: true });
-    mockUseInstructorTag('APIから取得した分類タイトル');
-    render(<TagEditForm tagId="1" />);
-    const user = userEvent.setup();
-
-    // Act
-    await user.click(screen.getByRole('button', { name: '削除' }));
-    await user.click(await screen.findByRole('button', { name: '削除する' }));
-    await screen.findByRole('alert');
-    await user.click(screen.getByRole('button', { name: '削除' }));
-    await user.click(await screen.findByRole('button', { name: '削除する' }));
-
-    // Assert
-    await waitFor(() =>
-      expect(screen.queryByRole('alert')).not.toBeInTheDocument(),
     );
   });
 

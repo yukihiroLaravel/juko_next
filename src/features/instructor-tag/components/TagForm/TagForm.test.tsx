@@ -76,6 +76,7 @@ describe('講座分類登録フォーム', () => {
     ).not.toBeInTheDocument();
   });
 
+  // AC-ITAG-006
   it('登録に成功すると、講座一覧に移る', async () => {
     // Arrange
     render(<TagForm />);
@@ -91,6 +92,7 @@ describe('講座分類登録フォーム', () => {
     );
   });
 
+  // AC-ITAG-008
   it('登録に失敗すると、エラーが出て、講座一覧に移らない', async () => {
     // Arrange
     createInstructorTag.mockResolvedValue({
@@ -111,6 +113,7 @@ describe('講座分類登録フォーム', () => {
     expect(navigation.push).not.toHaveBeenCalled();
   });
 
+  // AC-ITAG-007
   it('サーバーから分類タイトルのエラーが返ると、メッセージが入力欄の下に1つだけ出て、講座一覧に移らない', async () => {
     // Arrange
     createInstructorTag.mockResolvedValue({
@@ -135,7 +138,13 @@ describe('講座分類登録フォーム', () => {
 
   it('送信中は、ボタンが「登録中...」になり、押せない', async () => {
     // Arrange
-    createInstructorTag.mockReturnValue(new Promise(() => {}));
+    // 送信中のまま止めておき、確認が終わったら finishCreate で終わらせる
+    let finishCreate: (result: { success: true }) => void = () => {};
+    createInstructorTag.mockReturnValue(
+      new Promise((resolve) => {
+        finishCreate = resolve;
+      }),
+    );
     render(<TagForm />);
     const user = userEvent.setup();
 
@@ -147,5 +156,9 @@ describe('講座分類登録フォーム', () => {
     expect(
       await screen.findByRole('button', { name: '登録中...' }),
     ).toBeDisabled();
+
+    // 後片付け: 送信を終わらせ、送信中の状態を次のテストに持ち越さない
+    finishCreate({ success: true });
+    await waitFor(() => expect(navigation.push).toHaveBeenCalled());
   });
 });
