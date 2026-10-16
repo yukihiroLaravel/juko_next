@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useSWRConfig } from 'swr';
 import { Axios } from '@/lib/api';
 import { isInstructorTagsKey } from '../utils/swrKeys';
-import { isInstructorCoursesKey } from '@/features/instructor-course/utils/swrKeys';
+import { isInstructorCoursesKey } from '@/utils/swrKeys';
 
 type UpdateInstructorTagResult =
   | { success: true }
@@ -29,8 +29,9 @@ export function useUpdateInstructorTag() {
     try {
       await Axios.put(`/api/v1/instructor/tags/${tagId}`, { content });
       await mutate(isInstructorTagsKey);
-      // 講座一覧の分類表示も講座分類の名前を使うので、あわせて取り直す
-      await mutate(isInstructorCoursesKey);
+      // 講座一覧の分類表示も講座分類の名前を使うので、あわせて取り直す。
+      // 講座一覧はこの時点で画面にないため、手元のデータを消して、次に開いたときに取り直させる
+      await mutate(isInstructorCoursesKey, undefined, { revalidate: true });
       return { success: true };
     } catch (error) {
       if (axios.isAxiosError<ErrorResponse>(error)) {
