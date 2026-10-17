@@ -56,6 +56,12 @@ flowchart LR
 
 ページは Container を並べるだけにする。Container がフックでデータを受け取り、変換して Presentational へ渡す。Presentational は受け取った値を表示し、操作をコールバックで返す。
 
+## お知らせ詳細の取得と既読登録
+
+一覧は選択されたお知らせの ID を一覧の応答とは独立して保持する。モーダル内の Container が `useNotification` で詳細を取得し、変換した表示用の値を Presentational へ渡す。詳細の Suspense と ErrorBoundary はモーダル内に置き、読み込み中・失敗時も閉じる操作を維持する。
+
+既読登録は一覧の行を開く操作から `useMarkNotificationRead` を呼ぶ。一覧 Container の ref に送信を試みた ID を記録するため、ソートやページ移動では記録を維持し、画面から離れると破棄する。成功後は SWR の一覧キーに一致するキャッシュをすべて再検証する。
+
 ## テストの構成
 
 | 項目         | 内容                                                          |
