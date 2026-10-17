@@ -11,6 +11,11 @@ export const routes = {
   },
 
   instructor: {
+    /** 新規登録（仮登録） */
+    signup: () => '/instructor/signup',
+    /** 新規登録（認証コード入力） */
+    verification: (token: string) =>
+      `/instructor/verification/${encodeURIComponent(token)}`,
     courses: {
       /** 講座一覧 */
       list: () => '/instructor/courses',
