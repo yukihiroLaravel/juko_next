@@ -43,6 +43,12 @@ const valid = {
   email: 'teacher@example.com',
 };
 
+const nameFields = [
+  ['講師名', 'nickName'],
+  ['姓', 'lastName'],
+  ['名', 'firstName'],
+] as const;
+
 describe('講師の新規登録（仮登録）', () => {
   beforeEach(() => {
     log = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -69,11 +75,7 @@ describe('講師の新規登録（仮登録）', () => {
   });
 
   // AC-ISIGNUP-001
-  it.each([
-    ['講師名', 'nickName'],
-    ['姓', 'lastName'],
-    ['名', 'firstName'],
-  ] as const)(
+  it.each(nameFields)(
     '%sが51文字のとき、50文字以内で入力するよう促し、登録しない',
     async (label, field) => {
       // Arrange
@@ -91,11 +93,7 @@ describe('講師の新規登録（仮登録）', () => {
   );
 
   // AC-ISIGNUP-001
-  it.each([
-    ['講師名', 'nickName'],
-    ['姓', 'lastName'],
-    ['名', 'firstName'],
-  ] as const)(
+  it.each(nameFields)(
     '%sに空白だけを入力したとき、入力を促し、登録しない',
     async (label, field) => {
       // Arrange

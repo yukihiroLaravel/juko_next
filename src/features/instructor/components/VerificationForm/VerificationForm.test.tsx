@@ -127,7 +127,7 @@ describe('講師の新規登録（認証コード入力）', () => {
   });
 
   // AC-ISIGNUP-005
-  it('URL に含まれる符号は画面に表示しない', () => {
+  it('URL の token は画面に表示しない', () => {
     // Arrange
     // Act
     render(<VerificationForm token={token} />);
