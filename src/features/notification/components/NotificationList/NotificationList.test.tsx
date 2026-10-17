@@ -3,15 +3,47 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NotificationList } from './NotificationList';
 
-const { mockUseNotifications } = vi.hoisted(() => ({
-  mockUseNotifications: vi.fn(),
-}));
+const { mockUseNotifications, mockUseNotification, mockMarkNotificationRead } =
+  vi.hoisted(() => ({
+    mockUseNotifications: vi.fn(),
+    mockUseNotification: vi.fn(),
+    mockMarkNotificationRead: vi.fn(),
+  }));
 
 vi.mock('../../hooks/useNotifications', () => ({
   useNotifications: mockUseNotifications,
 }));
 
+vi.mock('../../hooks/useNotification', () => ({
+  useNotification: mockUseNotification,
+  useRetryNotification: () => ({
+    retryNotification: async () => ({ success: true }),
+  }),
+}));
+
+vi.mock('../../hooks/useMarkNotificationRead', () => ({
+  useMarkNotificationRead: () => ({
+    markNotificationRead: mockMarkNotificationRead,
+  }),
+}));
+
+const detail = {
+  notification_id: 1,
+  course_id: 1,
+  course_title: 'PHP入門講座',
+  title: '詳細から取得したタイトル',
+  content: '詳細から取得した本文です。',
+  instructor_nick_name: null,
+  start_date: '2026-10-01 10:00:00',
+  end_date: '2026-10-18 17:30:25',
+  attendance_deadline: '2026-12-31',
+};
+
 beforeEach(() => {
+  mockMarkNotificationRead.mockReset();
+  mockMarkNotificationRead.mockResolvedValue({ success: true });
+  mockUseNotification.mockReset();
+  mockUseNotification.mockReturnValue({ notification: detail });
   mockUseNotifications.mockReturnValue({
     notifications: [
       {
@@ -37,7 +69,7 @@ beforeEach(() => {
 
 describe('受講生側お知らせ一覧', () => {
   // AC-SNLIST-008
-  it('お知らせの行をクリックすると、タイトルと本文が表示される', async () => {
+  it('お知らせの行をクリックすると、詳細で取得したタイトルと本文が表示される', async () => {
     // Arrange
     const user = userEvent.setup();
     render(<NotificationList />);
@@ -47,9 +79,11 @@ describe('受講生側お知らせ一覧', () => {
 
     // Assert
     const dialog = screen.getByRole('dialog');
-    expect(within(dialog).getByText('追加教材のお知らせ')).toBeInTheDocument();
     expect(
-      within(dialog).getByText(/新しい教材を追加しました。/),
+      within(dialog).getByText('詳細から取得したタイトル'),
+    ).toBeInTheDocument();
+    expect(
+      within(dialog).getByText('詳細から取得した本文です。'),
     ).toBeInTheDocument();
   });
 
@@ -85,9 +119,12 @@ describe('受講生側お知らせ一覧', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  // AC-SNLIST-008
-  it('受講期限がないお知らせでは「—」と表示される', async () => {
+  // AC-SNLIST-010
+  it('受講期限がnullの場合、受講期限のラベルも値も表示しない', async () => {
     // Arrange
+    mockUseNotification.mockReturnValue({
+      notification: { ...detail, attendance_deadline: null },
+    });
     const user = userEvent.setup();
     render(<NotificationList />);
 
@@ -96,7 +133,7 @@ describe('受講生側お知らせ一覧', () => {
 
     // Assert
     const dialog = screen.getByRole('dialog');
-    expect(within(dialog).getByText('受講期限: —')).toBeInTheDocument();
+    expect(within(dialog).queryByText(/受講期限/)).not.toBeInTheDocument();
   });
 
   // AC-SNLIST-009
@@ -279,5 +316,147 @@ describe('受講生側お知らせ一覧', () => {
     expect(
       screen.getByText('現在、お知らせはありません。'),
     ).toBeInTheDocument();
+  });
+});
+
+describe('お知らせ詳細の取得状態', () => {
+  // AC-SNLIST-010
+  it('受講期限がある場合、詳細の受講期限を表示する', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<NotificationList />);
+    // Act
+    await user.click(screen.getByText('追加教材のお知らせ'));
+    // Assert
+    expect(
+      within(screen.getByRole('dialog')).getByText(
+        /受講期限.*2026[/-]12[/-]31/,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  // AC-SNLIST-011
+  it('詳細の読み込み中もモーダルを表示し、閉じることができる', async () => {
+    // Arrange
+    mockUseNotification.mockImplementation(() => {
+      throw new Promise(() => {});
+    });
+    const user = userEvent.setup();
+    render(<NotificationList />);
+    // Act
+    await user.click(screen.getByText('追加教材のお知らせ'));
+    // Assert
+    expect(
+      within(screen.getByRole('dialog')).getByText(
+        'お知らせを読み込んでいます。',
+      ),
+    ).toBeInTheDocument();
+    // Act
+    await user.click(screen.getAllByRole('button', { name: '閉じる' })[0]);
+    // Assert
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  // AC-SNLIST-012
+  it('詳細の取得に失敗した場合、モーダル内にエラーと再試行を表示する', async () => {
+    // Arrange
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    mockUseNotification.mockImplementation(() => {
+      throw new Error('取得失敗');
+    });
+    const user = userEvent.setup();
+    render(<NotificationList />);
+    // Act
+    await user.click(screen.getByText('追加教材のお知らせ'));
+    // Assert
+    const dialog = screen.getByRole('dialog');
+    expect(
+      within(dialog).getByText('お知らせの取得に失敗しました。'),
+    ).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole('button', { name: '再試行' }),
+    ).toBeInTheDocument();
+    // Act
+    mockUseNotification.mockReturnValue({ notification: detail });
+    await user.click(within(dialog).getByRole('button', { name: '再試行' }));
+    // Assert
+    expect(
+      await within(dialog).findByText('詳細から取得した本文です。'),
+    ).toBeInTheDocument();
+  });
+});
+
+describe('お知らせ詳細の既読登録', () => {
+  // AC-SNLIST-013
+  it('一度きりのお知らせを開き直しても既読登録を繰り返さない', async () => {
+    // Arrange
+    const list = mockUseNotifications();
+    mockUseNotifications.mockReturnValue({
+      ...list,
+      notifications: list.notifications.map((item: object) => ({
+        ...item,
+        type: 'once',
+        read_status: 'unread',
+      })),
+    });
+    const user = userEvent.setup();
+    render(<NotificationList />);
+    // Act
+    await user.click(screen.getByText('追加教材のお知らせ'));
+    await user.click(screen.getAllByRole('button', { name: '閉じる' })[0]);
+    await user.click(screen.getByText('追加教材のお知らせ'));
+    // Assert
+    expect(mockMarkNotificationRead).toHaveBeenCalledTimes(1);
+  });
+
+  // AC-SNLIST-013
+  it('常時表示のお知らせは既読登録せず詳細を表示する', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<NotificationList />);
+    // Act
+    await user.click(screen.getByText('追加教材のお知らせ'));
+    // Assert
+    expect(mockMarkNotificationRead).not.toHaveBeenCalled();
+    expect(
+      within(screen.getByRole('dialog')).getByText(
+        '詳細から取得した本文です。',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  // AC-SNLIST-014
+  it('既読登録に失敗しても詳細を読み続けることができる', async () => {
+    // Arrange
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    mockMarkNotificationRead.mockResolvedValue({
+      success: false,
+      error: '既読登録に失敗しました',
+    });
+    const list = mockUseNotifications();
+    mockUseNotifications.mockReturnValue({
+      ...list,
+      notifications: list.notifications.map((item: object) => ({
+        ...item,
+        type: 'once',
+        read_status: 'unread',
+      })),
+    });
+    const user = userEvent.setup();
+    render(<NotificationList />);
+    // Act
+    await user.click(screen.getByText('追加教材のお知らせ'));
+    // Assert
+    const dialog = screen.getByRole('dialog');
+    expect(
+      within(dialog).getByText('詳細から取得した本文です。'),
+    ).toBeInTheDocument();
+    expect(
+      within(dialog).queryByText('既読登録に失敗しました'),
+    ).not.toBeInTheDocument();
+    // Act
+    await user.click(screen.getAllByRole('button', { name: '閉じる' })[0]);
+    // Assert
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });

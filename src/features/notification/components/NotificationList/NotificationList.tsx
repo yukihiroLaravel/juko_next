@@ -4,6 +4,7 @@ import { startTransition, useRef, useState } from 'react';
 import { NotificationListUI } from './NotificationList.ui';
 import type { NotificationSortColumn } from '../NotificationTable/NotificationTable.ui';
 import { NotificationDetailModal } from '../NotificationDetailModal/NotificationDetailModal';
+import { useMarkNotificationRead } from '../../hooks/useMarkNotificationRead';
 import { useNotifications } from '../../hooks/useNotifications';
 import { mapNotificationItemToNotification } from '../../utils/mapNotificationItemToNotification';
 import type { NotificationSortOrder } from '../../types/notification';
@@ -24,8 +25,10 @@ export function NotificationList() {
   const notifications = apiNotifications.map(mapNotificationItemToNotification);
 
   const [selectedNotificationId, setSelectedNotificationId] = useState<
-    string | null
+    number | null
   >(null);
+  const { markNotificationRead } = useMarkNotificationRead();
+  const attemptedReadIds = useRef(new Set<number>());
   const openerRef = useRef<HTMLElement | null>(null);
 
   const totalPages = Math.ceil((pagination?.total ?? 0) / PAGE_SIZE);
@@ -34,11 +37,6 @@ export function NotificationList() {
   if (pagination && currentPage > lastPage) {
     setCurrentPage(lastPage);
   }
-
-  const selectedNotification =
-    notifications.find(
-      (notification) => notification.id === selectedNotificationId,
-    ) ?? null;
 
   const handleSortChange = (column: NotificationSortColumn) => {
     startTransition(() => {
@@ -61,8 +59,21 @@ export function NotificationList() {
 
   const handleNotificationClick = (notificationId: string) => {
     openerRef.current = document.activeElement as HTMLElement | null;
-    setSelectedNotificationId(notificationId);
-    console.log('既読登録:', notificationId);
+    const id = Number(notificationId);
+    setSelectedNotificationId(id);
+    const item = apiNotifications.find(
+      (notification) => notification.notification_id === id,
+    );
+    if (item?.type !== 'once' || attemptedReadIds.current.has(id)) return;
+    // 送信前に記録し、送信中・失敗後も同じ画面では再送しない。
+    attemptedReadIds.current.add(id);
+    void markNotificationRead(id).then((result) => {
+      if (!result.success)
+        console.warn('既読登録に失敗しました', {
+          notificationId: id,
+          reason: result.error,
+        });
+    });
   };
 
   const handleModalClose = () => {
@@ -83,7 +94,7 @@ export function NotificationList() {
       />
 
       <NotificationDetailModal
-        notification={selectedNotification}
+        notificationId={selectedNotificationId}
         onClose={handleModalClose}
         onCloseAutoFocus={(event) => {
           event.preventDefault();
