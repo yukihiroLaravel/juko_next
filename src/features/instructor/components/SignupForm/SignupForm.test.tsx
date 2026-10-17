@@ -143,6 +143,14 @@ describe('講師の新規登録（仮登録）', () => {
     expect(
       screen.queryByRole('button', { name: '登録' }),
     ).not.toBeInTheDocument();
-    expect(log).toHaveBeenCalled();
+    expect(log).toHaveBeenCalledWith(
+      'submit data:',
+      expect.objectContaining({
+        nickName: 'あ'.repeat(50),
+        lastName: 'い'.repeat(50),
+        firstName: 'う'.repeat(50),
+        email,
+      }),
+    );
   });
 });

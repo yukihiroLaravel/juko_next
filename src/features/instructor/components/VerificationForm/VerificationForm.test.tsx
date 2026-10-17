@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { VerificationForm } from './VerificationForm';
@@ -118,9 +118,11 @@ describe('講師の新規登録（認証コード入力）', () => {
 
     // Assert
     expect(screen.getByLabelText('認証コード')).toHaveValue('aB3x');
-    expect(log).toHaveBeenCalledWith(
-      'submit data:',
-      expect.objectContaining({ token, code: 'aB3x' }),
+    await waitFor(() =>
+      expect(log).toHaveBeenCalledWith(
+        'submit data:',
+        expect.objectContaining({ token, code: 'aB3x', password: 'abcd1234' }),
+      ),
     );
   });
 
