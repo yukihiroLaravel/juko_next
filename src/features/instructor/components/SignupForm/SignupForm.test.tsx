@@ -91,6 +91,26 @@ describe('講師の新規登録（仮登録）', () => {
   );
 
   // AC-ISIGNUP-001
+  it.each([
+    ['講師名', 'nickName'],
+    ['姓', 'lastName'],
+    ['名', 'firstName'],
+  ] as const)(
+    '%sに空白だけを入力したとき、入力を促し、登録しない',
+    async (label, field) => {
+      // Arrange
+      render(<SignupForm />);
+
+      // Act
+      await fill({ ...valid, [field]: '   ' });
+
+      // Assert
+      expect(await screen.findByText(`${label}は必須です`)).toBeInTheDocument();
+      expect(log).not.toHaveBeenCalled();
+    },
+  );
+
+  // AC-ISIGNUP-001
   it('メールアドレスの形式が正しくないとき、その旨を示し、登録しない', async () => {
     // Arrange
     render(<SignupForm />);
