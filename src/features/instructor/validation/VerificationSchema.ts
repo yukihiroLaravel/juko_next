@@ -6,6 +6,7 @@ export const verificationSchema = z
   .object({
     code: z
       .string()
+      .trim()
       .min(1, '認証コードは必須です')
       .length(4, '認証コードは4文字で入力してください'),
     password: z

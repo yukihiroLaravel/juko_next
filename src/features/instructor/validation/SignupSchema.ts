@@ -3,14 +3,17 @@ import { z } from 'zod';
 export const signupSchema = z.object({
   nickName: z
     .string()
+    .trim()
     .min(1, '講師名は必須です')
     .max(50, '講師名は50文字以内で入力してください'),
   lastName: z
     .string()
+    .trim()
     .min(1, '姓は必須です')
     .max(50, '姓は50文字以内で入力してください'),
   firstName: z
     .string()
+    .trim()
     .min(1, '名は必須です')
     .max(50, '名は50文字以内で入力してください'),
   email: z
