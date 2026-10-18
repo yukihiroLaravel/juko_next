@@ -24,18 +24,13 @@ export function NotificationDetailModal({
   onClose,
   onCloseAutoFocus,
 }: Props) {
-  const { retryNotification, clearNotificationError } = useRetryNotification();
-
-  const handleClose = () => {
-    if (notificationId !== null) clearNotificationError(notificationId);
-    onClose();
-  };
+  const { retryNotification } = useRetryNotification();
 
   return (
     <Dialog
       open={notificationId !== null}
       onOpenChange={(open) => {
-        if (!open) handleClose();
+        if (!open) onClose();
       }}
     >
       <DialogContent
@@ -68,7 +63,7 @@ export function NotificationDetailModal({
           </ErrorBoundary>
         )}
         <DialogFooter>
-          <Button variant="outline" onClick={handleClose}>
+          <Button variant="outline" onClick={onClose}>
             閉じる
           </Button>
         </DialogFooter>

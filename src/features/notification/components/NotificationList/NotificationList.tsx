@@ -5,6 +5,7 @@ import { NotificationListUI } from './NotificationList.ui';
 import type { NotificationSortColumn } from '../NotificationTable/NotificationTable.ui';
 import { NotificationDetailModal } from '../NotificationDetailModal/NotificationDetailModal';
 import { useMarkNotificationRead } from '../../hooks/useMarkNotificationRead';
+import { useRetryNotification } from '../../hooks/useNotification';
 import { useNotifications } from '../../hooks/useNotifications';
 import { mapNotificationItemToNotification } from '../../utils/mapNotificationItemToNotification';
 import type { NotificationSortOrder } from '../../types/notification';
@@ -28,6 +29,7 @@ export function NotificationList() {
     number | null
   >(null);
   const { markNotificationRead } = useMarkNotificationRead();
+  const { clearNotificationError } = useRetryNotification();
   const attemptedReadIds = useRef(new Set<number>());
   const openerRef = useRef<HTMLElement | null>(null);
 
@@ -60,6 +62,9 @@ export function NotificationList() {
   const handleNotificationClick = (notificationId: string) => {
     openerRef.current = document.activeElement as HTMLElement | null;
     const id = Number(notificationId);
+    // 前回の取得の失敗が残っていると取り直さないため、開く前に消す。
+    // 読み込み中に閉じたあとで失敗が届く場合もあるので、閉じるときではなく開くときに消す。
+    clearNotificationError(id);
     setSelectedNotificationId(id);
     const item = apiNotifications.find(
       (notification) => notification.notification_id === id,

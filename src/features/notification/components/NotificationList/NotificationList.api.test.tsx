@@ -291,6 +291,46 @@ describe('お知らせ詳細のAPI連携', () => {
     expect(Axios.post).toHaveBeenCalledTimes(1);
   });
 
+  // AC-SNLIST-012
+  it('読み込み中に閉じたあと詳細取得に失敗しても、開き直すと再取得し詳細を表示する', async () => {
+    // Arrange
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    let rejectDetail: (error: Error) => void = () => {};
+    vi.mocked(Axios.get).mockImplementation(async (url) => {
+      if (url.startsWith('/api/v1/notifications/index?'))
+        return { data: listing };
+      return new Promise((_, reject) => {
+        rejectDetail = reject;
+      });
+    });
+    const user = userEvent.setup();
+    await renderList();
+    await performUserAction(() => user.click(screen.getByText(item.title)));
+    await screen.findByText('お知らせを読み込んでいます。');
+    await performUserAction(() =>
+      user.click(screen.getAllByRole('button', { name: '閉じる' })[0]),
+    );
+    await act(async () => {
+      rejectDetail(new Error('詳細の取得失敗'));
+    });
+    vi.mocked(Axios.get).mockImplementation(async (url) => ({
+      data: url.startsWith('/api/v1/notifications/index?')
+        ? listing
+        : { data: detail },
+    }));
+    // Act
+    await performUserAction(() => user.click(screen.getByText(item.title)));
+    // Assert
+    expect(
+      await within(screen.getByRole('dialog')).findByText(detail.content),
+    ).toBeInTheDocument();
+    expect(
+      vi
+        .mocked(Axios.get)
+        .mock.calls.filter(([url]) => url === '/api/v1/notifications/4'),
+    ).toHaveLength(2);
+  });
+
   // AC-SNLIST-008
   it('正常取得した詳細は閉じてもキャッシュを保持し、開き直しても表示できる', async () => {
     // Arrange
