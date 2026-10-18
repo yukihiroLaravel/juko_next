@@ -331,7 +331,7 @@ describe('お知らせ詳細のAPI連携', () => {
     ).toHaveLength(2);
   });
 
-  // AC-SNLIST-008
+  // AC-SNLIST-012
   it('正常取得した詳細は閉じてもキャッシュを保持し、開き直しても表示できる', async () => {
     // Arrange
     const user = userEvent.setup();
