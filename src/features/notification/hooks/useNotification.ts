@@ -13,7 +13,15 @@ export function useNotification(notificationId: number | null) {
 }
 
 export function useRetryNotification() {
-  const { mutate } = useSWRConfig();
+  const { mutate, cache } = useSWRConfig();
+
+  function clearNotificationError(notificationId: number) {
+    const key = notificationKey(notificationId);
+    if (key === null) return;
+    const cached = cache.get(key);
+    // 再検証の失敗で正常データも残っている場合は、そのデータを保持する。
+    if (cached?.error && cached.data === undefined) cache.delete(key);
+  }
 
   async function retryNotification(notificationId: number) {
     const key = notificationKey(notificationId);
@@ -29,5 +37,5 @@ export function useRetryNotification() {
     }
   }
 
-  return { retryNotification };
+  return { retryNotification, clearNotificationError };
 }

@@ -18,6 +18,7 @@ vi.mock('../../hooks/useNotification', () => ({
   useNotification: mockUseNotification,
   useRetryNotification: () => ({
     retryNotification: async () => ({ success: true }),
+    clearNotificationError: vi.fn(),
   }),
 }));
 
@@ -329,9 +330,7 @@ describe('お知らせ詳細の取得状態', () => {
     await user.click(screen.getByText('追加教材のお知らせ'));
     // Assert
     expect(
-      within(screen.getByRole('dialog')).getByText(
-        /受講期限.*2026[/-]12[/-]31/,
-      ),
+      within(screen.getByRole('dialog')).getByText('受講期限: 2026/12/31'),
     ).toBeInTheDocument();
   });
 

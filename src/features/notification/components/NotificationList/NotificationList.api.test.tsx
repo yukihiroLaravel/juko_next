@@ -48,11 +48,12 @@ const listing = {
 };
 
 async function renderList() {
-  return await act(async () =>
+  const cache = new Map<string, { data?: unknown; error?: unknown }>();
+  const view = await act(async () =>
     render(
       <SWRConfig
         value={{
-          provider: () => new Map(),
+          provider: () => cache,
           shouldRetryOnError: false,
           revalidateOnFocus: false,
         }}
@@ -63,6 +64,7 @@ async function renderList() {
       </SWRConfig>,
     ),
   );
+  return { ...view, cache };
 }
 
 // Suspense を起こす操作は非同期 act で完了まで待つ。
@@ -252,5 +254,69 @@ describe('お知らせ詳細のAPI連携', () => {
     );
     // Assert
     expect(await screen.findByText(detail.content)).toBeInTheDocument();
+  });
+
+  // AC-SNLIST-012
+  it('詳細取得に失敗しても、閉じて開き直すと再取得し詳細を表示する', async () => {
+    // Arrange
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.mocked(Axios.get).mockImplementation(async (url) => {
+      if (url.startsWith('/api/v1/notifications/index?'))
+        return { data: listing };
+      throw new Error('詳細の取得失敗');
+    });
+    const user = userEvent.setup();
+    await renderList();
+    await performUserAction(() => user.click(screen.getByText(item.title)));
+    await screen.findByText('お知らせの取得に失敗しました。');
+    // Act
+    await performUserAction(() =>
+      user.click(screen.getAllByRole('button', { name: '閉じる' })[0]),
+    );
+    vi.mocked(Axios.get).mockImplementation(async (url) => ({
+      data: url.startsWith('/api/v1/notifications/index?')
+        ? listing
+        : { data: detail },
+    }));
+    await performUserAction(() => user.click(screen.getByText(item.title)));
+    // Assert
+    expect(
+      await within(screen.getByRole('dialog')).findByText(detail.content),
+    ).toBeInTheDocument();
+    expect(
+      vi
+        .mocked(Axios.get)
+        .mock.calls.filter(([url]) => url === '/api/v1/notifications/4'),
+    ).toHaveLength(2);
+    expect(Axios.post).toHaveBeenCalledTimes(1);
+  });
+
+  // AC-SNLIST-008
+  it('正常取得した詳細は閉じてもキャッシュを保持し、開き直しても表示できる', async () => {
+    // Arrange
+    const user = userEvent.setup();
+    const { cache } = await renderList();
+    await performUserAction(() => user.click(screen.getByText(item.title)));
+    await screen.findByText(detail.content);
+    const cachedData = cache.get('/api/v1/notifications/4')?.data;
+    expect(cachedData).toEqual({ data: detail });
+    // Act
+    await performUserAction(() =>
+      user.click(screen.getAllByRole('button', { name: '閉じる' })[0]),
+    );
+    // Assert
+    expect(cache.get('/api/v1/notifications/4')?.data).toBe(cachedData);
+    // Act
+    await performUserAction(() => user.click(screen.getByText(item.title)));
+    // Assert
+    expect(
+      await within(screen.getByRole('dialog')).findByText(detail.content),
+    ).toBeInTheDocument();
+    expect(
+      vi
+        .mocked(Axios.get)
+        .mock.calls.filter(([url]) => url === '/api/v1/notifications/4'),
+    ).toHaveLength(1);
+    expect(Axios.post).toHaveBeenCalledTimes(1);
   });
 });
