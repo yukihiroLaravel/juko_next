@@ -1,10 +1,18 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { VerificationForm } from './VerificationForm';
+import { useVerifyInstructor } from '@/features/instructor/hooks/useVerifyInstructor';
 
-// 登録は API とつなぐまで console.log に出すだけなので、出たかどうかで登録の実行を見る
-let log: ReturnType<typeof vi.spyOn>;
+const navigation = vi.hoisted(() => ({ push: vi.fn() }));
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: navigation.push }),
+}));
+
+vi.mock('@/features/instructor/hooks/useVerifyInstructor');
+
+const verifyInstructor = vi.fn();
 
 const token = 'abcDEF1234';
 
@@ -32,13 +40,14 @@ const valid = {
   passwordConfirmation: 'abcd1234',
 };
 
+const restartLink = { name: '仮登録からやり直す' };
+
 describe('講師の新規登録（認証コード入力）', () => {
   beforeEach(() => {
-    log = vi.spyOn(console, 'log').mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
+    navigation.push.mockReset();
+    verifyInstructor.mockReset();
+    verifyInstructor.mockResolvedValue({ success: true });
+    vi.mocked(useVerifyInstructor).mockReturnValue({ verifyInstructor });
   });
 
   // AC-ISIGNUP-003
@@ -53,7 +62,7 @@ describe('講師の新規登録（認証コード入力）', () => {
     expect(await screen.findByText('認証コードは必須です')).toBeInTheDocument();
     expect(screen.getByText('パスワードは必須です')).toBeInTheDocument();
     expect(screen.getByText('パスワード再入力は必須です')).toBeInTheDocument();
-    expect(log).not.toHaveBeenCalled();
+    expect(verifyInstructor).not.toHaveBeenCalled();
   });
 
   // AC-ISIGNUP-003
@@ -70,7 +79,7 @@ describe('講師の新規登録（認証コード入力）', () => {
       expect(
         await screen.findByText('認証コードは4文字で入力してください'),
       ).toBeInTheDocument();
-      expect(log).not.toHaveBeenCalled();
+      expect(verifyInstructor).not.toHaveBeenCalled();
     },
   );
 
@@ -90,7 +99,7 @@ describe('講師の新規登録（認証コード入力）', () => {
     expect(
       await screen.findByText('パスワードは8文字以上で入力してください'),
     ).toBeInTheDocument();
-    expect(log).not.toHaveBeenCalled();
+    expect(verifyInstructor).not.toHaveBeenCalled();
   });
 
   // AC-ISIGNUP-003
@@ -105,7 +114,7 @@ describe('講師の新規登録（認証コード入力）', () => {
     expect(
       await screen.findByText('パスワードが一致しません'),
     ).toBeInTheDocument();
-    expect(log).not.toHaveBeenCalled();
+    expect(verifyInstructor).not.toHaveBeenCalled();
   });
 
   // AC-ISIGNUP-004
@@ -119,9 +128,9 @@ describe('講師の新規登録（認証コード入力）', () => {
     // Assert
     expect(screen.getByLabelText('認証コード')).toHaveValue('aB3x');
     await waitFor(() =>
-      expect(log).toHaveBeenCalledWith(
-        'submit data:',
-        expect.objectContaining({ token, code: 'aB3x', password: 'abcd1234' }),
+      expect(verifyInstructor).toHaveBeenCalledWith(
+        token,
+        expect.objectContaining({ code: 'aB3x', password: 'abcd1234' }),
       ),
     );
   });
@@ -152,5 +161,164 @@ describe('講師の新規登録（認証コード入力）', () => {
       'type',
       'password',
     );
+  });
+
+  // AC-ISIGNUP-010
+  it('本登録に成功すると、講師ログインの画面に移る', async () => {
+    // Arrange
+    render(<VerificationForm token={token} />);
+
+    // Act
+    await fill(valid);
+
+    // Assert
+    await waitFor(() =>
+      expect(navigation.push).toHaveBeenCalledWith(
+        '/instructor/login?registered=1',
+      ),
+    );
+  });
+
+  // AC-ISIGNUP-008
+  it('認証コードが正しくないと、その旨がフォームの上に出て、仮登録からやり直すリンクは出ず、入力し直せる', async () => {
+    // Arrange
+    const message =
+      '認証コードが正しくありません。メールに記載の認証コードを確かめて、もう一度入力してください';
+    verifyInstructor.mockResolvedValue({ success: false, error: message });
+    render(<VerificationForm token={token} />);
+
+    // Act
+    await fill(valid);
+
+    // Assert
+    expect(await screen.findByRole('alert')).toHaveTextContent(message);
+    expect(screen.queryByRole('link', restartLink)).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '登録' })).toBeEnabled();
+    expect(navigation.push).not.toHaveBeenCalled();
+  });
+
+  // AC-ISIGNUP-009
+  it.each([
+    [
+      '認証コードの誤りが上限を超えた',
+      '認証コードの誤りが上限を超えたため、この仮登録は無効になりました。お手数ですが、仮登録からやり直してください',
+    ],
+    [
+      '認証コードの有効期限が切れた',
+      '認証コードの有効期限（60分）が切れたため、この仮登録は無効になりました。お手数ですが、仮登録からやり直してください',
+    ],
+    [
+      'URL の仮登録が見つからない',
+      'この URL の仮登録が見つかりません。無効になったか、URL が誤っている可能性があります。仮登録からやり直してください',
+    ],
+  ])(
+    '%sとき、その旨と仮登録からやり直すリンクが出る',
+    async (_situation, message) => {
+      // Arrange
+      verifyInstructor.mockResolvedValue({
+        success: false,
+        error: message,
+        needsRestart: true,
+      });
+      render(<VerificationForm token={token} />);
+
+      // Act
+      await fill(valid);
+
+      // Assert
+      expect(await screen.findByRole('alert')).toHaveTextContent(message);
+      expect(screen.getByRole('link', restartLink)).toBeInTheDocument();
+      expect(navigation.push).not.toHaveBeenCalled();
+    },
+  );
+
+  // AC-ISIGNUP-009
+  it('仮登録からやり直すリンクの行き先は、仮登録の画面である', async () => {
+    // Arrange
+    verifyInstructor.mockResolvedValue({
+      success: false,
+      error:
+        'この URL の仮登録が見つかりません。無効になったか、URL が誤っている可能性があります。仮登録からやり直してください',
+      needsRestart: true,
+    });
+    render(<VerificationForm token={token} />);
+
+    // Act
+    await fill(valid);
+
+    // Assert
+    expect(await screen.findByRole('link', restartLink)).toHaveAttribute(
+      'href',
+      '/instructor/signup',
+    );
+  });
+
+  // AC-ISIGNUP-007
+  it('サーバーが認証コードの誤りを返すと、認証コードの欄の下に理由が出る', async () => {
+    // Arrange
+    const message = '認証コードは4文字で入力してください（サーバー）';
+    verifyInstructor.mockResolvedValue({
+      success: false,
+      error: message,
+      fieldErrors: { code: message },
+    });
+    render(<VerificationForm token={token} />);
+
+    // Act
+    await fill(valid);
+
+    // Assert
+    expect(await screen.findByText(message)).toBeInTheDocument();
+    expect(screen.getByLabelText('認証コード')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  // AC-ISIGNUP-007
+  it('サーバーがパスワードの誤りを返すと、パスワードの欄の下に理由が出る', async () => {
+    // Arrange
+    const message = 'パスワードとパスワード再入力が一致しません（サーバー）';
+    verifyInstructor.mockResolvedValue({
+      success: false,
+      error: message,
+      fieldErrors: { password: message },
+    });
+    render(<VerificationForm token={token} />);
+
+    // Act
+    await fill(valid);
+
+    // Assert
+    expect(await screen.findByText(message)).toBeInTheDocument();
+    expect(screen.getByLabelText('パスワード')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  // AC-ISIGNUP-011
+  it('本登録の処理中は、もう一度登録を押せない', async () => {
+    // Arrange
+    // 処理中のまま止めておき、確認が終わったら finish で終わらせる
+    let finish: (result: { success: true }) => void = () => {};
+    verifyInstructor.mockReturnValue(
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+    );
+    render(<VerificationForm token={token} />);
+
+    // Act
+    await fill(valid);
+
+    // Assert
+    expect(await screen.findByRole('button', { name: '登録' })).toBeDisabled();
+
+    // 後片付け: 処理を終わらせ、処理中の状態を次のテストに持ち越さない
+    finish({ success: true });
+    await waitFor(() => expect(navigation.push).toHaveBeenCalled());
   });
 });
