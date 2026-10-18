@@ -6,7 +6,7 @@ export default function InstructorLoginPage() {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-4">
       <div className="w-full max-w-md space-y-4">
-        <LoginForm />
+        <LoginForm role="instructor" />
         <div className="text-center">
           <Button asChild variant="link">
             <Link href="/">TOPページへ戻る</Link>

@@ -15,9 +15,12 @@ const loginSchema = z.object({
     .min(8, 'パスワードは8文字以上で入力してください'),
 });
 
-export type LoginFormValues = z.infer<typeof loginSchema>;
+// export type LoginFormValues = z.infer<typeof loginSchema>;
+export type LoginFormProps = {
+  role?: 'student' | 'instructor';
+};
 
-export function LoginForm() {
+export function LoginForm({ role = 'student' }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const { login, isSubmitting } = useLogin();
 
@@ -30,7 +33,7 @@ export function LoginForm() {
   });
 
   const handleSubmit = form.handleSubmit(async (data: LoginFormValues) => {
-    const result = await login(data);
+    const result = await login({ ...data, role});
 
     if (!result.success && result.error) {
       form.resetField('password');

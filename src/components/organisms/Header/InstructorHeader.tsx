@@ -12,7 +12,9 @@ export function InstructorHeader() {
     return <InstructorHeaderUI userName="読み込み中..." onLogout={() => {}} />;
   }
 
+  const instructorName = user?.nick_name ?? user?.name ?? 'ゲスト';
+
   return (
-    <InstructorHeaderUI userName={user?.name ?? 'ゲスト'} onLogout={logout} />
+    <InstructorHeaderUI userName={instructorName} onLogout={() => logout('instructor')} />
   );
 }
