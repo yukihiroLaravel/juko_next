@@ -10,6 +10,7 @@
 | -------------------------------------------------------- | -------------------------------------------------------------------------------- | --------------------- |
 | [ADR-FE-0001](0001-screen-behavior-tests-with-vitest.md) | 画面の振る舞いを Vitest と React Testing Library で確かめる                      | 承認済み (2026-09-28) |
 | [ADR-FE-0002](0002-async-react.md)                       | 非同期の状態を Async React の考え方で扱う（Suspense・ErrorBoundary・transition） | 承認済み (2026-09-28) |
+| [ADR-FE-0003](0003-swr-cache-integration-tests.md)       | SWR のキャッシュに関わる振る舞いは HTTP の層を差し替えて確かめる                 | 承認済み (2026-10-18) |
 
 ## 書くとき
 

@@ -169,7 +169,7 @@ Suspense が合わない使い方もありうる。そう見えたときは、�
 ### 書き方
 
 - Container を描画する。Presentational だけを描画して props の表示を確かめるテストは書かない
-- データのフックは `vi.mock` で差し替え、`vi.mocked(useXxx).mockReturnValue(...)` で状態を与える。HTTP の層を差し替えない
+- データのフックは `vi.mock` で差し替え、`vi.mocked(useXxx).mockReturnValue(...)` で状態を与える。HTTP の層を差し替えない。例外は下の「SWR のキャッシュに関わる振る舞い」だけである
 - 要素は利用者に見えるもので探す。`getByRole`・`getByLabelText`・`getByText` を使い、クラス名や `data-testid` で探さない
 - 操作は `@testing-library/user-event` で行う
 - 読み込み中と取得の失敗は Suspense と ErrorBoundary が受け持つため、それを置いた単位で描画して確かめる。取得の失敗は、差し替えたフックに例外を投げさせて再現する
@@ -188,6 +188,15 @@ it('レッスンを完了にすると、完了済みの印が付く', async () =
 ```
 
 見本は `src/features/auth/components/LoginForm/LoginForm.test.tsx` にある。
+
+### SWR のキャッシュに関わる振る舞い
+
+開き直したときに取り直すか、取得できた値を残すか、送信の成功後に一覧を取り直すかは、フックを差し替えると SWR が動かず確かめられない。これに限り、`@/lib/api` の axios を差し替えて本物の SWR を動かす（ADR-FE-0003）。
+
+- `<部品>.api.test.tsx` として、対象の Container と同じディレクトリに置く
+- `SWRConfig` の `provider` でテストごとに新しいキャッシュを渡す
+- 確かめるのは取得と再取得の有無と、画面に出る結果である。送る値の形や API のパスは確かめない
+- フックのテストを別に書かない。上と同じく Container を描画する
 
 ## レビュー時の重大度
 
