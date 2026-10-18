@@ -1,9 +1,7 @@
 import type { NotificationsQuery } from '@/features/notification/types/notification';
 
-export function notificationKey(notificationId: number | null) {
-  return notificationId === null
-    ? null
-    : `/api/v1/notifications/${notificationId}`;
+export function notificationKey(notificationId: number) {
+  return `/api/v1/notifications/${notificationId}`;
 }
 
 export function isNotificationsKey(key: unknown): key is string {

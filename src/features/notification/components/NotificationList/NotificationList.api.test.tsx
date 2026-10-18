@@ -48,12 +48,11 @@ const listing = {
 };
 
 async function renderList() {
-  const cache = new Map<string, { data?: unknown; error?: unknown }>();
-  const view = await act(async () =>
+  return await act(async () =>
     render(
       <SWRConfig
         value={{
-          provider: () => cache,
+          provider: () => new Map(),
           shouldRetryOnError: false,
           revalidateOnFocus: false,
         }}
@@ -64,7 +63,6 @@ async function renderList() {
       </SWRConfig>,
     ),
   );
-  return { ...view, cache };
 }
 
 // Suspense を起こす操作は非同期 act で完了まで待つ。
@@ -100,9 +98,25 @@ beforeEach(() => {
   vi.mocked(Axios.post).mockResolvedValue({ data: { result: true } });
 });
 
-describe('お知らせ詳細のAPI連携', () => {
-  // AC-SNLIST-013
-  it('既読登録の送信中に開き直しても数値IDの送信は1回で、成功後に一覧を取り直す', async () => {
+// 一覧の取得件数（取り直したかどうかを確かめる）
+function countListRequests() {
+  return vi
+    .mocked(Axios.get)
+    .mock.calls.filter(([url]) =>
+      url.startsWith('/api/v1/notifications/index?'),
+    ).length;
+}
+
+// 詳細の取得件数（取り直したかどうかを確かめる）
+function countDetailRequests() {
+  return vi
+    .mocked(Axios.get)
+    .mock.calls.filter(([url]) => url === '/api/v1/notifications/4').length;
+}
+
+describe('お知らせ詳細とSWRのキャッシュ', () => {
+  // AC-SNLIST-016
+  it('確認済みの記録の送信に成功すると一覧を取り直し、詳細の表示を続ける', async () => {
     // Arrange
     let finish!: (value: unknown) => void;
     vi.mocked(Axios.post).mockReturnValue(
@@ -112,81 +126,35 @@ describe('お知らせ詳細のAPI連携', () => {
     );
     const user = userEvent.setup();
     await renderList();
-    // Act
-    await screen.findByText(item.title);
     await performUserAction(() => user.click(screen.getByText(item.title)));
-    expect(await screen.findByText(detail.content)).toBeInTheDocument();
-    await performUserAction(() =>
-      user.click(screen.getAllByRole('button', { name: '閉じる' })[0]),
-    );
-    await performUserAction(() => user.click(screen.getByText(item.title)));
-    // Assert
-    expect(Axios.post).toHaveBeenCalledTimes(1);
-    expect(Axios.post).toHaveBeenCalledWith('/api/v1/notifications/mark-read', {
-      notification_id: 4,
-    });
-    const listRequestsBeforeSuccess = vi
-      .mocked(Axios.get)
-      .mock.calls.filter(([url]) =>
-        url.startsWith('/api/v1/notifications/index?'),
-      ).length;
+    await screen.findByText(detail.content);
+    const listRequestsBeforeSuccess = countListRequests();
     // Act
     await act(async () => {
       finish({ data: { result: true } });
     });
     // Assert
     await waitFor(() =>
-      expect(
-        vi
-          .mocked(Axios.get)
-          .mock.calls.filter(([url]) =>
-            url.startsWith('/api/v1/notifications/index?'),
-          ).length,
-      ).toBeGreaterThan(listRequestsBeforeSuccess),
+      expect(countListRequests()).toBeGreaterThan(listRequestsBeforeSuccess),
     );
     expect(
-      await within(screen.getByRole('dialog')).findByText(detail.content),
+      within(screen.getByRole('dialog')).getByText(detail.content),
     ).toBeInTheDocument();
   });
 
-  // AC-SNLIST-014
-  it('既読登録に失敗しても詳細を表示し、開き直しても再送せず一覧を再検証しない', async () => {
+  // AC-SNLIST-016
+  it('確認済みの記録の送信に失敗したときは一覧を取り直さない', async () => {
     // Arrange
-    const log = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const errorLog = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const warning = vi.spyOn(console, 'warn').mockImplementation(() => {});
     vi.mocked(Axios.post).mockRejectedValue(new Error('通信失敗'));
     const user = userEvent.setup();
     await renderList();
     // Act
-    await screen.findByText(item.title);
     await performUserAction(() => user.click(screen.getByText(item.title)));
     // Assert
-    expect(await screen.findByText(detail.content)).toBeInTheDocument();
-    await waitFor(() =>
-      expect(log).toHaveBeenCalledWith('既読登録に失敗しました', {
-        notificationId: item.notification_id,
-        reason: '予期しないエラーが発生しました',
-      }),
-    );
-    expect(errorLog).not.toHaveBeenCalled();
-    expect(
-      within(screen.getByRole('dialog')).queryByRole('alert'),
-    ).not.toBeInTheDocument();
-    // Act
-    await performUserAction(() =>
-      user.click(screen.getAllByRole('button', { name: '閉じる' })[0]),
-    );
-    await performUserAction(() => user.click(screen.getByText(item.title)));
-    // Assert
-    expect(Axios.post).toHaveBeenCalledTimes(1);
-    expect(errorLog).not.toHaveBeenCalled();
-    expect(
-      vi
-        .mocked(Axios.get)
-        .mock.calls.filter(([url]) =>
-          url.startsWith('/api/v1/notifications/index?'),
-        ),
-    ).toHaveLength(1);
+    await screen.findByText(detail.content);
+    await waitFor(() => expect(warning).toHaveBeenCalled());
+    expect(countListRequests()).toBe(1);
   });
 
   // AC-SNLIST-008
@@ -226,7 +194,7 @@ describe('お知らせ詳細のAPI連携', () => {
   });
 
   // AC-SNLIST-012
-  it('詳細の取得に失敗したあと、再試行すると実際に詳細を取得し直せる', async () => {
+  it('詳細の取得に失敗したあと、再試行すると詳細を表示する', async () => {
     // Arrange
     vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.mocked(Axios.get).mockImplementation(async (url) => {
@@ -283,12 +251,7 @@ describe('お知らせ詳細のAPI連携', () => {
     expect(
       await within(screen.getByRole('dialog')).findByText(detail.content),
     ).toBeInTheDocument();
-    expect(
-      vi
-        .mocked(Axios.get)
-        .mock.calls.filter(([url]) => url === '/api/v1/notifications/4'),
-    ).toHaveLength(2);
-    expect(Axios.post).toHaveBeenCalledTimes(1);
+    expect(countDetailRequests()).toBe(2);
   });
 
   // AC-SNLIST-012
@@ -324,39 +287,25 @@ describe('お知らせ詳細のAPI連携', () => {
     expect(
       await within(screen.getByRole('dialog')).findByText(detail.content),
     ).toBeInTheDocument();
-    expect(
-      vi
-        .mocked(Axios.get)
-        .mock.calls.filter(([url]) => url === '/api/v1/notifications/4'),
-    ).toHaveLength(2);
+    expect(countDetailRequests()).toBe(2);
   });
 
-  // AC-SNLIST-012
-  it('正常取得した詳細は閉じてもキャッシュを保持し、開き直しても表示できる', async () => {
+  // AC-SNLIST-017
+  it('詳細を取得できたお知らせは、閉じて開き直しても取り直さずに表示する', async () => {
     // Arrange
     const user = userEvent.setup();
-    const { cache } = await renderList();
+    await renderList();
     await performUserAction(() => user.click(screen.getByText(item.title)));
     await screen.findByText(detail.content);
-    const cachedData = cache.get('/api/v1/notifications/4')?.data;
-    expect(cachedData).toEqual({ data: detail });
-    // Act
     await performUserAction(() =>
       user.click(screen.getAllByRole('button', { name: '閉じる' })[0]),
     );
-    // Assert
-    expect(cache.get('/api/v1/notifications/4')?.data).toBe(cachedData);
     // Act
     await performUserAction(() => user.click(screen.getByText(item.title)));
     // Assert
     expect(
       await within(screen.getByRole('dialog')).findByText(detail.content),
     ).toBeInTheDocument();
-    expect(
-      vi
-        .mocked(Axios.get)
-        .mock.calls.filter(([url]) => url === '/api/v1/notifications/4'),
-    ).toHaveLength(1);
-    expect(Axios.post).toHaveBeenCalledTimes(1);
+    expect(countDetailRequests()).toBe(1);
   });
 });

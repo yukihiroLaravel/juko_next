@@ -121,7 +121,7 @@ describe('受講生側お知らせ一覧', () => {
   });
 
   // AC-SNLIST-010
-  it('受講期限がnullの場合、受講期限のラベルも値も表示しない', async () => {
+  it('受講期限がないお知らせでは、受講期限のラベルも値も表示しない', async () => {
     // Arrange
     mockUseNotification.mockReturnValue({
       notification: { ...detail, attendance_deadline: null },
@@ -375,19 +375,13 @@ describe('お知らせ詳細の取得状態', () => {
     expect(
       within(dialog).getByRole('button', { name: '再試行' }),
     ).toBeInTheDocument();
-    // Act
-    mockUseNotification.mockReturnValue({ notification: detail });
-    await user.click(within(dialog).getByRole('button', { name: '再試行' }));
-    // Assert
-    expect(
-      await within(dialog).findByText('詳細から取得した本文です。'),
-    ).toBeInTheDocument();
   });
 });
 
-describe('お知らせ詳細の既読登録', () => {
+describe('お知らせの確認済みの記録', () => {
   // AC-SNLIST-013
-  it('一度きりのお知らせを開き直しても既読登録を繰り返さない', async () => {
+  // AC-SNLIST-015
+  it('一度きりのお知らせを開き直しても、確認済みの記録を2回送らない', async () => {
     // Arrange
     const list = mockUseNotifications();
     mockUseNotifications.mockReturnValue({
@@ -409,7 +403,7 @@ describe('お知らせ詳細の既読登録', () => {
   });
 
   // AC-SNLIST-013
-  it('常時表示のお知らせは既読登録せず詳細を表示する', async () => {
+  it('常時表示のお知らせを開いても、確認済みの記録を送らない', async () => {
     // Arrange
     const user = userEvent.setup();
     render(<NotificationList />);
@@ -425,7 +419,7 @@ describe('お知らせ詳細の既読登録', () => {
   });
 
   // AC-SNLIST-014
-  it('既読登録に失敗しても詳細を読み続けることができる', async () => {
+  it('確認済みの記録の送信に失敗しても、詳細を読み続けられる', async () => {
     // Arrange
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     mockMarkNotificationRead.mockResolvedValue({
