@@ -19,6 +19,9 @@ type ErrorResponse = {
   };
 };
 
+// Laravel の unique のルールが返す文言。ロケールを変えると文言も変わるので、そのときはここを直す
+const EMAIL_TAKEN_MESSAGE = 'The email has already been taken.';
+
 export function useRegisterInstructor() {
   const registerInstructor = async (
     data: SignupSchema,
@@ -40,7 +43,10 @@ export function useRegisterInstructor() {
             nickName: errors.nick_name?.[0],
             lastName: errors.last_name?.[0],
             firstName: errors.first_name?.[0],
-            email: errors.email?.[0],
+            email:
+              errors.email?.[0] === EMAIL_TAKEN_MESSAGE
+                ? 'このメールアドレスはすでに登録されています'
+                : errors.email?.[0],
           };
           const firstError = Object.values(fieldErrors).find(Boolean);
           if (firstError) {

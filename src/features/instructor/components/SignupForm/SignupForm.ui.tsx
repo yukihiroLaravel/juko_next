@@ -41,6 +41,13 @@ export function SignupFormUI({
 }: SignupFormUIProps) {
   const { register } = form;
   const { errors } = useFormState({ control: form.control });
+  // errors[name] だと React Compiler が更新を拾わないため、項目ごとに読み出す
+  const fieldErrors = {
+    nickName: errors.nickName,
+    lastName: errors.lastName,
+    firstName: errors.firstName,
+    email: errors.email,
+  };
 
   if (submittedEmail !== null) {
     return (
@@ -76,11 +83,11 @@ export function SignupFormUI({
                 id={name}
                 type={type}
                 {...register(name)}
-                aria-invalid={!!errors[name]}
+                aria-invalid={!!fieldErrors[name]}
               />
-              {errors[name] && (
+              {fieldErrors[name] && (
                 <p className="text-destructive text-sm">
-                  {errors[name].message}
+                  {fieldErrors[name].message}
                 </p>
               )}
             </div>
