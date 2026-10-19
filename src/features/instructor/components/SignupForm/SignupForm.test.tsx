@@ -219,7 +219,7 @@ describe('講師の新規登録（仮登録）', () => {
   // AC-ISIGNUP-007
   it('サーバーが講師名の誤りを返すと、講師名の欄の下に理由が出る', async () => {
     // Arrange
-    const message = '講師名は50文字以内で入力してください';
+    const message = '講師名は50文字以内で入力してください（サーバー）';
     registerInstructor.mockResolvedValue({
       success: false,
       error: message,
@@ -240,7 +240,7 @@ describe('講師の新規登録（仮登録）', () => {
   });
 
   // AC-ISIGNUP-007
-  it('仮登録に失敗したあと、すでに登録されているメールアドレスで送り直すと、上の失敗の表示が消え、メールアドレスの欄の下にだけ理由が出る', async () => {
+  it('失敗のあとに送り直すと、前回の失敗の表示が消える', async () => {
     // Arrange
     const message = 'このメールアドレスはすでに登録されています';
     registerInstructor

@@ -42,6 +42,13 @@ const valid = {
 
 const restartLink = { name: '仮登録からやり直す' };
 
+const tryCountOverError =
+  '認証コードの誤りが上限を超えたため、この仮登録は無効になりました。お手数ですが、仮登録からやり直してください';
+const expiredError =
+  '認証コードの有効期限（60分）が切れたため、この仮登録は無効になりました。お手数ですが、仮登録からやり直してください';
+const notFoundError =
+  'この URL の仮登録が見つかりません。無効になったか、URL が誤っている可能性があります。仮登録からやり直してください';
+
 describe('講師の新規登録（認証コード入力）', () => {
   beforeEach(() => {
     navigation.push.mockReset();
@@ -199,20 +206,11 @@ describe('講師の新規登録（認証コード入力）', () => {
 
   // AC-ISIGNUP-009
   it.each([
-    [
-      '認証コードの誤りが上限を超えた',
-      '認証コードの誤りが上限を超えたため、この仮登録は無効になりました。お手数ですが、仮登録からやり直してください',
-    ],
-    [
-      '認証コードの有効期限が切れた',
-      '認証コードの有効期限（60分）が切れたため、この仮登録は無効になりました。お手数ですが、仮登録からやり直してください',
-    ],
-    [
-      'URL の仮登録が見つからない',
-      'この URL の仮登録が見つかりません。無効になったか、URL が誤っている可能性があります。仮登録からやり直してください',
-    ],
+    ['認証コードの誤りが上限を超えた', tryCountOverError],
+    ['認証コードの有効期限が切れた', expiredError],
+    ['URL の仮登録が見つからない', notFoundError],
   ])(
-    '%sとき、その旨と仮登録からやり直すリンクが出る',
+    '%sとき、その旨と、仮登録の画面へ移るリンクが出る',
     async (_situation, message) => {
       // Arrange
       verifyInstructor.mockResolvedValue({
@@ -227,31 +225,13 @@ describe('講師の新規登録（認証コード入力）', () => {
 
       // Assert
       expect(await screen.findByRole('alert')).toHaveTextContent(message);
-      expect(screen.getByRole('link', restartLink)).toBeInTheDocument();
+      expect(screen.getByRole('link', restartLink)).toHaveAttribute(
+        'href',
+        '/instructor/signup',
+      );
       expect(navigation.push).not.toHaveBeenCalled();
     },
   );
-
-  // AC-ISIGNUP-009
-  it('仮登録からやり直すリンクの行き先は、仮登録の画面である', async () => {
-    // Arrange
-    verifyInstructor.mockResolvedValue({
-      success: false,
-      error:
-        'この URL の仮登録が見つかりません。無効になったか、URL が誤っている可能性があります。仮登録からやり直してください',
-      needsRestart: true,
-    });
-    render(<VerificationForm token={token} />);
-
-    // Act
-    await fill(valid);
-
-    // Assert
-    expect(await screen.findByRole('link', restartLink)).toHaveAttribute(
-      'href',
-      '/instructor/signup',
-    );
-  });
 
   // AC-ISIGNUP-007
   it('サーバーが認証コードの誤りを返すと、認証コードの欄の下に理由が出る', async () => {
@@ -300,14 +280,13 @@ describe('講師の新規登録（認証コード入力）', () => {
   });
 
   // AC-ISIGNUP-007
-  it('認証コードの誤りが上限を超えた旨とリンクが出たあと、送り直して認証コードの誤りが返ると、上の失敗の表示と仮登録からやり直すリンクが消える', async () => {
+  it('失敗のあとに送り直すと、前回の失敗の表示と仮登録からやり直すリンクが消える', async () => {
     // Arrange
     const message = '認証コードは4文字で入力してください（サーバー）';
     verifyInstructor
       .mockResolvedValueOnce({
         success: false,
-        error:
-          '認証コードの誤りが上限を超えたため、この仮登録は無効になりました。お手数ですが、仮登録からやり直してください',
+        error: tryCountOverError,
         needsRestart: true,
       })
       .mockResolvedValueOnce({
