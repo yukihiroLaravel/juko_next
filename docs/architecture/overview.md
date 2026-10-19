@@ -56,13 +56,21 @@ flowchart LR
 
 ページは Container を並べるだけにする。Container がフックでデータを受け取り、変換して Presentational へ渡す。Presentational は受け取った値を表示し、操作をコールバックで返す。
 
+## お知らせ詳細のモーダル
+
+詳細はモーダル内の Container（`NotificationDetail`）が `useNotification` で取得する。Suspense と ErrorBoundary はモーダルの中に置き、読み込み中と失敗のあいだも閉じる操作を残す。
+
+SWR は取得の失敗をキャッシュに残し、残っている間は取り直さない。そのため一覧の Container は、お知らせを開く前にそのお知らせの失敗を `clearNotificationError` で消す。閉じるときに消すと、読み込み中に閉じたあとで届いた失敗が残る。
+
+確認済みの記録は一覧の Container が `useMarkNotificationRead` で送る。送ったお知らせの ID は ref に持つため、並び替えやページの移動では残り、画面を離れると消える。
+
 ## テストの構成
 
-| 項目         | 内容                                                          |
-| ------------ | ------------------------------------------------------------- |
-| 設定         | `vitest.config.mts`（jsdom・`@/` の別名）                     |
-| 共通の前処理 | `src/test/setup.ts`（jest-dom の照合・描画の後始末）          |
-| 置き場       | テスト対象の Container と同じディレクトリに `<部品>.test.tsx` |
-| 実行         | `scripts/run pnpm test`                                       |
+| 項目         | 内容                                                                                                                               |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| 設定         | `vitest.config.mts`（jsdom・`@/` の別名）                                                                                          |
+| 共通の前処理 | `src/test/setup.ts`（jest-dom の照合・描画の後始末）                                                                               |
+| 置き場       | テスト対象の Container と同じディレクトリに `<部品>.test.tsx`。SWR のキャッシュに関わるものは `<部品>.api.test.tsx`（ADR-FE-0003） |
+| 実行         | `scripts/run pnpm test`                                                                                                            |
 
 書き方は `coding-standards.md` の「テスト」にある。

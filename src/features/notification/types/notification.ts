@@ -38,3 +38,19 @@ export type NotificationsQuery = {
   sortBy: NotificationSortBy;
   order: NotificationSortOrder;
 };
+
+export type NotificationDetail = {
+  notification_id: number;
+  course_id: number;
+  course_title: string;
+  title: string;
+  content: string;
+  instructor_nick_name: string | null;
+  start_date: string;
+  end_date: string;
+  attendance_deadline: string | null;
+};
+
+export type NotificationResponse = { data: NotificationDetail };
+
+export type MarkNotificationReadResponse = { result: true };
