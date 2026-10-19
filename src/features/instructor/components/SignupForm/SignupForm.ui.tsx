@@ -16,6 +16,7 @@ import { SignupSchema } from '@/features/instructor/validation/SignupSchema';
 type SignupFormUIProps = {
   form: UseFormReturn<SignupSchema>;
   onSubmit: (e: React.FormEvent) => void;
+  isPending: boolean;
   submittedEmail: string | null;
   submitError: string | null;
 };
@@ -34,6 +35,7 @@ const fields: Array<{
 export function SignupFormUI({
   form,
   onSubmit,
+  isPending,
   submittedEmail,
   submitError,
 }: SignupFormUIProps) {
@@ -85,8 +87,8 @@ export function SignupFormUI({
           ))}
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full">
-            登録
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? '登録中...' : '登録'}
           </Button>
         </CardFooter>
       </form>
