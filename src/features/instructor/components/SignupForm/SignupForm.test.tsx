@@ -1,10 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SignupForm } from './SignupForm';
+import { useRegisterInstructor } from '@/features/instructor/hooks/useRegisterInstructor';
 
-// 登録は API とつなぐまで console.log に出すだけなので、出たかどうかで登録の実行を見る
-let log: ReturnType<typeof vi.spyOn>;
+vi.mock('@/features/instructor/hooks/useRegisterInstructor');
+
+const registerInstructor = vi.fn();
 
 // 1つのラベルが63文字以内に収まるようにして、指定した長さのメールアドレスを作る
 function emailOfLength(length: number) {
@@ -49,13 +51,13 @@ const nameFields = [
   ['名', 'firstName'],
 ] as const;
 
+const sentNotice = /宛てに認証コードを送信しました/;
+
 describe('講師の新規登録（仮登録）', () => {
   beforeEach(() => {
-    log = vi.spyOn(console, 'log').mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
+    registerInstructor.mockReset();
+    registerInstructor.mockResolvedValue({ success: true });
+    vi.mocked(useRegisterInstructor).mockReturnValue({ registerInstructor });
   });
 
   // AC-ISIGNUP-001
@@ -71,7 +73,7 @@ describe('講師の新規登録（仮登録）', () => {
     expect(screen.getByText('姓は必須です')).toBeInTheDocument();
     expect(screen.getByText('名は必須です')).toBeInTheDocument();
     expect(screen.getByText('メールアドレスは必須です')).toBeInTheDocument();
-    expect(log).not.toHaveBeenCalled();
+    expect(registerInstructor).not.toHaveBeenCalled();
   });
 
   // AC-ISIGNUP-001
@@ -88,7 +90,7 @@ describe('講師の新規登録（仮登録）', () => {
       expect(
         await screen.findByText(`${label}は50文字以内で入力してください`),
       ).toBeInTheDocument();
-      expect(log).not.toHaveBeenCalled();
+      expect(registerInstructor).not.toHaveBeenCalled();
     },
   );
 
@@ -104,7 +106,7 @@ describe('講師の新規登録（仮登録）', () => {
 
       // Assert
       expect(await screen.findByText(`${label}は必須です`)).toBeInTheDocument();
-      expect(log).not.toHaveBeenCalled();
+      expect(registerInstructor).not.toHaveBeenCalled();
     },
   );
 
@@ -120,7 +122,7 @@ describe('講師の新規登録（仮登録）', () => {
     expect(
       await screen.findByText('メールアドレスの形式が正しくありません'),
     ).toBeInTheDocument();
-    expect(log).not.toHaveBeenCalled();
+    expect(registerInstructor).not.toHaveBeenCalled();
   });
 
   // AC-ISIGNUP-001
@@ -135,7 +137,7 @@ describe('講師の新規登録（仮登録）', () => {
     expect(
       await screen.findByText('メールアドレスは255文字以内で入力してください'),
     ).toBeInTheDocument();
-    expect(log).not.toHaveBeenCalled();
+    expect(registerInstructor).not.toHaveBeenCalled();
   });
 
   // AC-ISIGNUP-002
@@ -161,8 +163,7 @@ describe('講師の新規登録（仮登録）', () => {
     expect(
       screen.queryByRole('button', { name: '登録' }),
     ).not.toBeInTheDocument();
-    expect(log).toHaveBeenCalledWith(
-      'submit data:',
+    expect(registerInstructor).toHaveBeenCalledWith(
       expect.objectContaining({
         nickName: 'あ'.repeat(50),
         lastName: 'い'.repeat(50),
@@ -170,5 +171,122 @@ describe('講師の新規登録（仮登録）', () => {
         email,
       }),
     );
+  });
+
+  // AC-ISIGNUP-008
+  it('仮登録に失敗すると、フォームの上に失敗した旨が出て、案内に切り替わらない', async () => {
+    // Arrange
+    registerInstructor.mockResolvedValue({
+      success: false,
+      error: '仮登録に失敗しました',
+    });
+    render(<SignupForm />);
+
+    // Act
+    await fill(valid);
+
+    // Assert
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      '仮登録に失敗しました',
+    );
+    expect(screen.queryByText(sentNotice)).not.toBeInTheDocument();
+  });
+
+  // AC-ISIGNUP-007
+  it('すでに登録されているメールアドレスだと、メールアドレスの欄の下に理由が出て、案内に切り替わらない', async () => {
+    // Arrange
+    const message = 'このメールアドレスはすでに登録されています';
+    registerInstructor.mockResolvedValue({
+      success: false,
+      error: message,
+      fieldErrors: { email: message },
+    });
+    render(<SignupForm />);
+
+    // Act
+    await fill(valid);
+
+    // Assert
+    expect(await screen.findByText(message)).toBeInTheDocument();
+    expect(screen.getByLabelText('メールアドレス')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.queryByText(sentNotice)).not.toBeInTheDocument();
+  });
+
+  // AC-ISIGNUP-007
+  it('サーバーが講師名の誤りを返すと、講師名の欄の下に理由が出る', async () => {
+    // Arrange
+    const message = '講師名は50文字以内で入力してください（サーバー）';
+    registerInstructor.mockResolvedValue({
+      success: false,
+      error: message,
+      fieldErrors: { nickName: message },
+    });
+    render(<SignupForm />);
+
+    // Act
+    await fill(valid);
+
+    // Assert
+    expect(await screen.findByText(message)).toBeInTheDocument();
+    expect(screen.getByLabelText('講師名')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  // AC-ISIGNUP-007
+  it('失敗のあとに送り直すと、前回の失敗の表示が消える', async () => {
+    // Arrange
+    const message = 'このメールアドレスはすでに登録されています';
+    registerInstructor
+      .mockResolvedValueOnce({ success: false, error: '仮登録に失敗しました' })
+      .mockResolvedValueOnce({
+        success: false,
+        error: message,
+        fieldErrors: { email: message },
+      });
+    render(<SignupForm />);
+    await fill(valid);
+    // 1回目の失敗が上の枠に出ていることを、送り直す前に確かめておく
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      '仮登録に失敗しました',
+    );
+
+    // Act
+    await userEvent.setup().click(screen.getByRole('button', { name: '登録' }));
+
+    // Assert
+    expect(await screen.findByText(message)).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  // AC-ISIGNUP-011
+  it('登録の処理中は、ボタンが「登録中...」になり、もう一度登録を押せない', async () => {
+    // Arrange
+    // 処理中のまま止めておき、確認が終わったら finish で終わらせる
+    let finish: (result: { success: true }) => void = () => {};
+    registerInstructor.mockReturnValue(
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+    );
+    render(<SignupForm />);
+
+    // Act
+    await fill(valid);
+
+    // Assert
+    expect(
+      await screen.findByRole('button', { name: '登録中...' }),
+    ).toBeDisabled();
+
+    // 後片付け: 処理を終わらせ、処理中の状態を次のテストに持ち越さない
+    finish({ success: true });
+    expect(await screen.findByText(sentNotice)).toBeInTheDocument();
   });
 });

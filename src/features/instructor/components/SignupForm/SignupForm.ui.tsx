@@ -16,6 +16,7 @@ import { SignupSchema } from '@/features/instructor/validation/SignupSchema';
 type SignupFormUIProps = {
   form: UseFormReturn<SignupSchema>;
   onSubmit: (e: React.FormEvent) => void;
+  isPending: boolean;
   submittedEmail: string | null;
   submitError: string | null;
 };
@@ -34,11 +35,19 @@ const fields: Array<{
 export function SignupFormUI({
   form,
   onSubmit,
+  isPending,
   submittedEmail,
   submitError,
 }: SignupFormUIProps) {
   const { register } = form;
   const { errors } = useFormState({ control: form.control });
+  // errors[name] だと React Compiler が更新を拾わないため、項目ごとに読み出す
+  const fieldErrors = {
+    nickName: errors.nickName,
+    lastName: errors.lastName,
+    firstName: errors.firstName,
+    email: errors.email,
+  };
 
   if (submittedEmail !== null) {
     return (
@@ -74,19 +83,19 @@ export function SignupFormUI({
                 id={name}
                 type={type}
                 {...register(name)}
-                aria-invalid={!!errors[name]}
+                aria-invalid={!!fieldErrors[name]}
               />
-              {errors[name] && (
+              {fieldErrors[name] && (
                 <p className="text-destructive text-sm">
-                  {errors[name].message}
+                  {fieldErrors[name].message}
                 </p>
               )}
             </div>
           ))}
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full">
-            登録
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? '登録中...' : '登録'}
           </Button>
         </CardFooter>
       </form>
