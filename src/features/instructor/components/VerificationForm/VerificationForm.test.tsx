@@ -300,7 +300,7 @@ describe('講師の新規登録（認証コード入力）', () => {
   });
 
   // AC-ISIGNUP-011
-  it('本登録の処理中は、もう一度登録を押せない', async () => {
+  it('本登録の処理中は、ボタンが「登録中...」になり、もう一度登録を押せない', async () => {
     // Arrange
     // 処理中のまま止めておき、確認が終わったら finish で終わらせる
     let finish: (result: { success: true }) => void = () => {};
@@ -315,7 +315,9 @@ describe('講師の新規登録（認証コード入力）', () => {
     await fill(valid);
 
     // Assert
-    expect(await screen.findByRole('button', { name: '登録' })).toBeDisabled();
+    expect(
+      await screen.findByRole('button', { name: '登録中...' }),
+    ).toBeDisabled();
 
     // 後片付け: 処理を終わらせ、処理中の状態を次のテストに持ち越さない
     finish({ success: true });
