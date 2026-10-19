@@ -299,6 +299,36 @@ describe('講師の新規登録（認証コード入力）', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
+  // AC-ISIGNUP-007
+  it('認証コードの誤りが上限を超えた旨とリンクが出たあと、送り直して認証コードの誤りが返ると、上の失敗の表示と仮登録からやり直すリンクが消える', async () => {
+    // Arrange
+    const message = '認証コードは4文字で入力してください（サーバー）';
+    verifyInstructor
+      .mockResolvedValueOnce({
+        success: false,
+        error:
+          '認証コードの誤りが上限を超えたため、この仮登録は無効になりました。お手数ですが、仮登録からやり直してください',
+        needsRestart: true,
+      })
+      .mockResolvedValueOnce({
+        success: false,
+        error: message,
+        fieldErrors: { code: message },
+      });
+    render(<VerificationForm token={token} />);
+    await fill(valid);
+    // 1回目の失敗とリンクが出ていることを、送り直す前に確かめておく
+    expect(await screen.findByRole('link', restartLink)).toBeInTheDocument();
+
+    // Act
+    await userEvent.setup().click(screen.getByRole('button', { name: '登録' }));
+
+    // Assert
+    expect(await screen.findByText(message)).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', restartLink)).not.toBeInTheDocument();
+  });
+
   // AC-ISIGNUP-011
   it('本登録の処理中は、ボタンが「登録中...」になり、もう一度登録を押せない', async () => {
     // Arrange

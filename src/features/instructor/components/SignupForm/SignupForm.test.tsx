@@ -239,6 +239,32 @@ describe('講師の新規登録（仮登録）', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
+  // AC-ISIGNUP-007
+  it('仮登録に失敗したあと、すでに登録されているメールアドレスで送り直すと、上の失敗の表示が消え、メールアドレスの欄の下にだけ理由が出る', async () => {
+    // Arrange
+    const message = 'このメールアドレスはすでに登録されています';
+    registerInstructor
+      .mockResolvedValueOnce({ success: false, error: '仮登録に失敗しました' })
+      .mockResolvedValueOnce({
+        success: false,
+        error: message,
+        fieldErrors: { email: message },
+      });
+    render(<SignupForm />);
+    await fill(valid);
+    // 1回目の失敗が上の枠に出ていることを、送り直す前に確かめておく
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      '仮登録に失敗しました',
+    );
+
+    // Act
+    await userEvent.setup().click(screen.getByRole('button', { name: '登録' }));
+
+    // Assert
+    expect(await screen.findByText(message)).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
   // AC-ISIGNUP-011
   it('登録の処理中は、ボタンが「登録中...」になり、もう一度登録を押せない', async () => {
     // Arrange
