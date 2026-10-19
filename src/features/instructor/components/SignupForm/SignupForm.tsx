@@ -27,6 +27,7 @@ export function SignupForm() {
   });
 
   const handleSubmit = form.handleSubmit((data: SignupSchema) => {
+    setSubmitError(null);
     startTransition(async () => {
       const result = await registerInstructor(data);
       if (result.success) {

@@ -33,6 +33,8 @@ export function VerificationForm({ token }: Props) {
   });
 
   const handleSubmit = form.handleSubmit((data: VerificationSchema) => {
+    setSubmitError(null);
+    setNeedsRestart(false);
     startTransition(async () => {
       const result = await verifyInstructor(token, data);
       if (result.success) {
