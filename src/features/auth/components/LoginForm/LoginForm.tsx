@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { LoginFormUI } from './LoginForm.ui';
 import { useLogin } from '@/features/auth/hooks/useLogin';
+import type { UserRole } from '@/features/auth/types';
 
 const loginSchema = z.object({
   email: z.email('有効なメールアドレスを入力してください'),
@@ -17,7 +18,11 @@ const loginSchema = z.object({
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
 
-export function LoginForm() {
+export type LoginFormProps = {
+  role?: UserRole;
+};
+
+export function LoginForm({ role = 'student' }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const { login, isSubmitting } = useLogin();
 
@@ -30,7 +35,7 @@ export function LoginForm() {
   });
 
   const handleSubmit = form.handleSubmit(async (data: LoginFormValues) => {
-    const result = await login(data);
+    const result = await login({ ...data, role });
 
     if (!result.success && result.error) {
       form.resetField('password');

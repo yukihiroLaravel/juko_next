@@ -2,7 +2,7 @@ export type UserRole = 'student' | 'instructor';
 
 export type User = {
   id: number;
-  name: string;
+  nick_name: string;
   email: string;
   role: UserRole;
 };

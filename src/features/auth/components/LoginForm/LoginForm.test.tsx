@@ -59,6 +59,38 @@ describe('ログインフォーム', () => {
     expect(login).not.toHaveBeenCalled();
   });
 
+  it('受講生のログイン画面からログインすると、受講生としてログインを試みる', async () => {
+    // Arrange
+    login.mockResolvedValue({ success: true });
+    render(<LoginForm />);
+
+    // Act
+    await submit('student@example.com', 'password');
+
+    // Assert
+    expect(login).toHaveBeenCalledWith({
+      email: 'student@example.com',
+      password: 'password',
+      role: 'student',
+    });
+  });
+
+  it('講師のログイン画面からログインすると、講師としてログインを試みる', async () => {
+    // Arrange
+    login.mockResolvedValue({ success: true });
+    render(<LoginForm role="instructor" />);
+
+    // Act
+    await submit('instructor@example.com', 'password');
+
+    // Assert
+    expect(login).toHaveBeenCalledWith({
+      email: 'instructor@example.com',
+      password: 'password',
+      role: 'instructor',
+    });
+  });
+
   it('ログインの処理中は、もう一度ログインを押せない', () => {
     // Arrange
     mockUseLogin({ isSubmitting: true });

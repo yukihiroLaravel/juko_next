@@ -13,6 +13,9 @@ export function InstructorHeader() {
   }
 
   return (
-    <InstructorHeaderUI userName={user?.name ?? 'ゲスト'} onLogout={logout} />
+    <InstructorHeaderUI
+      userName={user?.nick_name ?? 'ゲスト'}
+      onLogout={() => logout('instructor')}
+    />
   );
 }

@@ -13,6 +13,9 @@ export function StudentHeader() {
   }
 
   return (
-    <StudentHeaderUI userName={user?.name ?? 'ゲスト'} onLogout={logout} />
+    <StudentHeaderUI
+      userName={user?.nick_name ?? 'ゲスト'}
+      onLogout={() => logout('student')}
+    />
   );
 }

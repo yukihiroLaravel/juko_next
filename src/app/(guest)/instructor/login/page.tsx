@@ -11,7 +11,7 @@ export default function InstructorLoginPage() {
         <Suspense fallback={null}>
           <RegisteredNotice />
         </Suspense>
-        <LoginForm />
+        <LoginForm role="instructor" />
         <div className="text-center">
           <Button asChild variant="link">
             <Link href="/">TOPページへ戻る</Link>

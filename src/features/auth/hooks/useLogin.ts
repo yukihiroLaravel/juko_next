@@ -8,6 +8,7 @@ import type { User, UserRole } from '../types';
 type LoginCredentials = {
   email: string;
   password: string;
+  role: UserRole;
 };
 
 type LoginResult = {
@@ -17,7 +18,7 @@ type LoginResult = {
 
 const REDIRECT_PATHS: Record<UserRole, string> = {
   student: '/attendance',
-  instructor: '/dashboard',
+  instructor: '/instructor/courses',
 };
 
 export function useLogin() {
@@ -31,7 +32,13 @@ export function useLogin() {
 
       try {
         await Axios.get('/sanctum/csrf-cookie');
-        await Axios.post('/login', credentials);
+        const loginUrl =
+          credentials.role === 'instructor' ? '/login/instructor' : '/login';
+
+        await Axios.post(loginUrl, {
+          email: credentials.email,
+          password: credentials.password,
+        });
 
         const response = await Axios.get<User>('/api/user');
         const user = response.data;
