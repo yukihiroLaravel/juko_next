@@ -33,10 +33,8 @@ export function useLogin() {
       try {
         await Axios.get('/sanctum/csrf-cookie');
         const loginUrl =
-          credentials.role === 'instructor'
-            ? '/login/instructor'
-            : '/login';
-        
+          credentials.role === 'instructor' ? '/login/instructor' : '/login';
+
         await Axios.post(loginUrl, {
           email: credentials.email,
           password: credentials.password,
