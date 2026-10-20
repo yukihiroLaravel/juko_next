@@ -1,11 +1,18 @@
 'use client';
 
-import { NotificationTableUI, Notification } from './NotificationTable.ui';
+import {
+  NotificationTableUI,
+  Notification,
+  NotificationSortColumn,
+} from './NotificationTable.ui';
+import type { NotificationSortOrder } from '@/features/notification/types/notification';
 
 type Props = {
   notifications: Notification[];
-  sortOrder: 'asc' | 'desc';
-  onSortChange: () => void;
+  sortBy: NotificationSortColumn;
+  sortOrder: NotificationSortOrder;
+  onSortChange: (column: NotificationSortColumn) => void;
+  onNotificationClick: (notificationId: string) => void;
 };
 
 export function NotificationTable(props: Props) {

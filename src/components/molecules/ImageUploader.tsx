@@ -1,36 +1,41 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Upload } from 'lucide-react';
 
 type Props = {
   value?: File;
   onChange: (file: File | undefined) => void;
   defaultImageUrl?: string;
+  alt: string;
+  emptyMessage: string;
+  previewClassName?: string;
 };
 
-export function ImageUploader({ value, onChange, defaultImageUrl }: Props) {
+export function ImageUploader({
+  value,
+  onChange,
+  defaultImageUrl,
+  alt,
+  emptyMessage,
+  previewClassName = 'h-28',
+}: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // value(File) からプレビュー用のURLを派生する（render 中に派生し setState はしない）
   const previewUrl = useMemo(
     () => (value ? URL.createObjectURL(value) : null),
     [value],
   );
 
-  // 生成したURLは value 変更時・アンマウント時に解放する。
-  // previewUrl が変わると直前の effect の cleanup が走り、前の URL が revoke される。
   useEffect(() => {
     if (!previewUrl) return;
     return () => URL.revokeObjectURL(previewUrl);
   }, [previewUrl]);
 
-  // ファイル未選択時はAPIから取得した既存画像URLを表示
   const displayUrl = previewUrl ?? defaultImageUrl ?? null;
 
-  // ファイル選択時、画像ファイルでない場合はエラーを表示
   const handleFiles = (files: FileList | null) => {
     const file = files?.[0];
     if (!file) return;
@@ -44,25 +49,6 @@ export function ImageUploader({ value, onChange, defaultImageUrl }: Props) {
     onChange(file);
   };
 
-  // ドラッグ＆ドロップ領域
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    handleFiles(e.dataTransfer.files);
-  };
-
-  // ドラッグオーバー時
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  // ドラッグリーブ時
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
   return (
     <div className="space-y-3">
       <input
@@ -70,13 +56,12 @@ export function ImageUploader({ value, onChange, defaultImageUrl }: Props) {
         type="file"
         accept="image/*"
         className="hidden"
-        onChange={(e) => {
-          handleFiles(e.target.files);
-          e.target.value = '';
+        onChange={(event) => {
+          handleFiles(event.target.files);
+          event.target.value = '';
         }}
       />
 
-      {/* クリックして選択 */}
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
@@ -85,24 +70,34 @@ export function ImageUploader({ value, onChange, defaultImageUrl }: Props) {
         クリックしてファイルを選択
       </button>
 
-      {/* プレビュー枠 */}
-      <div className="border-input flex h-28 items-center justify-center rounded-md border shadow-xs">
+      <div
+        className={`border-input flex ${previewClassName} items-center justify-center rounded-md border`}
+      >
         {displayUrl ? (
           <img
             src={displayUrl}
-            alt="プロフィール画像プレビュー"
+            alt={alt}
             className="h-full w-full rounded-md object-contain"
           />
         ) : (
-          <span>プロフィール画像</span>
+          <span>{emptyMessage}</span>
         )}
       </div>
 
-      {/* ドラッグ＆ドロップ領域 */}
       <div
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
+        onDrop={(event) => {
+          event.preventDefault();
+          setIsDragging(false);
+          handleFiles(event.dataTransfer.files);
+        }}
+        onDragOver={(event) => {
+          event.preventDefault();
+          setIsDragging(true);
+        }}
+        onDragLeave={(event) => {
+          event.preventDefault();
+          setIsDragging(false);
+        }}
         className={`flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed py-6 text-center transition-colors ${
           isDragging ? 'border-primary bg-primary/10' : 'border-input bg-white'
         }`}
@@ -115,7 +110,6 @@ export function ImageUploader({ value, onChange, defaultImageUrl }: Props) {
         </p>
       </div>
 
-      {/* 画像以外を選択・ドロップしたときのフィードバック */}
       {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );

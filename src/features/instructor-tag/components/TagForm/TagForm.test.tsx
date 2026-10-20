@@ -1,17 +1,30 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TagForm } from './TagForm';
+import { useCreateInstructorTag } from '@/features/instructor-tag/hooks/useCreateInstructorTag';
 
-afterEach(() => {
-  vi.restoreAllMocks();
+const navigation = vi.hoisted(() => ({ push: vi.fn() }));
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: navigation.push }),
+}));
+
+vi.mock('@/features/instructor-tag/hooks/useCreateInstructorTag');
+
+const createInstructorTag = vi.fn();
+
+beforeEach(() => {
+  navigation.push.mockReset();
+  createInstructorTag.mockReset();
+  createInstructorTag.mockResolvedValue({ success: true });
+  vi.mocked(useCreateInstructorTag).mockReturnValue({ createInstructorTag });
 });
 
 describe('講座分類登録フォーム', () => {
   // AC-ITAG-001
   it('分類タイトルが空のまま登録すると、入力を促すエラーが出て登録されない', async () => {
     // Arrange
-    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
     render(<TagForm />);
     const user = userEvent.setup();
 
@@ -22,13 +35,12 @@ describe('講座分類登録フォーム', () => {
     expect(
       await screen.findByText('分類タイトルが未入力です'),
     ).toBeInTheDocument();
-    expect(log).not.toHaveBeenCalled();
+    expect(createInstructorTag).not.toHaveBeenCalled();
   });
 
   // AC-ITAG-001
   it('分類タイトルが51文字のとき、文字数のエラーが出て登録されない', async () => {
     // Arrange
-    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
     render(<TagForm />);
     const user = userEvent.setup();
 
@@ -40,13 +52,12 @@ describe('講座分類登録フォーム', () => {
     expect(
       await screen.findByText('分類タイトルは50文字以内で入力してください'),
     ).toBeInTheDocument();
-    expect(log).not.toHaveBeenCalled();
+    expect(createInstructorTag).not.toHaveBeenCalled();
   });
 
   // AC-ITAG-002
   it('分類タイトルがちょうど50文字のとき、エラーが出ずに登録される', async () => {
     // Arrange
-    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
     render(<TagForm />);
     const user = userEvent.setup();
 
@@ -55,94 +66,99 @@ describe('講座分類登録フォーム', () => {
     await user.click(screen.getByRole('button', { name: '登録' }));
 
     // Assert
-    await waitFor(() => expect(log).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(createInstructorTag).toHaveBeenCalledWith({
+        content: 'あ'.repeat(50),
+      }),
+    );
     expect(
       screen.queryByText('分類タイトルは50文字以内で入力してください'),
     ).not.toBeInTheDocument();
   });
-});
 
-describe('講座分類編集フォーム', () => {
-  // AC-ITAG-003
-  it('編集画面を開くと、今の分類名が入力されている', () => {
+  // AC-ITAG-006
+  it('登録に成功すると、講座一覧に移る', async () => {
     // Arrange
-    // （準備なし）
-
-    // Act
-    render(<TagForm tagId="1" />);
-
-    // Assert
-    expect(screen.getByLabelText('分類タイトル')).toHaveValue(
-      'バックエンドマスター講座',
-    );
-  });
-
-  // AC-ITAG-004
-  it('削除を押すと、削除する分類の名前と元に戻せないことが確認ダイアログに出る', async () => {
-    // Arrange
-    render(<TagForm tagId="1" />);
+    render(<TagForm />);
     const user = userEvent.setup();
 
     // Act
-    await user.click(screen.getByRole('button', { name: '削除' }));
-
-    // Assert
-    expect(
-      await screen.findByText(
-        '「バックエンドマスター講座」を削除します。削除すると元に戻せません。',
-      ),
-    ).toBeInTheDocument();
-  });
-
-  // AC-ITAG-005
-  it('削除を押して確認ダイアログで削除するを選ぶと、削除される', async () => {
-    // Arrange
-    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
-    render(<TagForm tagId="1" />);
-    const user = userEvent.setup();
-
-    // Act
-    await user.click(screen.getByRole('button', { name: '削除' }));
-    await user.click(await screen.findByRole('button', { name: '削除する' }));
-
-    // Assert
-    expect(log).toHaveBeenCalledWith('講座分類を削除', { tagId: '1' });
-  });
-
-  // AC-ITAG-005
-  it('削除を押して確認ダイアログでキャンセルを選ぶと、削除されない', async () => {
-    // Arrange
-    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
-    render(<TagForm tagId="1" />);
-    const user = userEvent.setup();
-
-    // Act
-    await user.click(screen.getByRole('button', { name: '削除' }));
-    await user.click(await screen.findByRole('button', { name: 'キャンセル' }));
-
-    // Assert
-    expect(log).not.toHaveBeenCalled();
-  });
-
-  // AC-ITAG-002
-  it('分類タイトルを書き換えて更新を押すと、書き換えた内容で更新される', async () => {
-    // Arrange
-    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
-    render(<TagForm tagId="1" />);
-    const user = userEvent.setup();
-
-    // Act
-    const input = screen.getByLabelText('分類タイトル');
-    await user.clear(input);
-    await user.type(input, 'フロントエンドマスター講座');
-    await user.click(screen.getByRole('button', { name: '更新' }));
+    await user.type(screen.getByLabelText('分類タイトル'), 'laravel関連講座');
+    await user.click(screen.getByRole('button', { name: '登録' }));
 
     // Assert
     await waitFor(() =>
-      expect(log).toHaveBeenCalledWith('講座分類を更新', {
-        tagId: '1',
-        content: 'フロントエンドマスター講座',
+      expect(navigation.push).toHaveBeenCalledWith('/instructor/courses'),
+    );
+  });
+
+  // AC-ITAG-008
+  it('登録に失敗すると、エラーが出て、講座一覧に移らない', async () => {
+    // Arrange
+    createInstructorTag.mockResolvedValue({
+      success: false,
+      error: '講座分類の登録に失敗しました',
+    });
+    render(<TagForm />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.type(screen.getByLabelText('分類タイトル'), 'laravel関連講座');
+    await user.click(screen.getByRole('button', { name: '登録' }));
+
+    // Assert
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      '講座分類の登録に失敗しました',
+    );
+    expect(navigation.push).not.toHaveBeenCalled();
+  });
+
+  // AC-ITAG-007
+  it('サーバーから分類タイトルのエラーが返ると、メッセージが入力欄の下に1つだけ出て、講座一覧に移らない', async () => {
+    // Arrange
+    createInstructorTag.mockResolvedValue({
+      success: false,
+      error: 'このタイトルは使用できません',
+      fieldErrors: { content: 'このタイトルは使用できません' },
+    });
+    render(<TagForm />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.type(screen.getByLabelText('分類タイトル'), 'laravel関連講座');
+    await user.click(screen.getByRole('button', { name: '登録' }));
+
+    // Assert
+    expect(
+      await screen.findByText('このタイトルは使用できません'),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(navigation.push).not.toHaveBeenCalled();
+  });
+
+  it('送信中は、ボタンが「登録中...」になり、押せない', async () => {
+    // Arrange
+    // 送信中のまま止めておき、確認が終わったら finishCreate で終わらせる
+    let finishCreate: (result: { success: true }) => void = () => {};
+    createInstructorTag.mockReturnValue(
+      new Promise((resolve) => {
+        finishCreate = resolve;
       }),
     );
+    render(<TagForm />);
+    const user = userEvent.setup();
+
+    // Act
+    await user.type(screen.getByLabelText('分類タイトル'), 'laravel関連講座');
+    await user.click(screen.getByRole('button', { name: '登録' }));
+
+    // Assert
+    expect(
+      await screen.findByRole('button', { name: '登録中...' }),
+    ).toBeDisabled();
+
+    // 後片付け: 送信を終わらせ、送信中の状態を次のテストに持ち越さない
+    finishCreate({ success: true });
+    await waitFor(() => expect(navigation.push).toHaveBeenCalled());
   });
 });

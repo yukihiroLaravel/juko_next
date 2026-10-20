@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="講座画像">
+  <rect width="640" height="360" fill="#f1f5f9" />
+  <rect x="220" y="105" width="200" height="150" rx="12" fill="#cbd5e1" />
+  <path d="M250 220l45-48 35 36 27-28 34 40H250z" fill="#94a3b8" />
+  <circle cx="355" cy="145" r="15" fill="#94a3b8" />
+</svg>

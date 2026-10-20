@@ -11,14 +11,24 @@ export const routes = {
   },
 
   instructor: {
+    /** 新規登録（仮登録） */
+    signup: () => '/instructor/signup',
+    /** 新規登録（認証コード入力） */
+    verification: (token: string) =>
+      `/instructor/verification/${encodeURIComponent(token)}`,
+    /** 講師ログイン。registered を付けると、本登録が済んだことを伝える */
+    login: (options?: { registered?: boolean }) =>
+      options?.registered
+        ? '/instructor/login?registered=1'
+        : '/instructor/login',
     courses: {
       /** 講座一覧 */
       list: () => '/instructor/courses',
       /** 講座編集 */
       edit: (courseId: string | number) =>
-        `/instructor/courses/${encodeURIComponent(courseId)}`,
+        `/instructor/courses/${encodeURIComponent(courseId)}/edit`,
       /** 講座登録 */
-      create: () => '/instructor/courses/create',
+      create: () => '/instructor/courses/new',
       /** 受講期限一括変更 */
       bulkDeadline: (courseIds: Array<string | number>) =>
         `/instructor/courses/deadline?course_ids=${courseIds.map(encodeURIComponent).join(',')}`,

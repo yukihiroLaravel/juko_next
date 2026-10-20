@@ -1,89 +1,111 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { startTransition, useRef, useState } from 'react';
 import { NotificationListUI } from './NotificationList.ui';
-import { Notification } from '../NotificationTable/NotificationTable.ui';
+import type { NotificationSortColumn } from '../NotificationTable/NotificationTable.ui';
+import { NotificationDetailModal } from '../NotificationDetailModal/NotificationDetailModal';
+import { useMarkNotificationRead } from '../../hooks/useMarkNotificationRead';
+import { useRetryNotification } from '../../hooks/useNotification';
+import { useNotifications } from '../../hooks/useNotifications';
+import { mapNotificationItemToNotification } from '../../utils/mapNotificationItemToNotification';
+import type { NotificationSortOrder } from '../../types/notification';
 
 const PAGE_SIZE = 5;
 
-const mockNotifications: Notification[] = [
-  {
-    id: '1',
-    title: '領収書について',
-    courseName: 'PHPコース',
-    courseDeadline: null,
-    startDate: '2023/9/25',
-  },
-  {
-    id: '2',
-    title: 'レッスンについて',
-    courseName: 'Javaコース',
-    courseDeadline: '2024/12/31',
-    startDate: '2024/1/1',
-  },
-  {
-    id: '3',
-    title: '課題提出について',
-    courseName: 'Reactコース',
-    courseDeadline: '2024/6/30',
-    startDate: '2024/2/15',
-  },
-  {
-    id: '4',
-    title: 'メンテナンスのお知らせ',
-    courseName: '共通',
-    courseDeadline: null,
-    startDate: '2024/3/10',
-  },
-  {
-    id: '5',
-    title: '修了証発行について',
-    courseName: 'PHPコース',
-    courseDeadline: null,
-    startDate: '2024/3/20',
-  },
-  {
-    id: '6',
-    title: '追加教材のお知らせ',
-    courseName: 'Javaコース',
-    courseDeadline: null,
-    startDate: '2024/4/1',
-  },
-];
-
 export function NotificationList() {
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortBy, setSortBy] = useState<NotificationSortColumn>('start_date');
+  const [sortOrder, setSortOrder] = useState<NotificationSortOrder>('desc');
   const [currentPage, setCurrentPage] = useState(1);
+  const { notifications: apiNotifications, pagination } = useNotifications({
+    page: currentPage,
+    perPage: PAGE_SIZE,
+    sortBy: sortBy,
+    order: sortOrder,
+  });
 
-  const sortedNotifications = useMemo(() => {
-    return [...mockNotifications].sort((a, b) => {
-      const aDate = new Date(a.startDate).getTime();
-      const bDate = new Date(b.startDate).getTime();
-      return sortOrder === 'asc' ? aDate - bDate : bDate - aDate;
+  const notifications = apiNotifications.map(mapNotificationItemToNotification);
+
+  const [selectedNotificationId, setSelectedNotificationId] = useState<
+    number | null
+  >(null);
+  const { markNotificationRead } = useMarkNotificationRead();
+  const { clearNotificationError } = useRetryNotification();
+  const attemptedReadIds = useRef(new Set<number>());
+  const openerRef = useRef<HTMLElement | null>(null);
+
+  const totalPages = Math.ceil((pagination?.total ?? 0) / PAGE_SIZE);
+  const lastPage = Math.max(1, totalPages);
+
+  if (pagination && currentPage > lastPage) {
+    setCurrentPage(lastPage);
+  }
+
+  const handleSortChange = (column: NotificationSortColumn) => {
+    startTransition(() => {
+      if (sortBy === column) {
+        setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      } else {
+        setSortBy(column);
+        setSortOrder('asc');
+      }
+
+      setCurrentPage(1);
     });
-  }, [sortOrder]);
+  };
 
-  const totalPages = Math.ceil(sortedNotifications.length / PAGE_SIZE);
+  const handlePageChange = (page: number) => {
+    startTransition(() => {
+      setCurrentPage(page);
+    });
+  };
 
-  const paginatedNotifications = useMemo(() => {
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const end = start + PAGE_SIZE;
-    return sortedNotifications.slice(start, end);
-  }, [sortedNotifications, currentPage]);
+  const handleNotificationClick = (notificationId: string) => {
+    openerRef.current = document.activeElement as HTMLElement | null;
+    const id = Number(notificationId);
+    // 前回の取得の失敗が残っていると取り直さないため、開く前に消す。
+    // 読み込み中に閉じたあとで失敗が届く場合もあるので、閉じるときではなく開くときに消す。
+    clearNotificationError(id);
+    setSelectedNotificationId(id);
+    const item = apiNotifications.find(
+      (notification) => notification.notification_id === id,
+    );
+    if (item?.type !== 'once' || attemptedReadIds.current.has(id)) return;
+    // 送信前に記録し、送信中・失敗後も同じ画面では再送しない。
+    attemptedReadIds.current.add(id);
+    void markNotificationRead(id).then((result) => {
+      if (!result.success)
+        console.warn('既読登録に失敗しました', {
+          notificationId: id,
+          reason: result.error,
+        });
+    });
+  };
 
-  const handleSortChange = () => {
-    setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-    setCurrentPage(1);
+  const handleModalClose = () => {
+    setSelectedNotificationId(null);
   };
 
   return (
-    <NotificationListUI
-      notifications={paginatedNotifications}
-      sortOrder={sortOrder}
-      onSortChange={handleSortChange}
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={setCurrentPage}
-    />
+    <>
+      <NotificationListUI
+        notifications={notifications}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortChange={handleSortChange}
+        onNotificationClick={handleNotificationClick}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+
+      <NotificationDetailModal
+        notificationId={selectedNotificationId}
+        onClose={handleModalClose}
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          openerRef.current?.focus();
+        }}
+      />
+    </>
   );
 }

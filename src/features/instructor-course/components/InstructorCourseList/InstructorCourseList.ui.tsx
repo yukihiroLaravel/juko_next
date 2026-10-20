@@ -1,3 +1,4 @@
+import { type KeyboardEvent } from 'react';
 import { Button } from '@/components/atoms/Button';
 import {
   Dialog,
@@ -18,19 +19,17 @@ import { Input } from '@/components/atoms/Input';
 import { Switch } from '@/components/atoms/Switch';
 import { bulkActionLabels, type BulkAction } from '../../types/bulkAction';
 import type { Course } from '../../types/course';
-import { InstructorCourseCard } from '../InstructorCourseCard/InstructorCourseCard';
+import { InstructorCourseCardListUI } from '../InstructorCourseCardList/InstructorCourseCardList.ui';
 
 type InstructorCourseListUIProps = {
-  courses: Course[];
   searchKeyword: string;
   onSearchKeywordChange: (value: string) => void;
+  onSearchSubmit: () => void;
+  onSearchKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
   isClassificationEnabled: boolean;
   onClassificationChange: (checked: boolean) => void;
-  selectedCourseIds: number[];
-  onCourseSelectionChange: (courseId: number, checked: boolean) => void;
   onBulkAction: (action: BulkAction) => void;
   onRegister: () => void;
-  groupedCourses: Array<{ tag: string; courses: Course[] }>;
   hasVisibleSelection: boolean;
   confirmDialog: {
     title: string;
@@ -40,37 +39,38 @@ type InstructorCourseListUIProps = {
   } | null;
   onConfirmBulkAction: () => void;
   onCancelBulkAction: () => void;
+  courses: Course[];
+  groupedCourses: Array<{ tag: string; courses: Course[] }>;
+  selectedCourseIds: number[];
+  onCourseSelectionChange: (courseId: number, checked: boolean) => void;
+  currentPage: number;
+  lastPage: number;
+  onPageChange: (page: number) => void;
+  isRefreshing: boolean;
 };
 
 export function InstructorCourseListUI({
-  courses,
   searchKeyword,
   onSearchKeywordChange,
+  onSearchSubmit,
+  onSearchKeyDown,
   isClassificationEnabled,
   onClassificationChange,
-  selectedCourseIds,
-  onCourseSelectionChange,
   onBulkAction,
   onRegister,
-  groupedCourses,
   hasVisibleSelection,
   confirmDialog,
   onConfirmBulkAction,
   onCancelBulkAction,
+  courses,
+  groupedCourses,
+  selectedCourseIds,
+  onCourseSelectionChange,
+  currentPage,
+  lastPage,
+  onPageChange,
+  isRefreshing,
 }: InstructorCourseListUIProps) {
-  const renderCards = (items: Course[]) => (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((course) => (
-        <InstructorCourseCard
-          key={course.id}
-          {...course}
-          isSelected={selectedCourseIds.includes(course.id)}
-          onSelectionChange={onCourseSelectionChange}
-        />
-      ))}
-    </div>
-  );
-
   return (
     <div className="mx-auto max-w-6xl space-y-6 p-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -82,10 +82,12 @@ export function InstructorCourseListUI({
         <Input
           aria-label="講座検索"
           className="max-w-md"
-          placeholder="講座名で検索"
+          placeholder="講座名・分類名で検索"
           type="search"
           value={searchKeyword}
           onChange={(event) => onSearchKeywordChange(event.target.value)}
+          onKeyDown={onSearchKeyDown}
+          onBlur={onSearchSubmit}
         />
 
         <label className="flex items-center gap-2 text-sm">
@@ -156,49 +158,21 @@ export function InstructorCourseListUI({
         </DropdownMenu>
       </div>
 
-      {courses.length === 0 ? (
-        <p className="text-muted-foreground py-12 text-center">
-          該当する講座はありません。
-        </p>
-      ) : isClassificationEnabled ? (
-        <div className="space-y-8">
-          {groupedCourses.map(({ tag, courses: tagCourses }, index) => (
-            <section key={tag} aria-labelledby={`course-tag-${index}`}>
-              <h2
-                id={`course-tag-${index}`}
-                className="mb-4 text-xl font-semibold"
-              >
-                {tag}
-              </h2>
-
-              {renderCards(tagCourses)}
-            </section>
-          ))}
-        </div>
-      ) : (
-        renderCards(courses)
-      )}
-
-      <nav
-        aria-label="ページネーション"
-        className="flex items-center justify-center gap-2 pt-4"
+      <div
+        aria-busy={isRefreshing}
+        className={isRefreshing ? 'opacity-60 transition-opacity' : undefined}
       >
-        <Button variant="outline" size="sm" disabled>
-          前へ
-        </Button>
-
-        <Button variant="secondary" size="sm" aria-current="page">
-          1
-        </Button>
-
-        <Button variant="outline" size="sm">
-          2
-        </Button>
-
-        <Button variant="outline" size="sm">
-          次へ
-        </Button>
-      </nav>
+        <InstructorCourseCardListUI
+          courses={courses}
+          groupedCourses={groupedCourses}
+          isClassificationEnabled={isClassificationEnabled}
+          selectedCourseIds={selectedCourseIds}
+          onCourseSelectionChange={onCourseSelectionChange}
+          currentPage={currentPage}
+          lastPage={lastPage}
+          onPageChange={onPageChange}
+        />
+      </div>
 
       <Dialog
         open={confirmDialog !== null}

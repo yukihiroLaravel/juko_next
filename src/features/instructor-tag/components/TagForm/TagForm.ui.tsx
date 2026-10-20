@@ -20,6 +20,8 @@ type Props = {
   form: UseFormReturn<TagSchema>;
   onSubmit: (e: React.FormEvent) => void;
   isPending?: boolean;
+  // 編集画面でだけ渡す。削除の送信中かどうか
+  isDeleting?: boolean;
   title: string;
   // 編集画面でだけ渡す。確認ダイアログに出す、保存されている分類タイトル
   savedContent?: string;
@@ -30,6 +32,7 @@ export function TagFormUI({
   form,
   onSubmit,
   isPending,
+  isDeleting,
   title,
   savedContent,
   onDelete,
@@ -59,6 +62,16 @@ export function TagFormUI({
           )}
         </div>
 
+        {/* 入力欄に結びつかないエラー(ログイン切れ、権限なし、削除できないなど) */}
+        {errors.root && (
+          <p
+            role="alert"
+            className="rounded-md bg-red-50 p-3 text-sm text-red-600"
+          >
+            {errors.root.message}
+          </p>
+        )}
+
         {/* ボタン：削除の処理が渡されたら「削除」と「更新」、なければ「登録」 */}
         {onDelete ? (
           <div className="flex justify-between">
@@ -70,7 +83,7 @@ export function TagFormUI({
                   variant="destructive"
                   disabled={isPending}
                 >
-                  削除
+                  {isDeleting ? '削除中...' : '削除'}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -88,8 +101,9 @@ export function TagFormUI({
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+            {/* 削除の送信中は「更新」のまま押せなくする */}
             <Button type="submit" disabled={isPending}>
-              {isPending ? '更新中...' : '更新'}
+              {isPending && !isDeleting ? '更新中...' : '更新'}
             </Button>
           </div>
         ) : (

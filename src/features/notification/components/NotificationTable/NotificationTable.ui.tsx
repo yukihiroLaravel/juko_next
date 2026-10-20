@@ -9,7 +9,11 @@ import {
   TableRow,
 } from '@/components/atoms/Table';
 import { Button } from '@/components/atoms/Button';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
+import type {
+  NotificationSortBy,
+  NotificationSortOrder,
+} from '@/features/notification/types/notification';
 
 export type Notification = {
   id: string;
@@ -17,19 +21,38 @@ export type Notification = {
   courseName: string;
   courseDeadline: string | null;
   startDate: string;
+  body: string;
 };
+
+/** 一覧で並び替えられる列 */
+export type NotificationSortColumn = Extract<
+  NotificationSortBy,
+  'title' | 'course_id' | 'start_date'
+>;
 
 type Props = {
   notifications: Notification[];
-  sortOrder: 'asc' | 'desc';
-  onSortChange: () => void;
+  sortBy: NotificationSortColumn;
+  sortOrder: NotificationSortOrder;
+  onSortChange: (column: NotificationSortColumn) => void;
+  onNotificationClick: (notificationId: string) => void;
 };
 
 export function NotificationTableUI({
   notifications,
+  sortBy,
   sortOrder,
   onSortChange,
+  onNotificationClick,
 }: Props) {
+  // 並び替えていない列は、どちらの向きでもない上下のアイコンにする
+  const renderSortIcon = (column: NotificationSortColumn) => {
+    if (sortBy !== column) {
+      return <ChevronsUpDown />;
+    }
+    return sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />;
+  };
+
   return (
     <Table>
       <TableHeader>
@@ -40,11 +63,11 @@ export function NotificationTableUI({
               <Button
                 variant="ghost"
                 size="icon-sm"
-                onClick={onSortChange}
+                onClick={() => onSortChange('title')}
                 aria-label="タイトルで並び替え"
                 className="text-muted-foreground"
               >
-                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
+                {renderSortIcon('title')}
               </Button>
             </span>
           </TableHead>
@@ -55,26 +78,11 @@ export function NotificationTableUI({
               <Button
                 variant="ghost"
                 size="icon-sm"
-                onClick={onSortChange}
+                onClick={() => onSortChange('course_id')}
                 aria-label="講座名で並び替え"
                 className="text-muted-foreground"
               >
-                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
-              </Button>
-            </span>
-          </TableHead>
-
-          <TableHead>
-            <span className="inline-flex items-center gap-1">
-              講座受講期限
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={onSortChange}
-                aria-label="講座受講期限で並び替え"
-                className="text-muted-foreground"
-              >
-                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
+                {renderSortIcon('course_id')}
               </Button>
             </span>
           </TableHead>
@@ -85,11 +93,11 @@ export function NotificationTableUI({
               <Button
                 variant="ghost"
                 size="icon-sm"
-                onClick={onSortChange}
+                onClick={() => onSortChange('start_date')}
                 aria-label="開始日付で並び替え"
                 className="text-muted-foreground"
               >
-                {sortOrder === 'asc' ? <ChevronUp /> : <ChevronDown />}
+                {renderSortIcon('start_date')}
               </Button>
             </span>
           </TableHead>
@@ -98,10 +106,20 @@ export function NotificationTableUI({
 
       <TableBody>
         {notifications.map((notification) => (
-          <TableRow key={notification.id}>
+          <TableRow
+            key={notification.id}
+            tabIndex={0}
+            onClick={() => onNotificationClick(notification.id)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onNotificationClick(notification.id);
+              }
+            }}
+            className="cursor-pointer"
+          >
             <TableCell className="font-medium">{notification.title}</TableCell>
             <TableCell>{notification.courseName}</TableCell>
-            <TableCell>{notification.courseDeadline ?? '—'}</TableCell>
             <TableCell>{notification.startDate}</TableCell>
           </TableRow>
         ))}
