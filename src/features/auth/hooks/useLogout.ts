@@ -15,11 +15,9 @@ export function useLogout() {
 
       try {
         const logoutUrl =
-            role === 'instructor'
-              ? '/logout/instructor'
-              : '/logout';
-              
-        await Axios.post('/logout');
+          role === 'instructor' ? '/logout/instructor' : '/logout';
+
+        await Axios.post(logoutUrl);
         await mutate(undefined, false);
         router.push('/');
       } catch (error) {
@@ -29,7 +27,8 @@ export function useLogout() {
       } finally {
         setIsLoggingOut(false);
       }
-    }, [mutate, router],
+    },
+    [mutate, router],
   );
 
   return { logout, isLoggingOut };
