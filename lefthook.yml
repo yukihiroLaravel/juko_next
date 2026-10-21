@@ -1,0 +1,20 @@
+# コミットの前に、コミットするファイルだけを整形し ESLint で直す。
+# エディタの設定に頼らず、誰がどの環境で書いても同じ形でコミットされるようにするため。
+# 型検査とテストは時間がかかるため、継続的インテグレーションに任せる。
+# 一度だけ飛ばしたいときは LEFTHOOK=0 git commit とする。
+pre-commit:
+  piped: true
+  jobs:
+    - name: prettier
+      glob: '*.{js,mjs,cjs,ts,tsx,mts,json,md,css,yml,yaml}'
+      run: scripts/run pnpm exec prettier --write --ignore-unknown {staged_files}
+      stage_fixed: true
+
+    - name: eslint
+      glob: '*.{js,mjs,cjs,ts,tsx,mts}'
+      run: scripts/run pnpm exec eslint --fix {staged_files}
+      stage_fixed: true
+
+    - name: check-conventions
+      glob: '*.{test.ts,test.tsx,md}'
+      run: scripts/run pnpm check-conventions

@@ -102,6 +102,18 @@ pnpm remove <package-name>
 pnpm install
 ```
 
+依存の更新は、Dependabot（`.github/dependabot.yml`）が月に1回 `develop` 宛ての PR を作ります。minor と patch は1つの PR にまとめて届き、メジャーの更新は1つずつ別の PR で届きます。
+
+## コミット前の検査
+
+`pnpm install` をすると、lefthook がコミット前のフックを入れます。コミットするファイルだけに Prettier の整形と ESLint の自動修正がかかり、直せない違反があるとコミットが止まります。設定は `lefthook.yml` にあります。
+
+一度だけ飛ばしたいときは、次のようにします。CI では同じ検査が走るので、飛ばしたまま PR を出さないでください。
+
+```bash
+LEFTHOOK=0 git commit
+```
+
 ## ディレクトリ構成
 
 ```
