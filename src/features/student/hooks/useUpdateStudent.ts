@@ -61,8 +61,7 @@ export function useUpdateStudent() {
               };
             case 422: {
               const validationErrors = data?.errors as
-                | Record<string, string[]>
-                | undefined;
+                Record<string, string[]> | undefined;
               const firstError = validationErrors
                 ? Object.values(validationErrors)[0]?.[0]
                 : undefined;

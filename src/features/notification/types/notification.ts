@@ -24,11 +24,7 @@ export type NotificationsResponse = {
 
 /** お知らせ一覧APIの `sort_by` に指定できる項目 */
 export type NotificationSortBy =
-  | 'title'
-  | 'course_id'
-  | 'start_date'
-  | 'instructor_nick_name'
-  | 'read_status';
+  'title' | 'course_id' | 'start_date' | 'instructor_nick_name' | 'read_status';
 
 export type NotificationSortOrder = 'asc' | 'desc';
 

@@ -8,8 +8,7 @@ import {
 } from '@/features/attendance/utils/swrKeys';
 
 export type CompleteChapterLessonsResult =
-  | { success: true }
-  | { success: false; error: string };
+  { success: true } | { success: false; error: string };
 
 export type CompleteChapterLessons = (
   chapterId: string,
@@ -57,8 +56,7 @@ export function useCompleteChapterLessons(attendanceId: string) {
               };
             case 422: {
               const validationErrors = data?.errors as
-                | Record<string, string[]>
-                | undefined;
+                Record<string, string[]> | undefined;
               const firstError = validationErrors
                 ? Object.values(validationErrors)[0]?.[0]
                 : undefined;

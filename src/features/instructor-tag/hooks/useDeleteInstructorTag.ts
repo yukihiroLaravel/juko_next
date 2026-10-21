@@ -4,8 +4,7 @@ import { Axios } from '@/lib/api';
 import { instructorTagKey, isInstructorTagsKey } from '../utils/swrKeys';
 
 type DeleteInstructorTagResult =
-  | { success: true }
-  | { success: false; error: string };
+  { success: true } | { success: false; error: string };
 
 export function useDeleteInstructorTag() {
   const { mutate } = useSWRConfig();
