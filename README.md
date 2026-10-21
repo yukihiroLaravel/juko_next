@@ -10,7 +10,7 @@
 
 - Next.js 16 (App Router) — Turbopack / React Compiler 有効 (`reactCompiler: true`)
 - React 19
-- TypeScript 5
+- TypeScript 6
 - Tailwind CSS 4
 - pnpm (パッケージマネージャー)
 
@@ -33,8 +33,10 @@
 
 - Docker Desktop — バックエンド (Laravel + MySQL) の起動に必要
 - Node.js / pnpm — バージョンはリポジトリルートの `mise.toml` で管理しています (Node 24 / pnpm 9.15.0)
-  - [mise](https://mise.jdx.dev/) を使うと、リポジトリルートで `mise install` 一発で揃います。
+  - [mise](https://mise.jdx.dev/) を使うと、リポジトリルートで `mise install` を実行するだけで揃います。
   - 詳細はリポジトリルートの `Readme.md` を参照してください。
+  - `package.json` の `engines` と `packageManager` に合わない版で `pnpm install` すると、`.npmrc` の設定によりエラーで止まります。
+- エディタ — VS Code（または Cursor）を使う場合は、このディレクトリを開くと推奨の拡張機能（Prettier・ESLint・Tailwind CSS）の導入を勧められます。導入すると、保存のたびに整形と ESLint の自動修正がかかります。
 
 ### 初回セットアップ
 
@@ -100,6 +102,18 @@ pnpm remove <package-name>
 pnpm install
 ```
 
+依存の更新は、Dependabot（`.github/dependabot.yml`）が月に1回 `develop` 宛ての PR を作ります。minor と patch は1つの PR にまとめて届き、メジャーの更新は1つずつ別の PR で届きます。
+
+## コミット前の検査
+
+`pnpm install` をすると、lefthook がコミット前のフックを入れます。コミットするファイルだけに Prettier の整形と ESLint の自動修正がかかり、直せない違反があるとコミットが止まります。設定は `lefthook.yml` にあります。
+
+一度だけ飛ばしたいときは、次のようにします。CI では同じ検査が走るので、飛ばしたまま PR を出さないでください。
+
+```bash
+LEFTHOOK=0 git commit
+```
+
 ## ディレクトリ構成
 
 ```
@@ -154,6 +168,8 @@ source ~/.zshrc   # または ~/.bashrc
 ### Node / pnpm のバージョンが違う
 
 リポジトリ内で `mise current` を実行すると、`mise.toml` で定義したバージョンが表示されます。違うバージョンが使われている場合は `mise install` を再実行してください。
+
+`pnpm install` が `Unsupported engine` や `This project is configured to use v9.15.0 of pnpm` で止まるのも、版が違うときです。同じく `mise install` で揃えてから実行し直してください。
 
 ### ポート 3000 が使用中
 

@@ -1,0 +1,45 @@
+# 依存の更新を、気づいた人が手で上げる運用から、月に1回 PR が届く運用にする。
+# minor と patch は1つの PR にまとめ、メジャーは影響を見られるよう1つずつ別の PR にする。
+# 公開直後の版に飛びつかないよう、出てから7日たった版だけを対象にする。
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # 実行している Node 24 の型に合わせる。Node を上げるときに一緒に上げる
+      - dependency-name: '@types/node'
+        update-types:
+          - version-update:semver-major
+      # eslint-config-next が使うプラグインが ESLint 10 に対応するまで止める
+      - dependency-name: eslint
+        update-types:
+          - version-update:semver-major
+      # typescript-eslint が対応するまで 6.0 に止める
+      - dependency-name: typescript
+        versions:
+          - '>=6.1.0'
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns:
+          - '*'

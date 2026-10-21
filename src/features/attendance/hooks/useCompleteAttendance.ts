@@ -8,8 +8,7 @@ import {
 } from '@/features/attendance/utils/swrKeys';
 
 type CompleteAttendanceResult =
-  | { success: true }
-  | { success: false; error: string };
+  { success: true } | { success: false; error: string };
 
 export function useCompleteAttendance(attendanceId: string) {
   const { mutate } = useSWRConfig();
@@ -48,8 +47,7 @@ export function useCompleteAttendance(attendanceId: string) {
               };
             case 422: {
               const validationErrors = data?.errors as
-                | Record<string, string[]>
-                | undefined;
+                Record<string, string[]> | undefined;
               const firstError = validationErrors
                 ? Object.values(validationErrors)[0]?.[0]
                 : undefined;
