@@ -20,13 +20,40 @@
       "Bash(gh pr diff:*)",
       "Bash(gh pr checks:*)",
       "Bash(gh issue view:*)",
-      "WebFetch(domain:ui.shadcn.com)"
+      "WebFetch(domain:ui.shadcn.com)",
+      "Bash(scripts/run pnpm check-all)",
+      "Bash(scripts/run pnpm build)"
     ],
     "deny": ["Read(./.env*)"]
   },
   "language": "japanese",
   "plansDirectory": "docs/changes",
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/scripts/hooks/session-start.sh",
+            "timeout": 180,
+            "statusMessage": "依存とバックエンドの API を確かめています"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/scripts/hooks/stop-check.sh",
+            "timeout": 300,
+            "statusMessage": "CI と同じ検査を流しています"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",

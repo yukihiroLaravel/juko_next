@@ -31,21 +31,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check formatting with Prettier
-        run: pnpm format:check
-
-      - name: Lint with ESLint
-        run: pnpm lint
-
-      - name: Check project conventions
-        run: pnpm check-conventions-merge
-
-      - name: Type check
-        run: pnpm type-check
-
-      - name: Run tests
-        run: pnpm test
-
-      # 型検査とテストでは見つからない、Server Components の境界やルーティングの誤りを止める
-      - name: Build
-        run: pnpm build
+      # 整形・ESLint・規約・型検査・テスト・本番ビルドを順に流す。中身は package.json の check-all にあり、
+      # Claude Code の Stop フック（scripts/hooks/stop-check.sh）も同じものを流す
+      - name: Run all checks
+        run: pnpm check-all

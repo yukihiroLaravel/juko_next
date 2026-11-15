@@ -84,6 +84,7 @@ pnpm format         # Prettier整形
 pnpm format:check   # Prettier整形チェック
 pnpm test           # テスト (Vitest)
 pnpm check-conventions # 規約の検査（テストとドキュメント）
+pnpm check-all      # CI と同じ検査を全部（整形・ESLint・規約・型・テスト・本番ビルド）
 ```
 
 ## パッケージ管理
@@ -104,14 +105,14 @@ pnpm install
 
 依存の更新は、Dependabot（`.github/dependabot.yml`）が月に1回 `develop` 宛ての PR を作ります。minor と patch は1つの PR にまとめて届き、メジャーの更新は1つずつ別の PR で届きます。
 
-## コミット前の検査
+## 検査
 
-`pnpm install` をすると、lefthook がコミット前のフックを入れます。コミットするファイルだけに Prettier の整形と ESLint の自動修正がかかり、直せない違反があるとコミットが止まります。設定は `lefthook.yml` にあります。
+CI（`.github/workflows/ci.yml`）は `pnpm check-all` を流します。Claude Code で作業するときは、編集の直後に整形・ESLint・規約の検査が、作業の終わりに `pnpm check-all` が自動で走ります（`.claude/settings.json` のフック）。手で書いた変更を PR にする前は、`pnpm check-all` が通ることを確かめてください。
 
-一度だけ飛ばしたいときは、次のようにします。CI では同じ検査が走るので、飛ばしたまま PR を出さないでください。
+以前の版で `pnpm install` をした手元には、lefthook のコミット前のフックが残っています。コミットが lefthook を探して止まるときは、次のコマンドで消してください。
 
 ```bash
-LEFTHOOK=0 git commit
+rm -f .git/hooks/pre-commit .git/hooks/prepare-commit-msg
 ```
 
 ## ディレクトリ構成
@@ -181,6 +182,17 @@ lsof -i :3000
 
 # 別ポートで起動する場合
 pnpm dev -- -p 3001
+```
+
+### テストやビルドが `Cannot find native binding` や `Cannot find module '...darwin-arm64...'` で止まる
+
+Apple Silicon の Mac で、Intel 版の pnpm（Rosetta で動く mise から入れたもの）を使って `pnpm install` をすると、Apple Silicon 用のバイナリが入らずに起きます。pnpm を入れ直してから、依存を入れ直してください。
+
+```bash
+file "$(mise which pnpm)"   # x86_64 と出たら Intel 版
+mise uninstall pnpm@9.15.0 && mise install
+rm -rf node_modules .next
+pnpm install
 ```
 
 ### 依存関係を完全リセットしたい
