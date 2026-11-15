@@ -14,7 +14,7 @@ model: sonnet
 
 渡された docs・画面仕様・テストコードを読み、次の3点だけを点検する。指摘を返すだけで、ファイルは書き換えない。
 
-バグ、コーディング規約、整形、太字や区切り線は見ない。それぞれ人のレビュー、`scripts/check-conventions.mjs`、Prettier が受け持つ。
+バグ、コーディング規約、整形は見ない。それぞれ人のレビュー、`scripts/check-conventions.mjs`、Prettier が受け持つ。太字と区切り線は、`docs/` では検査スクリプトが見るので見ない。`docs/` の外（`CLAUDE.md`・`.claude/`）では検査がないので、文体の点検として見る。
 
 ## 対象の受け取り方
 

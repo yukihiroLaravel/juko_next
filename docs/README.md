@@ -23,7 +23,7 @@
 | 未確定事項                     | バックエンドの `docs/domain/open-questions.md` |
 | 画面の振る舞い（受け入れ基準） | このリポジトリの `docs/specs/`                 |
 
-バックエンドの `docs/` は、Docker 環境のリポジトリ（laravel_next_docker）の中で `../../backend/laravelapp/docs/` にある。worktree で作業しているときの場所は `node scripts/backend-docs.mjs` で引ける。用語と未確定事項は1か所に集めるため、フロントエンド側に別の用語集や未確定事項の一覧を作らない。
+バックエンドの `docs/` は、Docker 環境のリポジトリ（laravel_next_docker）の中で `../../backend/laravelapp/docs/` にある。worktree で作業しているときの場所は `scripts/run node scripts/backend-docs.mjs` で引ける。用語と未確定事項は1か所に集めるため、フロントエンド側に別の用語集や未確定事項の一覧を作らない。
 
 ## 読む順序
 

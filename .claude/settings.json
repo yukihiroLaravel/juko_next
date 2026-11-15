@@ -12,6 +12,8 @@
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git merge-base:*)",
       "Bash(scripts/run pnpm lint:*)",
       "Bash(scripts/run pnpm type-check)",
       "Bash(scripts/run pnpm format:*)",
