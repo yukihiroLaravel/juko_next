@@ -52,10 +52,7 @@ const hasJapanese = (s) => /[぀-ヿ一-鿿]/.test(s);
 const testFiles = walk(path.join(root, 'src'), (f) => /\.test\.tsx?$/.test(f));
 const docFiles = walk(path.join(root, 'docs'), (f) => f.endsWith('.md'));
 // 雛形と検査の対応表は、禁止した書き方や仮の ID を例として含むため対象から外す
-const isRuleOrTemplate = (f) =>
-  /documentation-rules\.md$|template\.md$|convention-checks\.md$|coding-standards\.md$/.test(
-    f,
-  );
+const isRuleOrTemplate = (f) => /template\.md$|convention-checks\.md$/.test(f);
 
 // 受け入れ基準の定義を集める。定義は番号付きの箇条書きの先頭に ID を置く形である
 function collectDefinedIds(docsDir) {

@@ -4,7 +4,7 @@
 
 画面仕様は `screens/` に1画面1ファイルで置く。画面へ手を入れる変更のなかで、その画面の分を書き起こす。一度に全画面を書かない。
 
-雛形は `.claude/skills/documentation-conventions/templates/screen.md` と `screen-conventions.md` にある。
+雛形は、画面ごとの仕様が `screens/template.md`、全画面に共通する仕様が `screens/conventions-template.md` にある。
 
 ## 文書一覧
 
@@ -18,7 +18,7 @@
 | `screens/instructor-tag-form.md`             | 講師側 講座分類登録・講座分類編集                                 | `AC-ITAG-<連番>`    |
 | `screens/student-notification-list.md`       | 受講生側 お知らせ一覧                                             | `AC-SNLIST-<連番>`  |
 
-画面を書き起こしたら、この表に行を足し、画面の略称を決める。略称はバックエンドの機能の略称と重ねない（`docs/documentation-rules.md`）。
+画面を書き起こしたら、この表に行を足し、画面の略称を決める。略称はバックエンドの機能の略称と重ねない（`.claude/rules/docs.md` の「ID」）。
 
 ## 書く順序
 
@@ -28,7 +28,7 @@
 
 ## 受け入れ基準とテストの対応
 
-画面の受け入れ基準は、その画面のテストと ID で結ぶ。テストの直前に `// AC-XXX-NNN` を書く（`docs/architecture/coding-standards.md` の「テスト」）。
+画面の受け入れ基準は、その画面のテストと ID で結ぶ。テストの直前に `// AC-XXX-NNN` を書く（`.claude/rules/tests.md`）。
 
 ```bash
 grep -rn 'AC-<画面の略称>-NNN' docs/ src/

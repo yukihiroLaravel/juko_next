@@ -148,7 +148,7 @@ juko_next/
 
 ## コーディング規約
 
-詳細は [`docs/architecture/coding-standards.md`](docs/architecture/coding-standards.md) を参照。AI エージェント向けの入口は [`AGENTS.md`](AGENTS.md) です。要点は以下のとおりです。
+規約は [`.claude/rules/`](.claude/rules/) にパスごとに分けて置いています。AI エージェント向けの入口と進め方は [`CLAUDE.md`](CLAUDE.md) にあります。要点は次のとおりです。
 
 - Container/Presentational パターン — ロジックは `Xxx.tsx`（Container）、表示は `Xxx.ui.tsx`（Presentational）に分離する。
 - コロケーション — 横断的なものは `src/` 直下、ドメイン固有のものは `src/features/{ドメイン}/` に集約する。

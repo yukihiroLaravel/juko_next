@@ -10,7 +10,7 @@ import nextTs from 'eslint-config-next/typescript';
 const shadcnUiRestriction = {
   group: ['@/components/ui/*', '**/components/ui/*'],
   message:
-    'features から components/ui を直接参照しない。components/atoms を経由する（coding-standards.md「共通部品の腐敗防止層」）。',
+    'features から components/ui を直接参照しない。components/atoms を経由する（.claude/rules/components.md「共通部品の腐敗防止層」）。',
 };
 
 // CHK-UI-01 表示の部品はデータの取得と送信をしない（型の参照は許す）
@@ -19,13 +19,13 @@ const dataAccessRestrictions = [
     group: ['swr', 'swr/*', 'axios', '@/lib/api', '@/utils/fetcher'],
     allowTypeImports: true,
     message:
-      '表示の部品（*.ui.tsx）でデータの取得・送信をしない。Container で行い props で渡す（coding-standards.md「Container と Presentational」）。',
+      '表示の部品（*.ui.tsx）でデータの取得・送信をしない。Container で行い props で渡す（.claude/rules/components.md「Container と Presentational」）。',
   },
   {
     group: ['@/features/*/hooks/*', '**/hooks/use*'],
     allowTypeImports: true,
     message:
-      '表示の部品（*.ui.tsx）からドメインのフックを呼ばない。Container で呼び props で渡す（coding-standards.md「Container と Presentational」）。',
+      '表示の部品（*.ui.tsx）からドメインのフックを呼ばない。Container で呼び props で渡す（.claude/rules/components.md「Container と Presentational」）。',
   },
 ];
 
