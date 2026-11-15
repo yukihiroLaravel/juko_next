@@ -1,5 +1,9 @@
 {
+  "model": "opusplan",
+  "effortLevel": "medium",
   "permissions": {
+    "defaultMode": "plan",
+    "additionalDirectories": ["../../backend/laravelapp"],
     "allow": [
       "Read",
       "Bash(ls:*)",
@@ -22,12 +26,15 @@
       "Bash(gh issue view:*)",
       "WebFetch(domain:ui.shadcn.com)",
       "Bash(scripts/run pnpm check-all)",
-      "Bash(scripts/run pnpm build)"
+      "Bash(scripts/run pnpm build)",
+      "Bash(scripts/run node scripts/backend-docs.mjs)",
+      "Bash(scripts/run pnpm dev)",
+      "Bash(gh run:*)"
     ],
     "deny": ["Read(./.env*)"]
   },
   "language": "japanese",
-  "plansDirectory": "docs/changes",
+  "plansDirectory": ".claude/plans",
   "hooks": {
     "SessionStart": [
       {
