@@ -18,7 +18,7 @@
     "test:watch": "vitest",
     "check-conventions": "node scripts/check-conventions.mjs",
     "check-conventions-merge": "node scripts/check-conventions.mjs --merge",
-    "prepare": "lefthook install"
+    "check-all": "pnpm format:check && pnpm lint && pnpm check-conventions-merge && pnpm type-check && pnpm test && pnpm build"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -67,7 +67,6 @@
     "eslint": "^9.39.5",
     "eslint-config-next": "16.4.2",
     "jsdom": "^30.1.3",
-    "lefthook": "^2.2.2",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.3",

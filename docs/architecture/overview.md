@@ -73,4 +73,4 @@ SWR は取得の失敗をキャッシュに残し、残っている間は取り�
 | 置き場       | テスト対象の Container と同じディレクトリに `<部品>.test.tsx`。SWR のキャッシュに関わるものは `<部品>.api.test.tsx`（ADR-FE-0003） |
 | 実行         | `scripts/run pnpm test`                                                                                                            |
 
-書き方は `coding-standards.md` の「テスト」にある。
+テストの方針と実行するコマンドは `CLAUDE.md`、書き方は `.claude/rules/tests.md` にある。

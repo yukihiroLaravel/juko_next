@@ -1,5 +1,9 @@
 {
+  "model": "opusplan",
+  "effortLevel": "medium",
   "permissions": {
+    "defaultMode": "plan",
+    "additionalDirectories": ["../../backend/laravelapp"],
     "allow": [
       "Read",
       "Bash(ls:*)",
@@ -8,6 +12,8 @@
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git merge-base:*)",
       "Bash(scripts/run pnpm lint:*)",
       "Bash(scripts/run pnpm type-check)",
       "Bash(scripts/run pnpm format:*)",
@@ -20,13 +26,43 @@
       "Bash(gh pr diff:*)",
       "Bash(gh pr checks:*)",
       "Bash(gh issue view:*)",
-      "WebFetch(domain:ui.shadcn.com)"
+      "WebFetch(domain:ui.shadcn.com)",
+      "Bash(scripts/run pnpm check-all)",
+      "Bash(scripts/run pnpm build)",
+      "Bash(scripts/run node scripts/backend-docs.mjs)",
+      "Bash(scripts/run pnpm dev)",
+      "Bash(gh run:*)"
     ],
     "deny": ["Read(./.env*)"]
   },
   "language": "japanese",
-  "plansDirectory": "docs/changes",
+  "plansDirectory": ".claude/plans",
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/scripts/hooks/session-start.sh",
+            "timeout": 180,
+            "statusMessage": "依存とバックエンドの API を確かめています"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/scripts/hooks/stop-check.sh",
+            "timeout": 300,
+            "statusMessage": "CI と同じ検査を流しています"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",

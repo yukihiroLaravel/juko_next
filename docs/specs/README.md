@@ -4,21 +4,21 @@
 
 画面仕様は `screens/` に1画面1ファイルで置く。画面へ手を入れる変更のなかで、その画面の分を書き起こす。一度に全画面を書かない。
 
-雛形は `.claude/skills/documentation-conventions/templates/screen.md` と `screen-conventions.md` にある。
+雛形は、画面ごとの仕様が `screens/template.md`、全画面に共通する仕様が `screens/conventions-template.md` にある。
 
 ## 文書一覧
 
-| 文書                                         | 画面                                                              | ID                  |
-| -------------------------------------------- | ----------------------------------------------------------------- | ------------------- |
-| `screens/conventions.md`                     | 全画面に共通する振る舞い（読み込み中・取得の失敗・0件の表示など） | `AC-SCREEN-<連番>`  |
-| `screens/instructor-course-list.md`          | 講師側 講座一覧                                                   | `AC-ICLIST-<連番>`  |
-| `screens/instructor-course-bulk-capacity.md` | 講師側 講座定員一括変更                                           | `AC-ICCAP-<連番>`   |
-| `screens/instructor-course-bulk-deadline.md` | 講師側 受講期限一括変更                                           | `AC-ICDEAD-<連番>`  |
-| `screens/instructor-signup.md`               | 講師側 新規登録（仮登録）・新規登録（認証コード入力）             | `AC-ISIGNUP-<連番>` |
-| `screens/instructor-tag-form.md`             | 講師側 講座分類登録・講座分類編集                                 | `AC-ITAG-<連番>`    |
-| `screens/student-notification-list.md`       | 受講生側 お知らせ一覧                                             | `AC-SNLIST-<連番>`  |
+| 文書                                         | 画面                                                                                                                                                     | ID                  |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `screens/conventions.md`                     | 全画面に共通する振る舞い（読み込み中・取得の失敗・0件の表示など）。未作成で、最初に共通の振る舞いを書くときに `screens/conventions-template.md` から作る | `AC-SCREEN-<連番>`  |
+| `screens/instructor-course-list.md`          | 講師側 講座一覧                                                                                                                                          | `AC-ICLIST-<連番>`  |
+| `screens/instructor-course-bulk-capacity.md` | 講師側 講座定員一括変更                                                                                                                                  | `AC-ICCAP-<連番>`   |
+| `screens/instructor-course-bulk-deadline.md` | 講師側 受講期限一括変更                                                                                                                                  | `AC-ICDEAD-<連番>`  |
+| `screens/instructor-signup.md`               | 講師側 新規登録（仮登録）・新規登録（認証コード入力）                                                                                                    | `AC-ISIGNUP-<連番>` |
+| `screens/instructor-tag-form.md`             | 講師側 講座分類登録・講座分類編集                                                                                                                        | `AC-ITAG-<連番>`    |
+| `screens/student-notification-list.md`       | 受講生側 お知らせ一覧                                                                                                                                    | `AC-SNLIST-<連番>`  |
 
-画面を書き起こしたら、この表に行を足し、画面の略称を決める。略称はバックエンドの機能の略称と重ねない（`docs/documentation-rules.md`）。
+画面を書き起こしたら、この表に行を足し、画面の略称を決める。略称はバックエンドの機能の略称と重ねない（`.claude/rules/docs.md` の「ID」）。
 
 ## 書く順序
 
@@ -28,7 +28,7 @@
 
 ## 受け入れ基準とテストの対応
 
-画面の受け入れ基準は、その画面のテストと ID で結ぶ。テストの直前に `// AC-XXX-NNN` を書く（`docs/architecture/coding-standards.md` の「テスト」）。
+画面の受け入れ基準は、その画面のテストと ID で結ぶ。テストの直前に `// AC-XXX-NNN` を書く（`.claude/rules/tests.md`）。
 
 ```bash
 grep -rn 'AC-<画面の略称>-NNN' docs/ src/

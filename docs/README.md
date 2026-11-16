@@ -4,15 +4,14 @@
 
 ## 索引
 
-| 置き場                                                                 | 内容                                                     |
-| ---------------------------------------------------------------------- | -------------------------------------------------------- |
-| [documentation-rules.md](documentation-rules.md)                       | このプロジェクトでのドキュメント運用ルール               |
-| [specs/](specs/README.md)                                              | 画面の仕様。画面ごとの振る舞い・状態・遷移と受け入れ基準 |
-| [architecture/overview.md](architecture/overview.md)                   | 技術スタックと実装の構成                                 |
-| [architecture/coding-standards.md](architecture/coding-standards.md)   | このプロジェクト固有のコーディング規約                   |
-| [architecture/convention-checks.md](architecture/convention-checks.md) | 規約をどこまで機械で判定できるかの対応表                 |
-| [adr/](adr/README.md)                                                  | 意思決定の記録                                           |
-| [changes/template.md](changes/template.md)                             | 変更を起票するときの雛形                                 |
+| 置き場                                                                 | 内容                                                           |
+| ---------------------------------------------------------------------- | -------------------------------------------------------------- |
+| [specs/](specs/README.md)                                              | 画面の仕様。画面ごとの振る舞い・状態・遷移と受け入れ基準       |
+| [architecture/overview.md](architecture/overview.md)                   | 技術スタックと実装の構成                                       |
+| [architecture/convention-checks.md](architecture/convention-checks.md) | 規約をどこまで機械で判定できるかの対応表と、レビューで見るもの |
+| [adr/](adr/README.md)                                                  | 意思決定の記録                                                 |
+
+書き方の規約は `docs/` ではなく `.claude/rules/` に、パスごとに分けて置いている。ドキュメントの書き方は `.claude/rules/docs.md` にある。
 
 ## バックエンドの docs/ との分担
 
@@ -24,7 +23,7 @@
 | 未確定事項                     | バックエンドの `docs/domain/open-questions.md` |
 | 画面の振る舞い（受け入れ基準） | このリポジトリの `docs/specs/`                 |
 
-バックエンドの `docs/` は、Docker 環境のリポジトリ（laravel_next_docker）の中で `../../backend/laravelapp/docs/` にある。用語と未確定事項は1か所に集めるため、フロントエンド側に別の用語集や未確定事項の一覧を作らない。
+バックエンドの `docs/` は、Docker 環境のリポジトリ（laravel_next_docker）の中で `../../backend/laravelapp/docs/` にある。worktree で作業しているときの場所は `scripts/run node scripts/backend-docs.mjs` で引ける。用語と未確定事項は1か所に集めるため、フロントエンド側に別の用語集や未確定事項の一覧を作らない。
 
 ## 読む順序
 

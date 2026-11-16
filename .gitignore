@@ -43,3 +43,9 @@ next-env.d.ts
 
 # Claude Code の個人設定
 .claude/settings.local.json
+
+# Claude Code のプランモードで書くプラン（作業ごとの使い捨てなので共有しない）
+.claude/plans/
+
+# エージェント用の作業ツリー
+.claude/worktrees/

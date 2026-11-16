@@ -1,6 +1,6 @@
 # テスト（Vitest と React Testing Library）
 
-このリポジトリで何を確かめ、何を確かめないかは `docs/architecture/coding-standards.md` の「テスト」にある。ここには書き方の汎用的なルールを置く。
+このリポジトリで何を確かめ、何を確かめないかは `.claude/rules/tests.md` にある。ここには書き方の汎用的なルールを置く。
 
 ## 利用者のように探す
 
